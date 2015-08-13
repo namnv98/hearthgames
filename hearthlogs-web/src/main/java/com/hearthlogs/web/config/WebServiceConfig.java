@@ -5,9 +5,12 @@ import com.hearthlogs.web.domain.CardSets;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
@@ -28,8 +31,11 @@ import java.util.Collections;
 @EnableJpaRepositories(basePackages={"com.hearthlogs.web.repository.jpa"})
 @EnableTransactionManagement
 @ComponentScan("com.hearthlogs.web")
-public class
-WebServiceConfig {
+@PropertySource("classpath:hearthlogs-web.properties")
+public class WebServiceConfig {
+
+    @Autowired
+    private Environment env;
 
     @Bean
     public CardSets cards() throws IOException {
@@ -38,7 +44,7 @@ WebServiceConfig {
 
     @Bean
     public SolrServer solrServer() {
-        return new HttpSolrServer("http://127.0.0.1:9000/solr/hpt");
+        return new HttpSolrServer(env.getProperty("solrUrl"));
     }
 
     @Bean
@@ -48,17 +54,12 @@ WebServiceConfig {
 
     @Bean
     public DataSource dataSource() {
-//        DriverManagerDataSource ds = new DriverManagerDataSource();
-//        ds.setDriverClassName("org.postgresql.ds.PGSimpleDataSource");
-//        ds.setUrl("jdbc:postgresql://localhost/games");
-//        ds.setUsername("hpt");
-//        ds.setPassword("STP*,96w");
         HikariDataSource ds = new HikariDataSource();
         ds.setMaximumPoolSize(10);
-        ds.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
-        ds.addDataSourceProperty("url", "jdbc:postgresql://127.0.0.1:9001/games");
-        ds.addDataSourceProperty("user", "hpt");
-        ds.addDataSourceProperty("password", "STP*,96w");
+        ds.setDataSourceClassName(env.getProperty("dbDriver"));
+        ds.addDataSourceProperty("url", env.getProperty("dbUrl"));
+        ds.addDataSourceProperty("user", env.getProperty("dbUser"));
+        ds.addDataSourceProperty("password", env.getProperty("dbPassword"));
         return ds;
     }
 
@@ -82,6 +83,4 @@ WebServiceConfig {
         txnMgr.setEntityManagerFactory(entityManagerFactory().getObject());
         return txnMgr;
     }
-
-
 }
