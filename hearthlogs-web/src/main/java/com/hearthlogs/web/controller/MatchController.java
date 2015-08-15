@@ -34,17 +34,15 @@ public class MatchController {
         CompletedMatch completedMatch;
         try {
             MatchContext context = matchService.deserializeGame(request.getData());
-            if ("0".equals(context.getFriendlyPlayer().getGameAccountIdLo())) { // We found a match that was played against the computer.  This is not acceptable.
+            if (!matchService.isMatchValid(context)) {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
             RawMatch rawMatch = matchService.saveRawPlayedGame(request.getData(), request.getStartTime(), request.getEndTime(), request.getRank());
-
             completedMatch = matchService.processGame(context, rawMatch);
             if (completedMatch == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             matchService.indexGame(completedMatch);
-
         } catch (Exception e) {
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));

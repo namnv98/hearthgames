@@ -11,7 +11,6 @@ import com.hearthlogs.web.repository.solr.CompletedMatchRepository;
 import com.hearthlogs.web.service.CardService;
 import com.hearthlogs.web.service.match.handler.ActivityHandlers;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -53,23 +52,18 @@ public class MatchService {
     }
 
     public MatchContext deserializeGame(byte[] rawData) {
-        MatchContext context = null;
-        try {
-            String game = decompressGameData(rawData);
-
-            String[] lines = game.split("\n");
-
-            context = new MatchContext();
-            for (String line : lines) {
-                matchActivityParser.parse(context, line);
-            }
-
-        } catch (Exception e) {
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            logger.error(sw.toString());
+        MatchContext context = new MatchContext();
+        String game = decompressGameData(rawData);
+        String[] lines = game.split("\n");
+        for (String line : lines) {
+            matchActivityParser.parse(context, line);
         }
         return context;
+    }
+
+    public boolean isMatchValid(MatchContext context) {
+        // We found a match that was played against the computer.  This is not acceptable.
+        return !"0".equals(context.getFriendlyPlayer().getGameAccountIdLo());
     }
 
     public RawMatch saveRawPlayedGame(byte[] rawData, long startTime, long endTime, String rank) {

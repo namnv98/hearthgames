@@ -41,9 +41,5 @@ public class CardHandler extends ActivityHandler {
         if ("PLAY".equals(before.getZone()) && "GRAVEYARD".equals(after.getZone()) && "MINION".equals(before.getCardtype())) {
             System.out.println(getName(before.getCardid()) + " has died.");
         }
-
-
-
     }
-
 }
