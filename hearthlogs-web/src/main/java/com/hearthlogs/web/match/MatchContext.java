@@ -6,6 +6,7 @@ import com.hearthlogs.web.domain.Game;
 import com.hearthlogs.web.domain.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -82,7 +83,7 @@ public class MatchContext {
 
     public Entity getEntity(String entityStr) {
         Entity entity = null;
-        if (entityStr == null) return null;
+        if (entityStr == null || "0".equals(entityStr)) return null;
         if (entityStr.equals(GAME_ENTITY)) { // The match itself
             entity = game;
         } else if (friendlyPlayer.getName().equals(entityStr)) {
@@ -205,6 +206,9 @@ public class MatchContext {
         for (Map.Entry<String, String> entry: data.entrySet()) {
             try {
                 String key = entry.getKey();
+                if (entity == null) {
+                    System.out.println();
+                }
                 if (!Character.isDigit(key.charAt(0))) {
                     org.apache.commons.beanutils.BeanUtils.copyProperty(entity, key, entry.getValue());
                 } else {
@@ -221,27 +225,6 @@ public class MatchContext {
 
     public void endUpdatePlayer() {
         Player player = null;
-        String friendlyPlayerId = null;
-        if (startingCardIds.size() == 0) {
-            for (Card card: getCards()) {
-                startingCardIds.add(card.getEntityId());
-                if (card.getCardid() != null) {
-                    friendlyPlayerId = card.getController();
-                }
-            }
-        } else {
-            for (Card card: getCards()) {
-                if (card.getCardid() != null) {
-                    friendlyPlayerId = card.getController();
-                    break;
-                }
-            }
-        }
-        if (!getFriendlyPlayer().getEntityId().equals(friendlyPlayerId)) {
-            Player swap = friendlyPlayer;
-            friendlyPlayer = opposingPlayer;
-            opposingPlayer = swap;
-        }
         if (getTempPlayerData() != null) {
             String teamId = getTempPlayerData().get(TEAM_ID);
             if (getFriendlyPlayer().getTeamId().equals(teamId)) {
@@ -314,6 +297,17 @@ public class MatchContext {
     }
 
     public void endCreateCard() {
+        Card card = getCurrentCard();
+        if (!isGameRunning()) {
+            startingCardIds.add(card.getEntityId());
+            System.out.println("Adding " + card.getCardid() + " to starting cards");
+            if (!StringUtils.isEmpty(card.getCardid()) && !friendlyPlayer.getTeamId().equals(card.getController()) && !card.getCardtype().startsWith("HERO")) {
+                System.out.println("Found a known card that doesnt belong to friendly player...swapping players");
+                Player swap = friendlyPlayer;
+                friendlyPlayer = opposingPlayer;
+                opposingPlayer = swap;
+            }
+        }
         getCards().add(getCurrentCard());
         Activity activity = createActivity(getCurrentCard());
         getActivities().add(activity);

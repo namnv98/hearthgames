@@ -5,6 +5,7 @@ import com.hearthlogs.client.match.MatchData;
 import com.hearthlogs.client.match.event.RetryMatchRecordedEvent;
 import com.hearthlogs.client.log.listener.LogListener;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.input.Tailer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,21 +47,21 @@ public class LogManager {
     }
 
     private void uploadCachedLogs() {
-        Collection<File> files = FileUtils.listFiles(new File(System.getProperty("java.io.tmpdir")), new String[]{"hpt"}, false);
+        Collection<File> files = FileUtils.listFiles(new File(System.getProperty("java.io.tmpdir")), new String[]{"chm"}, false);
         for (File file: files) {
             try {
                 byte[] data = FileUtils.readFileToByteArray(file);
                 MatchData matchData = new MatchData();
                 if (file.getName().startsWith("nonranked")) {
                     logger.info("Found Non Ranked match for upload : " + file.getName());
-                    String[] gameInfo = file.getName().replace(".hpt","").split("_");
+                    String[] gameInfo = file.getName().replace(".chm","").split("_");
                     matchData.setData(data);
                     matchData.setStartTime(Long.parseLong(gameInfo[1]));
                     matchData.setEndTime(Long.parseLong(gameInfo[2]));
 
                 } else if (file.getName().startsWith("ranked")) {
                     logger.info("Found Ranked match for upload : " + file.getName());
-                    String[] gameInfo = file.getName().replace(".hpt","").split("_");
+                    String[] gameInfo = file.getName().replace(".chm","").split("_");
                     matchData.setData(data);
                     matchData.setStartTime(Long.parseLong(gameInfo[1]));
                     matchData.setEndTime(Long.parseLong(gameInfo[2]));

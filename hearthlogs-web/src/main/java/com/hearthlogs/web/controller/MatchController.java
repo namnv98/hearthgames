@@ -4,8 +4,8 @@ import com.hearthlogs.api.ws.request.RecordMatchRequest;
 import com.hearthlogs.api.ws.response.RecordMatchResponse;
 import com.hearthlogs.web.match.MatchContext;
 import com.hearthlogs.web.match.RawMatch;
-import com.hearthlogs.web.service.MatchService;
 import com.hearthlogs.web.match.CompletedMatch;
+import com.hearthlogs.web.service.match.MatchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class MatchController {
     private MatchService matchService;
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<RecordMatchResponse> uploadGame(@RequestBody RecordMatchRequest request) {
+    public ResponseEntity<RecordMatchResponse> uploadMatch(@RequestBody RecordMatchRequest request) {
         CompletedMatch completedMatch;
         try {
             MatchContext context = matchService.deserializeGame(request.getData());
@@ -52,7 +52,7 @@ public class MatchController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         RecordMatchResponse response = new RecordMatchResponse();
-        response.setUrl(env.getProperty("matchUrl")+completedMatch.getId());
+        response.setUrl(env.getProperty("match.url")+completedMatch.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

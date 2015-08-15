@@ -30,12 +30,12 @@ public class MatchActivityParser {
             processed = createGameHandler.handle(context, line);
         } else if (createPlayerHandler.applies(context, line)) {
             processed = createPlayerHandler.handle(context, line);
+        } else if (updatePlayerHandler.applies(context, line)) {
+            processed = updatePlayerHandler.handle(context, line);
         } else if (createCardHandler.applies(context, line)) {
             processed = createCardHandler.handle(context, line);
         } else if (updateGameHandler.applies(context, line)) {
             processed = updateGameHandler.handle(context, line);
-        } else if (updatePlayerHandler.applies(context, line)) {
-            processed = updatePlayerHandler.handle(context, line);
         } else if (updateCardHandler.applies(context, line)) {
             processed = updateCardHandler.handle(context, line);
         } else if (tagChangeHandler.applies(context, line)) {

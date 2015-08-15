@@ -23,6 +23,9 @@ public class MatchRecorder {
 
     private static final Pattern medalRankPattern = Pattern.compile("name=Medal_Ranked_(.*) family");
     private static final String MEDAL_RANKED = "unloading name=Medal_Ranked";
+    private static final String CREATE_GAME = "CREATE_GAME";
+    private static final String GAME_STATE_COMPLETE = "TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE";
+    private static final String REGISTER_FRIEND_CHALLENGE = "---RegisterFriendChallenge---";
 
     @Autowired
     private ApplicationEventPublisher publisher;
@@ -38,20 +41,20 @@ public class MatchRecorder {
     @EventListener
     public void handleLine(LineReadEvent event) {
         String line = event.getLine();
-        if (line.startsWith("CREATE_GAME")) {
+        if (line.startsWith(CREATE_GAME)) {
             matchComplete = false;
             rank = null;
             startTime = System.currentTimeMillis();
             logger.info("A Game has started.  Game logging has begun.");
             currentMatch = new StringBuilder();
             currentMatch.append(line).append("\n");
-        } else if (currentMatch != null && line.startsWith("TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE")) {
+        } else if (currentMatch != null && line.startsWith(GAME_STATE_COMPLETE)) {
             currentMatch.append(line).append("\n");
             matchComplete = true;
             endTime = System.currentTimeMillis();
         } else if (currentMatch != null && matchComplete && line.startsWith(MEDAL_RANKED)) {
             rank = getRank(line);
-        } else if (currentMatch != null && matchComplete && line.startsWith("---RegisterFriendChallenge---")) {
+        } else if (currentMatch != null && matchComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
             logger.info("The Game is over.  Attempting to record to HPT web service.");
             MatchData matchData = new MatchData();
             matchData.setData(compress(currentMatch.toString()));
@@ -91,9 +94,9 @@ public class MatchRecorder {
     private void saveGameToFile(MatchData matchData) {
         String fileName = System.getProperty("java.io.tmpdir");
         if (rank != null) {
-            fileName += "ranked_"+startTime+"_"+endTime+"_" + rank + ".hpt";
+            fileName += "ranked_"+startTime+"_"+endTime+"_" + rank + ".chm";
         } else {
-            fileName += "nonranked_"+startTime+"_"+endTime+".hpt";
+            fileName += "nonranked_"+startTime+"_"+endTime+".chm";
 
         }
         File file = new File(fileName);

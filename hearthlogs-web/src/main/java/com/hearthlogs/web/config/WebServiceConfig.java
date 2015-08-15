@@ -44,7 +44,7 @@ public class WebServiceConfig {
 
     @Bean
     public SolrServer solrServer() {
-        return new HttpSolrServer(env.getProperty("solrUrl"));
+        return new HttpSolrServer(env.getProperty("solr.url"));
     }
 
     @Bean
@@ -56,10 +56,10 @@ public class WebServiceConfig {
     public DataSource dataSource() {
         HikariDataSource ds = new HikariDataSource();
         ds.setMaximumPoolSize(10);
-        ds.setDataSourceClassName(env.getProperty("dbDriver"));
-        ds.addDataSourceProperty("url", env.getProperty("dbUrl"));
-        ds.addDataSourceProperty("user", env.getProperty("dbUser"));
-        ds.addDataSourceProperty("password", env.getProperty("dbPassword"));
+        ds.setDataSourceClassName(env.getProperty("db.driver"));
+        ds.addDataSourceProperty("url", env.getProperty("db.url"));
+        ds.addDataSourceProperty("user", env.getProperty("db.user"));
+        ds.addDataSourceProperty("password", env.getProperty("db.password"));
         return ds;
     }
 

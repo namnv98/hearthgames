@@ -4,16 +4,16 @@ import java.io.File;
 
 public class ApplicationProperties {
 
-    private String hptWebServiceURL;
+    private String uploadUrl;
     private File logFile;
     private File logConfigFile;
 
-    public String getHptWebServiceURL() {
-        return hptWebServiceURL;
+    public String getUploadUrl() {
+        return uploadUrl;
     }
 
-    public void setHptWebServiceURL(String hptWebServiceURL) {
-        this.hptWebServiceURL = hptWebServiceURL;
+    public void setUploadUrl(String uploadUrl) {
+        this.uploadUrl = uploadUrl;
     }
 
     public File getLogFile() {

@@ -25,7 +25,7 @@ public class ApplicationConfiguration {
     @Bean
     public ApplicationProperties properties() {
         ApplicationProperties properties = new ApplicationProperties();
-        properties.setHptWebServiceURL(env.getProperty("hptWebServiceURL"));
+        properties.setUploadUrl(env.getProperty("upload.url"));
 
         String name = env.getProperty("os.name");
         String userHome = env.getProperty("user.home");

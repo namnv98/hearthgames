@@ -65,6 +65,34 @@ public class CompletedMatch {
     @Field
     private String rank;
 
+    public void addFriendlyStartingCard(String card) {
+        friendlyStartingCards.add(card);
+        friendlyCards.add(card);
+    }
+
+    public void addOpposingStartingCard(String card) {
+        opposingStartingCards.add(card);
+        opposingCards.add(card);
+    }
+
+    public void addFriendlyCard(String card) {
+        friendlyCards.add(card);
+    }
+
+    public void addOpposingCard(String card) {
+        opposingCards.add(card);
+    }
+
+    public void mulliganFriendlyCard(String card) {
+        friendlyMulliganedCards.add(card);
+        friendlyStartingCards.remove(card);
+    }
+
+    public void mulliganOpposingCard(String card) {
+        opposingMulliganedCards.add(card);
+        opposingStartingCards.remove(card);
+    }
+
     public String getId() {
         return id;
     }

@@ -73,7 +73,7 @@ public class HearthLogsClient {
         if (response != null && response.getStatusCode() == HttpStatus.OK) {
             logger.info("Game recorded and available for viewing at: " + response.getBody().getUrl());
         } else if (response != null && response.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
-            logger.info("The game type is not recordable. Some how a non-play mode game was uploaded.");
+            logger.info("The game type is not recordable. Somehow a non-play mode game was uploaded.");
         } else if (response == null){
             logger.info("Attempting to save match to local cache for later upload, on restart of the client.");
             publisher.publishEvent(new SaveMatchLocallyEvent(this, matchData));
@@ -89,7 +89,7 @@ public class HearthLogsClient {
         }
         ResponseEntity<RecordMatchResponse> response = null;
         try {
-            response = restTemplate.postForEntity(this.properties.getHptWebServiceURL(), request, RecordMatchResponse.class);
+            response = restTemplate.postForEntity(this.properties.getUploadUrl(), request, RecordMatchResponse.class);
         } catch (Exception e) {
             logger.info("HPT web service not available.");
         }

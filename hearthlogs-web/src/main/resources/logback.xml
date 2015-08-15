@@ -7,7 +7,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${java.io.tmpdir}/hpt.log</file>
+        <file>${java.io.tmpdir}/hearthlogs.log</file>
         <append>false</append>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %msg%n</Pattern>
