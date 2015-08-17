@@ -2,6 +2,7 @@ package com.hearthlogs.web.service.match.handler;
 
 import com.hearthlogs.web.domain.Card;
 import com.hearthlogs.web.domain.Game;
+import com.hearthlogs.web.domain.Zone;
 import com.hearthlogs.web.match.Activity;
 import com.hearthlogs.web.match.CompletedMatch;
 import com.hearthlogs.web.match.MatchContext;
@@ -10,15 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameHandler extends ActivityHandler {
 
-    protected void handleTagChange(MatchContext context, CompletedMatch match, Activity activity, Game before, Game after) {
+    protected void handleTagChange(MatchContext context, Activity activity, Game before, Game after) {
 
-        if (before.getStep() == null && "BEGIN_MULLIGAN".equals(after.getStep())) {
+        if (before.getStep() == null && Game.Step.BEGIN_MULLIGAN.eq(after.getStep())) {
             System.out.println("---------------------  The Game has started  ----------------------------------");
-            context.getCards().stream().filter(c -> "HAND".equals(c.getZone())).forEach(c -> {
+            context.getCards().stream().filter(c -> Zone.HAND.eq(c.getZone())).forEach(c -> {
                 if (getPlayer(context, c) == context.getFriendlyPlayer()) {
-                    match.addFriendlyStartingCard(c.getCardid());
+                    context.addFriendlyStartingCard(c);
                 } else {
-                    match.addOpposingStartingCard(c.getCardid());
+                    context.addOpposingStartingCard(c);
                 }
                 System.out.println(getPlayer(context, c).getName() + " has drawn " + getName(c.getCardid()));
             });
@@ -28,22 +29,22 @@ public class GameHandler extends ActivityHandler {
             System.out.println("--------------------  Mulligan Phase has started  -----------------------------");
             System.out.println();
         }
-        if ("BEGIN_MULLIGAN".equals(before.getStep()) && "MAIN_READY".equals(after.getStep())) {
+        if (Game.Step.BEGIN_MULLIGAN.eq(before.getStep()) && Game.Step.MAIN_READY.eq(after.getStep())) {
             System.out.println();
             System.out.println("--------------------  Mulligan Phase has ended  -------------------------------");
             System.out.println();
         }
-        if ("MAIN_READY".equals(after.getStep())) {
+        if (Game.Step.MAIN_READY.eq(after.getStep())) {
             Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
             Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
             printHeroHealth(context.getFriendlyPlayer(), friendlyHeroCard);
             printHeroHealth(context.getOpposingPlayer(), opposingHeroCard);
 
 
-            match.setTurns(Integer.valueOf(before.getTurn()));
+            context.setTurns(before.getTurn());
             System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TURN " + before.getTurn() + "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
-        if ("COMPLETE".equals(after.getState())) {
+        if (Game.State.COMPLETE.eq(after.getState())) {
             Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
             Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
             printHeroHealth(context.getFriendlyPlayer(), friendlyHeroCard);

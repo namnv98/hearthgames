@@ -11,6 +11,7 @@ import com.hearthlogs.web.repository.solr.CompletedMatchRepository;
 import com.hearthlogs.web.service.CardService;
 import com.hearthlogs.web.service.match.handler.ActivityHandlers;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,8 +57,23 @@ public class MatchService {
         MatchContext context = new MatchContext();
         String game = decompressGameData(rawData);
         String[] lines = game.split("\n");
-        for (String line : lines) {
-            matchActivityParser.parse(context, line);
+        String currentLine = null;
+        try {
+            for (String line : lines) {
+                currentLine = line;
+                matchActivityParser.parse(context, line.trim());
+            }
+        } catch (Exception e) {
+            long time = System.currentTimeMillis();
+            File file = new File(System.getProperty("java.io.tmpdir")+time+".log");
+            logger.error("Failed on line " + currentLine);
+            logger.error("Writing game file: " + file.getAbsolutePath());
+            try {
+                FileUtils.writeStringToFile(file, game, "UTF-8");
+            } catch (IOException e1) {
+                logger.error("Failed to write game file: " + time+".log");
+            }
+            throw e;
         }
         return context;
     }
@@ -83,7 +100,7 @@ public class MatchService {
             handle(context, activity);
         }
 
-        CompletedMatch completedMatch = context.getCompletedMatch();
+        CompletedMatch completedMatch = new CompletedMatch();
         completedMatch.setId(rawMatch.getId()+"");
         completedMatch.setFriendlyPlayer(context.getFriendlyPlayer().getName());
         completedMatch.setOpposingPlayer(context.getOpposingPlayer().getName());
@@ -93,19 +110,36 @@ public class MatchService {
         completedMatch.setEndTime(rawMatch.getEndTime());
         completedMatch.setRank(rawMatch.getRank());
 
-        Card card = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
+        Card card = (Card) context.getEntityById(context.getWinner().getHeroEntity());
         CardDetails cardDetails = cardService.getCardDetails(card.getCardid());
-        completedMatch.setFriendlyClass(cardDetails.getPlayerClass());
+        completedMatch.setWinnerClass(cardDetails.getPlayerClass());
 
-        card = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
+        card = (Card) context.getEntityById(context.getLoser().getHeroEntity());
         cardDetails = cardService.getCardDetails(card.getCardid());
-        completedMatch.setOpposingClass(cardDetails.getPlayerClass());
+        completedMatch.setLoserClass(cardDetails.getPlayerClass());
 
-        if ("1".equals(context.getFriendlyPlayer().getFirstPlayer())) {
-            completedMatch.setFirstPlayer(context.getFriendlyPlayer().getName());
+        completedMatch.setWinner(context.getWinner().getName());
+        completedMatch.setLoser(context.getLoser().getName());
+        completedMatch.setQuitter(context.getQuitter() != null ? context.getQuitter().getName() : null);
+        completedMatch.setFirstPlayer(context.getFirst().getName());
+
+        List<String> winnerCards = new ArrayList<>();
+//        List<String>
+        List<Card> winningCards;
+        if (context.getFriendlyPlayer() == context.getWinner()) {
+            winningCards = context.getFriendlyCards();
+            winningCards.addAll(context.getFriendlyStartingCards());
+
+
+
         } else {
-            completedMatch.setFirstPlayer(context.getOpposingPlayer().getName());
+            winningCards = context.getOpposingCards();
         }
+
+//        completedMatch.setWinnerCards();
+
+
+
 
         return completedMatch;
     }
@@ -170,7 +204,7 @@ public class MatchService {
         try (
                 InputStream is = new ByteArrayInputStream(data);
                 InflaterInputStream iis = new InflaterInputStream(is);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(512)
         ) {
             int b;
             while ((b = iis.read()) != -1) {

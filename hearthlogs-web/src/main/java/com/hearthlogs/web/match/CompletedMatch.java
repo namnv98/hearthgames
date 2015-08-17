@@ -2,9 +2,7 @@ package com.hearthlogs.web.match;
 
 import org.apache.solr.client.solrj.beans.Field;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class CompletedMatch {
 
@@ -40,24 +38,14 @@ public class CompletedMatch {
     private String quitter; // the name of the player who quit if any
 
     @Field
-    private String friendlyClass; // the class (i.e. warrior, hunter, etc...)
+    private String winnerClass; // the class (i.e. warrior, hunter, etc...)
     @Field
-    private String opposingClass;
+    private String loserClass;
 
     @Field
-    private List<String> friendlyStartingCards = new ArrayList<>();
+    private List<String> winnerCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
     @Field
-    private List<String> opposingStartingCards = new ArrayList<>();
-
-    @Field
-    private List<String> friendlyMulliganedCards = new ArrayList<>();
-    @Field
-    private List<String> opposingMulliganedCards = new ArrayList<>();
-
-    @Field
-    private List<String> friendlyCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
-    @Field
-    private List<String> opposingCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
+    private List<String> loserCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
 
     @Field
     private int turns;
@@ -65,33 +53,41 @@ public class CompletedMatch {
     @Field
     private String rank;
 
-    public void addFriendlyStartingCard(String card) {
-        friendlyStartingCards.add(card);
-        friendlyCards.add(card);
-    }
+    @Field
+    private float winnerManaEfficiency;
 
-    public void addOpposingStartingCard(String card) {
-        opposingStartingCards.add(card);
-        opposingCards.add(card);
-    }
+    @Field
+    private int winnerManaGained;
 
-    public void addFriendlyCard(String card) {
-        friendlyCards.add(card);
-    }
+    @Field
+    private int winnerManaUsed;
 
-    public void addOpposingCard(String card) {
-        opposingCards.add(card);
-    }
+    @Field
+    private double winnerBoardControl;
 
-    public void mulliganFriendlyCard(String card) {
-        friendlyMulliganedCards.add(card);
-        friendlyStartingCards.remove(card);
-    }
+    @Field
+    private int winnerFavorableTrades;
 
-    public void mulliganOpposingCard(String card) {
-        opposingMulliganedCards.add(card);
-        opposingStartingCards.remove(card);
-    }
+    @Field
+    private int winnerCardAdvantage;
+
+    @Field
+    private float loserManaEfficiency;
+
+    @Field
+    private int loserManaGained;
+
+    @Field
+    private int loserManaUsed;
+
+    @Field
+    private double loserBoardControl;
+
+    @Field
+    private int loserFavorableTrades;
+
+    @Field
+    private int loserCardAdvantage;
 
     public String getId() {
         return id;
@@ -181,68 +177,36 @@ public class CompletedMatch {
         this.quitter = quitter;
     }
 
-    public String getFriendlyClass() {
-        return friendlyClass;
+    public String getWinnerClass() {
+        return winnerClass;
     }
 
-    public void setFriendlyClass(String friendlyClass) {
-        this.friendlyClass = friendlyClass;
+    public void setWinnerClass(String winnerClass) {
+        this.winnerClass = winnerClass;
     }
 
-    public String getOpposingClass() {
-        return opposingClass;
+    public String getLoserClass() {
+        return loserClass;
     }
 
-    public void setOpposingClass(String opposingClass) {
-        this.opposingClass = opposingClass;
+    public void setLoserClass(String loserClass) {
+        this.loserClass = loserClass;
     }
 
-    public List<String> getFriendlyStartingCards() {
-        return friendlyStartingCards;
+    public List<String> getWinnerCards() {
+        return winnerCards;
     }
 
-    public void setFriendlyStartingCards(List<String> friendlyStartingCards) {
-        this.friendlyStartingCards = friendlyStartingCards;
+    public void setWinnerCards(List<String> winnerCards) {
+        this.winnerCards = winnerCards;
     }
 
-    public List<String> getOpposingStartingCards() {
-        return opposingStartingCards;
+    public List<String> getLoserCards() {
+        return loserCards;
     }
 
-    public void setOpposingStartingCards(List<String> opposingStartingCards) {
-        this.opposingStartingCards = opposingStartingCards;
-    }
-
-    public List<String> getFriendlyMulliganedCards() {
-        return friendlyMulliganedCards;
-    }
-
-    public void setFriendlyMulliganedCards(List<String> friendlyMulliganedCards) {
-        this.friendlyMulliganedCards = friendlyMulliganedCards;
-    }
-
-    public List<String> getOpposingMulliganedCards() {
-        return opposingMulliganedCards;
-    }
-
-    public void setOpposingMulliganedCards(List<String> opposingMulliganedCards) {
-        this.opposingMulliganedCards = opposingMulliganedCards;
-    }
-
-    public List<String> getFriendlyCards() {
-        return friendlyCards;
-    }
-
-    public void setFriendlyCards(List<String> friendlyCards) {
-        this.friendlyCards = friendlyCards;
-    }
-
-    public List<String> getOpposingCards() {
-        return opposingCards;
-    }
-
-    public void setOpposingCards(List<String> opposingCards) {
-        this.opposingCards = opposingCards;
+    public void setLoserCards(List<String> loserCards) {
+        this.loserCards = loserCards;
     }
 
     public int getTurns() {
@@ -259,5 +223,101 @@ public class CompletedMatch {
 
     public void setRank(String rank) {
         this.rank = rank;
+    }
+
+    public float getWinnerManaEfficiency() {
+        return winnerManaEfficiency;
+    }
+
+    public void setWinnerManaEfficiency(float winnerManaEfficiency) {
+        this.winnerManaEfficiency = winnerManaEfficiency;
+    }
+
+    public int getWinnerManaGained() {
+        return winnerManaGained;
+    }
+
+    public void setWinnerManaGained(int winnerManaGained) {
+        this.winnerManaGained = winnerManaGained;
+    }
+
+    public int getWinnerManaUsed() {
+        return winnerManaUsed;
+    }
+
+    public void setWinnerManaUsed(int winnerManaUsed) {
+        this.winnerManaUsed = winnerManaUsed;
+    }
+
+    public double getWinnerBoardControl() {
+        return winnerBoardControl;
+    }
+
+    public void setWinnerBoardControl(double winnerBoardControl) {
+        this.winnerBoardControl = winnerBoardControl;
+    }
+
+    public int getWinnerFavorableTrades() {
+        return winnerFavorableTrades;
+    }
+
+    public void setWinnerFavorableTrades(int winnerFavorableTrades) {
+        this.winnerFavorableTrades = winnerFavorableTrades;
+    }
+
+    public int getWinnerCardAdvantage() {
+        return winnerCardAdvantage;
+    }
+
+    public void setWinnerCardAdvantage(int winnerCardAdvantage) {
+        this.winnerCardAdvantage = winnerCardAdvantage;
+    }
+
+    public float getLoserManaEfficiency() {
+        return loserManaEfficiency;
+    }
+
+    public void setLoserManaEfficiency(float loserManaEfficiency) {
+        this.loserManaEfficiency = loserManaEfficiency;
+    }
+
+    public int getLoserManaGained() {
+        return loserManaGained;
+    }
+
+    public void setLoserManaGained(int loserManaGained) {
+        this.loserManaGained = loserManaGained;
+    }
+
+    public int getLoserManaUsed() {
+        return loserManaUsed;
+    }
+
+    public void setLoserManaUsed(int loserManaUsed) {
+        this.loserManaUsed = loserManaUsed;
+    }
+
+    public double getLoserBoardControl() {
+        return loserBoardControl;
+    }
+
+    public void setLoserBoardControl(double loserBoardControl) {
+        this.loserBoardControl = loserBoardControl;
+    }
+
+    public int getLoserFavorableTrades() {
+        return loserFavorableTrades;
+    }
+
+    public void setLoserFavorableTrades(int loserFavorableTrades) {
+        this.loserFavorableTrades = loserFavorableTrades;
+    }
+
+    public int getLoserCardAdvantage() {
+        return loserCardAdvantage;
+    }
+
+    public void setLoserCardAdvantage(int loserCardAdvantage) {
+        this.loserCardAdvantage = loserCardAdvantage;
     }
 }

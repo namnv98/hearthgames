@@ -56,26 +56,6 @@ public class MatchActivityParserTest {
             matchService.handle(context, activity);
         }
 
-        CompletedMatch completedMatch = context.getCompletedMatch();
-        completedMatch.setFriendlyPlayer(context.getFriendlyPlayer().getName());
-        completedMatch.setOpposingPlayer(context.getOpposingPlayer().getName());
-        completedMatch.setFriendlyAccountId(context.getFriendlyPlayer().getGameAccountIdLo());
-        completedMatch.setOpposingAccountId(context.getOpposingPlayer().getGameAccountIdLo());
-
-        Card card = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
-        CardDetails cardDetails = cardService.getCardDetails(card.getCardid());
-        completedMatch.setFriendlyClass(cardDetails.getPlayerClass());
-
-        card = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
-        cardDetails = cardService.getCardDetails(card.getCardid());
-        completedMatch.setOpposingClass(cardDetails.getPlayerClass());
-
-        if ("1".equals(context.getFriendlyPlayer().getFirstPlayer())) {
-            completedMatch.setFirstPlayer(context.getFriendlyPlayer().getName());
-        } else {
-            completedMatch.setFirstPlayer(context.getOpposingPlayer().getName());
-        }
-
     }
 
     private byte[] getData(String filename) throws IOException {

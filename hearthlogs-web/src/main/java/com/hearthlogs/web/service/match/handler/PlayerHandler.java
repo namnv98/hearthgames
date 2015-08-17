@@ -9,19 +9,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerHandler extends ActivityHandler {
 
-    protected void handleTagChange(MatchContext context, CompletedMatch match, Activity activity, Player before, Player after) {
-        if (after.getPlaystate() != null && "QUIT".equals(after.getPlaystate())) {
+    protected void handleTagChange(MatchContext context, Activity activity, Player before, Player after) {
+        if (after.getPlaystate() != null && Player.PlayState.QUIT.eq(after.getPlaystate())) {
             System.out.println(before.getName() + " has quit.");
-            match.setQuitter(before.getName());
+            context.setQuitter(before);
         }
-        if (after.getPlaystate() != null && "WON".equals(after.getPlaystate())) {
+        if (after.getPlaystate() != null && Player.PlayState.WON.eq(after.getPlaystate())) {
             System.out.println(before.getName() + " has won.");
-            match.setWinner(before.getName());
+            context.setWinner(before);
         }
-        if (after.getPlaystate() != null && "LOST".equals(after.getPlaystate())) {
+        if (after.getPlaystate() != null && Player.PlayState.LOST.eq(after.getPlaystate())) {
             System.out.println(before.getName() + " has lost.");
-            match.setLoser(before.getName());
+            context.setLoser(before);
+        }
+        if (TRUE.equals(before.getFirstPlayer())) {
+            context.setFirst(before);
         }
     }
-
 }

@@ -27,7 +27,7 @@ public class PowerFilter implements LogFilter {
     public String filter(String line) {
         String filteredLine = null;
         if (!StringUtils.isEmpty(line) && line.startsWith("[Power] GameState.DebugPrintPower() - ")) {
-            filteredLine = line.replace("[Power] GameState.DebugPrintPower() - ", "").trim();
+            filteredLine = line.replace("[Power] GameState.DebugPrintPower() - ", "");
         }
         return filteredLine;
     }

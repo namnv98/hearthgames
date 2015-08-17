@@ -6,6 +6,16 @@ public class Player extends Entity implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    public enum PlayState {
+        WON,
+        LOST,
+        QUIT;
+
+        public boolean eq(String playState) {
+            return this.toString().equals(playState);
+        }
+    }
+
     private String rank;
     private String gameAccountIdHi;
     private String gameAccountIdLo;

@@ -25,6 +25,14 @@ public class Card extends Entity implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    public enum Type {
+        MINION;
+
+        public boolean eq(String type) {
+            return this.toString().equals(type);
+        }
+    }
+
     private String id;
     private String cardid;
     private String triggerVisual;

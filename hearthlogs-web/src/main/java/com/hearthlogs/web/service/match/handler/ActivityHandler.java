@@ -1,11 +1,9 @@
 package com.hearthlogs.web.service.match.handler;
 
 import com.hearthlogs.web.domain.Card;
-import com.hearthlogs.web.domain.Entity;
 import com.hearthlogs.web.domain.Game;
 import com.hearthlogs.web.domain.Player;
 import com.hearthlogs.web.match.Activity;
-import com.hearthlogs.web.match.CompletedMatch;
 import com.hearthlogs.web.match.MatchContext;
 import com.hearthlogs.web.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,45 +12,47 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class ActivityHandler {
 
+    protected String TRUE = "1";
+    protected String FALSE = "0";
+
     @Autowired
     protected CardService cardService;
 
     protected void handle(MatchContext context, Activity activity) {
-        CompletedMatch match = context.getCompletedMatch();
         if (activity.isAction()) {
             if (activity.getEntity() instanceof Card) {
-                handleAction(context, match, activity, getPlayer(context, (Card) activity.getEntity()), (Card) activity.getEntity(), (Card) activity.getTarget());
+                handleAction(context, activity, getPlayer(context, (Card) activity.getEntity()), (Card) activity.getEntity(), (Card) activity.getTarget());
             }
         } else if (activity.isTagChange()) {
             if (activity.getEntity() instanceof Card) {
                 Card before = (Card) context.getEntityById(activity.getEntityId());
                 Card after = (Card) activity.getEntity();
-                handleTagChange(context, match, activity, getPlayer(context, before), before, after);
+                handleTagChange(context, activity, getPlayer(context, before), before, after);
             } else if (activity.getEntity() instanceof Player) {
                 Player before = (Player) context.getEntityById(activity.getEntityId());
                 Player after = (Player) activity.getEntity();
-                handleTagChange(context, match, activity, before, after);
+                handleTagChange(context, activity, before, after);
             } else if (activity.getEntity() instanceof Game) {
                 Game before = (Game) context.getEntityById(activity.getEntityId());
                 Game after = (Game) activity.getEntity();
-                handleTagChange(context, match, activity, before, after);
+                handleTagChange(context, activity, before, after);
             }
         }
     }
 
-    protected void handleAction(MatchContext context, CompletedMatch match, Activity activity, Player player, Card source, Card target) {
+    protected void handleAction(MatchContext context, Activity activity, Player player, Card source, Card target) {
 
     }
 
-    protected void handleTagChange(MatchContext context, CompletedMatch match, Activity activity, Player player, Card before, Card after) {
+    protected void handleTagChange(MatchContext context, Activity activity, Player player, Card before, Card after) {
 
     }
 
-    protected void handleTagChange(MatchContext context, CompletedMatch match, Activity activity, Player before, Player after) {
+    protected void handleTagChange(MatchContext context, Activity activity, Player before, Player after) {
 
     }
 
-    protected void handleTagChange(MatchContext context, CompletedMatch match, Activity activity, Game before, Game after) {
+    protected void handleTagChange(MatchContext context, Activity activity, Game before, Game after) {
 
     }
 

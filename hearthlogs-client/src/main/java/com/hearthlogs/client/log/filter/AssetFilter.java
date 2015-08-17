@@ -10,7 +10,7 @@ public class AssetFilter implements LogFilter {
     public String filter(String line) {
         String filteredLine = null;
         if (!StringUtils.isEmpty(line) && line.startsWith("[Asset] CachedAsset.UnloadAssetObject() - unloading name=Medal_Ranked")) {
-            filteredLine = line.replace("[Asset] CachedAsset.UnloadAssetObject() - ", "").trim();
+            filteredLine = line.replace("[Asset] CachedAsset.UnloadAssetObject() - ", "");
         }
         return filteredLine;
     }

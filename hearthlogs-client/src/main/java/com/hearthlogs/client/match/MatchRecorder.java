@@ -40,16 +40,16 @@ public class MatchRecorder {
 
     @EventListener
     public void handleLine(LineReadEvent event) {
-        String line = event.getLine();
+        String line = event.getLine().trim();
         if (line.startsWith(CREATE_GAME)) {
             matchComplete = false;
             rank = null;
             startTime = System.currentTimeMillis();
             logger.info("A Game has started.  Game logging has begun.");
             currentMatch = new StringBuilder();
-            currentMatch.append(line).append("\n");
+            currentMatch.append(event.getLine()).append("\n");
         } else if (currentMatch != null && line.startsWith(GAME_STATE_COMPLETE)) {
-            currentMatch.append(line).append("\n");
+            currentMatch.append(event.getLine()).append("\n");
             matchComplete = true;
             endTime = System.currentTimeMillis();
         } else if (currentMatch != null && matchComplete && line.startsWith(MEDAL_RANKED)) {
@@ -61,9 +61,9 @@ public class MatchRecorder {
             matchData.setStartTime(startTime);
             matchData.setEndTime(endTime);
 
-            // sometimes a random unload asset of a totally different rank appears in the log. so we check if the difference
+            // sometimes the rank of another player shows up in the log. so we check if the difference
             // between the 2 ranks we detect is more than 1.  If it is than something is wrong since you can go up 2 ranks
-            // from 1 match played.
+            // from 1 match played.  This is a best approximation at the moment but seems good enough.
             if (rank != null && lastRecordedRank != null && Math.abs(Integer.valueOf(rank) - Integer.valueOf(lastRecordedRank)) > 1) {
                 rank = lastRecordedRank;
             }
@@ -73,7 +73,7 @@ public class MatchRecorder {
             lastRecordedRank = rank;
             publisher.publishEvent(new MatchRecordedEvent(this, matchData));
         } else if (currentMatch != null && event.isLoggable()) {
-            currentMatch.append(line).append("\n");
+            currentMatch.append(event.getLine()).append("\n");
         }
     }
 

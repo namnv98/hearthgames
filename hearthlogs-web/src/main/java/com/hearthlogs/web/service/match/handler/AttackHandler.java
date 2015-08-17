@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AttackHandler extends ActivityHandler {
 
-    public void handleAction(MatchContext context, CompletedMatch match, Activity activity, Player player, Card source, Card target) {
+    public void handleAction(MatchContext context, Activity activity, Player player, Card source, Card target) {
         if (activity.isAttack()) {
             System.out.println(getName(source.getCardid()) + " has attacked " + getName(target.getCardid()));
         }

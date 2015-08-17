@@ -35,8 +35,6 @@ public class MatchContext {
     private Map<String, String> tempCardData;
     private String currentPlayerName;
 
-    private CompletedMatch completedMatch = new CompletedMatch();
-
     private boolean createAction;
     private boolean createCard;
     private boolean createGameEntity;
@@ -206,9 +204,6 @@ public class MatchContext {
         for (Map.Entry<String, String> entry: data.entrySet()) {
             try {
                 String key = entry.getKey();
-                if (entity == null) {
-                    System.out.println();
-                }
                 if (!Character.isDigit(key.charAt(0))) {
                     org.apache.commons.beanutils.BeanUtils.copyProperty(entity, key, entry.getValue());
                 } else {
@@ -481,7 +476,126 @@ public class MatchContext {
         return startingCardIds;
     }
 
-    public CompletedMatch getCompletedMatch() {
-        return completedMatch;
+    private Player winner;
+    private Player loser;
+    private Player quitter;
+    private Player first;
+
+    private List<Card> friendlyStartingCards = new ArrayList<>();
+    private List<Card> opposingStartingCards = new ArrayList<>();
+
+    private List<Card> friendlyMulliganedCards = new ArrayList<>();
+    private List<Card> opposingMulliganedCards = new ArrayList<>();
+
+    private List<Card> friendlyCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
+    private List<Card> opposingCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
+
+    private List<Card> friendlyCreatedCards = new ArrayList<>();
+    private List<Card> opposingCreatedCards = new ArrayList<>();
+
+    private String turns;
+
+    public void addFriendlyStartingCard(Card card) {
+        friendlyStartingCards.add(card);
+    }
+
+    public void addOpposingStartingCard(Card card) {
+        opposingStartingCards.add(card);
+    }
+
+    public void addFriendlyCard(Card card) {
+        friendlyCards.add(card);
+    }
+
+    public void addOpposingCard(Card card) {
+        opposingCards.add(card);
+    }
+
+    public void mulliganFriendlyCard(Card card) {
+        friendlyMulliganedCards.add(card);
+    }
+
+    public void mulliganOpposingCard(Card card) {
+        opposingMulliganedCards.add(card);
+    }
+
+    public void addFriendlyCreatedCard(Card card) {
+        friendlyCreatedCards.add(card);
+    }
+
+    public void addOpposingCreatedCard(Card card) {
+        opposingCreatedCards.add(card);
+    }
+
+    public List<Card> getFriendlyStartingCards() {
+        return friendlyStartingCards;
+    }
+
+    public List<Card> getOpposingStartingCards() {
+        return opposingStartingCards;
+    }
+
+    public List<Card> getFriendlyMulliganedCards() {
+        return friendlyMulliganedCards;
+    }
+
+    public List<Card> getOpposingMulliganedCards() {
+        return opposingMulliganedCards;
+    }
+
+    public List<Card> getFriendlyCards() {
+        return friendlyCards;
+    }
+
+    public List<Card> getOpposingCards() {
+        return opposingCards;
+    }
+
+    public List<Card> getOpposingCreatedCards() {
+        return opposingCreatedCards;
+    }
+
+    public List<Card> getFriendlyCreatedCards() {
+        return friendlyCreatedCards;
+    }
+
+    public String getTurns() {
+        return turns;
+    }
+
+    public void setTurns(String turns) {
+        this.turns = turns;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
+    public Player getLoser() {
+        return loser;
+    }
+
+    public void setLoser(Player loser) {
+        this.loser = loser;
+    }
+
+    public Player getQuitter() {
+        return quitter;
+    }
+
+    public void setQuitter(Player quitter) {
+        this.quitter = quitter;
+    }
+
+    public Player getFirst() {
+        return first;
+    }
+
+    public void setFirst(Player first) {
+        this.first = first;
     }
 }
