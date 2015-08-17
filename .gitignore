@@ -1,2 +1,5 @@
 .idea/
+hearthlogs-api/target/
+hearthlogs-client/target/
+hearthlogs-web/target/
 *.iml
