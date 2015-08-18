@@ -31,7 +31,7 @@ import java.util.Collections;
 @EnableJpaRepositories(basePackages={"com.hearthlogs.web.repository.jpa"})
 @EnableTransactionManagement
 @ComponentScan("com.hearthlogs.web")
-@PropertySource("classpath:hearthlogs-web.properties")
+@PropertySource("classpath:application.properties")
 public class WebServiceConfig {
 
     @Autowired

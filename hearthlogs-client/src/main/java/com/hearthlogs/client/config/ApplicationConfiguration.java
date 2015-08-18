@@ -14,7 +14,7 @@ import java.io.File;
 
 @Configuration
 @ComponentScan("com.hearthlogs.client")
-@PropertySource("classpath:hearthlogs-client.properties")
+@PropertySource("classpath:application.properties")
 public class ApplicationConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfiguration.class);
