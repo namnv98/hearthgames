@@ -5,7 +5,6 @@ import com.hearthlogs.client.match.MatchData;
 import com.hearthlogs.client.match.event.RetryMatchRecordedEvent;
 import com.hearthlogs.client.log.listener.LogListener;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.input.Tailer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +47,9 @@ public class LogManager {
 
     private void uploadCachedLogs() {
         Collection<File> files = FileUtils.listFiles(new File(System.getProperty("java.io.tmpdir")), new String[]{"chm"}, false);
+        if (files.size() > 0) {
+            logger.info("Found " + files.size() + " recorded game files that haven't been uploaded.");
+        }
         for (File file: files) {
             try {
                 byte[] data = FileUtils.readFileToByteArray(file);

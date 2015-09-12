@@ -71,7 +71,7 @@ public class HearthLogsClient {
     private void recordMatch(MatchData matchData) {
         ResponseEntity<RecordMatchResponse> response = postMatchToServer(createRequestFromData(matchData));
         if (response != null && response.getStatusCode() == HttpStatus.OK) {
-            logger.info("Game recorded and available for viewing at: " + response.getBody().getUrl());
+            logger.info("Game recorded: " + response.getBody().getUrl());
         } else if (response != null && response.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
             logger.info("The game type is not recordable. Somehow a non-play mode game was uploaded.");
         } else if (response == null){
@@ -91,7 +91,7 @@ public class HearthLogsClient {
         try {
             response = restTemplate.postForEntity(this.properties.getUploadUrl(), request, RecordMatchResponse.class);
         } catch (Exception e) {
-            logger.info("HPT web service not available.");
+            logger.info("HearthLogs.com not available.");
         }
         return response;
     }
@@ -106,7 +106,6 @@ public class HearthLogsClient {
                 logger.error("Failed to delete temporary file : " + file.getAbsolutePath());
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Failed to delete temporary file : " + file.getAbsolutePath());
         }
     }

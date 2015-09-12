@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -32,6 +33,7 @@ public class Main {
         frame.setResizable(true);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setState(Frame.ICONIFIED);
 
         initLogger(consoleTextArea);
 
@@ -51,7 +53,7 @@ public class Main {
 
         PatternLayoutEncoder encoder = new PatternLayoutEncoder();
         encoder.setContext(context);
-        encoder.setPattern("%d{HH:mm:ss} %level - %msg%n");
+        encoder.setPattern("%d{HH:mm:ss} - %msg%n");
         encoder.start();
 
         OutputStreamAppender<ILoggingEvent> appender= new OutputStreamAppender<>();

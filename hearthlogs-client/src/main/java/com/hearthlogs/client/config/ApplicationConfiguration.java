@@ -14,7 +14,6 @@ import java.io.File;
 
 @Configuration
 @ComponentScan("com.hearthlogs.client")
-@PropertySource("classpath:application.properties")
 public class ApplicationConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfiguration.class);
@@ -25,7 +24,7 @@ public class ApplicationConfiguration {
     @Bean
     public ApplicationProperties properties() {
         ApplicationProperties properties = new ApplicationProperties();
-        properties.setUploadUrl(env.getProperty("upload.url"));
+        properties.setUploadUrl("http://hearthlogs.com/upload");
 
         String name = env.getProperty("os.name");
         String userHome = env.getProperty("user.home");

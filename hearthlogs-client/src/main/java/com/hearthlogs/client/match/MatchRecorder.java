@@ -12,6 +12,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.DeflaterOutputStream;
@@ -38,6 +41,8 @@ public class MatchRecorder {
 
     private String lastRecordedRank;
 
+    private List<MatchData> recordedMatches = new ArrayList<>();
+
     @EventListener
     public void handleLine(LineReadEvent event) {
         String line = event.getLine().trim();
@@ -45,7 +50,6 @@ public class MatchRecorder {
             matchComplete = false;
             rank = null;
             startTime = System.currentTimeMillis();
-            logger.info("A Game has started.  Game logging has begun.");
             currentMatch = new StringBuilder();
             currentMatch.append(event.getLine()).append("\n");
         } else if (currentMatch != null && line.startsWith(GAME_STATE_COMPLETE)) {
@@ -55,7 +59,6 @@ public class MatchRecorder {
         } else if (currentMatch != null && matchComplete && line.startsWith(MEDAL_RANKED)) {
             rank = getRank(line);
         } else if (currentMatch != null && matchComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
-            logger.info("The Game is over.  Attempting to record to HPT web service.");
             MatchData matchData = new MatchData();
             matchData.setData(compress(currentMatch.toString()));
             matchData.setStartTime(startTime);
@@ -71,10 +74,27 @@ public class MatchRecorder {
 
             currentMatch = null;
             lastRecordedRank = rank;
-            publisher.publishEvent(new MatchRecordedEvent(this, matchData));
+            if (!hasMatchBeenRecorded(matchData)) {
+                logger.info("The Game has been recorded. Attempting to record to HearthLogs.com");
+
+                recordedMatches.add(matchData);
+                publisher.publishEvent(new MatchRecordedEvent(this, matchData));
+            }
+
         } else if (currentMatch != null && event.isLoggable()) {
             currentMatch.append(event.getLine()).append("\n");
         }
+    }
+
+    // This method is needed because of a bug in Tailer that results in the log being re-read from the beginning when
+    // hearthstone is exited out. So we have to unfortunately compare previous games data.
+    private boolean hasMatchBeenRecorded(MatchData data) {
+        for (MatchData md : recordedMatches) {
+            if (Arrays.equals(data.getData(), md.getData())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getRank(String line) {
