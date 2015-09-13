@@ -17,10 +17,19 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.ServerSocket;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
+
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(43210);
+        } catch (IOException e) {
+            System.exit(-1);
+        }
 
         JFrame frame = new SystemTraySupportedJFrame("Hearth Logs");
 
@@ -45,6 +54,10 @@ public class Main {
         LogManager logManager = context.getBean(LogManager.class);
         logManager.start();
 
+
+        while (true) {
+            serverSocket.accept();
+        }
 
     }
 
