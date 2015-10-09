@@ -1,7 +1,5 @@
 package com.hearthlogs.client.ws;
 
-import com.hearthlogs.api.ws.request.RecordMatchRequest;
-import com.hearthlogs.api.ws.response.RecordMatchResponse;
 import com.hearthlogs.client.match.event.SaveMatchLocallyEvent;
 import com.hearthlogs.client.config.ApplicationProperties;
 import com.hearthlogs.client.match.MatchData;

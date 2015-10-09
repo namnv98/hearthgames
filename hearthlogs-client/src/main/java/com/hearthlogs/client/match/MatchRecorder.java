@@ -35,11 +35,9 @@ public class MatchRecorder {
 
     private StringBuilder currentMatch;
     private boolean matchComplete;
-    private String rank;
+    private Integer rank;
     private long startTime;
     private long endTime;
-
-    private String lastRecordedRank;
 
     private List<MatchData> recordedMatches = new ArrayList<>();
 
@@ -57,26 +55,20 @@ public class MatchRecorder {
             matchComplete = true;
             endTime = System.currentTimeMillis();
         } else if (currentMatch != null && matchComplete && line.startsWith(MEDAL_RANKED)) {
-            rank = getRank(line);
+            int rankFound = getRank(line);
+            if (rank == null || rankFound < rank) {
+                rank = rankFound;
+            }
         } else if (currentMatch != null && matchComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
             MatchData matchData = new MatchData();
             matchData.setData(compress(currentMatch.toString()));
             matchData.setStartTime(startTime);
             matchData.setEndTime(endTime);
-
-            // sometimes the rank of another player shows up in the log. so we check if the difference
-            // between the 2 ranks we detect is more than 1.  If it is than something is wrong since you can go up 2 ranks
-            // from 1 match played.  This is a best approximation at the moment but seems good enough.
-            if (rank != null && lastRecordedRank != null && Math.abs(Integer.valueOf(rank) - Integer.valueOf(lastRecordedRank)) > 1) {
-                rank = lastRecordedRank;
-            }
-            matchData.setRank(rank);
+            matchData.setRank(rank+"");
 
             currentMatch = null;
-            lastRecordedRank = rank;
             if (!hasMatchBeenRecorded(matchData)) {
-                logger.info("The Game has been recorded. Attempting to record to HearthLogs.com");
-
+                logger.info("The Game has been recorded. Attempting to record @ HearthLogs.com");
                 recordedMatches.add(matchData);
                 publisher.publishEvent(new MatchRecordedEvent(this, matchData));
             }
@@ -97,11 +89,17 @@ public class MatchRecorder {
         return false;
     }
 
-    private String getRank(String line) {
-        String rank = null;
+    private int getRank(String line) {
+        int rank = 0;
         Matcher matcher = medalRankPattern.matcher(line);
         if (matcher.find()) {
-            rank = matcher.group(1);
+            String r = null;
+            try {
+                r = matcher.group(1);
+                rank = Integer.parseInt(r);
+            } catch (NumberFormatException e) {
+                logger.warn("Found a rank that was not parseable, maybe this is the Legend rank? : " + r);
+            }
         }
         return rank;
     }

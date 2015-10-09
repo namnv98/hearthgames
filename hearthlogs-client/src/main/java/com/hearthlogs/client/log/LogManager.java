@@ -1,6 +1,5 @@
 package com.hearthlogs.client.log;
 
-import com.hearthlogs.client.config.ApplicationProperties;
 import com.hearthlogs.client.match.MatchData;
 import com.hearthlogs.client.match.event.RetryMatchRecordedEvent;
 import com.hearthlogs.client.log.listener.LogListener;
@@ -21,26 +20,25 @@ public class LogManager {
     private static final Logger logger = LoggerFactory.getLogger(LogManager.class);
 
     private LogListener logListener;
-    private ApplicationProperties properties;
     private ApplicationEventPublisher publisher;
+    private File logFile;
 
     @Autowired
     public LogManager(LogListener logListener,
-                      ApplicationProperties properties,
+                      File logFile,
                       ApplicationEventPublisher publisher) {
         this.logListener = logListener;
-        this.properties = properties;
         this.publisher = publisher;
+        this.logFile = logFile;
     }
 
     public void start() throws InterruptedException, FileNotFoundException, UnsupportedEncodingException {
         uploadCachedLogs();
-        File file = properties.getLogFile();
-        if (!file.exists()) {
-            logger.error("Cannot find file : " + file.getName());
+        if (!logFile.exists()) {
+            logger.error("Cannot find file : " + logFile.getName());
             return;
         }
-        Tailer tailer = new Tailer(properties.getLogFile(), logListener, 1000, true);
+        Tailer tailer = new Tailer(logFile, logListener, 1000, true);
         Thread thread = new Thread(tailer);
         thread.start();
     }

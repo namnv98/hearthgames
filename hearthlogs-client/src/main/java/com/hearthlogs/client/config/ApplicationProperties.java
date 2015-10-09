@@ -1,12 +1,15 @@
 package com.hearthlogs.client.config;
 
-import java.io.File;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
+@ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
 
     private String uploadUrl;
-    private File logFile;
-    private File logConfigFile;
+    private String userHome;
+    private String osName;
 
     public String getUploadUrl() {
         return uploadUrl;
@@ -16,19 +19,19 @@ public class ApplicationProperties {
         this.uploadUrl = uploadUrl;
     }
 
-    public File getLogFile() {
-        return logFile;
+    public String getUserHome() {
+        return userHome;
     }
 
-    public void setLogFile(File logFile) {
-        this.logFile = logFile;
+    public void setUserHome(String userHome) {
+        this.userHome = userHome;
     }
 
-    public File getLogConfigFile() {
-        return logConfigFile;
+    public String getOsName() {
+        return osName;
     }
 
-    public void setLogConfigFile(File logConfigFile) {
-        this.logConfigFile = logConfigFile;
+    public void setOsName(String osName) {
+        this.osName = osName;
     }
 }

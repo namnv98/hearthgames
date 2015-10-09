@@ -17,14 +17,13 @@ public class LogConfigAnalyzerConfigurer {
     private static final Logger logger = LoggerFactory.getLogger(LogConfigAnalyzerConfigurer.class);
 
     @Autowired
-    private ApplicationProperties properties;
+    private File logConfigFile;
 
     public void configure() throws IOException {
-        File logConfigFile = properties.getLogConfigFile();
         if (!logConfigFile.exists()) {
             boolean created = logConfigFile.createNewFile();
             if (!created) {
-                String error = properties.getLogConfigFile() + " did not exist so we tried to create it, but failed.";
+                String error = logConfigFile + " did not exist so we tried to create it, but failed.";
                 logger.error(error);
             }
         }
