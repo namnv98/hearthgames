@@ -1,0 +1,94 @@
+New Server @ Godaddy (CentOS 6)
+
+Setup Hearthlogs.com on Apache:
+
+1. Setup hearthlogs.com apache folder and set permissions
+
+> mkdir -p /var/www/hearthlogs.com/public_html
+> chown -R apache:apache /var/www/hearthlogs.com/public_html/
+> chmod 755 /var/www
+
+2. Create a test page in public_html called index.html
+
+<html>
+  <head>
+    <title>www.hearthlogs.com</title>
+  </head>
+  <body>
+    <h1>Success: You Have Set Up a Virtual Host</h1>
+  </body>
+</html>
+
+3. Edit httpd conf
+
+> vi /etc/httpd/conf/httpd.conf
+
+Set server name:
+
+ServerName www.hearthlogs.com:80
+
+
+make sure NameVirtualHost *:80 is uncommented
+
+<VirtualHost *:80>
+     ServerAdmin hearthlogs@gmail.com
+     DocumentRoot /var/www/hearthlogs.com/public_html
+     ServerName www.hearthlogs.com
+     ServerAlias hearthlogs.com
+     ErrorLog /var/www/hearthlogs.com/error.log
+     CustomLog /var/www/hearthlogs.com/requests.log common
+</VirtualHost>
+
+
+
+Setup SSL
+
+1. Install Mod SSL
+
+> yum install mod_ssl
+
+2. Create dir to store key and certs
+
+> mkdir /etc/httpd/ssl
+
+3. Create CSR Request for Apache:
+
+> openssl req -new -newkey rsa:2048 -nodes -keyout hearthlogs.com.key -out hearthlogs.com.csr
+
+4. Go to Godaddy and request the certificate and download files for apache
+
+- copy all the files to /etc/httpd/ssl
+
+5. Add the same document root into:
+
+<VirtualHost *:443>
+
+
+6. Setup Java 8
+
+http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/
+
+7. Setup Tomcat 8
+
+http://www.davidghedini.com/pg/entry/install_tomcat_8_on_centos
+
+
+8. Add the following to both httpd.conf and ssl.conf in the virtual hosts:
+
+ ProxyPass / http://localhost:8080/
+ ProxyPassReverse / http://localhost:8080/
+
+ 
+9. Change sshd port  
+- edit /etc/ssh/sshd_config
+- uncomment Port 22 and change it to 54322
+- /etc/init.d/sshd restart
+ 
+
+10. Create Firewall
+
+- https://www.digitalocean.com/community/tutorials/how-to-set-up-a-basic-iptables-firewall-on-centos-6
+
+
+
+
