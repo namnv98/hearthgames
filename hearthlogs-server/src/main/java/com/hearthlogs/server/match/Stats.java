@@ -6,20 +6,14 @@ import java.util.*;
 
 public class Stats {
 
-    @Field
     private String id;
 
-    @Field
     private String winnerClass; // the class (i.e. warrior, hunter, etc...)
-    @Field
     private String loserClass;
 
-    @Field
     private List<String> winnerCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
-    @Field
     private List<String> loserCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
 
-    @Field
     private int turns;
 
     @Field

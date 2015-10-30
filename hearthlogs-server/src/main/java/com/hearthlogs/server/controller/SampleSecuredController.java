@@ -1,6 +1,6 @@
 package com.hearthlogs.server.controller;
 
-import com.hearthlogs.server.auth.UserInfo;
+import com.hearthlogs.server.config.security.UserInfo;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,9 +1,6 @@
 package com.hearthlogs.server.match;
 
-import com.hearthlogs.server.domain.Card;
-import com.hearthlogs.server.domain.Entity;
-import com.hearthlogs.server.domain.Game;
-import com.hearthlogs.server.domain.Player;
+import com.hearthlogs.server.match.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -40,8 +37,11 @@ public class MatchContext {
     private boolean createGameEntity;
     private boolean createPlayer;
     private boolean updateCard;
-    private boolean gameRunning;
+    private boolean gameUpdating;
     private boolean updatePlayer;
+
+    private int currentIndentLevel;
+    private int previousIndentLevel;
 
     public void setGame(Game game) {
         this.game = game;
@@ -167,12 +167,12 @@ public class MatchContext {
         this.updateCard = updateCard;
     }
 
-    public boolean isGameRunning() {
-        return gameRunning;
+    public boolean isGameUpdating() {
+        return gameUpdating;
     }
 
-    public void setGameRunning(boolean gameRunning) {
-        this.gameRunning = gameRunning;
+    public void setGameUpdating(boolean gameUpdating) {
+        this.gameUpdating = gameUpdating;
     }
 
     public Map<String, String> getTempPlayerData() {
@@ -199,6 +199,46 @@ public class MatchContext {
         this.updatePlayer = updatePlayer;
     }
 
+    public int getCurrentIndentLevel() {
+        return currentIndentLevel;
+    }
+
+    public void setCurrentIndentLevel(int currentIndentLevel) {
+        this.currentIndentLevel = currentIndentLevel;
+    }
+
+    public int getPreviousIndentLevel() {
+        return previousIndentLevel;
+    }
+
+    public void setPreviousIndentLevel(int previousIndentLevel) {
+        this.previousIndentLevel = previousIndentLevel;
+    }
+
+    public void setIndentLevel(String line) {
+        this.previousIndentLevel = currentIndentLevel;
+        this.currentIndentLevel = getIndentLevel(line);
+    }
+
+    private int getIndentLevel(String line) {
+        int count = 0;
+        for (char c: line.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        return count > 0 ? count / 4 : 0;
+    }
+
+    public boolean hasIndentationDecreased() {
+        return currentIndentLevel < previousIndentLevel;
+    }
+
+    public boolean hasIndentationIncreased() {
+        return currentIndentLevel > previousIndentLevel;
+    }
 
     public void populateEntity(Entity entity, Map<String, String> data) {
         for (Map.Entry<String, String> entry: data.entrySet()) {
@@ -293,19 +333,28 @@ public class MatchContext {
 
     public void endCreateCard() {
         Card card = getCurrentCard();
-        if (!isGameRunning()) {
+        if (!isGameUpdating()) {
             startingCardIds.add(card.getEntityId());
-            System.out.println("Adding " + card.getCardid() + " to starting cards");
+//            System.out.println("Adding " + card.getCardid() + " to starting cards (id=" + card.getEntityId()+ ")");
             if (!StringUtils.isEmpty(card.getCardid()) && !friendlyPlayer.getTeamId().equals(card.getController()) && !card.getCardtype().startsWith("HERO")) {
-                System.out.println("Found a known card that doesnt belong to friendly player...swapping players");
+//                System.out.println("Found a known card that doesnt belong to friendly player...swapping players");
                 Player swap = friendlyPlayer;
                 friendlyPlayer = opposingPlayer;
                 opposingPlayer = swap;
             }
         }
         getCards().add(getCurrentCard());
+
+        Activity currentActivity = null;
+        if (!getActivityStack().empty()) {
+            currentActivity = getActivityStack().peek();
+        }
         Activity activity = createActivity(getCurrentCard());
-        getActivities().add(activity);
+        if (currentActivity == null) {
+            getActivities().add(activity);
+        } else {
+            currentActivity.addChildGameEvent(activity);
+        }
         setCurrentCard(null);
         setCreateCard(false);
     }
@@ -405,13 +454,13 @@ public class MatchContext {
     public void startUpdateGame(Map<String, String> data) {
         processPendingCardUpdate();
         populateEntity(getGame(), data);
-        setGameRunning(true);
+        setGameUpdating(true);
     }
 
     public void endUpdateGame(Map<String, String> data) {
         Activity activity = createActivity(getGame(), data);
         getActivities().add(activity);
-        setGameRunning(false);
+        setGameUpdating(false);
     }
 
     public void updateCurrentGame(Map<String, String> data) {
@@ -476,126 +525,9 @@ public class MatchContext {
         return startingCardIds;
     }
 
-    private Player winner;
-    private Player loser;
-    private Player quitter;
-    private Player first;
-
-    private List<Card> friendlyStartingCards = new ArrayList<>();
-    private List<Card> opposingStartingCards = new ArrayList<>();
-
-    private List<Card> friendlyMulliganedCards = new ArrayList<>();
-    private List<Card> opposingMulliganedCards = new ArrayList<>();
-
-    private List<Card> friendlyCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
-    private List<Card> opposingCards = new ArrayList<>();  // the list of cards that were part of the deck.  This will not include cards created by other cards
-
-    private List<Card> friendlyCreatedCards = new ArrayList<>();
-    private List<Card> opposingCreatedCards = new ArrayList<>();
-
-    private String turns;
-
-    public void addFriendlyStartingCard(Card card) {
-        friendlyStartingCards.add(card);
+    public boolean isMatchValid() {
+        // We found a match that was played against the computer.  This is not acceptable.
+        return !"0".equals(getOpposingPlayer().getGameAccountIdLo());
     }
 
-    public void addOpposingStartingCard(Card card) {
-        opposingStartingCards.add(card);
-    }
-
-    public void addFriendlyCard(Card card) {
-        friendlyCards.add(card);
-    }
-
-    public void addOpposingCard(Card card) {
-        opposingCards.add(card);
-    }
-
-    public void mulliganFriendlyCard(Card card) {
-        friendlyMulliganedCards.add(card);
-    }
-
-    public void mulliganOpposingCard(Card card) {
-        opposingMulliganedCards.add(card);
-    }
-
-    public void addFriendlyCreatedCard(Card card) {
-        friendlyCreatedCards.add(card);
-    }
-
-    public void addOpposingCreatedCard(Card card) {
-        opposingCreatedCards.add(card);
-    }
-
-    public List<Card> getFriendlyStartingCards() {
-        return friendlyStartingCards;
-    }
-
-    public List<Card> getOpposingStartingCards() {
-        return opposingStartingCards;
-    }
-
-    public List<Card> getFriendlyMulliganedCards() {
-        return friendlyMulliganedCards;
-    }
-
-    public List<Card> getOpposingMulliganedCards() {
-        return opposingMulliganedCards;
-    }
-
-    public List<Card> getFriendlyCards() {
-        return friendlyCards;
-    }
-
-    public List<Card> getOpposingCards() {
-        return opposingCards;
-    }
-
-    public List<Card> getOpposingCreatedCards() {
-        return opposingCreatedCards;
-    }
-
-    public List<Card> getFriendlyCreatedCards() {
-        return friendlyCreatedCards;
-    }
-
-    public String getTurns() {
-        return turns;
-    }
-
-    public void setTurns(String turns) {
-        this.turns = turns;
-    }
-
-    public Player getWinner() {
-        return winner;
-    }
-
-    public void setWinner(Player winner) {
-        this.winner = winner;
-    }
-
-    public Player getLoser() {
-        return loser;
-    }
-
-    public void setLoser(Player loser) {
-        this.loser = loser;
-    }
-
-    public Player getQuitter() {
-        return quitter;
-    }
-
-    public void setQuitter(Player quitter) {
-        this.quitter = quitter;
-    }
-
-    public Player getFirst() {
-        return first;
-    }
-
-    public void setFirst(Player first) {
-        this.first = first;
-    }
 }

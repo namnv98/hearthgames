@@ -2,14 +2,10 @@ spring:
   application:
     name: HearthLogs Server
   datasource:
-    url: jdbc:postgresql://127.0.0.1:9001/hearthlogs
-    username: hl
-    password: STP*,96w
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-  data:
-    solr:
-      host: http://127.0.0.1:9000/solr/hearthlogs
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
 security:
   oauth2:
     client:

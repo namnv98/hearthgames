@@ -4,8 +4,12 @@ import com.hearthlogs.server.controller.request.RecordMatchRequest;
 import com.hearthlogs.server.controller.response.RecordMatchResponse;
 import com.hearthlogs.server.match.Match;
 import com.hearthlogs.server.match.MatchContext;
+import com.hearthlogs.server.match.result.MatchResult;
 import com.hearthlogs.server.match.Stats;
-import com.hearthlogs.server.service.match.MatchService;
+import com.hearthlogs.server.service.MatchParserService;
+import com.hearthlogs.server.service.MatchPersistenceService;
+import com.hearthlogs.server.service.MatchService;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.util.List;
 
 @RestController
 public class MatchController {
@@ -28,24 +31,33 @@ public class MatchController {
     @Autowired
     private MatchService matchService;
 
+    @Autowired
+    private MatchParserService matchParserService;
+
+    @Autowired
+    private MatchPersistenceService matchPersistenceService;
+
     @RequestMapping(value = "/upload", method=RequestMethod.POST)
     public ResponseEntity<RecordMatchResponse> uploadMatch(RecordMatchRequest request) {
         Stats stats;
         try {
-            MatchContext context = matchService.deserializeGame(request.getData());
-            if (!matchService.isMatchValid(context)) {
+            List<String> lines = matchParserService.deserializeGame(request.getData());
+            MatchContext context = matchParserService.processMatch(lines);
+            if (!context.isMatchValid()) {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
-            Match match = matchService.saveRawPlayedGame(request.getData(), request.getStartTime(), request.getEndTime(), request.getRank());
-            stats = matchService.processMatch(context, match);
-            if (stats == null) {
+            MatchResult result = matchService.processMatch(context, request.getRank());
+            if (result == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            matchService.indexGame(stats);
+
+            Match match = matchPersistenceService.saveRawPlayedGame(request.getData(), request.getStartTime(), request.getEndTime(), request.getRank());
+            stats = new Stats();
+            matchPersistenceService.indexGame(stats);
+
+
         } catch (Exception e) {
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            logger.error(sw.toString());
+            logger.error(ExceptionUtils.getStackTrace(e));
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         RecordMatchResponse response = new RecordMatchResponse();

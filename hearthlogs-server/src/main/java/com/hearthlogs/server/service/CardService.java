@@ -1,7 +1,7 @@
 package com.hearthlogs.server.service;
 
-import com.hearthlogs.server.domain.CardDetails;
-import com.hearthlogs.server.domain.CardSets;
+import com.hearthlogs.server.match.domain.CardDetails;
+import com.hearthlogs.server.match.domain.CardSets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +39,12 @@ public class CardService {
             cards.put(c.getId(), c);
         }
         for (CardDetails c: cardSets.getTavernBrawl()) {
+            cards.put(c.getId(), c);
+        }
+        for (CardDetails c: cardSets.getHeroSkins()) {
+            cards.put(c.getId(), c);
+        }
+        for (CardDetails c: cardSets.getTheGrandTournament()) {
             cards.put(c.getId(), c);
         }
     }

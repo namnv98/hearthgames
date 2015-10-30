@@ -1,64 +1,30 @@
 package com.hearthlogs.server.match;
 
-import javax.persistence.*;
-import javax.persistence.Entity;
+import com.hearthlogs.server.match.result.Turn;
+
 import java.sql.Timestamp;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "match")
 public class Match {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "match_id")
     private Long id;
-
-    @Column(name = "date_created")
     private Timestamp dateCreated;
-
-    @Column(name = "date_updated")
     private Timestamp dateUpdated;
-
-    @Column(name = "raw_game")
     private byte[] rawGame;
-
-    @Column(name = "start_time")
     private Timestamp startTime;
-
-    @Column(name = "end_time")
     private Timestamp endTime;
-
-    @Column(name = "rank")
     private String rank;
-
-    @Column(name = "f_account_id")
     private String friendlyAccountId;
-
-    @Column(name = "o_account_id")
     private String opposingAccountId;
-
-    @Column(name = "f_player")
     private String friendlyPlayer; // the name of the friendly player
-
-    @Column(name = "o_player")
     private String opposingPlayer;
-
-    @Column(name = "first")
     private String first; // the player who went first
-
-    @Column(name = "winner")
     private String winner; // will contain the name of the player who won
-
-    @Column(name = "loser")
     private String loser;
-
-    @Column(name = "quitter")
     private String quitter; // the name of the player who quit if any
 
-    @OneToMany(targetEntity=Turn.class, mappedBy="match")
-    private Set<Turn> turns = new HashSet<>();
+    private Set<Turn> turns = new LinkedHashSet<>();
 
     public Long getId() {
         return id;
