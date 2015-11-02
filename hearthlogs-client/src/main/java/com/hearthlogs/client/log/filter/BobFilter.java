@@ -10,7 +10,7 @@ public class BobFilter implements LogFilter {
     public String filter(String line) {
         String filteredLine = null;
         if (!StringUtils.isEmpty(line) && line.startsWith("[Bob] ---RegisterFriendChallenge---")) {
-            filteredLine = line.replace("[Bob]", "");
+            filteredLine = line.replace("[Bob] ", "");
         }
         return filteredLine;
     }
