@@ -49,6 +49,11 @@ public abstract class ActivityHandler {
             Card after = (Card) activity.getEntity();
             Player player = before.getController().equals(parsedMatch.getFriendlyPlayer().getController()) ? parsedMatch.getFriendlyPlayer() : parsedMatch.getOpposingPlayer();
             handleShowEntity(result, parsedMatch, activity, player, before, after);
+        } else if (activity.isHideEntity()) {
+            Card before = (Card) parsedMatch.getEntityById(activity.getEntityId());
+            Card after = (Card) activity.getEntity();
+            Player player = before.getController().equals(parsedMatch.getFriendlyPlayer().getController()) ? parsedMatch.getFriendlyPlayer() : parsedMatch.getOpposingPlayer();
+            handleHideEntity(result, parsedMatch, activity, player, before, after);
         } else if (activity.isNewCard()) {
             handleNewCard(result, parsedMatch, activity);
         } else if (activity.isNewGame()) {
@@ -81,6 +86,10 @@ public abstract class ActivityHandler {
     }
 
     protected void handleShowEntity(MatchResult result, ParsedMatch parsedMatch, Activity activity, Player player, Card before, Card after) {
+
+    }
+
+    protected void handleHideEntity(MatchResult result, ParsedMatch parsedMatch, Activity activity, Player player, Card before, Card after) {
 
     }
 }

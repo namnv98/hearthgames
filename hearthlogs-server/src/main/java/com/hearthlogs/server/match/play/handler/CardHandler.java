@@ -55,7 +55,54 @@ public class CardHandler extends ActivityHandler {
 
         }
 
+        if (Zone.DECK.eq(before.getZone()) && Zone.HAND.eq(after.getZone())) {
 
+            if (parsedMatch.getGame().isMulliganOver()) {
+
+                result.getCurrentTurn().addCardDrawn(player, before, activity.getParent().getEntity());
+                if (activity.getParent() != null && (activity.getParent().isTrigger() || activity.getParent().isPower())) {
+                    Entity entity = activity.getParent().getEntity();
+                    if (entity instanceof Card) {
+                        System.out.println(player.getName() + " has drawn. " + (before.getCardDetails() != null ? before.getCardDetails().getName() : "") + ", id="+before.getEntityId());
+                    } else if (entity instanceof Player) {
+                        System.out.println(player.getName() + " has drawn. " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                    }
+                }
+
+            } else {
+                if (player == parsedMatch.getFriendlyPlayer()) {
+                    if (parsedMatch.getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
+                        result.addFriendlyStartingCard(before);
+                        System.out.println(player.getName() + " has drawn+ " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                    }
+                } else {
+                    if (parsedMatch.getStartingCardIds().contains(before.getEntityId())) {
+                        result.addOpposingStartingCard(before);
+                        System.out.println(player.getName() + " has drawn- " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                    }
+                }
+            }
+
+
+
+        }
+
+
+    }
+
+    public void handleHideEntity(MatchResult result, ParsedMatch parsedMatch, Activity activity, Player player, Card before, Card after) {
+        if (Zone.HAND.eq(before.getZone()) && Zone.DECK.eq(after.getZone())) {
+
+            if ("DEALING".equals(player.getMulliganState())) {
+                if (player == parsedMatch.getFriendlyPlayer()) {
+                    result.mulliganFriendlyCard(before);
+                } else {
+                    result.mulliganOpposingCard(before);
+                }
+                System.out.println(player.getName() + " has mulliganed " + before.getCardDetails().getName());
+            }
+
+        }
     }
 
     public void handleCardTagChange(MatchResult result, ParsedMatch parsedMatch, Activity activity, Player player, Card before, Card after) {
@@ -78,7 +125,10 @@ public class CardHandler extends ActivityHandler {
         }
 
         if (after.getZonePosition() != null) {
-            result.getCurrentTurn().addZonePositionChange(before, Zone.valueOf(before.getZone()), Integer.parseInt(after.getZonePosition()));
+            if (parsedMatch.getGame().isMulliganOver()) {
+                result.getCurrentTurn().addZonePositionChange(before, Zone.valueOf(before.getZone()), Integer.parseInt(after.getZonePosition()));
+            }
+
 //            System.out.println(before.getCardDetails() == null ? "unknown card" : before.getCardDetails().getName() + " has moved to " + before.getZone() + ", position " + after.getZonePosition());
         }
 
@@ -111,6 +161,7 @@ public class CardHandler extends ActivityHandler {
                 }
 
             }
+
             if (Zone.DECK.eq(before.getZone()) && Zone.HAND.eq(after.getZone())) {
 
                 if (parsedMatch.getGame().isMulliganOver()) {
