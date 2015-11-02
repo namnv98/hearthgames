@@ -4,7 +4,13 @@
     <meta charset="utf-8">
 </head>
 <body>
-<p>This is a sample application of how to connect Spring Security with BattleNet.</p>
-<a href="/test">Go to some secured resource</a>
+
+<form method="POST" enctype="multipart/form-data" action="/upload">
+    File to upload: <input type="file" name="file">
+    <br /> <br />
+    <input type="submit" value="Upload"> Press here to upload the file!
+</form>
+
+
 </body>
 </html>

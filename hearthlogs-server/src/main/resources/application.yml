@@ -13,3 +13,4 @@ security:
       client-secret: PTywt4SWSv63EAKGhCyHumVc9dVuXQcw
       access-token-uri: https://us.battle.net/oauth/token
       user-authorization-uri: https://us.battle.net/oauth/authorize
+multipart.maxFileSize: 10MB

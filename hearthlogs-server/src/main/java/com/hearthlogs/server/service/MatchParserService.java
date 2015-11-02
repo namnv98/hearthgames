@@ -1,8 +1,8 @@
 package com.hearthlogs.server.service;
 
-import com.hearthlogs.server.service.log.handler.*;
-import com.hearthlogs.server.match.MatchContext;
-import org.apache.commons.io.FileUtils;
+import com.hearthlogs.server.match.parse.handler.*;
+import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class MatchParserService {
 
     private static final Logger logger = LoggerFactory.getLogger(MatchParserService.class);
 
-    private List<AbstractHandler> handlers = new ArrayList<>();
+    protected List<AbstractHandler> handlers = new ArrayList<>();
 
     public MatchParserService() {
         handlers.add(new CreateGameHandler());
@@ -37,16 +37,16 @@ public class MatchParserService {
         return Arrays.asList(lines);
     }
 
-    public MatchContext processMatch(List<String> lines) {
-        MatchContext context = new MatchContext();
-        for (String line : lines) {
-            context.setIndentLevel(line); // setting the level of indentation will help with cases where there are issues with the log file (i.e. an action_end is missing)
-            parseLine(context, line.trim());
+    public ParsedMatch parseLines(List<LogLineData> logLineDatas) {
+        ParsedMatch parsedMatch = new ParsedMatch();
+        for (LogLineData logLineData : logLineDatas) {
+            parsedMatch.setIndentLevel(logLineData.getLine()); // setting the level of indentation will help with cases where there are issues with the log file (i.e. an action_end is missing)
+            parseLine(parsedMatch, logLineData);
         }
-        return context;
+        return parsedMatch;
     }
 
-    private String decompressGameData(byte[] data) {
+    protected String decompressGameData(byte[] data) {
         try (
                 InputStream is = new ByteArrayInputStream(data);
                 InflaterInputStream iis = new InflaterInputStream(is);
@@ -62,17 +62,17 @@ public class MatchParserService {
         }
     }
 
-    private void parseLine(MatchContext context, String line) {
-        boolean processed = processLine(context, line);
+    protected void parseLine(ParsedMatch parsedMatch, LogLineData logLineData) {
+        boolean processed = processLine(parsedMatch, logLineData);
         if (!processed) {
-            parseLine(context, line);
+            parseLine(parsedMatch, logLineData);
         }
     }
 
-    private boolean processLine(MatchContext context, String line) {
+    protected boolean processLine(ParsedMatch parsedMatch, LogLineData logLineData) {
         for (Handler handler: handlers) {
-            if (handler.applies(context, line)) {
-                return handler.handle(context, line);
+            if (handler.supports(parsedMatch, logLineData.getTrimmedLine())) {
+                return handler.handle(parsedMatch, logLineData);
             }
         }
         return true;

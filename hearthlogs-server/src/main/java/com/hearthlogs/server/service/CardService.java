@@ -1,7 +1,7 @@
 package com.hearthlogs.server.service;
 
-import com.hearthlogs.server.match.domain.CardDetails;
-import com.hearthlogs.server.match.domain.CardSets;
+import com.hearthlogs.server.match.parse.domain.CardDetails;
+import com.hearthlogs.server.match.parse.domain.CardSets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
