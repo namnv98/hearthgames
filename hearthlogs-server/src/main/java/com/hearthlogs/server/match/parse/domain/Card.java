@@ -90,8 +90,7 @@ public class Card extends Entity implements Serializable {
     private String damage;
     private String predamage;
     private String revealed;
-
-    private String name;
+    private String frozen;
 
     private CardDetails cardDetails;
 
@@ -511,6 +510,14 @@ public class Card extends Entity implements Serializable {
         this.revealed = revealed;
     }
 
+    public String getFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(String frozen) {
+        this.frozen = frozen;
+    }
+
     public CardDetails getCardDetails() {
         return cardDetails;
     }
@@ -541,15 +548,15 @@ public class Card extends Entity implements Serializable {
     }
 
     public String getCardDetailsCost() {
-        return cardDetails != null ? cardDetails.getCost() : "0";
+        return cardDetails != null && cardDetails.getCost() != null ? cardDetails.getCost() : "0";
     }
 
     public String getCardDetailsHealth() {
-        return cardDetails != null ? cardDetails.getHealth() : "0";
+        return cardDetails != null && cardDetails.getHealth() != null ? cardDetails.getHealth() : "0";
     }
 
     public String getCardDetailsAttack() {
-        return cardDetails != null ? cardDetails.getAttack() : "0";
+        return cardDetails != null && cardDetails.getAttack() != null ? cardDetails.getAttack() : "0";
     }
 
 }
