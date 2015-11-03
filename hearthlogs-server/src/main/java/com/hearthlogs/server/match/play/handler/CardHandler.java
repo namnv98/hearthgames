@@ -33,7 +33,7 @@ public class CardHandler extends ActivityHandler {
                     creator = (Card) parsedMatch.getEntityById(created.getCreator());
                     result.getCurrentTurn().addCardCreation(beneficiary, creator, created);
 
-                    System.out.println(creator.getCardDetails().getName() + " has created : " + created.getCardDetails().getName());
+                    System.out.println(creator.getName() + " has created : " + created.getName());
                 }
             }
         }
@@ -44,7 +44,7 @@ public class CardHandler extends ActivityHandler {
         if (after.getZone() != null) {
             if (Zone.HAND.eq(before.getZone()) && Zone.PLAY.eq(after.getZone()) && Card.Type.MINION.eq(after.getCardtype())) {
                 result.getCurrentTurn().addCardPlayed(player, before);
-                System.out.println(player.getName() + " has played " + before.getCardDetails().getName());
+                System.out.println(player.getName() + " has played " + before.getName());
 
                 if (before.getController().equals(parsedMatch.getFriendlyPlayer().getController())) {
                     result.getCurrentTurn().getFriendlyCardsPutInPlay().add(before);
@@ -63,9 +63,9 @@ public class CardHandler extends ActivityHandler {
                 if (activity.getParent() != null && (activity.getParent().isTrigger() || activity.getParent().isPower())) {
                     Entity entity = activity.getParent().getEntity();
                     if (entity instanceof Card) {
-                        System.out.println(player.getName() + " has drawn. " + (before.getCardDetails() != null ? before.getCardDetails().getName() : "") + ", id="+before.getEntityId());
+                        System.out.println(player.getName() + " has drawn. " + before.getName() + ", id="+before.getEntityId());
                     } else if (entity instanceof Player) {
-                        System.out.println(player.getName() + " has drawn. " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                        System.out.println(player.getName() + " has drawn. " +  before.getName() + ", id="+before.getEntityId());
                     }
                 }
 
@@ -73,12 +73,12 @@ public class CardHandler extends ActivityHandler {
                 if (player == parsedMatch.getFriendlyPlayer()) {
                     if (parsedMatch.getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
                         result.addFriendlyStartingCard(before);
-                        System.out.println(player.getName() + " has drawn+ " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                        System.out.println(player.getName() + " has drawn+ " +  before.getName() + ", id="+before.getEntityId());
                     }
                 } else {
                     if (parsedMatch.getStartingCardIds().contains(before.getEntityId())) {
                         result.addOpposingStartingCard(before);
-                        System.out.println(player.getName() + " has drawn- " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                        System.out.println(player.getName() + " has drawn- " +  before.getName() + ", id="+before.getEntityId());
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class CardHandler extends ActivityHandler {
                 } else {
                     result.mulliganOpposingCard(before);
                 }
-                System.out.println(player.getName() + " has mulliganed " + before.getCardDetails().getName());
+                System.out.println(player.getName() + " has mulliganed " + before.getName());
             }
 
         }
@@ -112,13 +112,13 @@ public class CardHandler extends ActivityHandler {
                 Card detachFrom = (Card) parsedMatch.getEntityById(before.getAttached());
                 result.getCurrentTurn().addDetached(before, detachFrom);
 
-                System.out.println("Detached card : " + before.getCardDetails().getName() + " from " + detachFrom.getCardDetails().getName());
+                System.out.println("Detached card : " + before.getName() + " from " + detachFrom.getName());
 
             } else {
                 Card attachTo = (Card) parsedMatch.getEntityById(after.getAttached());
                 result.getCurrentTurn().addAttached(before, attachTo);
 
-                System.out.println("Attach card : " + before.getCardDetails().getName() + " to " + attachTo.getCardDetails().getName() + " : " + before.getCardDetails().getText());
+                System.out.println("Attach card : " + before.getName() + " to " + attachTo.getName() + " : " + before.getText());
             }
 
 
@@ -129,7 +129,7 @@ public class CardHandler extends ActivityHandler {
                 result.getCurrentTurn().addZonePositionChange(before, Zone.valueOf(before.getZone()), Integer.parseInt(after.getZonePosition()));
             }
 
-//            System.out.println(before.getCardDetails() == null ? "unknown card" : before.getCardDetails().getName() + " has moved to " + before.getZone() + ", position " + after.getZonePosition());
+//            System.out.println(before.getCardDetails() == null ? "unknown card" : before.getName() + " has moved to " + before.getZone() + ", position " + after.getZonePosition());
         }
 
         if (after.getZone() != null) {
@@ -157,7 +157,7 @@ public class CardHandler extends ActivityHandler {
                     } else {
                         result.mulliganOpposingCard(before);
                     }
-                    System.out.println(player.getName() + " has mulliganed " + before.getCardDetails().getName());
+                    System.out.println(player.getName() + " has mulliganed " + before.getName());
                 }
 
             }
@@ -170,9 +170,9 @@ public class CardHandler extends ActivityHandler {
                     if (activity.getParent() != null && (activity.getParent().isTrigger() || activity.getParent().isPower())) {
                         Entity entity = activity.getParent().getEntity();
                         if (entity instanceof Card) {
-                            System.out.println(player.getName() + " has drawn. " + (before.getCardDetails() != null ? before.getCardDetails().getName() : "") + ", id="+before.getEntityId());
+                            System.out.println(player.getName() + " has drawn. " + before.getName() + ", id="+before.getEntityId());
                         } else if (entity instanceof Player) {
-                            System.out.println(player.getName() + " has drawn. " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                            System.out.println(player.getName() + " has drawn. " +  before.getName() + ", id="+before.getEntityId());
                         }
                     }
 
@@ -180,12 +180,12 @@ public class CardHandler extends ActivityHandler {
                     if (player == parsedMatch.getFriendlyPlayer()) {
                         if (parsedMatch.getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
                             result.addFriendlyStartingCard(before);
-                            System.out.println(player.getName() + " has drawn+ " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                            System.out.println(player.getName() + " has drawn+ " + before.getName() + ", id="+before.getEntityId());
                         }
                     } else {
                         if (parsedMatch.getStartingCardIds().contains(before.getEntityId())) {
                             result.addOpposingStartingCard(before);
-                            System.out.println(player.getName() + " has drawn- " +  before.getCardDetails().getName() + ", id="+before.getEntityId());
+                            System.out.println(player.getName() + " has drawn- " +  before.getName() + ", id="+before.getEntityId());
                         }
                     }
                 }
@@ -196,7 +196,7 @@ public class CardHandler extends ActivityHandler {
 
             if (Zone.HAND.eq(before.getZone()) && Zone.PLAY.eq(after.getZone()) && Card.Type.MINION.eq(before.getCardtype())) {
                 result.getCurrentTurn().addCardPlayed(player, before);
-                System.out.println(player.getName() + " has played " + before.getCardDetails().getName());
+                System.out.println(player.getName() + " has played " + before.getName());
             }
 
             if (Zone.PLAY.eq(before.getZone()) && Zone.GRAVEYARD.eq(after.getZone()) && Card.Type.MINION.eq(before.getCardtype())) {
@@ -224,8 +224,8 @@ public class CardHandler extends ActivityHandler {
                                     // if a friendly minion killed an opposing minion and the friendly minion is still alive then its considered a favorable trade
                                     favorableTrade = true;
                                 } else if (killerHealth <= 0) {
-                                    int killerCost = Integer.parseInt(card.getCardDetails().getCost());
-                                    int killedCost = Integer.parseInt(before.getCardDetails().getCost());
+                                    int killerCost = Integer.parseInt(card.getCardDetailsCost());
+                                    int killedCost = Integer.parseInt(before.getCardDetailsCost());
                                     if (killerCost < killedCost) {
                                         // if a friendly minion killed an opposing minion and they both died but the cost of the opposing minion is higher its considered a favorable trade
                                         favorableTrade = true;
@@ -234,8 +234,8 @@ public class CardHandler extends ActivityHandler {
                                     }
                                 }
                             } else if (Card.Type.SPELL.eq(card.getCardtype())) {
-                                int killerCost = Integer.parseInt(card.getCardDetails().getCost());
-                                int killedCost = Integer.parseInt(before.getCardDetails().getCost());
+                                int killerCost = Integer.parseInt(card.getCardDetailsCost());
+                                int killedCost = Integer.parseInt(before.getCardDetailsCost());
                                 if (killerCost < killedCost) {
                                     // if a friendly spell killed an opposing minion and the cost of the opposing minion is higher its considered a favorable trade
                                     favorableTrade = true;
@@ -258,11 +258,11 @@ public class CardHandler extends ActivityHandler {
                     } else {
                         msg = " (poor)" + favoring;
                     }
-                    System.out.println(cardDetails.getName() + " has killed " + before.getCardDetails().getName() + msg);
+                    System.out.println(cardDetails.getName() + " has killed " + before.getName() + msg);
 
                 }
 //                else {
-//                    System.out.println(before.getCardDetails().getName() + " has died.");
+//                    System.out.println(before.getName() + " has died.");
 //                }
             }
         }
@@ -296,8 +296,8 @@ public class CardHandler extends ActivityHandler {
                                     favorableTrade = true;
                                 } else {
                                     // if a friendly card (minion,spell,etc...) destroyed an opposing minion
-                                    int killerCost = Integer.parseInt(parentCard.getCardDetails().getCost());
-                                    int killedCost = Integer.parseInt(card.getCardDetails().getCost());
+                                    int killerCost = Integer.parseInt(parentCard.getCardDetailsCost());
+                                    int killedCost = Integer.parseInt(card.getCardDetailsCost());
                                     if (killerCost > killedCost) {
                                         favorableTrade = true;
                                     } else if (killerCost == killedCost) {
@@ -327,38 +327,38 @@ public class CardHandler extends ActivityHandler {
 
         if (after.getHealth() != null && Zone.PLAY.eq(before.getZone())) {
             int newHealth = Integer.parseInt(after.getHealth());
-            int currentHealth = Integer.parseInt(before.getHealth() == null ? before.getCardDetails().getHealth() : before.getHealth());
+            int currentHealth = Integer.parseInt(before.getHealth() == null ? before.getCardDetailsHealth() : before.getHealth());
 
             int diffHealth = newHealth - currentHealth;
             result.getCurrentTurn().addHealthChange(before, diffHealth);
 
-            System.out.println(before.getCardDetails().getName() + " health is now : " + newHealth);
+            System.out.println(before.getName() + " health is now : " + newHealth);
         }
 
         if (after.getAtk() != null && Zone.PLAY.eq(before.getZone())) {
             int newAttack = Integer.parseInt(after.getAtk());
-            int currentAttack = Integer.parseInt(before.getAtk() == null ? before.getCardDetails().getAttack() : before.getAtk());
+            int currentAttack = Integer.parseInt(before.getAtk() == null ? before.getCardDetailsAttack() : before.getAtk());
 
             int diffAttack = newAttack - currentAttack;
             result.getCurrentTurn().addAttackChange(before, diffAttack);
 
-            System.out.println(before.getCardDetails().getName() + " attack is now : " + newAttack);
+            System.out.println(before.getName() + " attack is now : " + newAttack);
         }
 
 
         if (after.getDamage() != null && !FALSE_OR_ZERO.equals(after.getDamage())) {
-            int health = Integer.parseInt(before.getCardDetails().getHealth());
+            int health = Integer.parseInt(before.getCardDetailsHealth());
             int damage = Integer.parseInt(after.getDamage());
             int newHealth = health - damage;
 
             result.getCurrentTurn().addHeroHealthChange(before, newHealth);
-            System.out.println(before.getCardDetails().getName() + " health is now : " + (health - damage));
+            System.out.println(before.getName() + " health is now : " + (health - damage));
         }
 
         if (after.getArmor() != null) {
             int armor = Integer.parseInt(after.getArmor());
             result.getCurrentTurn().addArmorChange(before, armor);
-            System.out.println(before.getCardDetails().getName() + " armor is now : " + armor);
+            System.out.println(before.getName() + " armor is now : " + armor);
         }
 
         if (after.getPredamage() != null && !FALSE_OR_ZERO.equals(after.getPredamage())) {
@@ -369,17 +369,17 @@ public class CardHandler extends ActivityHandler {
             if (before == attacker) {
                 if (defender == null) {
                     result.getCurrentTurn().addDamage(attacker, before, damage);
-                    System.out.println(attacker.getCardDetails().getName() + " has done " + damage + " damage to " + before.getCardDetails().getName());
+                    System.out.println(attacker.getName() + " has done " + damage + " damage to " + before.getName());
                 } else {
                     result.getCurrentTurn().addDamage(defender, before, damage);
-                    System.out.println(defender.getCardDetails().getName() + " has done " + damage + " damage to " + before.getCardDetails().getName());
+                    System.out.println(defender.getName() + " has done " + damage + " damage to " + before.getName());
                 }
             } else if (before == defender) {
                 result.getCurrentTurn().addDamage(attacker, before, damage);
-                System.out.println(attacker.getCardDetails().getName() + " has done " + damage + " damage to " + before.getCardDetails().getName());
+                System.out.println(attacker.getName() + " has done " + damage + " damage to " + before.getName());
             } else {
                 result.getCurrentTurn().addDamage(attacker, before, damage);
-                System.out.println(attacker.getCardDetails().getName() + " has done " + damage + " damage to " + before.getCardDetails().getName());
+                System.out.println(attacker.getName() + " has done " + damage + " damage to " + before.getName());
             }
         }
 

@@ -91,6 +91,8 @@ public class Card extends Entity implements Serializable {
     private String predamage;
     private String revealed;
 
+    private String name;
+
     private CardDetails cardDetails;
 
     public String getId() {
@@ -529,4 +531,25 @@ public class Card extends Entity implements Serializable {
                 ", cardtype='" + cardtype + '\'' +
                 '}';
     }
+
+    public String getName() {
+        return cardDetails != null ? cardDetails.getName() : " a card ";
+    }
+
+    public String getText() {
+        return cardDetails != null ? cardDetails.getText() : "";
+    }
+
+    public String getCardDetailsCost() {
+        return cardDetails != null ? cardDetails.getCost() : "0";
+    }
+
+    public String getCardDetailsHealth() {
+        return cardDetails != null ? cardDetails.getHealth() : "0";
+    }
+
+    public String getCardDetailsAttack() {
+        return cardDetails != null ? cardDetails.getAttack() : "0";
+    }
+
 }

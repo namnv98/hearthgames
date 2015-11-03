@@ -9,9 +9,7 @@ import com.hearthlogs.server.match.play.domain.Turn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,7 +36,7 @@ public class GameHandler extends ActivityHandler {
                 } else {
                     result.addOpposingStartingCard(c);
                 }
-                System.out.println(player.getName() + " has drawn2 " + c.getCardDetails().getName() + " (id=" + c.getEntityId()+ ")");
+                System.out.println(player.getName() + " has drawn2 " + c.getName() + " (id=" + c.getEntityId()+ ")");
             });
 
 

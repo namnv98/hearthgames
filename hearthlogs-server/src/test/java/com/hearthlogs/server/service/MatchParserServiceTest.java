@@ -50,8 +50,8 @@ public class MatchParserServiceTest {
 
         List<RawMatchData> rawMatchData = rawLogProcessingService.processLogFile(lines);
 
-        ParsedMatch parsedMatch = matchParserService.parseLines(rawMatchData.get(1).getLines());
-        MatchResult result = matchPlayingService.processMatch(parsedMatch, rawMatchData.get(1).getRank());
+        ParsedMatch parsedMatch = matchParserService.parseLines(rawMatchData.get(0).getLines());
+        MatchResult result = matchPlayingService.processMatch(parsedMatch, rawMatchData.get(0).getRank());
         MatchStatistics stats = matchStatisticalAnalysisService.calculateStatistics(result, parsedMatch);
 
         result.setFriendly(parsedMatch.getFriendlyPlayer());
