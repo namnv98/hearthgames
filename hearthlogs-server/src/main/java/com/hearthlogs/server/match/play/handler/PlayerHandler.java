@@ -25,7 +25,7 @@ public class PlayerHandler extends ActivityHandler {
 
         if (after.getNumOptions() != null) {
             result.getCurrentTurn().addNumOptions(Integer.parseInt(after.getNumOptions()));
-            System.out.println(result.getCurrentTurn().getWhoseTurn().getName() + " has " + after.getNumOptions() + " possible moves to make.");
+//            System.out.println(result.getCurrentTurn().getWhoseTurn().getName() + " has " + after.getNumOptions() + " possible moves to make.");
         }
 
         if (after.getPlaystate() != null && Player.PlayState.QUIT.eq(after.getPlaystate())) {

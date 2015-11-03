@@ -65,6 +65,12 @@ public class GameHandler extends ActivityHandler {
 
         }
 
+        if (Game.Step.MAIN_READY.eq(after.getStep())) {
+            result.getCurrentTurn().setStartDateTime(activity.getDateTime());
+        } else if (Game.Step.MAIN_NEXT.eq(after.getStep()) || Game.Step.FINAL_GAMEOVER.eq(after.getStep())) {
+            result.getCurrentTurn().setEndDateTime(activity.getDateTime());
+        }
+
         if (Game.Step.MAIN_START.eq(after.getStep())) {
 
             // After 10 of one players turns the game automatically gives you 10 mana without recording it in the log.

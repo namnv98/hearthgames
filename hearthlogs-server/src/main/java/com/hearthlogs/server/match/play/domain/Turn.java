@@ -6,14 +6,16 @@ import com.hearthlogs.server.match.parse.domain.Player;
 import com.hearthlogs.server.match.parse.domain.Zone;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Turn implements Serializable {
 
-    private Long id;
-
     private int turnNumber;
     private ActionFactory actionFactory;
+
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
     private Player whoseTurn;
 
@@ -142,17 +144,14 @@ public class Turn implements Serializable {
         this.actions.add(numOptions);
     }
 
+    public void addFrozen(Card card, boolean frozen) {
+        Frozen f = new Frozen(card, frozen);
+        this.actions.add(f);
+    }
+
     protected Turn(int turnNumber, ActionFactory actionFactory) {
         this.turnNumber = turnNumber;
         this.actionFactory = actionFactory;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public int getTurnNumber() {
@@ -258,5 +257,21 @@ public class Turn implements Serializable {
 
     public void setOpposingCardsInPlay(Set<Card> opposingCardsInPlay) {
         this.opposingCardsInPlay = opposingCardsInPlay;
+    }
+
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 }

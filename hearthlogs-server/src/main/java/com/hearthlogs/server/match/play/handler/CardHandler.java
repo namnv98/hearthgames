@@ -107,18 +107,29 @@ public class CardHandler extends ActivityHandler {
 
     public void handleCardTagChange(MatchResult result, ParsedMatch parsedMatch, Activity activity, Player player, Card before, Card after) {
 
+        if (after.getFrozen() != null) {
+            boolean frozen = TRUE_OR_ONE.equals(after.getFrozen());
+            result.getCurrentTurn().addFrozen(before, frozen);
+        }
+
         if (after.getAttached() != null) {
             if (FALSE_OR_ZERO.equals(after.getAttached())) {
-                Card detachFrom = (Card) parsedMatch.getEntityById(before.getAttached());
-                result.getCurrentTurn().addDetached(before, detachFrom);
+                Entity entity = parsedMatch.getEntityById(before.getAttached());
+                if (entity instanceof Card) {
+                    Card detachFrom = (Card) entity;
+                    result.getCurrentTurn().addDetached(before, detachFrom);
 
-                System.out.println("Detached card : " + before.getName() + " from " + detachFrom.getName());
+                    System.out.println("Detached card : " + before.getName() + " from " + detachFrom.getName());
+                }
 
             } else {
-                Card attachTo = (Card) parsedMatch.getEntityById(after.getAttached());
-                result.getCurrentTurn().addAttached(before, attachTo);
+                Entity entity = parsedMatch.getEntityById(after.getAttached());
+                if (entity instanceof Card) {
+                    Card attachTo = (Card) entity;
+                    result.getCurrentTurn().addAttached(before, attachTo);
 
-                System.out.println("Attach card : " + before.getName() + " to " + attachTo.getName() + " : " + before.getText());
+                    System.out.println("Attach card : " + before.getName() + " to " + attachTo.getName() + " : " + before.getText());
+                }
             }
 
 
@@ -362,8 +373,18 @@ public class CardHandler extends ActivityHandler {
         }
 
         if (after.getPredamage() != null && !FALSE_OR_ZERO.equals(after.getPredamage())) {
-            Card attacker = (Card) activity.getParent().getEntity();
-            Card defender = (Card) activity.getParent().getTarget();
+            Card attacker = (Card) parsedMatch.getEntityById(parsedMatch.getGame().getProposedAttacker());
+            Card defender = (Card) parsedMatch.getEntityById(parsedMatch.getGame().getProposedDefender());
+            if (attacker == null && defender == null) {
+
+                if (activity.getParent().getEntity() instanceof Card && activity.getParent().getTarget() != null && activity.getParent().getTarget() instanceof Card) {
+                    attacker = (Card) activity.getParent().getEntity();
+                    defender = (Card) activity.getParent().getTarget();
+                } else {
+                    attacker = (Card) activity.getParent().getEntity();
+                    defender = before;
+                }
+            }
 
             int damage = Integer.parseInt(after.getPredamage());
             if (before == attacker) {
