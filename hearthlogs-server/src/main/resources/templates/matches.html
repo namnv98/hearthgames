@@ -21,6 +21,30 @@
 
     <span th:text="${uploadedMatches}">1</span>
 
+    <div th:each="match : ${matches}">
+
+        <span th:text="${match.}"></span>
+
+        <div th:each="turn : ${turns}">
+            <h2></h2>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Course Description</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="action : ${actions}">
+                    <td th:text="${action.courseName}">Sample Course</td>
+                    <td th:text="${action.courseDescription}">Description of Sample Course</td>
+                    <td th:text=""></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 </body>

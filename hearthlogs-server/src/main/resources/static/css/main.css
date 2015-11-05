@@ -1,0 +1,8 @@
+@font-face {
+    font-family: siteFont;
+    src: url(bliz-quadrata.woff);
+}
+
+body {
+    font-family: siteFont;
+}
