@@ -1,11 +1,10 @@
 package com.hearthlogs.server.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.parse.domain.CardSets;
 import com.hearthlogs.server.match.play.MatchResult;
 import com.hearthlogs.server.match.play.handler.*;
-import com.hearthlogs.server.match.play.domain.ActionFactory;
 import com.hearthlogs.server.match.raw.filter.AssetFilter;
 import com.hearthlogs.server.match.raw.filter.BobFilter;
 import com.hearthlogs.server.match.raw.filter.PowerFilter;
@@ -32,13 +31,8 @@ public class MatchParserServiceTest {
     @Before
     public void init() throws IOException {
         CardService cardService = new CardService(new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class));
-        ActionFactory actionFactory = new ActionFactory();
-        ActionHandler actionHandler = new ActionHandler(actionFactory);
-        CardHandler cardHandler = new CardHandler(actionFactory);
-        GameHandler gameHandler = new GameHandler(actionFactory);
-        PlayerHandler playerHandler = new PlayerHandler(actionFactory);
         matchParserService = new MatchParserService();
-        matchPlayingService = new MatchPlayingService(cardService, actionHandler, cardHandler, gameHandler, playerHandler);
+        matchPlayingService = new MatchPlayingService(cardService);
         matchStatisticalAnalysisService = new MatchStatisticalAnalysisService();
         rawLogProcessingService = new RawLogProcessingService(new PowerFilter(), new BobFilter(), new AssetFilter());
     }
@@ -46,16 +40,16 @@ public class MatchParserServiceTest {
     @Test
     public void shouldPlayUncompressedGame() throws IOException {
 
-        List<String> lines = FileUtils.readLines(new File("c:\\games\\game3"));
+        List<String> lines = FileUtils.readLines(new File("c:\\games\\game4"));
 
         List<RawMatchData> rawMatchData = rawLogProcessingService.processLogFile(lines);
 
-        ParsedMatch parsedMatch = matchParserService.parseLines(rawMatchData.get(0).getLines());
-        MatchResult result = matchPlayingService.processMatch(parsedMatch, rawMatchData.get(0).getRank());
-        MatchStatistics stats = matchStatisticalAnalysisService.calculateStatistics(result, parsedMatch);
+        ParseContext context = matchParserService.parseLines(rawMatchData.get(0).getLines());
+        MatchResult result = matchPlayingService.processMatch(context, rawMatchData.get(0).getRank());
+        MatchStatistics stats = matchStatisticalAnalysisService.calculateStatistics(result, context);
 
-        result.setFriendly(parsedMatch.getFriendlyPlayer());
-        result.setOpposing(parsedMatch.getOpposingPlayer());
+        result.setFriendly(context.getFriendlyPlayer());
+        result.setOpposing(context.getOpposingPlayer());
 
         System.out.println(stats.getFriendlyManaEfficiency());
         System.out.println(stats.getOpposingManaEfficiency());

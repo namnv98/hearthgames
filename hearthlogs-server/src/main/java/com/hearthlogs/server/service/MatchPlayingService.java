@@ -2,11 +2,9 @@ package com.hearthlogs.server.service;
 
 import com.hearthlogs.server.match.parse.domain.Activity;
 import com.hearthlogs.server.match.parse.domain.Card;
-import com.hearthlogs.server.match.parse.ParsedMatch;
-import com.hearthlogs.server.match.play.handler.ActionHandler;
-import com.hearthlogs.server.match.play.handler.CardHandler;
-import com.hearthlogs.server.match.play.handler.GameHandler;
-import com.hearthlogs.server.match.play.handler.PlayerHandler;
+import com.hearthlogs.server.match.parse.ParseContext;
+import com.hearthlogs.server.match.play.handler.Handler;
+import com.hearthlogs.server.match.play.handler.PlayHandlers;
 import com.hearthlogs.server.match.play.MatchResult;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -28,82 +26,75 @@ public class MatchPlayingService {
     private static final Logger logger = LoggerFactory.getLogger(MatchPlayingService.class);
 
     private CardService cardService;
-    private ActionHandler actionHandler;
-    private CardHandler cardHandler;
-    private GameHandler gameHandler;
-    private PlayerHandler playerHandler;
+    private PlayHandlers playHandlers = new PlayHandlers();
 
     @Autowired
-    public MatchPlayingService(CardService cardService,
-                               ActionHandler actionHandler,
-                               CardHandler cardHandler,
-                               GameHandler gameHandler,
-                               PlayerHandler playerHandler) {
+    public MatchPlayingService(CardService cardService) {
         this.cardService = cardService;
-        this.actionHandler = actionHandler;
-        this.cardHandler = cardHandler;
-        this.gameHandler = gameHandler;
-        this.playerHandler = playerHandler;
     }
 
-    public MatchResult processMatch(ParsedMatch parsedMatch, Integer rank) {
+    public MatchResult processMatch(ParseContext context, Integer rank) {
 
         MatchResult result = new MatchResult();
         result.setRank(rank);
 
         // Associate all the cards with their corresponding card details
-        List<Card> cards = parsedMatch.getCards();
+        List<Card> cards = context.getCards();
         for (Card c: cards) {
             c.setCardDetails(cardService.getCardDetails(c.getCardid()));
         }
 
-        for (Activity activity: parsedMatch.getActivities()) {
-            handle(result, parsedMatch, activity);
+        for (Activity activity: context.getActivities()) {
+            handle(result, context, activity);
         }
-        result.setFriendly(parsedMatch.getFriendlyPlayer());
-        result.setOpposing(parsedMatch.getOpposingPlayer());
+        result.setFriendly(context.getFriendlyPlayer());
+        result.setOpposing(context.getOpposingPlayer());
 
 
         return result;
     }
 
 
-    public void handle(MatchResult result, ParsedMatch parsedMatch, Activity activity) {
+    public void handle(MatchResult result, ParseContext context, Activity activity) {
         // Handler the domain first then any child actions. The reason for this is that the domain contains a high level abstraction what is happening
         // For example:
         //    ACTION_START Entity=[name=Haunted Creeper id=75 zone=PLAY zonePos=1 cardId=FP1_002 player=2] BlockType=ATTACK Index=-1 Target=[name=Jaina Proudmoore id=4 zone=PLAY zonePos=0 cardId=HERO_08 player=1]
         // means the Haunted Creeper minion is attacking Jaina Proudmoore
         // The details of the attack are in the child actions
-        doActivity(result, parsedMatch, activity);
-        doChildActivities(result, parsedMatch, activity.getChildren());
+        doActivity(result, context, activity);
+        doChildActivities(result, context, activity.getChildren());
     }
 
-    private void doChildActivities(MatchResult result, ParsedMatch parsedMatch, List<Activity> activities) {
+    private void doChildActivities(MatchResult result, ParseContext context, List<Activity> activities) {
         if (!CollectionUtils.isEmpty(activities)) {
             for (Activity activity : activities) {
-                doActivity(result, parsedMatch, activity);
-                doChildActivities(result, parsedMatch, activity.getChildren());
+                doActivity(result, context, activity);
+                doChildActivities(result, context, activity.getChildren());
             }
         }
     }
 
-    private void doActivity(MatchResult result, ParsedMatch parsedMatch, Activity activity) {
-        playActivity(result, parsedMatch, activity);
-        updateGameActivityData(parsedMatch, activity);
+    private void doActivity(MatchResult result, ParseContext context, Activity activity) {
+        playActivity(result, context, activity);
+        updateGameActivityData(context, activity);
     }
 
-    private void playActivity(MatchResult result, ParsedMatch parsedMatch, Activity activity) {
-        actionHandler.handle(result, parsedMatch, activity);
-        cardHandler.handle(result, parsedMatch, activity);
-        gameHandler.handle(result, parsedMatch, activity);
-        playerHandler.handle(result, parsedMatch, activity);
+    private void playActivity(MatchResult result, ParseContext context, Activity activity) {
+        for (Handler handler: playHandlers.getHandlers()) {
+            if (handler.supports(result, context, activity)) {
+                boolean handled = handler.handle(result, context, activity);
+                if (handled) {
+                    return;
+                }
+            }
+        }
     }
 
-    private void updateGameActivityData(ParsedMatch parsedMatch, Activity activity) {
+    private void updateGameActivityData(ParseContext context, Activity activity) {
         if (activity.isTagChange() || activity.isShowEntity() || activity.isHideEntity()) {
-            copyNonNullProperties(activity.getEntity(), parsedMatch.getEntityById(activity.getEntityId()));
+            copyNonNullProperties(activity.getDelta(), context.getEntityById(activity.getEntityId()));
             if (activity.isShowEntity()) {
-                Card c = ((Card) activity.getEntity());
+                Card c = ((Card) activity.getDelta());
                 c.setCardDetails(cardService.getCardDetails(c.getCardid()));
             }
         }

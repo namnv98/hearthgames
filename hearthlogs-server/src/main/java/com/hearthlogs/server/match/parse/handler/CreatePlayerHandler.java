@@ -1,6 +1,6 @@
 package com.hearthlogs.server.match.parse.handler;
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 
 import java.util.Map;
@@ -15,25 +15,26 @@ public class CreatePlayerHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    public boolean supports(ParsedMatch parsedMatch, String line) {
-        return line != null && parsedMatch != null && (line.startsWith(PLAYER) || parsedMatch.isCreatePlayer());
+    public boolean supports(ParseContext context, String line) {
+        return line != null && context != null && (line.startsWith(PLAYER) || context.isCreatePlayer());
     }
 
     @Override
-    public boolean handle(ParsedMatch parsedMatch, LogLineData logLineData) {
+    public boolean handle(ParseContext context, LogLineData logLineData) {
+        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
-        if (parsedMatch.isCreatePlayer() && line.startsWith(PLAYER)) { // we found the 2nd player
-            parsedMatch.endCreatePlayer(logLineData.getDateTime());
+        if (context.isCreatePlayer() && line.startsWith(PLAYER)) { // we found the 2nd player
+            context.endCreatePlayer(logLineData.getDateTime());
             String[] data = getGameAccountInfo(line);
-            parsedMatch.startCreatePlayer(logLineData.getDateTime(), data);
-        } else if (parsedMatch.isCreatePlayer() && line.startsWith(TAG)) { // in progress creating player populate some data
+            context.startCreatePlayer(logLineData.getDateTime(), data);
+        } else if (context.isCreatePlayer() && line.startsWith(TAG)) { // in progress creating player populate some data
             Map<String, String> data = getKeyValueData(line, tagPattern);
-            parsedMatch.updateCreatePlayer(data);
+            context.updateCreatePlayer(data);
         } else if (line.startsWith(PLAYER)) { // first time we found a player so create a new one and flag that we are creating players
             String[] data = getGameAccountInfo(line);
-            parsedMatch.startCreatePlayer(logLineData.getDateTime(), data);
+            context.startCreatePlayer(logLineData.getDateTime(), data);
         } else { // we were creating player but found a line that meant to be doing something else
-            parsedMatch.endCreatePlayer(logLineData.getDateTime());
+            context.endCreatePlayer(logLineData.getDateTime());
             return false;
         }
         return true;

@@ -1,6 +1,6 @@
 package com.hearthlogs.server.match.parse.handler;
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 
 import java.util.ArrayList;
@@ -24,25 +24,26 @@ public class UpdateCardHandler extends AbstractHandler {
     private static final String TAG_EQ = "tag=";
 
     @Override
-    public boolean supports(ParsedMatch parsedMatch, String line) {
-        return line != null && parsedMatch != null && (line.startsWith(SHOW_ENTITY) || parsedMatch.isUpdateCard() || line.startsWith(HIDE_ENTITY));
+    public boolean supports(ParseContext context, String line) {
+        return line != null && context != null && (line.startsWith(SHOW_ENTITY) || context.isUpdateCard() || line.startsWith(HIDE_ENTITY));
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean handle(ParsedMatch parsedMatch, LogLineData logLineData) {
+    public boolean handle(ParseContext context, LogLineData logLineData) {
+        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
-        if (parsedMatch.isUpdateCard() && line.startsWith(TAG)) { // are we updating an existing card's data
+        if (context.isUpdateCard() && line.startsWith(TAG)) { // are we updating an existing card's data
             Map<String, String> data = getKeyValueData(line, tagPattern);
-            parsedMatch.updateCurrentCard(data);
+            context.updateCurrentCard(data);
         } else if (line.startsWith(SHOW_ENTITY)) {
             String[] data = getCardInfo(line);
-            parsedMatch.startUpdateCard(logLineData.getDateTime(), data[0], data[1]);
+            context.startUpdateCard(logLineData.getDateTime(), data[0], data[1]);
         } else if (line.startsWith(HIDE_ENTITY)) {
             List<Object> objects = getHideCardInfo(line);
-            parsedMatch.hideEntity(logLineData.getDateTime(), (String) objects.get(0), ( Map<String, String> ) objects.get(1));
+            context.hideEntity(logLineData.getDateTime(), (String) objects.get(0), ( Map<String, String> ) objects.get(1));
         } else { // we were updating a card but found a line that meant to be doing something else
-            parsedMatch.endUpdateCard(logLineData.getDateTime());
+            context.endUpdateCard(logLineData.getDateTime());
             return false;
         }
         return true;

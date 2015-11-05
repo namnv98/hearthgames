@@ -12,7 +12,7 @@ public class CardDrawn implements Action, Serializable {
     private Card card;
     private Entity trigger;
 
-    protected CardDrawn(Player beneficiary, Card card, Entity trigger) {
+    public CardDrawn(Player beneficiary, Card card, Entity trigger) {
         this.beneficiary = beneficiary;
         this.card = card;
         this.trigger = trigger;

@@ -1,6 +1,6 @@
 package com.hearthlogs.server.match.parse.handler;
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 
 import java.util.Map;
@@ -15,34 +15,35 @@ public class UpdatePlayerHandler extends AbstractHandler {
     private static final String GAME_ENTITY = "GameEntity";
 
     @Override
-    public boolean supports(ParsedMatch parsedMatch, String line) {
+    public boolean supports(ParseContext context, String line) {
         // We are looking for the following line:
         // TAG_CHANGE Entity=<Player Name> tag=TIMEOUT value=75
         // This tells us that additional properties are being populated on players.  It is the first time we see
         // the player's name.  Unfortunately we have to wait till all the tag changes are complete
         // to find out what the player id is.
-        return line != null && parsedMatch != null && !parsedMatch.isGameUpdating() && (getPlayerName(line) != null || parsedMatch.isUpdatePlayer());
+        return line != null && context != null && !context.isGameUpdating() && (getPlayerName(line) != null || context.isUpdatePlayer());
     }
 
     @Override
-    public boolean handle(ParsedMatch parsedMatch,  LogLineData logLineData) {
+    public boolean handle(ParseContext context, LogLineData logLineData) {
+        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         String playerName = getPlayerName(line);
         String entityStr = getEntityStr(line);
         if (entityStr == null || entityStr.equals(GAME_ENTITY)) { // Player updates are always followed by an update to the GameEntity...at least so far
             // we were updating a player but found a line that meant to be doing something else
-            parsedMatch.endUpdatePlayer(logLineData.getDateTime());
+            context.endUpdatePlayer(logLineData.getDateTime());
             return false;
         } else {
             Map<String, String> data = getKeyValueData(line, tagPattern);
-            if (parsedMatch.isUpdatePlayer() && playerName != null && parsedMatch.getCurrentPlayerName() != null && !playerName.equals(parsedMatch.getCurrentPlayerName())) { // we have found a 2nd player
-                parsedMatch.endUpdatePlayer(logLineData.getDateTime());
-                parsedMatch.startUpdatePlayer(logLineData.getDateTime(), playerName, data);
-            } else if (parsedMatch.isUpdatePlayer() && parsedMatch.getCurrentPlayerName() != null && entityStr.equals(parsedMatch.getCurrentPlayerName())) {
+            if (context.isUpdatePlayer() && playerName != null && context.getCurrentPlayerName() != null && !playerName.equals(context.getCurrentPlayerName())) { // we have found a 2nd player
+                context.endUpdatePlayer(logLineData.getDateTime());
+                context.startUpdatePlayer(logLineData.getDateTime(), playerName, data);
+            } else if (context.isUpdatePlayer() && context.getCurrentPlayerName() != null && entityStr.equals(context.getCurrentPlayerName())) {
                 // Found data to update on a player.  Also assuming that we are updating a player until we see an update to the GameEntity
-                parsedMatch.updateCurrentPlayer(data);
+                context.updateCurrentPlayer(data);
             } else if (playerName != null) { // first time finding a player to update
-                parsedMatch.startUpdatePlayer(logLineData.getDateTime(), playerName, data);
+                context.startUpdatePlayer(logLineData.getDateTime(), playerName, data);
             }
         }
         return true;

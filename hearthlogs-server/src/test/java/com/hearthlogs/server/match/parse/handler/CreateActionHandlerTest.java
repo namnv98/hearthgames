@@ -3,7 +3,7 @@ package com.hearthlogs.server.match.parse.handler;
 import com.hearthlogs.server.match.parse.domain.Card;
 import com.hearthlogs.server.match.parse.domain.Game;
 import com.hearthlogs.server.match.parse.domain.Player;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
@@ -20,20 +20,20 @@ public class CreateActionHandlerTest {
 
         CreateActionHandler handler = new CreateActionHandler();
 
-        ParsedMatch parsedMatch = new ParsedMatch();
+        ParseContext context = new ParseContext();
         Game game = new Game();
         game.setState("RUNNING");
-        parsedMatch.setGame(game);
+        context.setGame(game);
         Player friendlyPlayer = new Player();
         friendlyPlayer.setName("Seekay");
-        parsedMatch.setFriendlyPlayer(friendlyPlayer);
+        context.setFriendlyPlayer(friendlyPlayer);
         Player opposingPlayer = new Player();
         opposingPlayer.setName("Another Player");
-        parsedMatch.setOpposingPlayer(opposingPlayer);
+        context.setOpposingPlayer(opposingPlayer);
 
         Card card = new Card();
         card.setEntityId("24");
-        parsedMatch.getCards().add(card);
+        context.getCards().add(card);
 
 
         String[] lines = new String[7];
@@ -46,15 +46,15 @@ public class CreateActionHandlerTest {
         lines[6] = "ACTION_END";
 
         for (String line: lines) {
-            if (handler.supports(parsedMatch, line)) {
+            if (handler.supports(context, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(parsedMatch, logLineData);
+                handler.handle(context, logLineData);
             }
         }
 
-        assertEquals(1, parsedMatch.getActivities().size());
-        assertEquals(1, parsedMatch.getActivities().get(0).getChildren().size());
-        assertEquals(false, parsedMatch.isCreateAction());
+        assertEquals(1, context.getActivities().size());
+        assertEquals(1, context.getActivities().get(0).getChildren().size());
+        assertEquals(false, context.isCreateAction());
     }
 
 }

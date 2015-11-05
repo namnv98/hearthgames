@@ -1,7 +1,7 @@
 package com.hearthlogs.server.match.parse.handler;
 
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 
 import java.util.regex.Matcher;
@@ -14,23 +14,24 @@ public class CreateActionHandler extends AbstractHandler {
     private static final Pattern actionStartPattern = Pattern.compile("ACTION_START Entity=(.*?) BlockType=(.*?) Index=(.*?) Target=(.*)");
 
     @Override
-    public boolean supports(ParsedMatch parsedMatch, String line) {
-        return line != null && parsedMatch != null && (parsedMatch.isCreateAction() || line.startsWith(ACTION_START) || line.startsWith(ACTION_END));
+    public boolean supports(ParseContext context, String line) {
+        return line != null && context != null && (context.isCreateAction() || line.startsWith(ACTION_START) || line.startsWith(ACTION_END));
     }
 
     @Override
-    public boolean handle(ParsedMatch parsedMatch, LogLineData logLineData) {
+    public boolean handle(ParseContext context, LogLineData logLineData) {
+        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
-        if (parsedMatch.isCreateAction() && line.startsWith(ACTION_START) && parsedMatch.hasIndentationDecreased()) {
+        if (context.isCreateAction() && line.startsWith(ACTION_START) && context.hasIndentationDecreased()) {
             // some actions don't have an ACTION_END so if we find another ACTION_START that is a lower indentation level then end the previous domain
-            parsedMatch.endAction();
-            parsedMatch.createAction(logLineData.getDateTime(), getActionData(line));
-        } else if (parsedMatch.isCreateAction() && line.startsWith(ACTION_START)) { // we found a child ACTION_START
-            parsedMatch.createSubAction(logLineData.getDateTime(), getActionData(line));
+            context.endAction();
+            context.createAction(logLineData.getDateTime(), getActionData(line));
+        } else if (context.isCreateAction() && line.startsWith(ACTION_START)) { // we found a child ACTION_START
+            context.createSubAction(logLineData.getDateTime(), getActionData(line));
         } else if (line.startsWith(ACTION_START)) {
-            parsedMatch.createAction(logLineData.getDateTime(), getActionData(line));
+            context.createAction(logLineData.getDateTime(), getActionData(line));
         } else if (line.startsWith(ACTION_END)) { // are we done?  found an ACTION_END
-            parsedMatch.endAction();
+            context.endAction();
         }
         return true;
     }

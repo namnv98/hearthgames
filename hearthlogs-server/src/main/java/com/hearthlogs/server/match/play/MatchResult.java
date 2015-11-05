@@ -1,8 +1,10 @@
 package com.hearthlogs.server.match.play;
 
 import com.hearthlogs.server.match.parse.domain.Card;
+import com.hearthlogs.server.match.parse.domain.Entity;
 import com.hearthlogs.server.match.parse.domain.Player;
-import com.hearthlogs.server.match.play.domain.Turn;
+import com.hearthlogs.server.match.parse.domain.Zone;
+import com.hearthlogs.server.match.play.domain.*;
 
 import java.util.*;
 
@@ -28,6 +30,8 @@ public class MatchResult {
 
     private Set<Turn> turns = new LinkedHashSet<>();
     private Turn currentTurn;
+    private int turnNumber;
+    private Player currentPlayer;
 
     public void addFriendlyStartingCard(Card card) {
         friendlyStartingCards.add(card);
@@ -103,11 +107,6 @@ public class MatchResult {
         this.turns = turns;
     }
 
-    public void addTurn(Turn turn) {
-        currentTurn = turn;
-        this.turns.add(turn);
-    }
-
     public Turn getCurrentTurn() {
         return currentTurn;
     }
@@ -156,6 +155,13 @@ public class MatchResult {
         this.currentTurn = currentTurn;
     }
 
+    public int getTurnNumber() {
+        return turnNumber;
+    }
+
+    public void setTurnNumber(int turnNumber) {
+        this.turnNumber = turnNumber;
+    }
 
     public Player getFriendly() {
         return friendly;
@@ -172,4 +178,107 @@ public class MatchResult {
     public void setOpposing(Player opposing) {
         this.opposing = opposing;
     }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void addTurn() {
+        currentTurn = new Turn(turnNumber);
+        this.turns.add(currentTurn);
+    }
+
+    public void addKill(Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
+        this.currentTurn.addAction(new Kill(beneficiary, killer, killed, favorableTrade, evenTrade));
+    }
+
+    public void addDamage(Card damager, Card damaged, int amount) {
+        this.currentTurn.addAction(new Damage(damager, damaged, amount));
+    }
+
+    public void addCardCreation(Player beneficiary, Card creator, Card created) {
+        this.currentTurn.addAction(new CardCreation(beneficiary, creator, created));
+    }
+
+    public void addHeroHealthChange(Card card, int health) {
+        this.currentTurn.addAction(new HeroHealthChange(card, health));
+    }
+
+    public void addArmorChange(Card card, int armor) {
+        this.currentTurn.addAction(new ArmorChange(card, armor));
+    }
+
+    public void addCardDrawn(Player beneficiary, Card card, Entity trigger) {
+        this.currentTurn.addAction(new CardDrawn(beneficiary, card, trigger));
+    }
+
+    public void addCardPlayed(Player beneficiary, Card card) {
+        this.currentTurn.addAction(new CardPlayed(beneficiary, card));
+    }
+
+    public void addManaGained(int mana) {
+        this.currentTurn.addAction(new ManaGained(mana));
+    }
+
+    public void addManaUsed(Card card, int mana) {
+        this.currentTurn.addAction(new ManaUsed(card, mana));
+    }
+
+    public void addManaSaved(Card card, int mana) {
+        this.currentTurn.addAction(new ManaSaved(card, mana));
+    }
+
+    public void addManaOverspent(Card card, int mana) {
+        this.currentTurn.addAction(new ManaOverspent(card, mana));
+    }
+
+    public void addTempManaGained(Card card, int mana) {
+        this.currentTurn.addAction(new TempManaGained(card, mana));
+    }
+
+    public void addFrozen(Card card, boolean frozen) {
+        this.currentTurn.addAction(new Frozen(card, frozen));
+    }
+
+    public void addAttached(Card card, Card attachedTo) {
+        this.currentTurn.addAction(new Attached(card, attachedTo));
+    }
+
+    public void addDetached(Card card, Card detachedFrom) {
+        this.currentTurn.addAction(new Detached(card, detachedFrom));
+    }
+
+    public void addTrigger(Card card) {
+        this.currentTurn.addAction(new Trigger(card));
+    }
+
+    public void addHealthChange(Card card, int amount) {
+        this.currentTurn.addAction(new HealthChange(card, amount));
+    }
+
+    public void addAttackChange(Card card, int amount) {
+        this.currentTurn.addAction(new AttackChange(card, amount));
+    }
+
+    public void addJoust(Player friendly, Player opposing, String friendlyCardId, String oppsosingCardId, Card card, boolean winner) {
+        this.currentTurn.addAction(new Joust(friendly, opposing, friendlyCardId, oppsosingCardId, card, winner));
+    }
+
+    public void addZonePositionChange(Card card, Zone zone, int position) {
+        this.currentTurn.addAction(new ZonePositionChange(card, zone, position));
+    }
+
+    public void addHeroPowerUsed(Player player, Card card) {
+        this.currentTurn.addAction(new HeroPowerUsed(player, card));
+    }
+
+    public void addNumOptions(int number) {
+        this.currentTurn.addAction(new NumOptions(number));
+    }
+
+
 }

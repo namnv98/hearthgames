@@ -1,6 +1,6 @@
 package com.hearthlogs.server.match.parse.handler;
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 
 import java.util.Map;
@@ -13,12 +13,13 @@ public class CreateGameHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    public boolean supports(ParsedMatch parsedMatch, String line) {
-        return line != null && parsedMatch != null && (line.startsWith(GAME_ENTITY) || parsedMatch.isCreateGameEntity());
+    public boolean supports(ParseContext context, String line) {
+        return line != null && context != null && (line.startsWith(GAME_ENTITY) || context.isCreateGameEntity());
     }
 
     @Override
-    public boolean handle(ParsedMatch context, LogLineData logLineData) {
+    public boolean handle(ParseContext context, LogLineData logLineData) {
+        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         if (context.isCreateGameEntity() && line.startsWith(TAG)) { // are we populating match data?
             Map<String, String> data = getKeyValueData(line, tagPattern);

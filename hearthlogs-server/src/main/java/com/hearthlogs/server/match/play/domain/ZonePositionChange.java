@@ -11,7 +11,7 @@ public class ZonePositionChange implements Action, Serializable {
     private Zone zone;
     private int position;
 
-    protected ZonePositionChange(Card card, Zone zone, int position) {
+    public ZonePositionChange(Card card, Zone zone, int position) {
         this.card = card;
         this.zone = zone;
         this.position = position;

@@ -10,7 +10,7 @@ public class Damage implements Action, Serializable {
     private Card damaged;
     private int amount;
 
-    protected Damage(Card damager, Card damaged, int amount) {
+    public Damage(Card damager, Card damaged, int amount) {
         this.damager = damager;
         this.damaged = damaged;
         this.amount = amount;

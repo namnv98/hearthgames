@@ -1,6 +1,6 @@
 package com.hearthlogs.server.controller;
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.play.MatchResult;
 import com.hearthlogs.server.match.stats.domain.MatchStatistics;
 import com.hearthlogs.server.match.raw.domain.RawMatchData;
@@ -52,9 +52,9 @@ public class LogFileUploadController {
                 modelAndView.addObject("uploadedMatches", rawMatchDatas.size());
 
                 for (RawMatchData rawMatchData : rawMatchDatas) {
-                    ParsedMatch parsedMatch = matchParserService.parseLines(rawMatchData.getLines());
-                    MatchResult matchResult = matchPlayingService.processMatch(parsedMatch, rawMatchData.getRank());
-                    MatchStatistics matchStatistics = matchStatisticalAnalysisService.calculateStatistics(matchResult, parsedMatch);
+                    ParseContext context = matchParserService.parseLines(rawMatchData.getLines());
+                    MatchResult matchResult = matchPlayingService.processMatch(context, rawMatchData.getRank());
+                    MatchStatistics matchStatistics = matchStatisticalAnalysisService.calculateStatistics(matchResult, context);
                     statisticsList.add(matchStatistics);
                 }
 

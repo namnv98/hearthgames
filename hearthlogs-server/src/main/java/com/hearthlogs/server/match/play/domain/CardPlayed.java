@@ -10,7 +10,7 @@ public class CardPlayed implements Action, Serializable {
     private Player beneficiary;
     private Card card;
 
-    protected CardPlayed(Player beneficiary, Card card) {
+    public CardPlayed(Player beneficiary, Card card) {
         this.beneficiary = beneficiary;
         this.card = card;
     }

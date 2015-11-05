@@ -13,7 +13,7 @@ public class Kill implements Action, Serializable {
     private boolean favorableTrade;
     private boolean evenTrade;
 
-    protected Kill(Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
+    public Kill(Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
         this.beneficiary = beneficiary;
         this.killer = killer;
         this.killed = killed;

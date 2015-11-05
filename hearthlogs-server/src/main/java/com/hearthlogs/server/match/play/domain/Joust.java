@@ -14,7 +14,7 @@ public class Joust implements Action, Serializable {
     private Card card;
     private boolean winner;
 
-    protected Joust(Player friendly, Player opposing, String friendlyCardId, String oppsosingCardId, Card card, boolean winner) {
+    public Joust(Player friendly, Player opposing, String friendlyCardId, String oppsosingCardId, Card card, boolean winner) {
         this.friendly = friendly;
         this.opposing = opposing;
         this.friendlyCardId = friendlyCardId;

@@ -9,7 +9,7 @@ public class AttackChange implements Action, Serializable {
     private Card card;
     private int amount;
 
-    protected AttackChange(Card card, int amount) {
+    public AttackChange(Card card, int amount) {
         this.card = card;
         this.amount = amount;
     }

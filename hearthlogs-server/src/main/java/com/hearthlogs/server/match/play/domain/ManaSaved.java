@@ -9,7 +9,7 @@ public class ManaSaved implements Action, Serializable {
     private Card card;
     private int manaSaved;
 
-    protected ManaSaved(Card card, int manaSaved) {
+    public ManaSaved(Card card, int manaSaved) {
         this.card = card;
         this.manaSaved = manaSaved;
     }

@@ -2,7 +2,7 @@ package com.hearthlogs.server.service;
 
 import com.hearthlogs.server.match.play.MatchResult;
 import com.hearthlogs.server.match.parse.domain.Player;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.play.domain.Turn;
 import com.hearthlogs.server.match.stats.domain.MatchStatistics;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class MatchStatisticalAnalysisService {
 
-    public MatchStatistics calculateStatistics(MatchResult result, ParsedMatch parsedMatch) {
+    public MatchStatistics calculateStatistics(MatchResult result, ParseContext context) {
 
         MatchStatistics stats = new MatchStatistics();
 

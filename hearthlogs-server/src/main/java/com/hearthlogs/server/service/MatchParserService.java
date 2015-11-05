@@ -1,7 +1,7 @@
 package com.hearthlogs.server.service;
 
 import com.hearthlogs.server.match.parse.handler.*;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +37,13 @@ public class MatchParserService {
         return Arrays.asList(lines);
     }
 
-    public ParsedMatch parseLines(List<LogLineData> logLineDatas) {
-        ParsedMatch parsedMatch = new ParsedMatch();
+    public ParseContext parseLines(List<LogLineData> logLineDatas) {
+        ParseContext context = new ParseContext();
         for (LogLineData logLineData : logLineDatas) {
-            parsedMatch.setIndentLevel(logLineData.getLine()); // setting the level of indentation will help with cases where there are issues with the log file (i.e. an action_end is missing)
-            parseLine(parsedMatch, logLineData);
+            context.setIndentLevel(logLineData.getLine()); // setting the level of indentation will help with cases where there are issues with the log file (i.e. an action_end is missing)
+            parseLine(context, logLineData);
         }
-        return parsedMatch;
+        return context;
     }
 
     protected String decompressGameData(byte[] data) {
@@ -62,17 +62,17 @@ public class MatchParserService {
         }
     }
 
-    protected void parseLine(ParsedMatch parsedMatch, LogLineData logLineData) {
-        boolean processed = processLine(parsedMatch, logLineData);
+    protected void parseLine(ParseContext context, LogLineData logLineData) {
+        boolean processed = processLine(context, logLineData);
         if (!processed) {
-            parseLine(parsedMatch, logLineData);
+            parseLine(context, logLineData);
         }
     }
 
-    protected boolean processLine(ParsedMatch parsedMatch, LogLineData logLineData) {
+    protected boolean processLine(ParseContext context, LogLineData logLineData) {
         for (Handler handler: handlers) {
-            if (handler.supports(parsedMatch, logLineData.getTrimmedLine())) {
-                return handler.handle(parsedMatch, logLineData);
+            if (handler.supports(context, logLineData.getTrimmedLine())) {
+                return handler.handle(context, logLineData);
             }
         }
         return true;

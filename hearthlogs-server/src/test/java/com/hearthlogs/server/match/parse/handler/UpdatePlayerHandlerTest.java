@@ -1,7 +1,7 @@
 package com.hearthlogs.server.match.parse.handler;
 
 import com.hearthlogs.server.match.parse.domain.Player;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
@@ -18,15 +18,15 @@ public class UpdatePlayerHandlerTest {
 
         UpdatePlayerHandler handler = new UpdatePlayerHandler();
 
-        ParsedMatch parsedMatch = new ParsedMatch();
+        ParseContext context = new ParseContext();
         Player player1 = new Player();
         player1.setEntityId("2");
         player1.setTeamId("1");
         Player player2 = new Player();
         player2.setEntityId("3");
         player2.setTeamId("2");
-        parsedMatch.setFriendlyPlayer(player1);
-        parsedMatch.setOpposingPlayer(player2);
+        context.setFriendlyPlayer(player1);
+        context.setOpposingPlayer(player2);
 
         String[] lines = new String[11];
         lines[0] = "TAG_CHANGE Entity=Player2 tag=TIMEOUT value=75";
@@ -42,17 +42,17 @@ public class UpdatePlayerHandlerTest {
         lines[10] = "TAG_CHANGE Entity=GameEntity tag=10 value=85";
 
         for (String line : lines) {
-            if (handler.supports(parsedMatch, line)) {
+            if (handler.supports(context, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(parsedMatch, logLineData);
+                handler.handle(context, logLineData);
             }
         }
 
-        assertEquals("2", parsedMatch.getOpposingPlayer().getTeamId());
-        assertEquals("Player2", parsedMatch.getOpposingPlayer().getName());
-        assertEquals("1", parsedMatch.getOpposingPlayer().getFirstPlayer());
-        assertEquals("1", parsedMatch.getFriendlyPlayer().getTeamId());
-        assertEquals("4", parsedMatch.getFriendlyPlayer().getNumCardsDrawnThisTurn());
+        assertEquals("2", context.getOpposingPlayer().getTeamId());
+        assertEquals("Player2", context.getOpposingPlayer().getName());
+        assertEquals("1", context.getOpposingPlayer().getFirstPlayer());
+        assertEquals("1", context.getFriendlyPlayer().getTeamId());
+        assertEquals("4", context.getFriendlyPlayer().getNumCardsDrawnThisTurn());
     }
 
 }

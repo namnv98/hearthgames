@@ -1,7 +1,7 @@
 package com.hearthlogs.server.match.parse.handler;
 
 import com.hearthlogs.server.match.parse.domain.Card;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
@@ -18,17 +18,17 @@ public class UpdateCardHandlerTest {
 
         UpdateCardHandler handler = new UpdateCardHandler();
 
-        ParsedMatch parsedMatch = new ParsedMatch();
+        ParseContext context = new ParseContext();
 
         Card card = new Card();
         card.setEntityId("85");
-        parsedMatch.getCards().add(card);
+        context.getCards().add(card);
         card = new Card();
         card.setEntityId("25");
-        parsedMatch.getCards().add(card);
+        context.getCards().add(card);
         card = new Card();
         card.setEntityId("23");
-        parsedMatch.getCards().add(card);
+        context.getCards().add(card);
 
         String[] lines = new String[11];
         lines[0] = "SHOW_ENTITY - Updating Entity=85 CardID=CS2_017o";
@@ -44,19 +44,19 @@ public class UpdateCardHandlerTest {
         lines[10] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(parsedMatch, line)) {
+            if (handler.supports(context, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(parsedMatch, logLineData);
+                handler.handle(context, logLineData);
             }
         }
 
-        assertEquals(3, parsedMatch.getCards().size());
-        assertEquals("CS2_017o", parsedMatch.getCards().get(0).getCardid());
-        assertEquals("BRM_028", parsedMatch.getCards().get(1).getCardid());
-        assertEquals("CS2_031", parsedMatch.getCards().get(2).getCardid());
-        assertEquals(3, parsedMatch.getActivities().size());
-        assertEquals("36", ((Card)parsedMatch.getActivities().get(0).getEntity()).getAttached());
-        assertEquals("HAND", ((Card)parsedMatch.getActivities().get(2).getEntity()).getZone());
-        assertEquals(false, parsedMatch.isUpdateCard());
+        assertEquals(3, context.getCards().size());
+        assertEquals("CS2_017o", context.getCards().get(0).getCardid());
+        assertEquals("BRM_028", context.getCards().get(1).getCardid());
+        assertEquals("CS2_031", context.getCards().get(2).getCardid());
+        assertEquals(3, context.getActivities().size());
+        assertEquals("36", ((Card) context.getActivities().get(0).getDelta()).getAttached());
+        assertEquals("HAND", ((Card) context.getActivities().get(2).getDelta()).getZone());
+        assertEquals(false, context.isUpdateCard());
     }
 }

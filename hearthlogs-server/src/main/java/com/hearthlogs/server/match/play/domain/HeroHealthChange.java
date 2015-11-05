@@ -9,7 +9,7 @@ public class HeroHealthChange implements Action, Serializable {
     private Card card;
     private int health;
 
-    protected HeroHealthChange(Card card, int health) {
+    public HeroHealthChange(Card card, int health) {
         this.card = card;
         this.health = health;
     }

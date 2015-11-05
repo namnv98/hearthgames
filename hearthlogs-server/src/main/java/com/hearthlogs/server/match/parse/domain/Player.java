@@ -16,6 +16,8 @@ public class Player extends Entity implements Serializable {
         }
     }
 
+    public static final String DEALING = "DEALING";
+
     private String rank;
     private String gameAccountIdHi;
     private String gameAccountIdLo;

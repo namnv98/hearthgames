@@ -2,7 +2,7 @@ package com.hearthlogs.server.match.parse.handler;
 
 import static org.junit.Assert.*;
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class CreatePlayerHandlerTest {
 
         CreatePlayerHandler handler = new CreatePlayerHandler();
 
-        ParsedMatch parsedMatch = new ParsedMatch();
+        ParseContext context = new ParseContext();
 
         String[] lines = new String[33];
         lines[0]  = "Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115193835963207 lo=35548956]";
@@ -55,21 +55,21 @@ public class CreatePlayerHandlerTest {
         lines[32] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(parsedMatch, line)) {
+            if (handler.supports(context, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(parsedMatch, logLineData);
+                handler.handle(context, logLineData);
             }
         }
 
-        assertNotNull(parsedMatch.getFriendlyPlayer());
-        assertNotNull(parsedMatch.getOpposingPlayer());
-        assertEquals("35548956", parsedMatch.getFriendlyPlayer().getGameAccountIdLo());
-        assertEquals("26973114", parsedMatch.getOpposingPlayer().getGameAccountIdLo());
-        assertEquals("1", parsedMatch.getOpposingPlayer().getFirstPlayer());
-        assertEquals("1", parsedMatch.getFriendlyPlayer().getTeamId());
-        assertEquals("2", parsedMatch.getOpposingPlayer().getTeamId());
-        assertEquals("4", parsedMatch.getFriendlyPlayer().getNumCardsDrawnThisTurn());
-        assertEquals("3", parsedMatch.getOpposingPlayer().getNumCardsDrawnThisTurn());
+        assertNotNull(context.getFriendlyPlayer());
+        assertNotNull(context.getOpposingPlayer());
+        assertEquals("35548956", context.getFriendlyPlayer().getGameAccountIdLo());
+        assertEquals("26973114", context.getOpposingPlayer().getGameAccountIdLo());
+        assertEquals("1", context.getOpposingPlayer().getFirstPlayer());
+        assertEquals("1", context.getFriendlyPlayer().getTeamId());
+        assertEquals("2", context.getOpposingPlayer().getTeamId());
+        assertEquals("4", context.getFriendlyPlayer().getNumCardsDrawnThisTurn());
+        assertEquals("3", context.getOpposingPlayer().getNumCardsDrawnThisTurn());
 
     }
 }

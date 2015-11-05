@@ -1,9 +1,13 @@
 package com.hearthlogs.server.match.parse.domain;
 
+import com.hearthlogs.server.service.MatchPlayingService;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Activity implements Serializable {
 
@@ -107,7 +111,7 @@ public class Activity implements Serializable {
 
     // Action Data
     LocalDateTime dateTime;
-    private Entity entity;
+    private Entity delta;
     private BlockType blockType;
     private String index;
     private Entity target;
@@ -116,12 +120,12 @@ public class Activity implements Serializable {
 
     private List<Activity> children = new ArrayList<>();
 
-    public Entity getEntity() {
-        return entity;
+    public Entity getDelta() {
+        return delta;
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public void setDelta(Entity delta) {
+        this.delta = delta;
     }
 
     public BlockType getBlockType() {
@@ -200,4 +204,41 @@ public class Activity implements Serializable {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
+
+    @Override
+    public String toString() {
+        String entityType = "";
+        if (delta instanceof Player) {
+            entityType = "Player";
+        } else if (delta instanceof Card) {
+            entityType = "Card";
+        } else {
+            entityType = "Game";
+        }
+
+        String fields = type != Type.ACTION ? Arrays.toString(getNonNullPropertyNames(delta)) : "";
+
+        return "Activity{" +
+                "id=" + id+
+                ", type=" + type +
+                ", delta=" + entityType +
+                ", fields= " + fields +
+                '}';
+
+
+    }
+
+    public static String[] getNonNullPropertyNames (Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new LinkedHashSet<>();
+        for(PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue != null && !pd.getName().startsWith("cardDetails") && !pd.getName().equals("class") && !pd.getName().equals("unknownTags")) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
+    }
+
 }

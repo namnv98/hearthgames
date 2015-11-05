@@ -10,7 +10,7 @@ public class HeroPowerUsed implements Action, Serializable {
     private Player player;
     private Card card;
 
-    protected HeroPowerUsed(Player player, Card card) {
+    public HeroPowerUsed(Player player, Card card) {
         this.player = player;
         this.card = card;
     }

@@ -6,7 +6,7 @@ public class ManaGained implements Action, Serializable {
 
     private int manaGained;
 
-    protected ManaGained(int manaGained) {
+    public ManaGained(int manaGained) {
         this.manaGained = manaGained;
     }
 

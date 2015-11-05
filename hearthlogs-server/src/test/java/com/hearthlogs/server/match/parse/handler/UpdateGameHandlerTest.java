@@ -1,7 +1,7 @@
 package com.hearthlogs.server.match.parse.handler;
 
 import com.hearthlogs.server.match.parse.domain.Game;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
@@ -18,8 +18,8 @@ public class UpdateGameHandlerTest {
 
         UpdateGameHandler handler = new UpdateGameHandler();
 
-        ParsedMatch parsedMatch = new ParsedMatch();
-        parsedMatch.setGame(new Game());
+        ParseContext context = new ParseContext();
+        context.setGame(new Game());
 
         String lines[] = new String[5];
         lines[0] = "TAG_CHANGE Entity=GameEntity tag=TURN value=1";
@@ -29,15 +29,15 @@ public class UpdateGameHandlerTest {
         lines[4] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(parsedMatch, line)) {
+            if (handler.supports(context, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(parsedMatch, logLineData);
+                handler.handle(context, logLineData);
             }
         }
 
-        assertEquals(2, parsedMatch.getActivities().size());
-        assertEquals("1", parsedMatch.getGame().getTurn());
-        assertEquals("RUNNING", parsedMatch.getGame().getState());
-        assertEquals("COMPLETE", ((Game)parsedMatch.getActivities().get(1).getEntity()).getState());
+        assertEquals(2, context.getActivities().size());
+        assertEquals("1", context.getGame().getTurn());
+        assertEquals("RUNNING", context.getGame().getState());
+        assertEquals("COMPLETE", ((Game) context.getActivities().get(1).getDelta()).getState());
     }
 }

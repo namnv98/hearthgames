@@ -9,7 +9,7 @@ public class Attached implements Action, Serializable {
     private Card card;
     private Card attachedTo;
 
-    protected Attached(Card card, Card attachedTo) {
+    public Attached(Card card, Card attachedTo) {
         this.card = card;
         this.attachedTo = attachedTo;
     }

@@ -9,7 +9,7 @@ public class Detached implements Action, Serializable {
     private Card card;
     private Card detachedFrom;
 
-    protected Detached(Card card, Card detachedFrom) {
+    public Detached(Card card, Card detachedFrom) {
         this.card = card;
         this.detachedFrom = detachedFrom;
     }

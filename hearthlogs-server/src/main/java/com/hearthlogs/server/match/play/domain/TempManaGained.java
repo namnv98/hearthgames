@@ -9,7 +9,7 @@ public class TempManaGained implements Action, Serializable {
     private Card card;
     private int tempManaGained;
 
-    protected TempManaGained(Card card, int tempManaGained) {
+    public TempManaGained(Card card, int tempManaGained) {
         this.card = card;
         this.tempManaGained = tempManaGained;
     }

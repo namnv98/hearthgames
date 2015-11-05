@@ -11,7 +11,7 @@ public class CardCreation implements Action, Serializable {
     private Card creator;
     private Card created;
 
-    protected CardCreation(Player beneficiary, Card creator, Card created) {
+    public CardCreation(Player beneficiary, Card creator, Card created) {
         this.beneficiary = beneficiary;
         this.creator = creator;
         this.created = created;

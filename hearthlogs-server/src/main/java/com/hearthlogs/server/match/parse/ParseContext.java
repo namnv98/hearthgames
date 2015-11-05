@@ -1,6 +1,7 @@
 package com.hearthlogs.server.match.parse;
 
 import com.hearthlogs.server.match.parse.domain.*;
+import com.hearthlogs.server.match.raw.domain.LogLineData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -9,9 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class ParsedMatch {
+public class ParseContext {
 
-    private static final Logger logger = LoggerFactory.getLogger(ParsedMatch.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParseContext.class);
 
     private static final String GAME_ENTITY = "GameEntity";
     private static final String NAME = "name";
@@ -40,6 +41,8 @@ public class ParsedMatch {
     private boolean updateCard;
     private boolean gameUpdating;
     private boolean updatePlayer;
+
+    private LogLineData currentLine;
 
     private int currentIndentLevel;
     private int previousIndentLevel;
@@ -270,8 +273,8 @@ public class ParsedMatch {
             }
         }
         populateEntity(player, getTempPlayerData());
-        Activity activity = createActivity(dateTime, Activity.Type.TAG_CHANGE ,player, getTempPlayerData());
-        getActivities().add(activity);
+        Activity activity = createActivity(dateTime, Activity.Type.TAG_CHANGE, player, getTempPlayerData());
+        addActivity(activity);
         setTempPlayerData(null);
         setUpdatePlayer(false);
     }
@@ -292,25 +295,22 @@ public class ParsedMatch {
     }
 
     public void createSubAction(LocalDateTime dateTime, String[] data) {
-        getActivityStack().push(createActivity(dateTime, data));
+        Activity activity = createActivity(dateTime, data);
+        addActivity(activity);
+        getActivityStack().push(activity);
     }
 
     public void createAction(LocalDateTime dateTime, String data[]) {
         processPendingCardUpdate(dateTime);
-        getActivityStack().push(createActivity(dateTime, data));
+        Activity activity = createActivity(dateTime, data);
+        addActivity(activity);
+        getActivityStack().push(activity);
         setCreateAction(true);
     }
 
     public void endAction() {
         if (getActivityStack().isEmpty()) return; // The log is missing data when spectating games.  So these games can't fully be serialized at the moment.
-        Activity activity = getActivityStack().pop();
-        if (!getActivityStack().empty()) { // is there are more match events on the stack then we need to add this domain as a subaction
-            Activity parentActivity = getActivityStack().peek();
-            parentActivity.addChildGameEvent(activity);
-        } else { // no more actions so we are done with the domain
-            getActivities().add(activity);
-            setCreateAction(!getActivityStack().empty());  // we are only out of the domain when all sub actions are captured
-        }
+        getActivityStack().pop();
     }
 
     public Activity createActivity(LocalDateTime dateTime, String[]data) {
@@ -346,16 +346,8 @@ public class ParsedMatch {
         }
         getCards().add(getCurrentCard());
 
-        Activity currentActivity = null;
-        if (!getActivityStack().empty()) {
-            currentActivity = getActivityStack().peek();
-        }
         Activity activity = createActivity(dateTime, getCurrentCard());
-        if (currentActivity == null) {
-            getActivities().add(activity);
-        } else {
-            currentActivity.addChildGameEvent(activity);
-        }
+        addActivity(activity);
         setCurrentCard(null);
         setCreateCard(false);
     }
@@ -368,7 +360,7 @@ public class ParsedMatch {
     public void endCreateGame(LocalDateTime dateTime) {
         setCreateGameEntity(false);
         Activity activity = createActivity(dateTime, getGame());
-        getActivities().add(activity);
+        addActivity(activity);
     }
 
     public void updateCreateGame(Map<String, String> data) {
@@ -395,40 +387,24 @@ public class ParsedMatch {
             setOpposingPlayer(getCurrentPlayer());
         }
         Activity activity = createActivity(dateTime, getCurrentPlayer());
-        getActivities().add(activity);
+        addActivity(activity);
         setCurrentPlayer(null);
         setCreatePlayer(false);
     }
 
     public void tagChange(LocalDateTime dateTime, String entityStr, Map<String, String> data) {
-        Activity currentActivity = null;
-        if (!getActivityStack().empty()) {
-            currentActivity = getActivityStack().peek();
-        }
         Entity entity = getEntity(entityStr);
         if (entity != null) {
             Activity activity = createActivity(dateTime, Activity.Type.TAG_CHANGE, entity, data);
-            if (currentActivity == null) {
-                getActivities().add(activity);
-            } else {
-                currentActivity.addChildGameEvent(activity);
-            }
+            addActivity(activity);
         }
     }
 
     public void hideEntity(LocalDateTime dateTime, String entityStr, Map<String, String> data) {
-        Activity currentActivity = null;
-        if (!getActivityStack().empty()) {
-            currentActivity = getActivityStack().peek();
-        }
         Entity entity = getEntity(entityStr);
         if (entity != null) {
             Activity activity = createActivity(dateTime, Activity.Type.HIDE_ENTITY, entity, data);
-            if (currentActivity == null) {
-                getActivities().add(activity);
-            } else {
-                currentActivity.addChildGameEvent(activity);
-            }
+            addActivity(activity);
         }
     }
 
@@ -437,16 +413,8 @@ public class ParsedMatch {
     }
 
     public void endUpdateCard(LocalDateTime dateTime) {
-        Activity currentActivity = null;
-        if (!getActivityStack().empty()) {
-            currentActivity = getActivityStack().peek();
-        }
         Activity activity = createActivity(dateTime, Activity.Type.SHOW_ENTITY, getCurrentCard(), tempCardData);
-        if (currentActivity == null) {  // a card update never seems to happen outside of an domain but just in case in the future it does we will leave this code here
-            getActivities().add(activity);
-        } else {
-            currentActivity.addChildGameEvent(activity);
-        }
+        addActivity(activity);
         tempCardData = null;
         setCurrentCard(null);
         setUpdateCard(false);
@@ -476,13 +444,13 @@ public class ParsedMatch {
 
     public void endUpdateGame(LocalDateTime dateTime, Map<String, String> data) {
         Activity activity = createActivity(dateTime, Activity.Type.TAG_CHANGE, getGame(), data);
-        getActivities().add(activity);
+        addActivity(activity);
         setGameUpdating(false);
     }
 
     public void updateCurrentGame(LocalDateTime dateTime, Map<String, String> data) {
         Activity activity = createActivity(dateTime, Activity.Type.TAG_CHANGE, getGame(), data);
-        getActivities().add(activity);
+        addActivity(activity);
     }
 
     // This method is unfortunately required because an update card spans multiple lines and you can't tell when
@@ -490,13 +458,17 @@ public class ParsedMatch {
     private void processPendingCardUpdate(LocalDateTime dateTime) {
         if (isUpdateCard()) {
             endUpdateCard(dateTime);
+        } else if (isCreateCard()) {
+            endCreateCard(dateTime);
         }
     }
 
     public Activity createActivity(LocalDateTime dateTime, Entity entity) {
         Activity activity = new Activity();
+        activity.setId(activityId++);
         activity.setDateTime(dateTime);
-        activity.setEntity(entity);
+        activity.setDelta(entity);
+        activity.setEntityId(entity.getEntityId());
         if (entity instanceof Card) {
             activity.setType(Activity.Type.NEW_CARD);
         } else if (entity instanceof Game) {
@@ -524,7 +496,7 @@ public class ParsedMatch {
         activity.setDateTime(dateTime);
         activity.setId(activityId++);
         activity.setEntityId(entity.getEntityId());
-        activity.setEntity(data);
+        activity.setDelta(data);
         activity.setType(type);
         return activity;
 
@@ -535,12 +507,37 @@ public class ParsedMatch {
         activity.setDateTime(dateTime);
         activity.setId(activityId++);
         activity.setEntityId(entity.getEntityId());
-        activity.setEntity(entity);
+        activity.setDelta(entity);
         activity.setType(Activity.Type.ACTION);
         activity.setBlockType(blockType);
         activity.setIndex(index);
         activity.setTarget(target);
         return activity;
+    }
+
+    private void addActivity(Activity activity) {
+        Activity currentActivity = null;
+        if (!getActivityStack().empty()) {
+            currentActivity = getActivityStack().peek();
+        }
+        if (currentActivity == null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i < getActivityStack().size(); i++) {
+                sb.append("    ");
+            }
+//            System.out.println(currentLine.getLine());
+            System.out.println(sb.toString()+activity);
+            getActivities().add(activity);
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i < getActivityStack().size(); i++) {
+                sb.append("    ");
+            }
+//            System.out.println(currentLine.getLine());
+            System.out.println(sb.toString()+activity);
+            currentActivity.addChildGameEvent(activity);
+        }
+
     }
 
     public List<String> getStartingCardIds() {
@@ -550,6 +547,34 @@ public class ParsedMatch {
     public boolean isMatchValid() {
         // We found a match that was played against the computer.  This is not acceptable.
         return !"0".equals(getOpposingPlayer().getGameAccountIdLo());
+    }
+
+    public LogLineData getCurrentLine() {
+        return currentLine;
+    }
+
+    public void setCurrentLine(LogLineData currentLine) {
+        this.currentLine = currentLine;
+    }
+
+    public Player getPlayerForCard(Card card) {
+        return card.getController().equals(getFriendlyPlayer().getController()) ? getFriendlyPlayer() : getOpposingPlayer();
+    }
+
+    public Card getBefore(Activity activity) {
+        return  (Card) getEntityById(activity.getEntityId());
+    }
+
+    public Card getAfter(Activity activity) {
+        return (Card) activity.getDelta();
+    }
+
+    public boolean isFriendly(Player player) {
+        return player == getFriendlyPlayer();
+    }
+
+    public String getSide(Card card) {
+        return Objects.equals(card.getController(), getFriendlyPlayer().getController()) ? "FRIENDLY" : "OPPOSING";
     }
 
 }

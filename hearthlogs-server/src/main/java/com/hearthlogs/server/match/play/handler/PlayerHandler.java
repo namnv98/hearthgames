@@ -4,27 +4,31 @@ import com.hearthlogs.server.match.parse.domain.Card;
 import com.hearthlogs.server.match.parse.domain.CardDetails;
 import com.hearthlogs.server.match.parse.domain.Player;
 import com.hearthlogs.server.match.parse.domain.Activity;
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.play.MatchResult;
-import com.hearthlogs.server.match.play.domain.ActionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PlayerHandler extends ActivityHandler {
+public class PlayerHandler implements Handler {
 
-    @Autowired
-    public PlayerHandler(ActionFactory actionFactory) {
-        super(actionFactory);
+    @Override
+    public boolean supports(MatchResult result, ParseContext context, Activity activity) {
+        return activity.isTagChange() && activity.getDelta() instanceof Player;
     }
 
-    protected void handlePlayerTagChange(MatchResult result, ParsedMatch parsedMatch, Activity activity, Player before, Player after) {
+    public boolean handle(MatchResult result, ParseContext context, Activity activity) {
+        Player before = (Player) context.getEntityById(activity.getEntityId());
+        Player after = (Player) activity.getDelta();
+
         if (after.getCurrentPlayer() != null && TRUE_OR_ONE.equals(after.getCurrentPlayer())) {
-            result.getCurrentTurn().setWhoseTurn(before);
+            result.setCurrentPlayer(before);
+            if (result.getCurrentTurn().getWhoseTurn() == null) {
+                result.getCurrentTurn().setWhoseTurn(before);
+            }
         }
 
         if (after.getNumOptions() != null) {
-            result.getCurrentTurn().addNumOptions(Integer.parseInt(after.getNumOptions()));
+            result.addNumOptions(Integer.parseInt(after.getNumOptions()));
 //            System.out.println(result.getCurrentTurn().getWhoseTurn().getName() + " has " + after.getNumOptions() + " possible moves to make.");
         }
 
@@ -45,35 +49,33 @@ public class PlayerHandler extends ActivityHandler {
         }
 
         if (after.getResources() != null) {
-            result.getCurrentTurn().addManaGained(Integer.parseInt(after.getResources()));
+            result.addManaGained(Integer.parseInt(after.getResources()));
         } else if (after.getResourcesUsed() != null && !"0".equals(after.getResourcesUsed())) {
-            Card cardUsedOn = (Card) activity.getParent().getEntity();
+            Card cardUsedOn = (Card) activity.getParent().getDelta();
 
             int manaUsed = Integer.parseInt(after.getResourcesUsed()) - result.getCurrentTurn().getManaUsed();
             if (result.getCurrentTurn().getTempManaUsed() > 0) {
                 manaUsed += result.getCurrentTurn().getTempManaUsed();
                 result.getCurrentTurn().setTempManaUsed(0);
             }
-            result.getCurrentTurn().addManaUsed(cardUsedOn, manaUsed);
+            result.addManaUsed(cardUsedOn, manaUsed);
 
-            if (activity.getParent().getEntity() instanceof Card) {
+            if (activity.getParent().getDelta() instanceof Card) {
                 CardDetails cardDetails = cardUsedOn.getCardDetails();
-//                System.out.println(cardDetails.getName() + " costs : " + cardDetails.getCost());
-
                 int cost = Integer.parseInt(cardDetails.getCost());
                 if (manaUsed < cost) {
-                    result.getCurrentTurn().addManaSaved(cardUsedOn, cost - manaUsed);
+                    result.addManaSaved(cardUsedOn, cost - manaUsed);
                 } else if (manaUsed > cost){
-                    result.getCurrentTurn().addManaOverspent(cardUsedOn, manaUsed - cost);
+                    result.addManaOverspent(cardUsedOn, manaUsed - cost);
                 }
             }
-
         } else if ((before.getTempResources() == null || before.getTempResources().equals("0")) && after.getTempResources() != null) {
-            Card fromCard = (Card) activity.getParent().getEntity();
-            result.getCurrentTurn().addTempManaGained(fromCard, Integer.parseInt(after.getTempResources()));
+            Card fromCard = (Card) activity.getParent().getDelta();
+            result.addTempManaGained(fromCard, Integer.parseInt(after.getTempResources()));
         } else if (before.getTempResources() != null && after.getTempResources() != null) {
             int tempManaUsed = Integer.parseInt(before.getTempResources()) - Integer.parseInt(after.getTempResources());
             result.getCurrentTurn().setTempManaUsed(tempManaUsed);
         }
+        return true;
     }
 }

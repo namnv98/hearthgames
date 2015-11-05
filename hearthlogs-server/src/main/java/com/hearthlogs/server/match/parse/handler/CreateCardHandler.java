@@ -1,6 +1,6 @@
 package com.hearthlogs.server.match.parse.handler;
 
-import com.hearthlogs.server.match.parse.ParsedMatch;
+import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.raw.domain.LogLineData;
 
 import java.util.Map;
@@ -14,25 +14,26 @@ public class CreateCardHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    public boolean supports(ParsedMatch parsedMatch, String line) {
-        return line != null && parsedMatch != null && (line.startsWith(CREATE_CARD) || parsedMatch.isCreateCard());
+    public boolean supports(ParseContext context, String line) {
+        return line != null && context != null && (line.startsWith(CREATE_CARD) || context.isCreateCard());
     }
 
     @Override
-    public boolean handle(ParsedMatch parsedMatch, LogLineData logLineData) {
+    public boolean handle(ParseContext context, LogLineData logLineData) {
+        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
-        if (parsedMatch.isCreateCard() && line.startsWith(CREATE_CARD)) { // we found back to back cards to add
+        if (context.isCreateCard() && line.startsWith(CREATE_CARD)) { // we found back to back cards to add
             Map<String, String> data = getKeyValueData(line, cardPattern);
-            parsedMatch.endCreateCard(logLineData.getDateTime());
-            parsedMatch.startCreateCard(logLineData.getDateTime(), data);
-        } else if (parsedMatch.isCreateCard() && line.startsWith(TAG)) { // in progress creating card populate some data
+            context.endCreateCard(logLineData.getDateTime());
+            context.startCreateCard(logLineData.getDateTime(), data);
+        } else if (context.isCreateCard() && line.startsWith(TAG)) { // in progress creating card populate some data
             Map<String, String> data = getKeyValueData(line, tagPattern);
-            parsedMatch.updateCreateCard(data);
+            context.updateCreateCard(data);
         } else if (line.startsWith(CREATE_CARD)) { // first time we found a card so create a new one and flag that we are creating cards
             Map<String, String> data = getKeyValueData(line, cardPattern);
-            parsedMatch.startCreateCard(logLineData.getDateTime(), data);
+            context.startCreateCard(logLineData.getDateTime(), data);
         } else { // we were creating a card but found a line that meant to be doing something else
-            parsedMatch.endCreateCard(logLineData.getDateTime());
+            context.endCreateCard(logLineData.getDateTime());
             return false;
         }
         return true;

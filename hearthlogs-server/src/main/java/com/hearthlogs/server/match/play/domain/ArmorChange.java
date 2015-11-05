@@ -9,7 +9,7 @@ public class ArmorChange implements Action, Serializable {
     private Card card;
     private int armor;
 
-    protected ArmorChange(Card card, int armor) {
+    public ArmorChange(Card card, int armor) {
         this.card = card;
         this.armor = armor;
     }
