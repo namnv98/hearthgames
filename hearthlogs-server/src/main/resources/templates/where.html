@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthLogs.com - Where do I find my log files?</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+    <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">WHERE DO I FIND MY LOG FILES?</h3>
+        </div>
+        <div class="panel-body">
+            <div class="bs-callout bs-callout-good">
+                <h4>Ready to Upload Log Files?</h4>
+                <span>Take me back to <a href="/">upload</a></span>
+            </div>
+            <div class="bs-callout bs-callout-info">
+                <h4>Hearthstone Log File Locations:</h4>
+                <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs\</p>
+                <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> ~/Library/Preferences/Blizzard/Hearthstone/Logs/</p>
+                <h4>Log Config File:</h4>
+                <p>By default Hearthstone does not enable it's many loggers. It simply logs System Information.  To allow Hearthlogs.com to analyze your log files you will need to create a file called log.config.</p>
+                <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\log.config</p>
+                <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> ~/Library/Preferences/Blizzard/Hearthstone/log.config</p>
+                <p>In the contents of that file place the below lines. Please note that you will need to exit Hearthstone and restart it for the logging to happen.</p>
+                <pre>
+[Power]
+LogLevel=1
+FilePrinting=false
+ConsolePrinting=true
+ScreenPrinting=false
+[Asset]
+LogLevel=1
+FilePrinting=false
+ConsolePrinting=true
+ScreenPrinting=false
+[Bob]
+LogLevel=1
+FilePrinting=false
+ConsolePrinting=true
+ScreenPrinting=false
+                </pre>
+                <p>Note: Hearthstone keeps only 5 log files at a time, each time you start Hearthstone it will create a new log file and if there was more than 5 it will delete the oldest one. Make sure you save them to a different location if you want to keep all your games played.</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

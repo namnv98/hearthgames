@@ -23,6 +23,7 @@
         <java.version>1.8</java.version>
 
         <bootstrap.version>3.3.5</bootstrap.version>
+        <bootstrap.fileinput.version>4.2.7</bootstrap.fileinput.version>
         <jquery.version>2.1.4</jquery.version>
     </properties>
     <dependencies>
@@ -56,6 +57,11 @@
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>bootstrap-fileinput</artifactId>
+            <version>${bootstrap.fileinput.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>

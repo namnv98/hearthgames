@@ -4,28 +4,36 @@
     <title>HearthLogs.com - Upload a Hearhtstone Log File</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
-          rel="stylesheet" media="screen" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/css/fileinput.min.css" th:href="@{/webjars/bootstrap-fileinput/4.2.7/css/fileinput.min.css}" rel="stylesheet" media="screen" />
 
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
-            th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/js/fileinput.min.js" th:src="@{/webjars/bootstrap-fileinput/4.2.7/js/fileinput.min.js}"></script>
 
-    <link href="../static/css/main.css"
-          th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
 
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#upload").fileinput();
+        });
+    </script>
 </head>
 <body>
 
 <div class="container">
 
-    <h1>Hearthstone Log Analyzer</h1>
-
-    <form method="POST" enctype="multipart/form-data" action="/upload">
-        File to upload: <input type="file" name="file"/>
-        <br /> <br />
-        <input type="submit" value="Upload"/> Press here to upload the file!
-    </form>
+    <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">SELECT A HEARTHSTONE LOG FILE TO UPLOAD</h3>
+        </div>
+        <div class="panel-body">
+            <form method="POST" enctype="multipart/form-data" action="/upload">
+                <input id="upload" name="file" type="file" class="file" data-show-preview="false"/>
+            </form>
+            <a href="/where">Where do I find my log files?</a>
+        </div>
+    </div>
 
 </div>
 
