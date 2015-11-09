@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 @Component
 public class CardService {
@@ -55,5 +56,14 @@ public class CardService {
 
     public String getName(String id) {
         return cards.get(id).getName();
+    }
+
+    public CardDetails getByName(String name) {
+        for (CardDetails cardDetails: cards.values()) {
+            if (Objects.equals(name, cardDetails.getName())) {
+                return cardDetails;
+            }
+        }
+        return null;
     }
 }

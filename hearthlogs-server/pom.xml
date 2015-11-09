@@ -25,6 +25,7 @@
         <bootstrap.version>3.3.5</bootstrap.version>
         <bootstrap.fileinput.version>4.2.7</bootstrap.fileinput.version>
         <jquery.version>2.1.4</jquery.version>
+        <jsoup.version>1.8.3</jsoup.version>
     </properties>
     <dependencies>
 
@@ -108,6 +109,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
         </dependency>
     </dependencies>
     <build>

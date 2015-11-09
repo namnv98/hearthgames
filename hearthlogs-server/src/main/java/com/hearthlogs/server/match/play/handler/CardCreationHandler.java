@@ -14,7 +14,7 @@ public class CardCreationHandler implements Handler {
 
     @Override
     public boolean handle(MatchResult result, ParseContext context, Activity activity) {
-        if (!activity.getParent().isJoust()) { // Cards created during the joust are not part of your deck but do represent a copy of card in your deck, they are temporary.
+        if (activity.getParent() == null || !activity.getParent().isJoust()) { // Cards created during the joust are not part of your deck but do represent a copy of card in your deck, they are temporary.
             Card created = context.getAfter(activity);;
             if (created.getController() != null && created.getCreator() != null) {
                 Player beneficiary = context.getPlayerForCard(created);
@@ -27,5 +27,4 @@ public class CardCreationHandler implements Handler {
         }
         return false;
     }
-
 }

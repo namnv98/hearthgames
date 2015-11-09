@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthLogs.com - Upload a Hearhtstone Log File</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen" />
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+            th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+    <link href="../static/css/main.css"
+          th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
+    <div class="match-summary panel panel-primary" style="padding: 0 10px;">
+
+        <div style="text-align: center;">
+            <span style="font-size: 25px; font-weight: bold;">Seekay</span>
+            <img height="100" width="100" src="../static/images/warrior.png" th:src="@{images/warrior.png}" />
+            <img height="50" width="50" src="../static/images/versus.png" th:src="@{images/versus.png}" />
+            <img height="100" width="100" src="../static/images/hunter.png" th:src="@{images/hunter.png}" />
+            <span style="font-size: 25px; font-weight: bold;">Opponent</span>
+        </div>
+
+        <hr/>
+
+        <h4 style="color: #1B809E; font-weight: bold;">Health Summary</h4>
+
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                    <th>9</th>
+                    <th>10</th>
+                    <th>11</th>
+                    <th>12</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="warrior">
+                    <td>Seekay</td>
+                    <td>30</td>
+                    <td>30</td>
+                    <td>29</td>
+                    <td>27</td>
+                    <td>24</td>
+                    <td>20</td>
+                    <td>16</td>
+                    <td>10</td>
+                    <td>9</td>
+                    <td>8</td>
+                    <td>6</td>
+                    <td>6</td>
+                </tr>
+                <tr class="hunter">
+                    <td>Opponent</td>
+                    <td>30</td>
+                    <td>30</td>
+                    <td>30</td>
+                    <td>29</td>
+                    <td>27</td>
+                    <td>22</td>
+                    <td>21</td>
+                    <td>19</td>
+                    <td>12</td>
+                    <td>6</td>
+                    <td>2</td>
+                    <td>0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <h4 style="color: #1B809E; font-weight: bold;">Mana Summary</h4>
+
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Used</th>
+                    <th>Gained</th>
+                    <th>Overspent</th>
+                    <th>Saved</th>
+                    <th>Efficiency</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="warrior">
+                    <td>Seekay</td>
+                    <td>40</td>
+                    <td>55</td>
+                    <td>2</td>
+                    <td>5</td>
+                    <td>72.72%</td>
+                </tr>
+                <tr class="hunter">
+                    <td>Opponent</td>
+                    <td>48</td>
+                    <td>60</td>
+                    <td>0</td>
+                    <td>2</td>
+                    <td>80.00%</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="color: #1B809E; font-weight: bold;">Card Advantage</h4>
+
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                    <th>9</th>
+                    <th>10</th>
+                    <th>11</th>
+                    <th>12</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="warrior">
+                    <td>Seekay</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                </tr>
+                <tr class="hunter">
+                    <td>Opponent</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="color: #1B809E; font-weight: bold;">Board Control</h4>
+
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                    <th>9</th>
+                    <th>10</th>
+                    <th>11</th>
+                    <th>12</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="warrior">
+                    <td>Seekay</td>
+                    <td class="hunter-bg"></td>
+                    <td class="hunter-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="hunter-bg"></td>
+                    <td class="hunter-bg"></td>
+                    <td class="hunter-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td>62.50%</td>
+                </tr>
+                <tr class="hunter">
+                    <td>Opponent</td>
+                    <td class="hunter-bg"></td>
+                    <td class="hunter-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="hunter-bg"></td>
+                    <td class="hunter-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td class="warrior-bg"></td>
+                    <td>37.50%</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <h4 style="color: #1B809E; font-weight: bold;">Turn By Turn Summary</h4>
+
+        <div>
+            <h5>Turn 1 - Seekay</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Seekay Hand: <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a></th>
+                    <th colspan="2">Seekay</th>
+                    <th colspan="2">Opponent</th>
+                </tr>
+                <tr>
+                    <th>Opponent Hand: <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a></th>
+                    <th>Health</th>
+                    <th>Mana</th>
+                    <th>Health</th>
+                    <th>Mana</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Gargantua has drawn Leper Gnome, id=61</td>
+                    <td class="warrior">30</td>
+                    <td class="warrior">30</td>
+                    <td class="hunter">--</td>
+                    <td class="hunter">30</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

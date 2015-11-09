@@ -7,9 +7,23 @@
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
 
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 
     <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/where.css" th:href="@{css/where.css}" rel="stylesheet" media="screen"/>
 
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#android-instruction1').popover({content: function() { return $('#android-instruction1_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+            $('#android-instruction2').popover({content: function() { return $('#android-instruction2_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+            $('#android-instruction3').popover({content: function() { return $('#android-instruction3_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+            $('#android-instruction4').popover({content: function() { return $('#android-instruction4_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+            $('#android-instruction5').popover({content: function() { return $('#android-instruction5_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+            $('#android-instruction6').popover({content: function() { return $('#android-instruction6_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+            $('#android-instruction7').popover({content: function() { return $('#android-instruction7_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+            $('#android-instruction8').popover({content: function() { return $('#android-instruction8_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
+        });
+    </script>
 </head>
 <body>
 
@@ -20,21 +34,18 @@
         <div class="panel-heading">
             <h3 class="panel-title">WHERE DO I FIND MY LOG FILES?</h3>
         </div>
-        <div class="panel-body">
-            <div class="bs-callout bs-callout-good">
-                <h4>Ready to Upload Log Files?</h4>
-                <span>Take me back to <a href="/">upload</a></span>
-            </div>
-            <div class="bs-callout bs-callout-info">
-                <h4>Hearthstone Log File Locations:</h4>
-                <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs\</p>
-                <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> ~/Library/Preferences/Blizzard/Hearthstone/Logs/</p>
-                <h4>Log Config File:</h4>
-                <p>By default Hearthstone does not enable it's many loggers. It simply logs System Information.  To allow Hearthlogs.com to analyze your log files you will need to create a file called log.config.</p>
-                <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\log.config</p>
-                <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> ~/Library/Preferences/Blizzard/Hearthstone/log.config</p>
-                <p>In the contents of that file place the below lines. Please note that you will need to exit Hearthstone and restart it for the logging to happen.</p>
-                <pre>
+        <div class="panel-body hearthlogs-where">
+            <h4>Hearthstone Log File Locations:</h4>
+            <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> <kbd>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs</kbd></p>
+            <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> <kbd>~/Library/Preferences/Blizzard/Hearthstone/Logs</kbd></p>
+            <p><img th:src="@{images/android.png}" src="../static/images/android.png"/> <kbd>Android/data/com.blizzard.wtcg.hearthstone/files/Logs</kbd></p>
+            <h4>Log Config File:</h4>
+            <p>By default Hearthstone does not enable it's many loggers. It simply logs System Information.  To allow Hearthlogs.com to analyze your log files you will need to create a file called log.config.</p>
+            <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> <kbd>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\log.config</kbd></p>
+            <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> <kbd>~/Library/Preferences/Blizzard/Hearthstone/log.config</kbd></p>
+            <p><img th:src="@{images/android.png}" src="../static/images/android.png"/> <kbd>Android/data/com.blizzard.wtcg.hearthstone/files/log.config</kbd></p>
+            <p>In the contents of that file place the below lines. Please note that you will need to exit Hearthstone and restart it for the logging to happen.</p>
+            <pre>
 [Power]
 LogLevel=1
 FilePrinting=false
@@ -50,10 +61,45 @@ LogLevel=1
 FilePrinting=false
 ConsolePrinting=true
 ScreenPrinting=false
-                </pre>
-                <p>Note: Hearthstone keeps only 5 log files at a time, each time you start Hearthstone it will create a new log file and if there was more than 5 it will delete the oldest one. Make sure you save them to a different location if you want to keep all your games played.</p>
+            </pre>
+            <div class="bs-callout bs-callout-android">
+                <h4>Android Instructions</h4>
+                <p>Get an App like File Manager (File Transfer) by Cheetah Mobile and follow these instructions:</p>
+                <ul>
+                    <li>Open the app, go into "Device" <button class="btn btn-xs btn-primary" id="android-instruction1">step 1</button></li>
+                    <li>Navigate to Android/data/com.blizzard.wtcg.hearthstone/files and create the log.config file by click the top right corner and choosing "Create" <button class="btn btn-xs btn-primary" id="android-instruction2">step 2</button></li>
+                    <li>With the log.config created <button class="btn btn-xs btn-primary" id="android-instruction3">step 3</button> edit it <button class="btn btn-xs btn-primary" id="android-instruction4">step 4</button> with the Text Editor <button class="btn btn-xs btn-primary" id="android-instruction5">step 5</button> and enter the lines as above <button class="btn btn-xs btn-primary" id="android-instruction6">step 6</button></li>
+                    <li>After you have played a game you can select the log file and click "Share" <button class="btn btn-xs btn-primary" id="android-instruction7">step 7</button> and choose a method of transferring it off your device <button class="btn btn-xs btn-primary" id="android-instruction8">step 8</button> </li>
+                </ul>
+                <div id="android-instruction1_popover_content_wrapper" style="display: none">
+                    <img height="356" width="200" th:src="@{/images/android-instruction1.png}" src="../static/images/android-instruction1.png" />
+                </div>
+                <div id="android-instruction2_popover_content_wrapper" style="display: none">
+                    <img th:src="@{/images/android-instruction2.png}" src="../static/images/android-instruction2.png" />
+                </div>
+                <div id="android-instruction3_popover_content_wrapper" style="display: none">
+                    <img th:src="@{/images/android-instruction3.png}" src="../static/images/android-instruction3.png" />
+                </div>
+                <div id="android-instruction4_popover_content_wrapper" style="display: none">
+                    <img th:src="@{/images/android-instruction4.png}" src="../static/images/android-instruction4.png" />
+                </div>
+                <div id="android-instruction5_popover_content_wrapper" style="display: none">
+                    <img th:src="@{/images/android-instruction5.png}" src="../static/images/android-instruction5.png" />
+                </div>
+                <div id="android-instruction6_popover_content_wrapper" style="display: none">
+                    <img th:src="@{/images/android-instruction6.png}" src="../static/images/android-instruction6.png" />
+                </div>
+                <div id="android-instruction7_popover_content_wrapper" style="display: none">
+                    <img th:src="@{/images/android-instruction7.png}" src="../static/images/android-instruction7.png" />
+                </div>
+                <div id="android-instruction8_popover_content_wrapper" style="display: none">
+                    <img th:src="@{/images/android-instruction8.png}" src="../static/images/android-instruction8.png" />
+                </div>
             </div>
-
+            <div class="bs-callout bs-callout-warning">
+                <h4>Warning</h4>
+                <p>Hearthstone keeps only 5 log files at a time, each time you start Hearthstone it will create a new log file and if there was more than 5 it will delete the oldest one. Make sure you save them to a different location if you want to keep all your games played.</p>
+            </div>
         </div>
     </div>
 

@@ -38,7 +38,7 @@ public class LogFileUploadController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("matches");
+        modelAndView.setViewName("match");
 
         List<MatchStatistics> statisticsList = new ArrayList<>();
         if (!file.isEmpty()) {

@@ -4,45 +4,60 @@
 }
 
 body {
-    font-family: siteFont;
-}
-
-.bs-callout {
-    padding: 20px;
-    margin: 20px 0px;
-    border-width: 1px 1px 1px 5px;
-    border-style: solid;
-    border-color: #EEE;
-    -moz-border-top-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    border-image: none;
-    border-radius: 3px;
-}
-
-.bs-callout-good {
-    border-left-color: #1B809E;
-}
-
-.bs-callout-good h4 {
-    color: #1B809E;
-}
-
-
-.bs-callout-info {
-    border-left-color: #9F6000;
-}
-
-.bs-callout-info h4 {
-    color: #9F6000;
+    font-family: siteFont, serif;
+    color: #D5D4D4;
+    background-color: #2D2D2D;
+    opacity: .97;
 }
 
 .hearthlogs-title {
     font-size: 80px;
 }
 
+.panel {
+    background-color: #2D2D2D;
+    border-color: #D5D4D4;
+}
+
+
+.home-title {
+    margin-top: 25%;
+}
+
 .hearthlogs-title span {
     font-size: 17px;
-    color: #a9a9a9;
+    color: #5d5d5d;
 }
+
+.death-knight { color: #C41F3B; }
+.death-knight-bg { background-color: #C41F3B; }
+
+.druid { color: #FF7D0A; }
+.druid-bg { background-color: #FF7D0A; }
+
+.hunter { color: #ABD473; }
+.hunter-bg { background-color: #ABD473; }
+
+.mage { color: #69CCF0; }
+.mage-bg { background-color: #69CCF0; }
+
+.monk { color: #00FF96; }
+.monk-bg { background-color: #00FF96; }
+
+.paladin { color: #F58CBA; }
+.paladin-bg { background-color: #F58CBA; }
+
+.priest { color: #FFFFFF; }
+.priest-bg { background-color: #FFFFFF; }
+
+.rogue { color: #FFF569; }
+.rogue-bg { background-color: #FFF569; }
+
+.shaman { color: #0070DE; }
+.shaman-bg { background-color: #0070DE; }
+
+.warlock { color: #9482C9; }
+.warlock-bg { background-color: #9482C9; }
+
+.warrior { color: #C79C6E; }
+.warrior-bg { background-color: #C79C6E; }
