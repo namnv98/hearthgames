@@ -4,10 +4,9 @@ import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.play.MatchResult;
 import com.hearthlogs.server.match.stats.domain.MatchStatistics;
 import com.hearthlogs.server.match.raw.domain.RawMatchData;
-import com.hearthlogs.server.service.MatchParserService;
-import com.hearthlogs.server.service.MatchPlayingService;
-import com.hearthlogs.server.service.MatchStatisticalAnalysisService;
-import com.hearthlogs.server.service.RawLogProcessingService;
+import com.hearthlogs.server.match.view.domain.HealthArmorSummary;
+import com.hearthlogs.server.match.view.domain.VersusInfo;
+import com.hearthlogs.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +34,9 @@ public class LogFileUploadController {
     @Autowired
     private MatchStatisticalAnalysisService matchStatisticalAnalysisService;
 
+    @Autowired
+    private MatchResultRenderingService matchResultRenderingService;
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
@@ -56,6 +58,13 @@ public class LogFileUploadController {
                     MatchResult matchResult = matchPlayingService.processMatch(context, rawMatchData.getRank());
                     MatchStatistics matchStatistics = matchStatisticalAnalysisService.calculateStatistics(matchResult, context);
                     statisticsList.add(matchStatistics);
+
+                    VersusInfo versusInfo = matchResultRenderingService.getVersusInfo(matchResult, context);
+                    HealthArmorSummary healthArmorSummary = matchResultRenderingService.getHealthSummary(matchResult, context);
+
+                    modelAndView.addObject("versusInfo", versusInfo);
+                    modelAndView.addObject("healthArmorSummary", healthArmorSummary);
+                    modelAndView.addObject("manaStats", matchStatistics);
                 }
 
             } catch (Exception e) {

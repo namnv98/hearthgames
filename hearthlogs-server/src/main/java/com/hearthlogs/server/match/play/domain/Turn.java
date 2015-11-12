@@ -84,6 +84,16 @@ public class Turn implements Serializable {
         return sum;
     }
 
+    public int getManaLost() {
+        int sum = 0;
+        for (Action a: actions) {
+            if (a instanceof ManaLost) {
+                sum += ((ManaLost) a).getManaLost();
+            }
+        }
+        return sum;
+    }
+
     public int getTempManaUsed() {
         return tempManaUsed;
     }

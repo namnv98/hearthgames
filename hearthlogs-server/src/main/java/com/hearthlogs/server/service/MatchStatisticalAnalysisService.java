@@ -22,18 +22,17 @@ public class MatchStatisticalAnalysisService {
         stats.setFriendlyTotalMana(calcFriendlyTotalMana(result.getTurns(), result.getFriendly()));
         stats.setFriendlyManaUsed(calcFriendlyManaUsed(result.getTurns(), result.getFriendly()));
         stats.setFriendlyManaSaved(calcFriendlyManaSaved(result.getTurns(), result.getFriendly()));
+        stats.setFriendlyManaLost(calcFriendlyManaLost(result.getTurns(), result.getFriendly()));
         stats.setFriendlyManaEfficiency(calcFriendlyManaEfficiency(stats.getFriendlyManaUsed(), stats.getFriendlyTotalMana(), stats.getFriendlyManaSaved()));
 
         stats.setOpposingTotalMana(calcOpposingTotalMana(result.getTurns(), result.getOpposing()));
         stats.setOpposingManaUsed(calcOpposingManaUsed(result.getTurns(), result.getOpposing()));
         stats.setOpposingManaSaved(calcOpposingManaSaved(result.getTurns(), result.getOpposing()));
+        stats.setOpposingManaLost(calcOpposingManaLost(result.getTurns(), result.getOpposing()));
         stats.setOpposingManaEfficiency(calcOpposingManaEfficiency(stats.getOpposingManaUsed(), stats.getOpposingTotalMana(), stats.getOpposingManaSaved()));
-
 
         return stats;
     }
-
-
 
     private long calcFriendlyTotalMana(Set<Turn> turns, Player friendly) {
         return getMana(turns, friendly, Turn::getManaGained);
@@ -45,6 +44,10 @@ public class MatchStatisticalAnalysisService {
 
     private long calcFriendlyManaSaved(Set<Turn> turns, Player friendly) {
         return getMana(turns, friendly, Turn::getManaSaved);
+    }
+
+    private long calcFriendlyManaLost(Set<Turn> turns, Player friendly) {
+        return getMana(turns, friendly, Turn::getManaLost);
     }
 
     public float calcFriendlyManaEfficiency(long friendlyManaUsed, long friendlyTotalMana, long friendlyManaSaved) {
@@ -61,6 +64,10 @@ public class MatchStatisticalAnalysisService {
 
     private long calcOpposingManaSaved(Set<Turn> turns, Player opposing) {
         return getMana(turns, opposing, Turn::getManaSaved);
+    }
+
+    private long calcOpposingManaLost(Set<Turn> turns, Player friendly) {
+        return getMana(turns, friendly, Turn::getManaLost);
     }
 
     private long getMana(Set<Turn> turns, Player player, ToIntFunction<Turn> turnToIntFunction) {

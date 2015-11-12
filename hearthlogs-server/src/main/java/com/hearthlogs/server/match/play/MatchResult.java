@@ -31,7 +31,6 @@ public class MatchResult {
     private Set<Turn> turns = new LinkedHashSet<>();
     private Turn currentTurn;
     private int turnNumber;
-    private Player currentPlayer;
 
     public void addFriendlyStartingCard(Card card) {
         friendlyStartingCards.add(card);
@@ -179,14 +178,6 @@ public class MatchResult {
         this.opposing = opposing;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
     public void addTurn() {
         currentTurn = new Turn(turnNumber);
         this.turns.add(currentTurn);
@@ -224,16 +215,16 @@ public class MatchResult {
         this.currentTurn.addAction(new ManaGained(mana));
     }
 
-    public void addManaUsed(Card card, int mana) {
-        this.currentTurn.addAction(new ManaUsed(card, mana));
+    public void addManaUsed(Entity entity, int mana) {
+        this.currentTurn.addAction(new ManaUsed(entity, mana));
     }
 
     public void addManaSaved(Card card, int mana) {
         this.currentTurn.addAction(new ManaSaved(card, mana));
     }
 
-    public void addManaOverspent(Card card, int mana) {
-        this.currentTurn.addAction(new ManaOverspent(card, mana));
+    public void addManaLost(Card card, int mana) {
+        this.currentTurn.addAction(new ManaLost(card, mana));
     }
 
     public void addTempManaGained(Card card, int mana) {

@@ -64,6 +64,12 @@ public class GameHandler implements Handler {
             if (result.getTurnNumber() > 1) {
                 result.addTurn();
             }
+            if (TRUE_OR_ONE.equals(context.getFriendlyPlayer().getCurrentPlayer())) {
+                result.getCurrentTurn().setWhoseTurn(context.getFriendlyPlayer());
+            } else if (TRUE_OR_ONE.equals(context.getOpposingPlayer().getCurrentPlayer())) {
+                result.getCurrentTurn().setWhoseTurn(context.getOpposingPlayer());
+            }
+
             result.getCurrentTurn().setStartDateTime(activity.getDateTime());
         } else if (Game.Step.MAIN_NEXT.eq(after.getStep()) || Game.Step.FINAL_GAMEOVER.eq(after.getStep())) {
             result.getCurrentTurn().setEndDateTime(activity.getDateTime());
@@ -81,18 +87,22 @@ public class GameHandler implements Handler {
         if (after.getTurn() != null && context.getGame().isGameRunning()) {
             int turnNumber = Integer.parseInt(after.getTurn());
             result.setTurnNumber(turnNumber);
-            result.getCurrentTurn().setWhoseTurn(result.getCurrentPlayer());
         }
 
         if (Game.State.COMPLETE.eq(after.getState())) {
             Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
             Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
 
-            CardDetails cardDetails = friendlyHeroCard.getCardDetails();
-            result.setWinnerClass(cardDetails.getPlayerClass());
+            CardDetails friendlyCardDetails = friendlyHeroCard.getCardDetails();
+            CardDetails opposingCardDetails = opposingHeroCard.getCardDetails();
 
-            cardDetails = opposingHeroCard.getCardDetails();
-            result.setLoserClass(cardDetails.getPlayerClass());
+            if (result.getWinner() == context.getFriendlyPlayer()) {
+                result.setWinnerClass(friendlyCardDetails.getPlayerClass());
+                result.setLoserClass(opposingCardDetails.getPlayerClass());
+            } else {
+                result.setWinnerClass(opposingCardDetails.getPlayerClass());
+                result.setLoserClass(friendlyCardDetails.getPlayerClass());
+            }
 
 
             System.out.println("--------------------------  Game Over  ----------------------------------------");

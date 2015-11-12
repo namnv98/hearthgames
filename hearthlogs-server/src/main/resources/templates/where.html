@@ -36,14 +36,14 @@
         </div>
         <div class="panel-body hearthlogs-where">
             <h4>Hearthstone Log File Locations:</h4>
-            <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> <kbd>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs</kbd></p>
-            <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> <kbd>~/Library/Preferences/Blizzard/Hearthstone/Logs</kbd></p>
-            <p><img th:src="@{images/android.png}" src="../static/images/android.png"/> <kbd>Android/data/com.blizzard.wtcg.hearthstone/files/Logs</kbd></p>
+            <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> <code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs</code></p>
+            <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> <code>~/Library/Preferences/Blizzard/Hearthstone/Logs</code></p>
+            <p><img th:src="@{images/android.png}" src="../static/images/android.png"/> <code>Android/data/com.blizzard.wtcg.hearthstone/files/Logs</code></p>
             <h4>Log Config File:</h4>
             <p>By default Hearthstone does not enable it's many loggers. It simply logs System Information.  To allow Hearthlogs.com to analyze your log files you will need to create a file called log.config.</p>
-            <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> <kbd>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\log.config</kbd></p>
-            <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> <kbd>~/Library/Preferences/Blizzard/Hearthstone/log.config</kbd></p>
-            <p><img th:src="@{images/android.png}" src="../static/images/android.png"/> <kbd>Android/data/com.blizzard.wtcg.hearthstone/files/log.config</kbd></p>
+            <p><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> <code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\log.config</code></p>
+            <p><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> <code>~/Library/Preferences/Blizzard/Hearthstone/log.config</code></p>
+            <p><img th:src="@{images/android.png}" src="../static/images/android.png"/> <code>Android/data/com.blizzard.wtcg.hearthstone/files/log.config</code></p>
             <p>In the contents of that file place the below lines. Please note that you will need to exit Hearthstone and restart it for the logging to happen.</p>
             <pre>
 [Power]
@@ -98,7 +98,7 @@ ScreenPrinting=false
             </div>
             <div class="bs-callout bs-callout-warning">
                 <h4>Warning</h4>
-                <p>Hearthstone keeps only 5 log files at a time, each time you start Hearthstone it will create a new log file and if there was more than 5 it will delete the oldest one. Make sure you save them to a different location if you want to keep all your games played.</p>
+                <p>Hearthstone keeps only 5 log files at a time, each time you start Hearthstone it will create a new log file, and if there were more than 5 it will delete the oldest one. Make sure you save them to a different location if you want to keep all games played.</p>
             </div>
         </div>
     </div>

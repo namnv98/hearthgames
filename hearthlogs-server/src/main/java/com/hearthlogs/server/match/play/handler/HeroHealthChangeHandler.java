@@ -9,7 +9,10 @@ public class HeroHealthChangeHandler implements Handler {
 
     @Override
     public boolean supports(MatchResult result, ParseContext context, Activity activity) {
-        return activity.isTagChange() && (activity.getDelta() instanceof Card) && context.getAfter(activity).getDamage() != null && !FALSE_OR_ZERO.equals(context.getAfter(activity).getDamage());
+        return activity.isTagChange() && (activity.getDelta() instanceof Card)
+                && context.getAfter(activity).getDamage() != null
+                && !FALSE_OR_ZERO.equals(context.getAfter(activity).getDamage())
+                && Card.Type.HERO.eq(context.getBefore(activity).getCardtype());
     }
 
     @Override
@@ -22,7 +25,7 @@ public class HeroHealthChangeHandler implements Handler {
         int newHealth = health - damage;
 
         result.addHeroHealthChange(before, newHealth);
-        System.out.println(context.getSide(before) + " " + before.getName() + " health is now : " + (health - damage));
+        System.out.println(context.getSide(before) + " " + before.getName() + " hero health is now : " + (health - damage));
         return true;
     }
 }

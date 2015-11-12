@@ -1,10 +1,10 @@
 package com.hearthlogs.server.match.view.domain;
 
-public class MatchVersusView {
+public class VersusInfo {
 
     private String friendlyName;
-    private String friendlyClass;
     private String opposingName;
+    private String friendlyClass;
     private String opposingClass;
 
     public String getFriendlyName() {
@@ -15,20 +15,20 @@ public class MatchVersusView {
         this.friendlyName = friendlyName;
     }
 
-    public String getFriendlyClass() {
-        return friendlyClass;
-    }
-
-    public void setFriendlyClass(String friendlyClass) {
-        this.friendlyClass = friendlyClass;
-    }
-
     public String getOpposingName() {
         return opposingName;
     }
 
     public void setOpposingName(String opposingName) {
         this.opposingName = opposingName;
+    }
+
+    public String getFriendlyClass() {
+        return friendlyClass;
+    }
+
+    public void setFriendlyClass(String friendlyClass) {
+        this.friendlyClass = friendlyClass;
     }
 
     public String getOpposingClass() {

@@ -1,33 +1,15 @@
-@font-face {
-    font-family: siteFont;
-    src: url(bliz-quadrata.woff);
-}
+@font-face { font-family: siteFont; src: url(bliz-quadrata.woff); }
 
-body {
-    font-family: siteFont, serif;
-    color: #D5D4D4;
-    background-color: #2D2D2D;
-    opacity: .97;
-}
+body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; opacity: .97; }
 
-.hearthlogs-title {
-    font-size: 80px;
-}
+.hearthlogs-title { font-size: 80px; }
 
-.panel {
-    background-color: #2D2D2D;
-    border-color: #D5D4D4;
-}
+.panel { background-color: #2D2D2D; border-color: #D5D4D4; }
 
 
-.home-title {
-    margin-top: 25%;
-}
+.home-title { margin-top: 25%; }
 
-.hearthlogs-title span {
-    font-size: 17px;
-    color: #5d5d5d;
-}
+.hearthlogs-title span { font-size: 17px; color: #5d5d5d; }
 
 .death-knight { color: #C41F3B; }
 .death-knight-bg { background-color: #C41F3B; }

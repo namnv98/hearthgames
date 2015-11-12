@@ -1,0 +1,10 @@
+#health-summary tr > td:first-child > div > div, #health-summary tr > th:first-child > div > div { width: 160px; text-align: left; }
+#health-summary .turn { text-align: center; }
+
+.health-armor {margin: auto; width: 25px;}
+
+.health-bg { position:relative; background-image: url(health.png); width: 18px; height: 25px; text-align: center; margin-left: 2px; }
+.health-bg > div { position: absolute; bottom: 0; text-shadow: 2px 2px 4px #000; width: 18px; text-align: center; font-weight: bold; }
+
+.armor-bg { position:relative; background-image: url(armor.png); width: 22px; height: 25px; font-size: 12px; text-align: center; }
+.armor-bg > div { position: absolute; bottom: 5px; text-shadow: 1px 1px 1px #000; width: 22px; text-align: center; font-weight: bold; }

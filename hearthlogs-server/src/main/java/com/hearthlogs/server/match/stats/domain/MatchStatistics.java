@@ -5,11 +5,13 @@ public class MatchStatistics {
     private long friendlyTotalMana;
     private long friendlyManaUsed;
     private long friendlyManaSaved;
+    private long friendlyManaLost;
     private float friendlyManaEfficiency;
 
     private long opposingTotalMana;
     private long opposingManaUsed;
     private long opposingManaSaved;
+    private long opposingManaLost;
     private float opposingManaEfficiency;
 
 
@@ -35,6 +37,14 @@ public class MatchStatistics {
 
     public void setFriendlyManaSaved(long friendlyManaSaved) {
         this.friendlyManaSaved = friendlyManaSaved;
+    }
+
+    public long getFriendlyManaLost() {
+        return friendlyManaLost;
+    }
+
+    public void setFriendlyManaLost(long friendlyManaLost) {
+        this.friendlyManaLost = friendlyManaLost;
     }
 
     public float getFriendlyManaEfficiency() {
@@ -67,6 +77,14 @@ public class MatchStatistics {
 
     public void setOpposingManaSaved(long opposingManaSaved) {
         this.opposingManaSaved = opposingManaSaved;
+    }
+
+    public long getOpposingManaLost() {
+        return opposingManaLost;
+    }
+
+    public void setOpposingManaLost(long opposingManaLost) {
+        this.opposingManaLost = opposingManaLost;
     }
 
     public float getOpposingManaEfficiency() {

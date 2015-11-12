@@ -1,9 +1,6 @@
 package com.hearthlogs.server.match.play.handler;
 
-import com.hearthlogs.server.match.parse.domain.Card;
-import com.hearthlogs.server.match.parse.domain.CardDetails;
-import com.hearthlogs.server.match.parse.domain.Player;
-import com.hearthlogs.server.match.parse.domain.Activity;
+import com.hearthlogs.server.match.parse.domain.*;
 import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.play.MatchResult;
 import org.springframework.stereotype.Component;
@@ -20,12 +17,6 @@ public class PlayerHandler implements Handler {
         Player before = (Player) context.getEntityById(activity.getEntityId());
         Player after = (Player) activity.getDelta();
 
-        if (after.getCurrentPlayer() != null && TRUE_OR_ONE.equals(after.getCurrentPlayer())) {
-            result.setCurrentPlayer(before);
-            if (result.getCurrentTurn().getWhoseTurn() == null) {
-                result.getCurrentTurn().setWhoseTurn(before);
-            }
-        }
 
         if (after.getNumOptions() != null) {
             result.addNumOptions(Integer.parseInt(after.getNumOptions()));
@@ -51,22 +42,25 @@ public class PlayerHandler implements Handler {
         if (after.getResources() != null) {
             result.addManaGained(Integer.parseInt(after.getResources()));
         } else if (after.getResourcesUsed() != null && !"0".equals(after.getResourcesUsed())) {
-            Card cardUsedOn = (Card) activity.getParent().getDelta();
+            Entity usedOn = activity.getParent().getDelta();
 
             int manaUsed = Integer.parseInt(after.getResourcesUsed()) - result.getCurrentTurn().getManaUsed();
             if (result.getCurrentTurn().getTempManaUsed() > 0) {
                 manaUsed += result.getCurrentTurn().getTempManaUsed();
                 result.getCurrentTurn().setTempManaUsed(0);
             }
-            result.addManaUsed(cardUsedOn, manaUsed);
+            result.addManaUsed(usedOn, manaUsed);
 
             if (activity.getParent().getDelta() instanceof Card) {
+                Card cardUsedOn = (Card) usedOn;
                 CardDetails cardDetails = cardUsedOn.getCardDetails();
-                int cost = Integer.parseInt(cardDetails.getCost());
-                if (manaUsed < cost) {
-                    result.addManaSaved(cardUsedOn, cost - manaUsed);
-                } else if (manaUsed > cost){
-                    result.addManaOverspent(cardUsedOn, manaUsed - cost);
+                if (cardDetails != null) {
+                    int cost = Integer.parseInt(cardDetails.getCost());
+                    if (manaUsed < cost) {
+                        result.addManaSaved(cardUsedOn, cost - manaUsed);
+                    } else if (manaUsed > cost){
+                        result.addManaLost(cardUsedOn, manaUsed - cost);
+                    }
                 }
             }
         } else if ((before.getTempResources() == null || before.getTempResources().equals("0")) && after.getTempResources() != null) {
