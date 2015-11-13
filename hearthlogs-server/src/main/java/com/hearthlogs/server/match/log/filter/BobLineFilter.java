@@ -1,10 +1,10 @@
-package com.hearthlogs.server.match.raw.filter;
+package com.hearthlogs.server.match.log.filter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Component
-public class BobFilter {
+public class BobLineFilter {
 
     public String filter(String line) {
         String filteredLine = null;

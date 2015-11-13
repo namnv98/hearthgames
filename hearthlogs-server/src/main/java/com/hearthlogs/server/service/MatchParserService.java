@@ -2,7 +2,7 @@ package com.hearthlogs.server.service;
 
 import com.hearthlogs.server.match.parse.handler.*;
 import com.hearthlogs.server.match.parse.ParseContext;
-import com.hearthlogs.server.match.raw.domain.LogLineData;
+import com.hearthlogs.server.match.log.domain.LogLineData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

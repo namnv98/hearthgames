@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class HearthpwnCardParser {
+public class HearthPwnCardParser {
 
     @Autowired
     private CardService cardService;
 
-    public List<HearthpwnCardLink> getCardLinks() throws IOException {
+    public List<HearthPwnCardLink> getCardLinks() throws IOException {
 
-        List<HearthpwnCardLink> cardLinks = new ArrayList<>();
-        for (int i=1; i < 14; i++) {
+        List<HearthPwnCardLink> cardLinks = new ArrayList<>();
+        for (int i=1; i < 16; i++) {
             String url = "http://www.hearthpwn.com/cards?display=1&page=";
 
             Document doc = Jsoup.connect(url+i).userAgent("Mozilla").get();
@@ -35,16 +35,19 @@ public class HearthpwnCardParser {
                     String href = link.get(0).attr("href");
                     String name = link.get(0).html();
 
-                    CardDetails cardDetails = cardService.getByName(name);
-                    String cardId = "";
-                    if (cardDetails != null) {
-                        cardId = cardDetails.getId();
+                    if (!cardService.isTavernBrawl(name)) {
+                        CardDetails cardDetails = cardService.getByName(name);
+                        String cardId = "";
+                        if (cardDetails != null) {
+                            cardId = cardDetails.getId();
+                        }
+                        HearthPwnCardLink cardLink = new HearthPwnCardLink();
+                        cardLink.setCardId(cardId);
+                        cardLink.setHref(href);
+                        cardLink.setName(name);
+                        cardLinks.add(cardLink);
+
                     }
-                    HearthpwnCardLink cardLink = new HearthpwnCardLink();
-                    cardLink.setCardId(cardId);
-                    cardLink.setHref(href);
-                    cardLink.setName(name);
-                    cardLinks.add(cardLink);
                 }
             }
         }

@@ -1,7 +1,7 @@
 package com.hearthlogs.server.match.parse;
 
 import com.hearthlogs.server.match.parse.domain.*;
-import com.hearthlogs.server.match.raw.domain.LogLineData;
+import com.hearthlogs.server.match.log.domain.LogLineData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;

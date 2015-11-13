@@ -1,11 +1,11 @@
 package com.hearthlogs.server.service;
 
-import com.hearthlogs.server.match.raw.domain.FilteredLineData;
-import com.hearthlogs.server.match.raw.domain.LogLineData;
-import com.hearthlogs.server.match.raw.domain.RawMatchData;
-import com.hearthlogs.server.match.raw.filter.AssetFilter;
-import com.hearthlogs.server.match.raw.filter.BobFilter;
-import com.hearthlogs.server.match.raw.filter.PowerFilter;
+import com.hearthlogs.server.match.log.domain.FilteredLineData;
+import com.hearthlogs.server.match.log.domain.LogLineData;
+import com.hearthlogs.server.match.log.domain.RawMatchData;
+import com.hearthlogs.server.match.log.filter.AssetLineFilter;
+import com.hearthlogs.server.match.log.filter.BobLineFilter;
+import com.hearthlogs.server.match.log.filter.PowerLineFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +27,17 @@ public class RawLogProcessingService {
     private static final String GAME_STATE_COMPLETE = "TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE";
     private static final String REGISTER_FRIEND_CHALLENGE = "---RegisterFriendChallenge---";
 
-    private PowerFilter powerFilter;
-    private BobFilter bobFilter;
-    private AssetFilter assetFilter;
+    private PowerLineFilter powerLineFilter;
+    private BobLineFilter bobLineFilter;
+    private AssetLineFilter assetLineFilter;
 
     @Autowired
-    public RawLogProcessingService(PowerFilter powerFilter,
-                                   BobFilter bobFilter,
-                                   AssetFilter assetFilter) {
-        this.powerFilter = powerFilter;
-        this.bobFilter = bobFilter;
-        this.assetFilter = assetFilter;
+    public RawLogProcessingService(PowerLineFilter powerLineFilter,
+                                   BobLineFilter bobLineFilter,
+                                   AssetLineFilter assetLineFilter) {
+        this.powerLineFilter = powerLineFilter;
+        this.bobLineFilter = bobLineFilter;
+        this.assetLineFilter = assetLineFilter;
     }
 
     public List<RawMatchData> processLogFile(List<String> lines) {
@@ -92,15 +92,15 @@ public class RawLogProcessingService {
 
     private FilteredLineData filterLine(String line) {
         FilteredLineData filteredLineData = null;
-        String filteredLine = powerFilter.filter(line);
+        String filteredLine = powerLineFilter.filter(line);
         if (filteredLine != null) {
             filteredLineData = new FilteredLineData(filteredLine, true);
         }
-        filteredLine = assetFilter.filter(line);
+        filteredLine = assetLineFilter.filter(line);
         if (filteredLine != null) {
             filteredLineData = new FilteredLineData(filteredLine, false);
         }
-        filteredLine = bobFilter.filter(line);
+        filteredLine = bobLineFilter.filter(line);
         if (filteredLine != null) {
             filteredLineData = new FilteredLineData(filteredLine, false);
         }

@@ -3,7 +3,7 @@ package com.hearthlogs.server.match.parse.handler;
 import static org.junit.Assert.*;
 
 import com.hearthlogs.server.match.parse.ParseContext;
-import com.hearthlogs.server.match.raw.domain.LogLineData;
+import com.hearthlogs.server.match.log.domain.LogLineData;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;

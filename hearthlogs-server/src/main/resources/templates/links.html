@@ -38,9 +38,12 @@
         </table>
         </div>
 
-        <div th:each="cardLink : ${cardLinks}">
-            <span th:text="${cardLink.cardId}">Card ID</span>,<span th:text="${cardLink.href}">Link</span>
+        { "cards" : [
+        <div th:each="cardLink : ${cardLinks}" th:inline="text">
+            { "cardId" : "[[${cardLink.cardId}]]" , "href": "[[${cardLink.href}]]" },
         </div>
+          ]
+        }
 
     </div>
 </div>

@@ -1,4 +1,4 @@
-package com.hearthlogs.server.match.view.domain.generic;
+package com.hearthlogs.server.match.analysis.domain.generic;
 
 public class GenericColumn {
 

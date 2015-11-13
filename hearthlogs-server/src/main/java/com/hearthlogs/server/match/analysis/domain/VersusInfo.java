@@ -1,4 +1,4 @@
-package com.hearthlogs.server.match.view.domain;
+package com.hearthlogs.server.match.analysis.domain;
 
 public class VersusInfo {
 

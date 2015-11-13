@@ -31,29 +31,29 @@
         <table id="health-summary" class="table table-bordered">
             <thead>
             <tr>
-                <th th:text="${column.data}" th:each="column,iterStat : ${healthArmorSummary.header.columns}" th:class="${iterStat.first}? '' : 'turn'"></th>
+                <th th:text="${column.data}" th:each="column,iterStat : ${healthArmorInfo.header.columns}" th:class="${iterStat.first}? '' : 'turn'"></th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td th:each="column,iterStat : ${healthArmorSummary.friendly.columns}">
+                <td th:each="column,iterStat : ${healthArmorInfo.friendly.columns}">
                     <div th:class="${iterStat.first}? '' : 'health-armor'" class="health-armor">
                         <div th:if="${column.data2 != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
                             <div th:text="${column.data2}"></div>
                         </div>
-                        <div th:class="${iterStat.first}? ${#strings.toLowerCase(healthArmorSummary.friendlyClass)} : 'health-bg'" class="health-bg">
+                        <div th:class="${iterStat.first}? ${#strings.toLowerCase(healthArmorInfo.friendlyClass)} : 'health-bg'" class="health-bg">
                             <div th:text="${column.data}"></div>
                         </div>
                     </div>
                 </td>
             </tr>
             <tr>
-                <td th:each="column,iterStat : ${healthArmorSummary.opposing.columns}">
+                <td th:each="column,iterStat : ${healthArmorInfo.opposing.columns}">
                     <div th:class="${iterStat.first}? '' : 'health-armor'" class="health-armor">
                         <div th:if="${column.data2 != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
                             <div th:text="${column.data2}"></div>
                         </div>
-                        <div th:class="${iterStat.first}? ${#strings.toLowerCase(healthArmorSummary.opposingClass)} : 'health-bg'" class="health-bg">
+                        <div th:class="${iterStat.first}? ${#strings.toLowerCase(healthArmorInfo.opposingClass)} : 'health-bg'" class="health-bg">
                             <div th:text="${column.data}"></div>
                         </div>
                     </div>

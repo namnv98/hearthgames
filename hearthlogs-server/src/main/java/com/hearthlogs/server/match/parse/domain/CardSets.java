@@ -22,6 +22,7 @@ public class CardSets implements Serializable {
     private List<CardDetails> tavernBrawl = new ArrayList<>();
     private List<CardDetails> heroSkins = new ArrayList<>();
     private List<CardDetails> theGrandTournament = new ArrayList<>();
+    private List<CardDetails> leagueOfExplorers = new ArrayList<>();
 
     public List<CardDetails> getBasic() {
         return basic;
@@ -133,5 +134,13 @@ public class CardSets implements Serializable {
 
     public void setTheGrandTournament(List<CardDetails> theGrandTournament) {
         this.theGrandTournament = theGrandTournament;
+    }
+
+    public List<CardDetails> getLeagueOfExplorers() {
+        return leagueOfExplorers;
+    }
+
+    public void setLeagueOfExplorers(List<CardDetails> leagueOfExplorers) {
+        this.leagueOfExplorers = leagueOfExplorers;
     }
 }

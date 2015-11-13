@@ -1,8 +1,8 @@
-package com.hearthlogs.server.match.view.domain;
+package com.hearthlogs.server.match.analysis.domain;
 
-import com.hearthlogs.server.match.view.domain.generic.GenericRow;
+import com.hearthlogs.server.match.analysis.domain.generic.GenericRow;
 
-public class HealthArmorSummary {
+public class HealthArmorInfo {
 
     private GenericRow header;
     private GenericRow friendly;

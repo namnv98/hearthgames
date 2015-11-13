@@ -1,7 +1,7 @@
 package com.hearthlogs.server.controller;
 
-import com.hearthlogs.server.util.HearthpwnCardLink;
-import com.hearthlogs.server.util.HearthpwnCardParser;
+import com.hearthlogs.server.util.HearthPwnCardLink;
+import com.hearthlogs.server.util.HearthPwnCardParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,14 +13,14 @@ import java.util.List;
 public class HearthpwnCardLinkUpdateController {
 
     @Autowired
-    private HearthpwnCardParser cardParser;
+    private HearthPwnCardParser cardParser;
 
     @RequestMapping("/link")
     public ModelAndView linkCards() throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("links");
 
-        List<HearthpwnCardLink> cardLinks = cardParser.getCardLinks();
+        List<HearthPwnCardLink> cardLinks = cardParser.getCardLinks();
         modelAndView.addObject("cardLinks", cardLinks);
 
         return modelAndView;

@@ -1,6 +1,6 @@
-package com.hearthlogs.server.match.stats.domain;
+package com.hearthlogs.server.match.analysis.domain;
 
-public class MatchStatistics {
+public class ManaInfo {
 
     private long friendlyTotalMana;
     private long friendlyManaUsed;

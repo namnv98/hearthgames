@@ -1,4 +1,4 @@
-package com.hearthlogs.server.match.raw.domain;
+package com.hearthlogs.server.match.log.domain;
 
 import java.time.LocalDateTime;
 

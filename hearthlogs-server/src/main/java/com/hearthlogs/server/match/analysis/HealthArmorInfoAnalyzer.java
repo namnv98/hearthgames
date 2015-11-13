@@ -1,5 +1,8 @@
-package com.hearthlogs.server.service;
+package com.hearthlogs.server.match.analysis;
 
+import com.hearthlogs.server.match.analysis.domain.HealthArmorInfo;
+import com.hearthlogs.server.match.analysis.domain.generic.GenericColumn;
+import com.hearthlogs.server.match.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.parse.domain.Card;
 import com.hearthlogs.server.match.play.MatchResult;
@@ -7,47 +10,28 @@ import com.hearthlogs.server.match.play.domain.Action;
 import com.hearthlogs.server.match.play.domain.ArmorChange;
 import com.hearthlogs.server.match.play.domain.HeroHealthChange;
 import com.hearthlogs.server.match.play.domain.Turn;
-import com.hearthlogs.server.match.view.domain.HealthArmorSummary;
-import com.hearthlogs.server.match.view.domain.VersusInfo;
-import com.hearthlogs.server.match.view.domain.generic.GenericColumn;
-import com.hearthlogs.server.match.view.domain.generic.GenericRow;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class MatchResultRenderingService {
+@Component
+public class HealthArmorInfoAnalyzer implements Analyzer<HealthArmorInfo> {
 
-    public VersusInfo getVersusInfo(MatchResult result, ParseContext context) {
-
-        VersusInfo info = new VersusInfo();
-
-        String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
-        String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
-
-        info.setFriendlyClass(friendlyClass);
-        info.setOpposingClass(opposingClass);
-        info.setFriendlyName(context.getFriendlyPlayer().getName());
-        info.setOpposingName(context.getOpposingPlayer().getName());
-
-        return info;
-    }
-
-    public HealthArmorSummary getHealthSummary(MatchResult result, ParseContext context) {
-
-        HealthArmorSummary summary = new HealthArmorSummary();
+    @Override
+    public HealthArmorInfo analyze(MatchResult result, ParseContext context) {
+        HealthArmorInfo info = new HealthArmorInfo();
 
         GenericRow header = new GenericRow();
-        summary.setHeader(header);
+        info.setHeader(header);
         header.addColumn(new GenericColumn("Player"));
         for (int i=1; i <= result.getTurns().size(); i++) {
             header.addColumn(new GenericColumn(""+i));
         }
 
         GenericRow friendly = new GenericRow();
-        summary.setFriendly(friendly);
+        info.setFriendly(friendly);
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
 
         GenericRow opposing = new GenericRow();
-        summary.setOpposing(opposing);
+        info.setOpposing(opposing);
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
 
         Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
@@ -104,10 +88,9 @@ public class MatchResultRenderingService {
         String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
         String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
 
-        summary.setFriendlyClass(friendlyClass);
-        summary.setOpposingClass(opposingClass);
+        info.setFriendlyClass(friendlyClass);
+        info.setOpposingClass(opposingClass);
 
-        return summary;
+        return info;
     }
-
 }

@@ -1,15 +1,18 @@
 package com.hearthlogs.server.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hearthlogs.server.match.analysis.domain.VersusInfo;
 import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.parse.domain.CardSets;
 import com.hearthlogs.server.match.play.MatchResult;
-import com.hearthlogs.server.match.raw.filter.AssetFilter;
-import com.hearthlogs.server.match.raw.filter.BobFilter;
-import com.hearthlogs.server.match.raw.filter.PowerFilter;
-import com.hearthlogs.server.match.stats.domain.MatchStatistics;
-import com.hearthlogs.server.match.raw.domain.RawMatchData;
-import com.hearthlogs.server.match.view.domain.HealthArmorSummary;
+import com.hearthlogs.server.match.log.filter.AssetLineFilter;
+import com.hearthlogs.server.match.log.filter.BobLineFilter;
+import com.hearthlogs.server.match.log.filter.PowerLineFilter;
+import com.hearthlogs.server.match.analysis.domain.ManaInfo;
+import com.hearthlogs.server.match.log.domain.RawMatchData;
+import com.hearthlogs.server.match.analysis.domain.HealthArmorInfo;
+import com.hearthlogs.server.util.HearthPwnCardLink;
+import com.hearthlogs.server.util.HearthPwnCards;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,18 +28,17 @@ public class MatchParserServiceTest {
 
     MatchPlayingService matchPlayingService;
     MatchParserService matchParserService;
-    MatchStatisticalAnalysisService matchStatisticalAnalysisService;
     RawLogProcessingService rawLogProcessingService;
-    MatchResultRenderingService matchResultRenderingService;
+    MatchAnalysisService matchAnalysisService;
 
     @Before
     public void init() throws IOException {
-        CardService cardService = new CardService(new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class));
+        CardService cardService = new CardService(new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class),
+                new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("HearthPwn.json"), HearthPwnCards.class));
         matchParserService = new MatchParserService();
         matchPlayingService = new MatchPlayingService(cardService);
-        matchStatisticalAnalysisService = new MatchStatisticalAnalysisService();
-        rawLogProcessingService = new RawLogProcessingService(new PowerFilter(), new BobFilter(), new AssetFilter());
-        matchResultRenderingService = new MatchResultRenderingService();
+        rawLogProcessingService = new RawLogProcessingService(new PowerLineFilter(), new BobLineFilter(), new AssetLineFilter());
+        matchAnalysisService = new MatchAnalysisService();
     }
 
     @Test
@@ -48,18 +50,15 @@ public class MatchParserServiceTest {
 
         ParseContext context = matchParserService.parseLines(rawMatchData.get(0).getLines());
         MatchResult result = matchPlayingService.processMatch(context, rawMatchData.get(0).getRank());
-        MatchStatistics stats = matchStatisticalAnalysisService.calculateStatistics(result, context);
 
-        HealthArmorSummary healthArmorSummary = matchResultRenderingService.getHealthSummary(result, context);
+        VersusInfo versusInfo = matchAnalysisService.getVersusInfo(result, context);
+        HealthArmorInfo healthArmorInfo = matchAnalysisService.getHealthArmorInfo(result, context);
+        ManaInfo manaInfo = matchAnalysisService.getManaInfo(result, context);
 
-
-        result.setFriendly(context.getFriendlyPlayer());
-        result.setOpposing(context.getOpposingPlayer());
-
-        System.out.println(stats.getFriendlyManaEfficiency());
-        System.out.println(stats.getOpposingManaEfficiency());
-        System.out.println(stats.getFriendlyManaUsed() + " / " + stats.getFriendlyTotalMana());
-        System.out.println(stats.getOpposingManaUsed() + " / " + stats.getOpposingTotalMana());
+        System.out.println(manaInfo.getFriendlyManaEfficiency());
+        System.out.println(manaInfo.getOpposingManaEfficiency());
+        System.out.println(manaInfo.getFriendlyManaUsed() + " / " + manaInfo.getFriendlyTotalMana());
+        System.out.println(manaInfo.getOpposingManaUsed() + " / " + manaInfo.getOpposingTotalMana());
         System.out.println();
 
     }

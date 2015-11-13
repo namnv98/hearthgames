@@ -1,4 +1,4 @@
-package com.hearthlogs.server.match.raw.filter;
+package com.hearthlogs.server.match.log.filter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
  *
  */
 @Component
-public class PowerFilter {
+public class PowerLineFilter {
 
     /**
      * The filter method accepts only log lines starting with DebugPrintPower
