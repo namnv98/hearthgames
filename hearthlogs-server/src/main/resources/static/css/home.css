@@ -1,4 +1,4 @@
-body { background-image: url(background.jpg) }
+body { background-image: url(background.jpg); }
 
-.hearthlogs-title { margin-top: 25%; }
+.hearthlogs-title { margin-top: 33%; text-align: center; }
 .hearthlogs-title span { color: #fff; }

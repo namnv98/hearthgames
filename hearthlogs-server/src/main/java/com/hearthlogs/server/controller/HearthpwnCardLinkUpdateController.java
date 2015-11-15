@@ -20,7 +20,7 @@ public class HearthpwnCardLinkUpdateController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("links");
 
-        List<HearthPwnCardLink> cardLinks = cardParser.getCardLinks();
+        List<HearthPwnCardLink> cardLinks = cardParser.getUnknownCardLinks();
         modelAndView.addObject("cardLinks", cardLinks);
 
         return modelAndView;

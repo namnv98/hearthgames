@@ -1,9 +1,13 @@
 package com.hearthlogs.server.match.analysis.domain.generic;
 
-public class GenericColumn {
+import java.util.List;
+
+public class GenericColumn<T> {
 
     private String data;
     private String data2;
+
+    private List<T> datas;
 
     public GenericColumn(String data) {
         this.data = data;
@@ -23,5 +27,13 @@ public class GenericColumn {
 
     public String getData() {
         return data;
+    }
+
+    public List<T> getDatas() {
+        return datas;
+    }
+
+    public void setDatas(List<T> datas) {
+        this.datas = datas;
     }
 }

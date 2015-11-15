@@ -25,6 +25,43 @@
     </div>
 
 
+    <h4 style="color: #1B809E; font-weight: bold;">Card Summary</h4>
+    <div>
+        <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a>
+
+        <table id="card-info" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Player</th>
+                <th>Starting Hand</th>
+                <th>Mulliganed Cards</th>
+                <th>Cards In Deck</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr >
+                <td>
+
+                </td>
+                <td>
+                    <a th:each="column,iterStat : ${card.friendly.columns}" th:href="${column.data}" href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg">
+                        <img th:src="@{/images/cardback.png}" src="../static/images/cardback.png"/>
+                    </a>
+                </td>
+
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
     <h4 style="color: #1B809E; font-weight: bold;">Health Summary</h4>
 
     <div>

@@ -11,8 +11,6 @@ import com.hearthlogs.server.match.log.filter.PowerLineFilter;
 import com.hearthlogs.server.match.analysis.domain.ManaInfo;
 import com.hearthlogs.server.match.log.domain.RawMatchData;
 import com.hearthlogs.server.match.analysis.domain.HealthArmorInfo;
-import com.hearthlogs.server.util.HearthPwnCardLink;
-import com.hearthlogs.server.util.HearthPwnCards;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +31,7 @@ public class MatchParserServiceTest {
 
     @Before
     public void init() throws IOException {
-        CardService cardService = new CardService(new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class),
-                new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("HearthPwn.json"), HearthPwnCards.class));
+        CardService cardService = new CardService(new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class));
         matchParserService = new MatchParserService();
         matchPlayingService = new MatchPlayingService(cardService);
         rawLogProcessingService = new RawLogProcessingService(new PowerLineFilter(), new BobLineFilter(), new AssetLineFilter());
