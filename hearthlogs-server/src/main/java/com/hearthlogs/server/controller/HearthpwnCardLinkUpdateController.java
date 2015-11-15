@@ -16,7 +16,7 @@ public class HearthpwnCardLinkUpdateController {
     private HearthPwnCardParser cardParser;
 
     @RequestMapping("/link")
-    public ModelAndView linkCards() throws Exception {
+    public ModelAndView link() throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("links");
 

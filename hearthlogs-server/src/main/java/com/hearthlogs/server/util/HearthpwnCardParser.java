@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class HearthPwnCardParser {
@@ -23,11 +25,14 @@ public class HearthPwnCardParser {
 
         List<HearthPwnCardLink> cardLinks = new ArrayList<>();
         for (int i=1; i < 16; i++) {
-            String url = "http://www.hearthpwn.com/cards?display=1&page=";
+            String url = "http://www.hearthpwn.com/cards?display=1&sort=name&page=";
 
             Document doc = Jsoup.connect(url+i).userAgent("Mozilla").get();
             Element row = doc.getElementById("cards");
             Elements rows = row.getElementsByTag("tr");
+
+
+            Map<String, String> namesFound = new HashMap<>();
 
             for (Element element : rows) {
                 Elements link = element.select("td > a");
@@ -35,19 +40,25 @@ public class HearthPwnCardParser {
                     String href = link.get(0).attr("href");
                     String name = link.get(0).html();
 
-                    if (!cardService.isTavernBrawl(name)) {
-                        CardDetails cardDetails = cardService.getByName(name);
-                        String cardId = "";
-                        if (cardDetails != null) {
-                            cardId = cardDetails.getId();
-                        }
-                        HearthPwnCardLink cardLink = new HearthPwnCardLink();
-                        cardLink.setCardId(cardId);
-                        cardLink.setHref(href);
-                        cardLink.setName(name);
-                        cardLinks.add(cardLink);
-
+                    CardDetails cardDetails;
+                    if (namesFound.containsKey(name)) {
+                        cardDetails = cardService.getByName(name);
+                        cardDetails = cardService.getCardDetails(cardDetails.getId()+"H");
+                    } else {
+                        cardDetails = cardService.getByName(name);
+                        namesFound.put(name, "1");
                     }
+
+
+                    String cardId = "";
+                    if (cardDetails != null) {
+                        cardId = cardDetails.getId();
+                    }
+                    HearthPwnCardLink cardLink = new HearthPwnCardLink();
+                    cardLink.setCardId(cardId);
+                    cardLink.setHref(href);
+                    cardLink.setName(name);
+                    cardLinks.add(cardLink);
                 }
             }
         }

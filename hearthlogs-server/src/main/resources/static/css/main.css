@@ -1,18 +1,13 @@
-@font-face { font-family: siteFont; src: url(bliz-quadrata.woff); }
+@font-face { font-family: siteFont; src: url(siteFont.woff); }
 
 body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; opacity: .97; }
 
-.hearthlogs-title { font-size: 80px; }
+h1, h2, h3, h4, h5 { text-shadow: 1px 1px 1px #000; }
 
-.panel { background-color: #2D2D2D; border-color: #D5D4D4; }
+.hearthlogs-title { font-size: 80px; text-shadow: 2px 2px 4px #000; }
+.hearthlogs-title span { font-size: 17px; color: #5d5d5d; text-shadow: 2px 2px 4px #000; }
 
-
-.home-title { margin-top: 25%; }
-
-.hearthlogs-title span { font-size: 17px; color: #5d5d5d; }
-
-.death-knight { color: #C41F3B; }
-.death-knight-bg { background-color: #C41F3B; }
+.panel { background-color: #2D2D2D; border-color: #1B809E; }
 
 .druid { color: #FF7D0A; }
 .druid-bg { background-color: #FF7D0A; }
@@ -22,9 +17,6 @@ body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; 
 
 .mage { color: #69CCF0; }
 .mage-bg { background-color: #69CCF0; }
-
-.monk { color: #00FF96; }
-.monk-bg { background-color: #00FF96; }
 
 .paladin { color: #F58CBA; }
 .paladin-bg { background-color: #F58CBA; }

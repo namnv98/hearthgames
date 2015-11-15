@@ -28,7 +28,7 @@
     <h4 style="color: #1B809E; font-weight: bold;">Health Summary</h4>
 
     <div>
-        <table id="health-summary" class="table table-bordered">
+        <table id="health-info" class="table table-bordered">
             <thead>
             <tr>
                 <th th:text="${column.data}" th:each="column,iterStat : ${healthArmorInfo.header.columns}" th:class="${iterStat.first}? '' : 'turn'"></th>

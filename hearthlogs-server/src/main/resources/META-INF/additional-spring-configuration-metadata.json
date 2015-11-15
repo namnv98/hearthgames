@@ -1,0 +1,16 @@
+{
+  "groups": [
+    {
+      "name": "hearthlogs.analytics",
+      "type": "com.hearthlogs.server.config.analytics.AnalyticsProperties",
+      "sourceType": "com.hearthlogs.server.config.analytics.AnalyticsProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "hearthlogs.analytics.trackingCode",
+      "type": "java.lang.String",
+      "description": "Hearthlogs Google Analytics Tracking Code."
+    }
+  ]
+}

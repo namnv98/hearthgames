@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WhereController {
 
     @RequestMapping(value = "/where")
-    public String home() {
+    public String where() {
         return "where";
     }
 

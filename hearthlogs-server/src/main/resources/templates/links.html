@@ -19,24 +19,24 @@
     <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
     <div class="panel panel-primary">
 
-        <div>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Card ID</th>
-                <th>Link</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="cardLink : ${cardLinks}">
-                <td th:text="${cardLink.name}">Name</td>
-                <td th:text="${cardLink.cardId}">Card ID</td>
-                <td><a th:href="@{'http://www.hearthpwn.com' + ${cardLink.href}}" th:text="${cardLink.name}">Link Description</a></td>
-            </tr>
-            </tbody>
-        </table>
-        </div>
+        <!--<div>-->
+        <!--<table class="table table-bordered">-->
+            <!--<thead>-->
+            <!--<tr>-->
+                <!--<th>Name</th>-->
+                <!--<th>Card ID</th>-->
+                <!--<th>Link</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr th:each="cardLink : ${cardLinks}">-->
+                <!--<td th:text="${cardLink.name}">Name</td>-->
+                <!--<td th:text="${cardLink.cardId}">Card ID</td>-->
+                <!--<td><a th:href="@{'http://www.hearthpwn.com' + ${cardLink.href}}" th:text="${cardLink.name}">Link Description</a></td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+        <!--</div>-->
 
         { "cards" : [
         <div th:each="cardLink : ${cardLinks}" th:inline="text">

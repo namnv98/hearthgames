@@ -14,3 +14,6 @@ security:
       access-token-uri: https://us.battle.net/oauth/token
       user-authorization-uri: https://us.battle.net/oauth/authorize
 multipart.maxFileSize: 10MB
+hearthlogs:
+  analytics:
+    tracking-code: UA-70109758-1
