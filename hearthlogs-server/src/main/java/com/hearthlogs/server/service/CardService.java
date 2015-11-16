@@ -62,8 +62,8 @@ public class CardService {
         return cards.get(id).getName();
     }
 
-    public List<String> getCardIdsByName(String name) {
-        return cards.values().stream().filter(cardDetails -> cardDetails.getName().equals(name)).map(cardDetails -> name).collect(Collectors.toList());
+    public List<CardDetails> getCardDetailsByName(String name) {
+        return cards.values().stream().filter(cardDetails -> cardDetails.getName().equals(name)).collect(Collectors.toList());
     }
 
 }

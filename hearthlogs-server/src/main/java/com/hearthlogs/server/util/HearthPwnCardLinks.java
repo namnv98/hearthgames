@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardIdLinks implements Serializable {
+public class HearthPwnCardLinks implements Serializable {
 
     private static final long serialVersionUID = 1;
 
-    private List<CardIdLink> cards = new ArrayList<>();
+    private List<HearthPwnCardLink> cards = new ArrayList<>();
 
-    public List<CardIdLink> getCards() {
+    public List<HearthPwnCardLink> getCards() {
         return cards;
     }
 
-    public void setCards(List<CardIdLink> cards) {
+    public void setCards(List<HearthPwnCardLink> cards) {
         this.cards = cards;
     }
 }

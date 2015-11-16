@@ -5,6 +5,7 @@ public class HearthPwnCardLink {
     private String href;
     private String cardId;
     private String name;
+    private String hearthPwnId;
 
     public String getHref() {
         return href;
@@ -28,5 +29,13 @@ public class HearthPwnCardLink {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHearthPwnId() {
+        return hearthPwnId;
+    }
+
+    public void setHearthPwnId(String hearthPwnId) {
+        this.hearthPwnId = hearthPwnId;
     }
 }

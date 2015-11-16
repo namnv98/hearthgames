@@ -2,7 +2,7 @@ package com.hearthlogs.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hearthlogs.server.match.parse.domain.CardSets;
-import com.hearthlogs.server.util.CardIdLinks;
+import com.hearthlogs.server.util.HearthPwnCardLinks;
 import org.apache.solr.client.solrj.SolrServer;
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.SpringApplication;
@@ -50,7 +50,7 @@ public class HearthlogsServerApplication {
     }
 
     @Bean
-    public CardIdLinks cards() throws IOException {
-        return new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("CardIdLinks.json"), CardIdLinks.class);
+    public HearthPwnCardLinks cards() throws IOException {
+        return new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("HearthPwn.json"), HearthPwnCardLinks.class);
     }
 }
