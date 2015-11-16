@@ -12,18 +12,43 @@ import com.hearthlogs.server.match.play.domain.HeroHealthChange;
 import com.hearthlogs.server.match.play.domain.Turn;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
-public class HealthArmorInfoAnalyzer implements Analyzer<HealthArmorInfo> {
+public class HealthArmorInfoAnalyzer implements Analyzer<List<HealthArmorInfo>> {
 
     @Override
-    public HealthArmorInfo analyze(MatchResult result, ParseContext context) {
+    public List<HealthArmorInfo> analyze(MatchResult result, ParseContext context) {
+
+        List<HealthArmorInfo> infos = new ArrayList<>();
+
+        List<Turn> subSetOfTurns = new ArrayList<>();
+        for (Turn turn: result.getTurns()) {
+            if (turn.getTurnNumber() % 24 == 0) {
+                subSetOfTurns.add(turn);
+                HealthArmorInfo info = getHealthArmorInfo(result, context, subSetOfTurns);
+                infos.add(info);
+                subSetOfTurns = new ArrayList<>();
+            } else {
+                subSetOfTurns.add(turn);
+            }
+        }
+        if (subSetOfTurns.size() > 0) {
+            HealthArmorInfo info = getHealthArmorInfo(result, context, subSetOfTurns);
+            infos.add(info);
+        }
+        return infos;
+    }
+
+    private HealthArmorInfo getHealthArmorInfo(MatchResult result, ParseContext context, List<Turn> turns) {
         HealthArmorInfo info = new HealthArmorInfo();
 
         GenericRow header = new GenericRow();
         info.setHeader(header);
         header.addColumn(new GenericColumn("Player"));
-        for (int i=1; i <= result.getTurns().size(); i++) {
-            header.addColumn(new GenericColumn(""+i));
+        for (int i=1; i <= turns.size(); i++) {
+            header.addColumn(new GenericColumn(""+turns.get(i-1).getTurnNumber()));
         }
 
         GenericRow friendly = new GenericRow();
@@ -53,7 +78,7 @@ public class HealthArmorInfoAnalyzer implements Analyzer<HealthArmorInfo> {
             opposingArmor = 0;
         }
 
-        for (Turn turn: result.getTurns()) {
+        for (Turn turn: turns) {
             for (Action action: turn.getActions()) {
                 if (action instanceof HeroHealthChange) {
                     HeroHealthChange change = (HeroHealthChange) action;

@@ -13,6 +13,8 @@ import com.hearthlogs.server.match.analysis.domain.VersusInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MatchAnalysisService {
 
@@ -36,7 +38,7 @@ public class MatchAnalysisService {
         return versusInfoAnalyzer.analyze(result, context);
     }
 
-    public HealthArmorInfo getHealthArmorInfo(MatchResult result, ParseContext context) {
+    public List<HealthArmorInfo> getHealthArmorInfo(MatchResult result, ParseContext context) {
         return healthArmorInfoAnalyzer.analyze(result, context);
 
     }

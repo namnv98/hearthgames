@@ -55,12 +55,13 @@ public class LogFileUploadController {
 
                     CardInfo cardInfo = matchAnalysisService.getCardInfo(matchResult, context);
                     VersusInfo versusInfo = matchAnalysisService.getVersusInfo(matchResult, context);
-                    HealthArmorInfo healthArmorInfo = matchAnalysisService.getHealthArmorInfo(matchResult, context);
+                    List<HealthArmorInfo> healthArmorInfos = matchAnalysisService.getHealthArmorInfo(matchResult, context);
+
                     ManaInfo manaInfo = matchAnalysisService.getManaInfo(matchResult, context);
 
                     modelAndView.addObject("cardInfo", cardInfo);
                     modelAndView.addObject("versusInfo", versusInfo);
-                    modelAndView.addObject("healthArmorInfo", healthArmorInfo);
+                    modelAndView.addObject("healthArmorInfos", healthArmorInfos);
                     modelAndView.addObject("manaStats", manaInfo);
                 }
 

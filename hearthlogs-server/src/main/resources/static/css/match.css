@@ -1,5 +1,10 @@
-#health-info tr > td:first-child > div > div, #health-info tr > th:first-child > div > div { width: 160px; text-align: left; }
-#health-info .turn { text-align: center; }
+.health-info {width: auto;}
+.health-info th:first-child {
+    width: 160px; text-align: left;
+}
+
+.health-info tr > td:first-child > div > div, .health-info tr > th:first-child > div > div { text-align: left; }
+.health-info .turn { text-align: center; }
 
 .health-armor {margin: auto; width: 25px;}
 

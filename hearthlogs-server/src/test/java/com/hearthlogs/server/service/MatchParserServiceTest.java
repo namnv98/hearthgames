@@ -57,7 +57,7 @@ public class MatchParserServiceTest {
 
         CardInfo cardInfo = matchAnalysisService.getCardInfo(result, context);
         VersusInfo versusInfo = matchAnalysisService.getVersusInfo(result, context);
-        HealthArmorInfo healthArmorInfo = matchAnalysisService.getHealthArmorInfo(result, context);
+        List<HealthArmorInfo> healthArmorInfos = matchAnalysisService.getHealthArmorInfo(result, context);
         ManaInfo manaInfo = matchAnalysisService.getManaInfo(result, context);
 
         System.out.println(manaInfo.getFriendlyManaEfficiency());
