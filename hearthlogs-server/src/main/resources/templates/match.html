@@ -53,10 +53,16 @@
                     <a th:if="${card.cardDetails != null}" th:each="card : ${startingCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
                         <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
                     </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${startingCards}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
                 </td>
                 <td>
                     <a th:if="${card.cardDetails != null}" th:each="card : ${mulliganCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
                         <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${mulliganCards}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
                     </a>
                 </td>
                 <td>
@@ -73,10 +79,16 @@
                     <a th:if="${card.cardDetails != null}" th:each="card : ${startingCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
                         <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
                     </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${startingCards}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
                 </td>
                 <td>
                     <a th:if="${card.cardDetails != null}" th:each="card : ${mulliganCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
                         <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${mulliganCards}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
                     </a>
                 </td>
                 <td>
