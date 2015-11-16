@@ -6,6 +6,12 @@ public class VersusInfo {
     private String opposingName;
     private String friendlyClass;
     private String opposingClass;
+    private String winner;
+    private String winnerClass;
+    private String loser;
+    private String loserClass;
+    private String quitter;
+    private String quitterClass;
 
     public String getFriendlyName() {
         return friendlyName;
@@ -37,5 +43,53 @@ public class VersusInfo {
 
     public void setOpposingClass(String opposingClass) {
         this.opposingClass = opposingClass;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public String getLoser() {
+        return loser;
+    }
+
+    public void setLoser(String loser) {
+        this.loser = loser;
+    }
+
+    public String getQuitter() {
+        return quitter;
+    }
+
+    public void setQuitter(String quitter) {
+        this.quitter = quitter;
+    }
+
+    public String getWinnerClass() {
+        return winnerClass;
+    }
+
+    public void setWinnerClass(String winnerClass) {
+        this.winnerClass = winnerClass;
+    }
+
+    public String getLoserClass() {
+        return loserClass;
+    }
+
+    public void setLoserClass(String loserClass) {
+        this.loserClass = loserClass;
+    }
+
+    public String getQuitterClass() {
+        return quitterClass;
+    }
+
+    public void setQuitterClass(String quitterClass) {
+        this.quitterClass = quitterClass;
     }
 }

@@ -6,10 +6,18 @@
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script type="text/javascript" src="http://static-hearth.cursecdn.com/current/js/syndication/tt.js"></script>
 
     <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
     <link href="../static/css/match.css" th:href="@{css/match.css}" rel="stylesheet" media="screen"/>
 
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#card-info").click(function(e){
+                e.preventDefault();
+            });
+        });
+    </script>
 </head>
 <body style="padding: 20px;">
 
@@ -27,8 +35,6 @@
 
     <h4 style="color: #1B809E; font-weight: bold;">Card Summary</h4>
     <div>
-        <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a>
-
         <table id="card-info" class="table table-bordered">
             <thead>
             <tr>
@@ -39,31 +45,51 @@
             </tr>
             </thead>
             <tbody>
-            <tr >
+            <tr th:with="player=${cardInfo.friendly.columns[0]},startingCards=${cardInfo.friendly.columns[1].datas},mulliganCards=${cardInfo.friendly.columns[2].datas},deckCards=${cardInfo.friendly.columns[3].datas}">
                 <td>
-
+                    <span th:class="${#strings.toLowerCase(cardInfo.friendlyClass)}" th:text="${player.data}"></span>
                 </td>
                 <td>
-                    <a th:each="column,iterStat : ${card.friendly.columns}" th:href="${column.data}" href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg">
-                        <img th:src="@{/images/cardback.png}" src="../static/images/cardback.png"/>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${startingCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
                     </a>
                 </td>
-
                 <td>
-
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${mulliganCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
                 </td>
                 <td>
-
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${deckCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                </td>
+            </tr>
+            <tr th:with="player=${cardInfo.opposing.columns[0]},startingCards=${cardInfo.opposing.columns[1].datas},mulliganCards=${cardInfo.opposing.columns[2].datas},deckCards=${cardInfo.opposing.columns[3].datas}">
+                <td>
+                    <span th:class="${#strings.toLowerCase(cardInfo.opposingClass)}" th:text="${player.data}"></span>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${startingCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${mulliganCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${deckCards}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
                 </td>
             </tr>
             </tbody>
         </table>
-
     </div>
 
-
     <h4 style="color: #1B809E; font-weight: bold;">Health Summary</h4>
-
     <div>
         <table id="health-info" class="table table-bordered">
             <thead>

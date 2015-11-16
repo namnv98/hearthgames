@@ -1,5 +1,6 @@
 package com.hearthlogs.server.controller;
 
+import com.hearthlogs.server.match.analysis.domain.CardInfo;
 import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.play.MatchResult;
 import com.hearthlogs.server.match.analysis.domain.ManaInfo;
@@ -52,10 +53,12 @@ public class LogFileUploadController {
                     ParseContext context = matchParserService.parseLines(rawMatchData.getLines());
                     MatchResult matchResult = matchPlayingService.processMatch(context, rawMatchData.getRank());
 
+                    CardInfo cardInfo = matchAnalysisService.getCardInfo(matchResult, context);
                     VersusInfo versusInfo = matchAnalysisService.getVersusInfo(matchResult, context);
                     HealthArmorInfo healthArmorInfo = matchAnalysisService.getHealthArmorInfo(matchResult, context);
                     ManaInfo manaInfo = matchAnalysisService.getManaInfo(matchResult, context);
 
+                    modelAndView.addObject("cardInfo", cardInfo);
                     modelAndView.addObject("versusInfo", versusInfo);
                     modelAndView.addObject("healthArmorInfo", healthArmorInfo);
                     modelAndView.addObject("manaStats", manaInfo);

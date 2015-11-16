@@ -1,6 +1,11 @@
 package com.hearthlogs.server.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hearthlogs.server.match.analysis.CardInfoAnalyzer;
+import com.hearthlogs.server.match.analysis.HealthArmorInfoAnalyzer;
+import com.hearthlogs.server.match.analysis.ManaInfoAnalyzer;
+import com.hearthlogs.server.match.analysis.VersusInfoAnalyzer;
+import com.hearthlogs.server.match.analysis.domain.CardInfo;
 import com.hearthlogs.server.match.analysis.domain.VersusInfo;
 import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.parse.domain.CardSets;
@@ -11,6 +16,7 @@ import com.hearthlogs.server.match.log.filter.PowerLineFilter;
 import com.hearthlogs.server.match.analysis.domain.ManaInfo;
 import com.hearthlogs.server.match.log.domain.RawMatchData;
 import com.hearthlogs.server.match.analysis.domain.HealthArmorInfo;
+import com.hearthlogs.server.util.HearthPwnCardLinks;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,11 +37,12 @@ public class MatchParserServiceTest {
 
     @Before
     public void init() throws IOException {
-        CardService cardService = new CardService(new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class));
+        CardService cardService = new CardService(new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class),
+                new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("HearthPwn.json"), HearthPwnCardLinks.class));
         matchParserService = new MatchParserService();
         matchPlayingService = new MatchPlayingService(cardService);
         rawLogProcessingService = new RawLogProcessingService(new PowerLineFilter(), new BobLineFilter(), new AssetLineFilter());
-        matchAnalysisService = new MatchAnalysisService();
+        matchAnalysisService = new MatchAnalysisService(new ManaInfoAnalyzer(), new HealthArmorInfoAnalyzer(), new VersusInfoAnalyzer(), new CardInfoAnalyzer());
     }
 
     @Test
@@ -48,6 +55,7 @@ public class MatchParserServiceTest {
         ParseContext context = matchParserService.parseLines(rawMatchData.get(0).getLines());
         MatchResult result = matchPlayingService.processMatch(context, rawMatchData.get(0).getRank());
 
+        CardInfo cardInfo = matchAnalysisService.getCardInfo(result, context);
         VersusInfo versusInfo = matchAnalysisService.getVersusInfo(result, context);
         HealthArmorInfo healthArmorInfo = matchAnalysisService.getHealthArmorInfo(result, context);
         ManaInfo manaInfo = matchAnalysisService.getManaInfo(result, context);

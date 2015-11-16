@@ -1,8 +1,10 @@
 package com.hearthlogs.server.service;
 
+import com.hearthlogs.server.match.analysis.CardInfoAnalyzer;
 import com.hearthlogs.server.match.analysis.HealthArmorInfoAnalyzer;
 import com.hearthlogs.server.match.analysis.ManaInfoAnalyzer;
 import com.hearthlogs.server.match.analysis.VersusInfoAnalyzer;
+import com.hearthlogs.server.match.analysis.domain.CardInfo;
 import com.hearthlogs.server.match.analysis.domain.ManaInfo;
 import com.hearthlogs.server.match.parse.ParseContext;
 import com.hearthlogs.server.match.play.MatchResult;
@@ -14,14 +16,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class MatchAnalysisService {
 
-    @Autowired
     private ManaInfoAnalyzer manaInfoAnalyzer;
-
-    @Autowired
     private HealthArmorInfoAnalyzer healthArmorInfoAnalyzer;
+    private VersusInfoAnalyzer versusInfoAnalyzer;
+    private CardInfoAnalyzer cardInfoAnalyzer;
 
     @Autowired
-    private VersusInfoAnalyzer versusInfoAnalyzer;
+    public MatchAnalysisService(ManaInfoAnalyzer manaInfoAnalyzer,
+                                HealthArmorInfoAnalyzer healthArmorInfoAnalyzer,
+                                VersusInfoAnalyzer versusInfoAnalyzer,
+                                CardInfoAnalyzer cardInfoAnalyzer) {
+        this.manaInfoAnalyzer = manaInfoAnalyzer;
+        this.healthArmorInfoAnalyzer = healthArmorInfoAnalyzer;
+        this.versusInfoAnalyzer = versusInfoAnalyzer;
+        this.cardInfoAnalyzer = cardInfoAnalyzer;
+    }
 
     public VersusInfo getVersusInfo(MatchResult result, ParseContext context) {
         return versusInfoAnalyzer.analyze(result, context);
@@ -34,5 +43,9 @@ public class MatchAnalysisService {
 
     public ManaInfo getManaInfo(MatchResult result, ParseContext context) {
         return manaInfoAnalyzer.analyze(result, context);
+    }
+
+    public CardInfo getCardInfo(MatchResult result, ParseContext context) {
+        return cardInfoAnalyzer.analyze(result, context);
     }
 }
