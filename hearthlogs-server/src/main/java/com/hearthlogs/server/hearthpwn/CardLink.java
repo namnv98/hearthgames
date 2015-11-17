@@ -1,6 +1,6 @@
-package com.hearthlogs.server.util;
+package com.hearthlogs.server.hearthpwn;
 
-public class HearthPwnCardLink {
+public class CardLink {
 
     private String href;
     private String cardId;

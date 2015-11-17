@@ -1,4 +1,4 @@
-package com.hearthlogs.server.util;
+package com.hearthlogs.server.hearthpwn;
 
 import com.hearthlogs.server.match.parse.domain.CardDetails;
 import com.hearthlogs.server.service.CardService;
@@ -23,23 +23,23 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public class HearthPwnCardParser {
+public class CardParser {
 
     private CardService cardService;
-    private HearthPwnCardLinks hearthPwnCardLinks;
+    private CardLinks cardLinks;
 
     private String HREF_REGEX = "/cards/(.*?)-.*";
     private Pattern hearthPwnIdPattern = Pattern.compile(HREF_REGEX);
 
     @Autowired
-    public HearthPwnCardParser(CardService cardService, HearthPwnCardLinks hearthPwnCardLinks) {
+    public CardParser(CardService cardService, CardLinks cardLinks) {
         this.cardService = cardService;
-        this.hearthPwnCardLinks = hearthPwnCardLinks;
+        this.cardLinks = cardLinks;
     }
 
-    public List<HearthPwnCardLink> getUnknownCardLinks() throws IOException {
+    public List<CardLink> getUnknownCardLinks() throws IOException {
 
-        List<HearthPwnCardLink> cardLinks = new ArrayList<>();
+        List<CardLink> cardLinks = new ArrayList<>();
         for (int i=1; i < 16; i++) {
             String url = "http://www.hearthpwn.com/cards?display=2&page=";
 
@@ -65,7 +65,7 @@ public class HearthPwnCardParser {
                         hearthPwnId = matcher.group(1);
                     }
                     String cardId = null;
-                    for (HearthPwnCardLink cardIdLink: hearthPwnCardLinks.getCards()) {
+                    for (CardLink cardIdLink: this.cardLinks.getCards()) {
                         if (cardIdLink.getHearthPwnId().equals(hearthPwnId)) {
                             cardId = cardIdLink.getCardId();
                             break;
@@ -74,7 +74,7 @@ public class HearthPwnCardParser {
 
                     if (cardId == null) { // we don't about this card so we need to manually map it
                         List<CardDetails> cardDetailsList = cardService.getCardDetailsByName(name); // there might be multiple cards with the same name so we have to manually check after
-                        HearthPwnCardLink cardLink = new HearthPwnCardLink();
+                        CardLink cardLink = new CardLink();
                         final String finalText = text;
                         List<CardDetails> potentialCardDetails = cardDetailsList.stream().filter(cd -> Objects.equals(cd.getText(), finalText)).collect(Collectors.toList());
                         if (potentialCardDetails.isEmpty()) {
@@ -114,7 +114,7 @@ public class HearthPwnCardParser {
                     }
 
                     String cardId = null;
-                    for (HearthPwnCardLink cardIdLink: hearthPwnCardLinks.getCards()) {
+                    for (CardLink cardIdLink: cardLinks.getCards()) {
                         if (cardIdLink.getHearthPwnId().equals(hearthPwnId)) {
                             cardId = cardIdLink.getCardId();
                             break;
@@ -138,7 +138,7 @@ public class HearthPwnCardParser {
 
     public void makeThumbnails() throws IOException {
 
-        for (HearthPwnCardLink cardIdLink: hearthPwnCardLinks.getCards()) {
+        for (CardLink cardIdLink: cardLinks.getCards()) {
 
             try {
                 Thumbnails.of(new File("C:\\images\\download\\"+cardIdLink.getCardId()+".png"))

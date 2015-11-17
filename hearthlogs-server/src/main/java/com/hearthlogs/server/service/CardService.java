@@ -2,8 +2,8 @@ package com.hearthlogs.server.service;
 
 import com.hearthlogs.server.match.parse.domain.CardDetails;
 import com.hearthlogs.server.match.parse.domain.CardSets;
-import com.hearthlogs.server.util.HearthPwnCardLink;
-import com.hearthlogs.server.util.HearthPwnCardLinks;
+import com.hearthlogs.server.hearthpwn.CardLink;
+import com.hearthlogs.server.hearthpwn.CardLinks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +16,10 @@ public class CardService {
     private Map<String, CardDetails> cards = new HashMap<>();
 
     @Autowired
-    public CardService(CardSets cardSets, HearthPwnCardLinks cardLinks) {
+    public CardService(CardSets cardSets, CardLinks cardLinks) {
 
-        Map<String, HearthPwnCardLink> cardLinkMap = new HashMap<>();
-        for (HearthPwnCardLink cardLink: cardLinks.getCards()) {
+        Map<String, CardLink> cardLinkMap = new HashMap<>();
+        for (CardLink cardLink: cardLinks.getCards()) {
             cardLinkMap.put(cardLink.getCardId(), cardLink);
         }
 

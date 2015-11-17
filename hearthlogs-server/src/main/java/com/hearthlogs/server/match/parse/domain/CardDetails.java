@@ -1,6 +1,6 @@
 package com.hearthlogs.server.match.parse.domain;
 
-import com.hearthlogs.server.util.HearthPwnCardLink;
+import com.hearthlogs.server.hearthpwn.CardLink;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,7 +30,7 @@ public class CardDetails implements Serializable {
     private String inPlayText;
     private String elite;
 
-    private HearthPwnCardLink cardLink;
+    private CardLink cardLink;
 
     public String getId() {
         return id;
@@ -196,11 +196,11 @@ public class CardDetails implements Serializable {
         this.elite = elite;
     }
 
-    public HearthPwnCardLink getCardLink() {
+    public CardLink getCardLink() {
         return cardLink;
     }
 
-    public void setCardLink(HearthPwnCardLink cardLink) {
+    public void setCardLink(CardLink cardLink) {
         this.cardLink = cardLink;
     }
 }
