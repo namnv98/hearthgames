@@ -62,7 +62,7 @@ public class LogFileUploadController {
                     modelAndView.addObject("cardInfo", cardInfo);
                     modelAndView.addObject("versusInfo", versusInfo);
                     modelAndView.addObject("healthArmorInfos", healthArmorInfos);
-                    modelAndView.addObject("manaStats", manaInfo);
+                    modelAndView.addObject("manaInfo", manaInfo);
                 }
 
             } catch (Exception e) {

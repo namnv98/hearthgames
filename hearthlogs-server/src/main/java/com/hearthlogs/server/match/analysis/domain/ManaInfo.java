@@ -6,14 +6,15 @@ public class ManaInfo {
     private long friendlyManaUsed;
     private long friendlyManaSaved;
     private long friendlyManaLost;
+    private long friendlyNotNeeded;
     private float friendlyManaEfficiency;
 
     private long opposingTotalMana;
     private long opposingManaUsed;
     private long opposingManaSaved;
     private long opposingManaLost;
+    private long opposingNotNeeded;
     private float opposingManaEfficiency;
-
 
     public long getFriendlyTotalMana() {
         return friendlyTotalMana;
@@ -45,6 +46,14 @@ public class ManaInfo {
 
     public void setFriendlyManaLost(long friendlyManaLost) {
         this.friendlyManaLost = friendlyManaLost;
+    }
+
+    public long getFriendlyNotNeeded() {
+        return friendlyNotNeeded;
+    }
+
+    public void setFriendlyNotNeeded(long friendlyNotNeeded) {
+        this.friendlyNotNeeded = friendlyNotNeeded;
     }
 
     public float getFriendlyManaEfficiency() {
@@ -85,6 +94,14 @@ public class ManaInfo {
 
     public void setOpposingManaLost(long opposingManaLost) {
         this.opposingManaLost = opposingManaLost;
+    }
+
+    public long getOpposingNotNeeded() {
+        return opposingNotNeeded;
+    }
+
+    public void setOpposingNotNeeded(long opposingNotNeeded) {
+        this.opposingNotNeeded = opposingNotNeeded;
     }
 
     public float getOpposingManaEfficiency() {

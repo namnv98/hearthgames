@@ -19,17 +19,29 @@ public class ManaInfoAnalyzer implements Analyzer<ManaInfo> {
     public ManaInfo analyze(MatchResult result, ParseContext context) {
         ManaInfo manaInfo = new ManaInfo();
 
+        int manaNotNeeded = result.getCurrentTurn().getManaGained() - result.getCurrentTurn().getManaUsed();
+        if (result.getCurrentTurn().getWhoseTurn() == context.getFriendlyPlayer()) {
+            manaInfo.setFriendlyNotNeeded(manaNotNeeded);
+        } else {
+            manaInfo.setOpposingNotNeeded(manaNotNeeded);
+        }
+
         manaInfo.setFriendlyTotalMana(calcFriendlyTotalMana(result.getTurns(), result.getFriendly()));
         manaInfo.setFriendlyManaUsed(calcFriendlyManaUsed(result.getTurns(), result.getFriendly()));
         manaInfo.setFriendlyManaSaved(calcFriendlyManaSaved(result.getTurns(), result.getFriendly()));
         manaInfo.setFriendlyManaLost(calcFriendlyManaLost(result.getTurns(), result.getFriendly()));
-        manaInfo.setFriendlyManaEfficiency(calcFriendlyManaEfficiency(manaInfo.getFriendlyManaUsed(), manaInfo.getFriendlyTotalMana(), manaInfo.getFriendlyManaSaved()));
+        manaInfo.setFriendlyManaEfficiency(
+            calcFriendlyManaEfficiency(manaInfo.getFriendlyManaUsed(), manaInfo.getFriendlyTotalMana(), manaInfo.getFriendlyManaSaved(), manaInfo.getFriendlyNotNeeded())
+        );
 
         manaInfo.setOpposingTotalMana(calcOpposingTotalMana(result.getTurns(), result.getOpposing()));
         manaInfo.setOpposingManaUsed(calcOpposingManaUsed(result.getTurns(), result.getOpposing()));
         manaInfo.setOpposingManaSaved(calcOpposingManaSaved(result.getTurns(), result.getOpposing()));
         manaInfo.setOpposingManaLost(calcOpposingManaLost(result.getTurns(), result.getOpposing()));
-        manaInfo.setOpposingManaEfficiency(calcOpposingManaEfficiency(manaInfo.getOpposingManaUsed(), manaInfo.getOpposingTotalMana(), manaInfo.getOpposingManaSaved()));
+        manaInfo.setOpposingManaEfficiency(
+            calcOpposingManaEfficiency(manaInfo.getOpposingManaUsed(), manaInfo.getOpposingTotalMana(), manaInfo.getOpposingManaSaved(), manaInfo.getOpposingNotNeeded())
+        );
+
 
         return manaInfo;
     }
@@ -50,8 +62,8 @@ public class ManaInfoAnalyzer implements Analyzer<ManaInfo> {
         return getMana(turns, friendly, Turn::getManaLost);
     }
 
-    private float calcFriendlyManaEfficiency(long friendlyManaUsed, long friendlyTotalMana, long friendlyManaSaved) {
-        return (float) friendlyManaUsed / (friendlyTotalMana - friendlyManaSaved);
+    private float calcFriendlyManaEfficiency(long friendlyManaUsed, long friendlyTotalMana, long friendlyManaSaved, long friendlyManaNotNeeded) {
+        return (float) friendlyManaUsed / (friendlyTotalMana - friendlyManaSaved - friendlyManaNotNeeded);
     }
 
     private long calcOpposingTotalMana(Set<Turn> turns, Player opposing) {
@@ -75,8 +87,8 @@ public class ManaInfoAnalyzer implements Analyzer<ManaInfo> {
         return stats.getSum();
     }
 
-    private float calcOpposingManaEfficiency(long opposingManaUsed, long opposingTotalMana, long opposingManaSaved) {
-        return (float) opposingManaUsed / (opposingTotalMana - opposingManaSaved);
+    private float calcOpposingManaEfficiency(long opposingManaUsed, long opposingTotalMana, long opposingManaSaved, long opposingManaNotNeeded) {
+        return (float) opposingManaUsed / (opposingTotalMana - opposingManaSaved - opposingManaNotNeeded);
     }
 
 }

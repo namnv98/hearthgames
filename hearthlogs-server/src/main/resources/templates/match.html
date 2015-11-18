@@ -21,17 +21,24 @@
 </head>
 <body style="padding: 20px;">
 
+<div class="container">
+
     <div class="hearthlogs-title" style="text-align: center;">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
 
     <hr/>
     <div style="text-align: center; margin-top: 5px;">
         <span style="font-size: 25px; font-weight: bold;" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span>
-        <img height="100" width="100" src="../static/images/warrior.png" th:src="@{'images/'+${#strings.toLowerCase(versusInfo.friendlyClass)}+'.png'}" />
-        <img height="50" width="50" src="../static/images/versus.png" th:src="@{images/versus.png}" />
-        <img height="100" width="100" src="../static/images/hunter.png" th:src="@{'images/'+${#strings.toLowerCase(versusInfo.opposingClass)}+'.png'}" />
+        <img src="http://images.hearthlogs.com/HERO_01.png" th:src="@{'http://images.hearthlogs.com/'+${versusInfo.friendlyHeroCardId}+'.png'}" />
+        <span style="font-size: 25px; font-weight: bold;">VS</span>
+        <img src="http://images.hearthlogs.com/HERO_05.png" th:src="@{'http://images.hearthlogs.com/'+${versusInfo.opposingHeroCardId}+'.png'}" />
         <span style="font-size: 25px; font-weight: bold;" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span>
     </div>
+    <div style="text-align: center; margin-top: 5px;">
 
+        <span style="font-size: 25px; font-weight: bold;" th:if="${versusInfo.friendlyName == versusInfo.winner}"> <span style="font-size: 25px; font-weight: bold;" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span> has Won! </span>
+        <span style="font-size: 25px; font-weight: bold;" th:if="${versusInfo.opposingName == versusInfo.winner}"> <span style="font-size: 25px; font-weight: bold;" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span> has Won :( </span>
+
+    </div>
 
     <h4 style="color: #1B809E; font-weight: bold;">Card Summary</h4>
     <div>
@@ -151,25 +158,28 @@
                 <th>Gained</th>
                 <th>Lost</th>
                 <th>Saved</th>
+                <th>Not Needed</th>
                 <th>Efficiency</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="warrior">
-                <td>Seekay</td>
-                <td>40</td>
-                <td>55</td>
-                <td>2</td>
-                <td>5</td>
-                <td>72.72%</td>
+            <tr th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}">
+                <td th:text="${versusInfo.friendlyName}">Seekay</td>
+                <td th:text="${manaInfo.friendlyManaUsed}">40</td>
+                <td th:text="${manaInfo.friendlyTotalMana}">40</td>
+                <td th:text="${manaInfo.friendlyManaLost}">40</td>
+                <td th:text="${manaInfo.friendlyManaSaved}">40</td>
+                <td th:text="${manaInfo.friendlyNotNeeded}">40</td>
+                <td th:text="${#numbers.formatDecimal(manaInfo.friendlyManaEfficiency*100, 0, 'COMMA', 2, 'POINT')+'%'}">40</td>
             </tr>
-            <tr class="hunter">
-                <td>Opponent</td>
-                <td>48</td>
-                <td>60</td>
-                <td>0</td>
-                <td>2</td>
-                <td>80.00%</td>
+            <tr th:class="${#strings.toLowerCase(versusInfo.opposingClass)}">
+                <td th:text="${versusInfo.opposingName}">Seekay</td>
+                <td th:text="${manaInfo.opposingManaUsed}">40</td>
+                <td th:text="${manaInfo.opposingTotalMana}">40</td>
+                <td th:text="${manaInfo.opposingManaLost}">40</td>
+                <td th:text="${manaInfo.opposingManaSaved}">40</td>
+                <td th:text="${manaInfo.opposingNotNeeded}">40</td>
+                <td th:text="${#numbers.formatDecimal(manaInfo.opposingManaEfficiency*100, 0, 'COMMA', 2, 'POINT')+'%'}">40</td>
             </tr>
             </tbody>
         </table>
@@ -321,7 +331,7 @@
             </tbody>
         </table>
     </div>
-
+</div>
 
 </body>
 </html>

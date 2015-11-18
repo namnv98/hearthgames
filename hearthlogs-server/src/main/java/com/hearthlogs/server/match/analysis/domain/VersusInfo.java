@@ -12,6 +12,8 @@ public class VersusInfo {
     private String loserClass;
     private String quitter;
     private String quitterClass;
+    private String friendlyHeroCardId;
+    private String opposingHeroCardId;
 
     public String getFriendlyName() {
         return friendlyName;
@@ -91,5 +93,21 @@ public class VersusInfo {
 
     public void setQuitterClass(String quitterClass) {
         this.quitterClass = quitterClass;
+    }
+
+    public String getFriendlyHeroCardId() {
+        return friendlyHeroCardId;
+    }
+
+    public void setFriendlyHeroCardId(String friendlyHeroCardId) {
+        this.friendlyHeroCardId = friendlyHeroCardId;
+    }
+
+    public String getOpposingHeroCardId() {
+        return opposingHeroCardId;
+    }
+
+    public void setOpposingHeroCardId(String opposingHeroCardId) {
+        this.opposingHeroCardId = opposingHeroCardId;
     }
 }

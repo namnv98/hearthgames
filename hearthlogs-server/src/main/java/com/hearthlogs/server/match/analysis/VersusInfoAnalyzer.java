@@ -2,6 +2,7 @@ package com.hearthlogs.server.match.analysis;
 
 import com.hearthlogs.server.match.analysis.domain.VersusInfo;
 import com.hearthlogs.server.match.parse.ParseContext;
+import com.hearthlogs.server.match.parse.domain.Card;
 import com.hearthlogs.server.match.play.MatchResult;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,12 @@ public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
         info.setOpposingClass(opposingClass);
         info.setFriendlyName(context.getFriendlyPlayer().getName());
         info.setOpposingName(context.getOpposingPlayer().getName());
+
+        Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
+        Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
+
+        info.setFriendlyHeroCardId(friendlyHeroCard.getCardid());
+        info.setOpposingHeroCardId(opposingHeroCard.getCardid());
 
         return info;
     }
