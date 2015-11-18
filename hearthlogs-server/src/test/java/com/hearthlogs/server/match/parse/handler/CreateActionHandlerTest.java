@@ -54,7 +54,6 @@ public class CreateActionHandlerTest {
 
         assertEquals(1, context.getActivities().size());
         assertEquals(1, context.getActivities().get(0).getChildren().size());
-        assertEquals(false, context.isCreateAction());
     }
 
 }
