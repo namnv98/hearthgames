@@ -1,0 +1,29 @@
+.info-heading { color: #fff; font-weight: bold; text-shadow: 1px 1px 1px #000;}
+
+.hearthlogs-title { text-align: center; }
+
+.versus-info { text-align: center; margin-top: 5px; }
+.versus-info span { font-size: 25px; font-weight: bold; }
+.health-info, #mana-info {width: auto;}
+.health-info th:first-child { width: 130px; text-align: left; }
+#card-info th:first-child { width: 130px; text-align: left; }
+#mana-info th:first-child { width: 130px; text-align: left; }
+
+.board-control-info { width: auto; }
+.board-control-info th:first-child { width: 130px; text-align: left; }
+.bcontrol-info { width: 25px; height: 25px; }
+
+.card-advantage-info { width: auto; }
+.card-advantage-info th:first-child { width: 130px; text-align: left; }
+.cadvantage-info { width: 25px; height: 25px; }
+
+.health-info tr > td:first-child > div > div, .health-info tr > th:first-child > div > div { text-align: left; }
+.health-info .turn { text-align: center; }
+
+.health-armor {margin: auto; width: 25px; color: #fff;}
+
+.health-bg { position:relative; background-image: url(health.png); width: 18px; height: 25px; text-align: center; margin-left: 2px; }
+.health-bg > div { position: absolute; bottom: 0; text-shadow: 2px 2px 4px #000; width: 18px; text-align: center; font-weight: bold; }
+
+.armor-bg { position:relative; background-image: url(armor.png); width: 22px; height: 25px; font-size: 12px; text-align: center; }
+.armor-bg > div { position: absolute; bottom: 5px; text-shadow: 1px 1px 1px #000; width: 22px; text-align: center; font-weight: bold; }

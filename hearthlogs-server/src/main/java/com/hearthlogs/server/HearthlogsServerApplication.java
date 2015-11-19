@@ -1,7 +1,7 @@
 package com.hearthlogs.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hearthlogs.server.match.parse.domain.CardSets;
+import com.hearthlogs.server.game.parse.domain.CardSets;
 import com.hearthlogs.server.hearthpwn.CardLinks;
 import org.apache.solr.client.solrj.SolrServer;
 import org.h2.server.web.WebServlet;

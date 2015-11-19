@@ -1,12 +1,9 @@
 package com.hearthlogs.server.controller;
 
-import com.hearthlogs.server.match.analysis.domain.CardInfo;
-import com.hearthlogs.server.match.parse.ParseContext;
-import com.hearthlogs.server.match.play.MatchResult;
-import com.hearthlogs.server.match.analysis.domain.ManaInfo;
-import com.hearthlogs.server.match.log.domain.RawMatchData;
-import com.hearthlogs.server.match.analysis.domain.HealthArmorInfo;
-import com.hearthlogs.server.match.analysis.domain.VersusInfo;
+import com.hearthlogs.server.game.analysis.domain.*;
+import com.hearthlogs.server.game.parse.GameContext;
+import com.hearthlogs.server.game.play.GameResult;
+import com.hearthlogs.server.game.log.domain.RawMatchData;
 import com.hearthlogs.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,18 +23,18 @@ public class LogFileUploadController {
     private RawLogProcessingService rawLogProcessingService;
 
     @Autowired
-    private MatchParserService matchParserService;
+    private GameParserService gameParserService;
 
     @Autowired
-    private MatchPlayingService matchPlayingService;
+    private GamePlayingService gamePlayingService;
 
     @Autowired
-    private MatchAnalysisService matchAnalysisService;
+    private GameAnalysisService gameAnalysisService;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView upload(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("match");
+        modelAndView.setViewName("game");
 
         if (!file.isEmpty()) {
             try {
@@ -50,19 +47,23 @@ public class LogFileUploadController {
                 modelAndView.addObject("uploadedMatches", rawMatchDatas.size());
 
                 for (RawMatchData rawMatchData : rawMatchDatas) {
-                    ParseContext context = matchParserService.parseLines(rawMatchData.getLines());
-                    MatchResult matchResult = matchPlayingService.processMatch(context, rawMatchData.getRank());
+                    GameContext context = gameParserService.parseLines(rawMatchData.getLines());
+                    GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
 
-                    CardInfo cardInfo = matchAnalysisService.getCardInfo(matchResult, context);
-                    VersusInfo versusInfo = matchAnalysisService.getVersusInfo(matchResult, context);
-                    List<HealthArmorInfo> healthArmorInfos = matchAnalysisService.getHealthArmorInfo(matchResult, context);
+                    CardInfo cardInfo = gameAnalysisService.getCardInfo(result, context);
+                    VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
+                    List<HealthArmorInfo> healthArmorInfos = gameAnalysisService.getHealthArmorInfo(result, context);
+                    List<BoardControlInfo> boardControlInfos = gameAnalysisService.getBoardControlInfo(result, context);
+                    List<CardAdvantageInfo> cardAdvantageInfos = gameAnalysisService.getCardAdvantageInfo(result, context);
 
-                    ManaInfo manaInfo = matchAnalysisService.getManaInfo(matchResult, context);
+                    ManaInfo manaInfo = gameAnalysisService.getManaInfo(result, context);
 
                     modelAndView.addObject("cardInfo", cardInfo);
                     modelAndView.addObject("versusInfo", versusInfo);
                     modelAndView.addObject("healthArmorInfos", healthArmorInfos);
                     modelAndView.addObject("manaInfo", manaInfo);
+                    modelAndView.addObject("boardControlInfos", boardControlInfos);
+                    modelAndView.addObject("cardAdvantageInfos", cardAdvantageInfos);
                 }
 
             } catch (Exception e) {

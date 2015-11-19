@@ -1,6 +1,6 @@
 package com.hearthlogs.server.hearthpwn;
 
-import com.hearthlogs.server.match.parse.domain.CardDetails;
+import com.hearthlogs.server.game.parse.domain.CardDetails;
 import com.hearthlogs.server.service.CardService;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FileUtils;

@@ -9,29 +9,36 @@ h1, h2, h3, h4, h5 { text-shadow: 1px 1px 1px #000; }
 
 .panel { background-color: #2D2D2D; border-color: #1B809E; }
 
-.druid { color: #FF7D0A; }
+.druid { color: #FF7D0A; text-shadow: 1px 1px 1px #000; }
 .druid-bg { background-color: #FF7D0A; }
 
-.hunter { color: #ABD473; }
+.hunter { color: #ABD473; text-shadow: 1px 1px 1px #000; }
 .hunter-bg { background-color: #ABD473; }
 
-.mage { color: #69CCF0; }
+.mage { color: #69CCF0; text-shadow: 1px 1px 1px #000; }
 .mage-bg { background-color: #69CCF0; }
 
-.paladin { color: #F58CBA; }
+.paladin { color: #F58CBA; text-shadow: 1px 1px 1px #000; }
 .paladin-bg { background-color: #F58CBA; }
 
-.priest { color: #FFFFFF; }
+.priest { color: #FFFFFF; text-shadow: 1px 1px 1px #000; }
 .priest-bg { background-color: #FFFFFF; }
 
-.rogue { color: #FFF569; }
+.rogue { color: #FFF569; text-shadow: 1px 1px 1px #000; }
 .rogue-bg { background-color: #FFF569; }
 
-.shaman { color: #0070DE; }
+.shaman { color: #0070DE; text-shadow: 1px 1px 1px #000; }
 .shaman-bg { background-color: #0070DE; }
 
-.warlock { color: #9482C9; }
+.warlock { color: #9482C9; text-shadow: 1px 1px 1px #000; }
 .warlock-bg { background-color: #9482C9; }
 
-.warrior { color: #C79C6E; }
+.warrior { color: #C79C6E; text-shadow: 1px 1px 1px #000; }
 .warrior-bg { background-color: #C79C6E; }
+
+table {
+    color: #000;
+    border-color: #000;
+    /*background: repeating-linear-gradient(to right, #f6ba52, #f6ba52 10px, #ffd180 10px, #ffd180 20px)*/
+    background-color: #CFC395;
+}

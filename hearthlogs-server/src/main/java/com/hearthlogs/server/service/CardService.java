@@ -1,7 +1,7 @@
 package com.hearthlogs.server.service;
 
-import com.hearthlogs.server.match.parse.domain.CardDetails;
-import com.hearthlogs.server.match.parse.domain.CardSets;
+import com.hearthlogs.server.game.parse.domain.CardDetails;
+import com.hearthlogs.server.game.parse.domain.CardSets;
 import com.hearthlogs.server.hearthpwn.CardLink;
 import com.hearthlogs.server.hearthpwn.CardLinks;
 import org.springframework.beans.factory.annotation.Autowired;

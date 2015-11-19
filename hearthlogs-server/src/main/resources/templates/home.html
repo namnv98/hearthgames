@@ -29,7 +29,7 @@
             <h3 class="panel-title">SELECT A HEARTHSTONE LOG FILE TO UPLOAD</h3>
         </div>
         <div class="panel-body">
-            <form method="POST" enctype="multipart/form-data" action="match.html" th:action="@{/upload}">
+            <form method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
                 <input id="upload" name="file" type="file" class="file" data-show-preview="false"/>
             </form>
             <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>

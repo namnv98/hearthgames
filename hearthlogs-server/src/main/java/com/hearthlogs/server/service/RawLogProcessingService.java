@@ -1,11 +1,11 @@
 package com.hearthlogs.server.service;
 
-import com.hearthlogs.server.match.log.domain.FilteredLineData;
-import com.hearthlogs.server.match.log.domain.LogLineData;
-import com.hearthlogs.server.match.log.domain.RawMatchData;
-import com.hearthlogs.server.match.log.filter.AssetLineFilter;
-import com.hearthlogs.server.match.log.filter.BobLineFilter;
-import com.hearthlogs.server.match.log.filter.PowerLineFilter;
+import com.hearthlogs.server.game.log.domain.FilteredLineData;
+import com.hearthlogs.server.game.log.domain.LogLineData;
+import com.hearthlogs.server.game.log.domain.RawMatchData;
+import com.hearthlogs.server.game.log.filter.AssetLineFilter;
+import com.hearthlogs.server.game.log.filter.BobLineFilter;
+import com.hearthlogs.server.game.log.filter.PowerLineFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
