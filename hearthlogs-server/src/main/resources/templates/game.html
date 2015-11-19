@@ -34,10 +34,11 @@
         <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span>
     </div>
     <div class="versus-info">
-
         <span th:if="${versusInfo.friendlyName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span> has Won! </span>
         <span th:if="${versusInfo.opposingName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span> has Won :( </span>
-
+    </div>
+    <div class="versus-info-duration">
+        <span>Duration: <span th:text="${versusInfo.duration}"></span></span>
     </div>
 
     <h4 class="info-heading">Card Summary</h4>
@@ -45,7 +46,7 @@
         <table id="card-info" class="table table-bordered">
             <thead>
             <tr>
-                <th>Player</th>
+                <th></th>
                 <th>Starting Hand</th>
                 <th>Mulliganed Cards</th>
                 <th>Cards In Deck</th>
@@ -150,7 +151,7 @@
     <h4 class="info-heading">Mana Summary</h4>
 
     <div>
-        <table class="table table-bordered">
+        <table id="mana-info" class="table table-bordered">
             <thead>
             <tr>
                 <th></th>

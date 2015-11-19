@@ -4,10 +4,10 @@ body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; 
 
 h1, h2, h3, h4, h5 { text-shadow: 1px 1px 1px #000; }
 
-.hearthlogs-title { font-size: 80px; text-shadow: 2px 2px 4px #000; }
+.hearthlogs-title { font-size: 80px; text-align: center; text-shadow: 2px 2px 4px #000; }
 .hearthlogs-title span { font-size: 17px; color: #5d5d5d; text-shadow: 2px 2px 4px #000; }
 
-.panel { background-color: #2D2D2D; border-color: #1B809E; }
+.panel { color: #000; border-color: #000; background-color: #CFC395; }
 
 .druid { color: #FF7D0A; text-shadow: 1px 1px 1px #000; }
 .druid-bg { background-color: #FF7D0A; }
@@ -36,9 +36,4 @@ h1, h2, h3, h4, h5 { text-shadow: 1px 1px 1px #000; }
 .warrior { color: #C79C6E; text-shadow: 1px 1px 1px #000; }
 .warrior-bg { background-color: #C79C6E; }
 
-table {
-    color: #000;
-    border-color: #000;
-    /*background: repeating-linear-gradient(to right, #f6ba52, #f6ba52 10px, #ffd180 10px, #ffd180 20px)*/
-    background-color: #CFC395;
-}
+table { color: #000; border-color: #000; background-color: #CFC395; }

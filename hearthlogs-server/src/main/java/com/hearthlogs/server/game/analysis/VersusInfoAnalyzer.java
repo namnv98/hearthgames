@@ -4,7 +4,12 @@ import com.hearthlogs.server.game.analysis.domain.VersusInfo;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.play.GameResult;
+import com.hearthlogs.server.game.play.domain.Turn;
 import org.springframework.stereotype.Component;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Component
 public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
@@ -34,6 +39,21 @@ public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
         info.setFriendlyHeroCardId(friendlyHeroCard.getCardid());
         info.setOpposingHeroCardId(opposingHeroCard.getCardid());
 
+        Turn firstTurn = result.getTurns().iterator().next();
+        Turn lastTurn = result.getCurrentTurn();
+
+        Duration duration = Duration.between(firstTurn.getStartDateTime(), lastTurn.getEndDateTime());
+        info.setDuration(format(duration));
+
         return info;
+    }
+
+    private String format(Duration duration) {
+        long hours = duration.toHours();
+        duration = duration.minusHours(hours);
+        long minutes = duration.toMinutes();
+        duration = duration.minusMinutes(minutes);
+
+        return String.format("%02d:%02d:%02d", hours, minutes, duration.getSeconds());
     }
 }
