@@ -121,8 +121,8 @@
             <tr>
                 <td th:each="column,iterStat : ${healthArmorInfo.friendly.columns}">
                     <div th:class="${iterStat.first}? '' : 'health-armor'" class="health-armor">
-                        <div th:if="${column.data2 != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
-                            <div th:text="${column.data2}"></div>
+                        <div th:if="${column.extraData != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
+                            <div th:text="${column.extraData}"></div>
                         </div>
                         <div th:class="${iterStat.first}? ${#strings.toLowerCase(versusInfo.friendlyClass)} : 'health-bg'" class="health-bg">
                             <div th:text="${column.data}"></div>
@@ -133,8 +133,8 @@
             <tr>
                 <td th:each="column,iterStat : ${healthArmorInfo.opposing.columns}">
                     <div th:class="${iterStat.first}? '' : 'health-armor'" class="health-armor">
-                        <div th:if="${column.data2 != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
-                            <div th:text="${column.data2}"></div>
+                        <div th:if="${column.extraData != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
+                            <div th:text="${column.extraData}"></div>
                         </div>
                         <div th:class="${iterStat.first}? ${#strings.toLowerCase(versusInfo.opposingClass)} : 'health-bg'" class="health-bg">
                             <div th:text="${column.data}"></div>

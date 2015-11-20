@@ -1,7 +1,7 @@
 package com.hearthlogs.server.game.analysis;
 
-import com.hearthlogs.server.game.analysis.domain.BoardControlInfo;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericColumn;
+import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class BoardControlInfoAnalyzer extends PagingAbstractAnalyzer<BoardControlInfo> {
+public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
     @Override
-    protected BoardControlInfo getInfo(GameResult result, GameContext context, List<Turn> turns) {
+    protected GenericTable getInfo(GameResult result, GameContext context, List<Turn> turns) {
 
-        BoardControlInfo info = new BoardControlInfo();
+        GenericTable info = new GenericTable();
 
         GenericRow header = new GenericRow();
         info.setHeader(header);

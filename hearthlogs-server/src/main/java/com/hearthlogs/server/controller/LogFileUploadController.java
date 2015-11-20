@@ -1,6 +1,7 @@
 package com.hearthlogs.server.controller;
 
 import com.hearthlogs.server.game.analysis.domain.*;
+import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.log.domain.RawMatchData;
@@ -51,11 +52,11 @@ public class LogFileUploadController {
                     GameContext context = gameParserService.parseLines(rawMatchData.getLines());
                     GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
 
-                    CardInfo cardInfo = gameAnalysisService.getCardInfo(result, context);
+                    GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
                     VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
-                    List<HealthArmorInfo> healthArmorInfos = gameAnalysisService.getHealthArmorInfo(result, context);
-                    List<BoardControlInfo> boardControlInfos = gameAnalysisService.getBoardControlInfo(result, context);
-                    List<CardAdvantageInfo> cardAdvantageInfos = gameAnalysisService.getCardAdvantageInfo(result, context);
+                    List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context);
+                    List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
+                    List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
                     List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
                     ManaInfo manaInfo = gameAnalysisService.getManaInfo(result, context);

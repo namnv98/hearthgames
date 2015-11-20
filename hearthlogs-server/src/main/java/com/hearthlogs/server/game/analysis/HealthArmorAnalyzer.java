@@ -1,6 +1,6 @@
 package com.hearthlogs.server.game.analysis;
 
-import com.hearthlogs.server.game.analysis.domain.HealthArmorInfo;
+import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.play.domain.HeroHealthChange;
 import com.hearthlogs.server.game.play.domain.Turn;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericColumn;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class HealthArmorInfoAnalyzer extends PagingAbstractAnalyzer<HealthArmorInfo> {
+public class HealthArmorAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
-    protected HealthArmorInfo getInfo(GameResult result, GameContext context, List<Turn> turns) {
-        HealthArmorInfo info = new HealthArmorInfo();
+    protected GenericTable getInfo(GameResult result, GameContext context, List<Turn> turns) {
+        GenericTable info = new GenericTable();
 
         GenericRow header = new GenericRow();
         info.setHeader(header);
@@ -75,13 +75,13 @@ public class HealthArmorInfoAnalyzer extends PagingAbstractAnalyzer<HealthArmorI
             }
             GenericColumn col = new GenericColumn(""+friendlyHealth);
             if (friendlyArmor != 0) {
-                col.setData2(""+friendlyArmor);
+                col.setExtraData(""+friendlyArmor);
             }
             friendly.addColumn(col);
 
             col = new GenericColumn(""+opposingHealth);
             if (opposingArmor != 0) {
-                col.setData2(""+opposingArmor);
+                col.setExtraData(""+opposingArmor);
             }
             opposing.addColumn(col);
         }

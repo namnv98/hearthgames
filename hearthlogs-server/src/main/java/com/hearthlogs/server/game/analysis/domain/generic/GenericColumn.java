@@ -5,7 +5,7 @@ import java.util.Collection;
 public class GenericColumn<T> {
 
     private String data;
-    private String data2;
+    private String extraData;
 
     private Collection<T> datas;
 
@@ -21,12 +21,12 @@ public class GenericColumn<T> {
         this.data = data;
     }
 
-    public String getData2() {
-        return data2;
+    public String getExtraData() {
+        return extraData;
     }
 
-    public void setData2(String data2) {
-        this.data2 = data2;
+    public void setExtraData(String extraData) {
+        this.extraData = extraData;
     }
 
     public String getData() {

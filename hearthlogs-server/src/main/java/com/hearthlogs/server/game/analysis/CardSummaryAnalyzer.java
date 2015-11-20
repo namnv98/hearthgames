@@ -1,8 +1,8 @@
 package com.hearthlogs.server.game.analysis;
 
-import com.hearthlogs.server.game.analysis.domain.CardInfo;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
+import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.play.GameResult;
@@ -15,12 +15,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class CardInfoAnalyzer implements Analyzer<CardInfo> {
+public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
 
     @Override
-    public CardInfo analyze(GameResult result, GameContext context) {
+    public GenericTable analyze(GameResult result, GameContext context) {
 
-        CardInfo info = new CardInfo();
+        GenericTable info = new GenericTable();
 
         GenericRow header = new GenericRow();
         header.addColumn(new GenericColumn(""));
@@ -52,7 +52,7 @@ public class CardInfoAnalyzer implements Analyzer<CardInfo> {
         cards.addAll(context.getCards().stream()
                 .filter(card -> Objects.equals(card.getController(), controller) && ids.contains(card.getEntityId()) &&
                                 !Card.Type.HERO.eq(card.getCardtype()) && !Card.Type.HERO_POWER.eq(card.getCardtype()) &&
-                                !Objects.equals(card.getCardid(), "GAME_005")
+                                !Objects.equals(card.getCardid(), Card.THE_COIN)
                 ).collect(Collectors.toList()));
         return cards;
     }

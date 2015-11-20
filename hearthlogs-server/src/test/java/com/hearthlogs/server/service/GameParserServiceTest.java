@@ -3,6 +3,7 @@ package com.hearthlogs.server.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hearthlogs.server.game.analysis.*;
 import com.hearthlogs.server.game.analysis.domain.*;
+import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.CardSets;
 import com.hearthlogs.server.game.play.GameResult;
@@ -36,7 +37,7 @@ public class GameParserServiceTest {
         gameParserService = new GameParserService();
         gamePlayingService = new GamePlayingService(cardService);
         rawLogProcessingService = new RawLogProcessingService(new PowerLineFilter(), new BobLineFilter(), new AssetLineFilter());
-        gameAnalysisService = new GameAnalysisService(new ManaInfoAnalyzer(), new HealthArmorInfoAnalyzer(), new VersusInfoAnalyzer(), new CardInfoAnalyzer(), new BoardControlInfoAnalyzer(), new CardAdvantageInfoAnalyzer(), new TurnInfoAnalyzer());
+        gameAnalysisService = new GameAnalysisService(new ManaInfoAnalyzer(), new HealthArmorAnalyzer(), new VersusInfoAnalyzer(), new CardSummaryAnalyzer(), new BoardControlAnalyzer(), new CardAdvantageAnalyzer(), new TurnInfoAnalyzer());
     }
 
     @Test
@@ -49,12 +50,12 @@ public class GameParserServiceTest {
         GameContext context = gameParserService.parseLines(rawMatchData.get(0).getLines());
         GameResult result = gamePlayingService.processMatch(context, rawMatchData.get(0).getRank());
 
-        CardInfo cardInfo = gameAnalysisService.getCardInfo(result, context);
+        GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
         VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
-        List<HealthArmorInfo> healthArmorInfos = gameAnalysisService.getHealthArmorInfo(result, context);
+        List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context);
         ManaInfo manaInfo = gameAnalysisService.getManaInfo(result, context);
-        List<BoardControlInfo> boardControlInfos = gameAnalysisService.getBoardControlInfo(result, context);
-        List<CardAdvantageInfo> cardAdvantageInfos = gameAnalysisService.getCardAdvantageInfo(result, context);
+        List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
+        List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
         List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
         System.out.println();

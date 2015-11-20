@@ -1,8 +1,6 @@
-package com.hearthlogs.server.game.analysis.domain;
+package com.hearthlogs.server.game.analysis.domain.generic;
 
-import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
-
-public class BoardControlInfo {
+public class GenericTable {
 
     private GenericRow header;
     private GenericRow friendly;

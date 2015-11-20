@@ -2,6 +2,7 @@ package com.hearthlogs.server.service;
 
 import com.hearthlogs.server.game.analysis.*;
 import com.hearthlogs.server.game.analysis.domain.*;
+import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +14,27 @@ import java.util.List;
 public class GameAnalysisService {
 
     private ManaInfoAnalyzer manaInfoAnalyzer;
-    private HealthArmorInfoAnalyzer healthArmorInfoAnalyzer;
+    private HealthArmorAnalyzer healthArmorAnalyzer;
     private VersusInfoAnalyzer versusInfoAnalyzer;
-    private CardInfoAnalyzer cardInfoAnalyzer;
-    private BoardControlInfoAnalyzer boardControlInfoAnalyzer;
-    private CardAdvantageInfoAnalyzer cardAdvantageInfoAnalyzer;
+    private CardSummaryAnalyzer cardSummaryAnalyzer;
+    private BoardControlAnalyzer boardControlAnalyzer;
+    private CardAdvantageAnalyzer cardAdvantageAnalyzer;
     private TurnInfoAnalyzer turnInfoAnalyzer;
 
     @Autowired
     public GameAnalysisService(ManaInfoAnalyzer manaInfoAnalyzer,
-                               HealthArmorInfoAnalyzer healthArmorInfoAnalyzer,
+                               HealthArmorAnalyzer healthArmorAnalyzer,
                                VersusInfoAnalyzer versusInfoAnalyzer,
-                               CardInfoAnalyzer cardInfoAnalyzer,
-                               BoardControlInfoAnalyzer boardControlInfoAnalyzer,
-                               CardAdvantageInfoAnalyzer cardAdvantageInfoAnalyzer,
+                               CardSummaryAnalyzer cardSummaryAnalyzer,
+                               BoardControlAnalyzer boardControlAnalyzer,
+                               CardAdvantageAnalyzer cardAdvantageAnalyzer,
                                TurnInfoAnalyzer turnInfoAnalyzer) {
         this.manaInfoAnalyzer = manaInfoAnalyzer;
-        this.healthArmorInfoAnalyzer = healthArmorInfoAnalyzer;
+        this.healthArmorAnalyzer = healthArmorAnalyzer;
         this.versusInfoAnalyzer = versusInfoAnalyzer;
-        this.cardInfoAnalyzer = cardInfoAnalyzer;
-        this.boardControlInfoAnalyzer = boardControlInfoAnalyzer;
-        this.cardAdvantageInfoAnalyzer = cardAdvantageInfoAnalyzer;
+        this.cardSummaryAnalyzer = cardSummaryAnalyzer;
+        this.boardControlAnalyzer = boardControlAnalyzer;
+        this.cardAdvantageAnalyzer = cardAdvantageAnalyzer;
         this.turnInfoAnalyzer = turnInfoAnalyzer;
     }
 
@@ -41,24 +42,24 @@ public class GameAnalysisService {
         return versusInfoAnalyzer.analyze(result, context);
     }
 
-    public List<HealthArmorInfo> getHealthArmorInfo(GameResult result, GameContext context) {
-        return healthArmorInfoAnalyzer.analyze(result, context);
+    public List<GenericTable> getHealthArmor(GameResult result, GameContext context) {
+        return healthArmorAnalyzer.analyze(result, context);
     }
 
     public ManaInfo getManaInfo(GameResult result, GameContext context) {
         return manaInfoAnalyzer.analyze(result, context);
     }
 
-    public CardInfo getCardInfo(GameResult result, GameContext context) {
-        return cardInfoAnalyzer.analyze(result, context);
+    public GenericTable getCardSummary(GameResult result, GameContext context) {
+        return cardSummaryAnalyzer.analyze(result, context);
     }
 
-    public List<BoardControlInfo> getBoardControlInfo(GameResult result, GameContext context) {
-        return boardControlInfoAnalyzer.analyze(result, context);
+    public List<GenericTable> getBoardControl(GameResult result, GameContext context) {
+        return boardControlAnalyzer.analyze(result, context);
     }
 
-    public List<CardAdvantageInfo> getCardAdvantageInfo(GameResult result, GameContext context) {
-        return cardAdvantageInfoAnalyzer.analyze(result, context);
+    public List<GenericTable> getCardAdvantage(GameResult result, GameContext context) {
+        return cardAdvantageAnalyzer.analyze(result, context);
     }
 
     public List<TurnInfo> getTurnInfo(GameResult result, GameContext context) {
