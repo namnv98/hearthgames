@@ -42,34 +42,10 @@ public class GameHandler implements Handler {
 //            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TURN " + context.getGame().getTurn() + "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
 
-        if (GameEntity.Step.MAIN_NEXT.eq(after.getStep())) {
-
-            Set<Card> friendlyCardsInPlay = new HashSet<>();
-            Set<Card> opposingCardsInPlay = new HashSet<>();
-
-            for (Turn turn: result.getTurns()) {
-                friendlyCardsInPlay.addAll(turn.getFriendlyCardsPutInPlay().stream().collect(Collectors.toList()));
-                turn.getFriendlyCardsRemovedFromPlay().forEach(friendlyCardsInPlay::remove);
-                opposingCardsInPlay.addAll(turn.getOpposingCardsPutInPlay().stream().collect(Collectors.toList()));
-                turn.getOpposingCardsRemovedFromPlay().forEach(opposingCardsInPlay::remove);
-            }
-
-            result.getCurrentTurn().setFriendlyCardsInPlay(friendlyCardsInPlay);
-            result.getCurrentTurn().setOpposingCardsInPlay(opposingCardsInPlay);
-        }
-
         if (GameEntity.Step.MAIN_READY.eq(after.getStep())) {
             System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TURN " + result.getTurnNumber() + "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             if (result.getTurnNumber() > 1) {
                 result.addTurn();
-
-                context.getCards().stream().filter(card -> Zone.HAND.eq(card.getZone()) && context.getFriendlyPlayer().getController().equals(card.getController())).forEach(card -> {
-                    result.getCurrentTurn().getFriendlyCardsInHand().add(card);
-                });
-                context.getCards().stream().filter(card -> Zone.HAND.eq(card.getZone()) && context.getOpposingPlayer().getController().equals(card.getController())).forEach(card -> {
-                    result.getCurrentTurn().getOpposingCardsInHand().add(card);
-                });
-
             }
             if (TRUE_OR_ONE.equals(context.getFriendlyPlayer().getCurrentPlayer())) {
                 result.getCurrentTurn().setWhoseTurn(context.getFriendlyPlayer());

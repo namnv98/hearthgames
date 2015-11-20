@@ -260,7 +260,14 @@ public class GameResult {
     }
 
     public void addZonePositionChange(Card card, Zone zone, int position) {
-        this.currentTurn.addAction(new ZonePositionChange(card, zone, position));
+        int size = this.getCurrentTurn().getActions().size();
+        Action lastAction = size > 0 ? this.getCurrentTurn().getActions().get(size-1) : null;
+        ZonePositionChange zonePositionChange = new ZonePositionChange(card, zone, position);
+        if (lastAction instanceof ZonePositionChange) {
+            ((ZonePositionChange) lastAction).addZonePositionChange(zonePositionChange);
+        } else {
+            this.currentTurn.addAction(zonePositionChange);
+        }
     }
 
     public void addHeroPowerUsed(Player player, Card card) {
@@ -271,5 +278,31 @@ public class GameResult {
         this.currentTurn.addAction(new NumOptions(number));
     }
 
+    public void addEndofTurn() {
+        // we add this so that if the last action is a ZonePositionChange we can capture it with the code below
+        this.currentTurn.addAction(new EndOfTurn());
+    }
 
+    // keep track of the last action we looked at for determining if we should update the board state so we don't update every time a tag changes..we only want
+    // to look at when another action was added but calling isUpdateBoardState will happen after we update the game state.
+    private Action lastActionProcessed = null;
+
+    public boolean isUpdateBoardState() {
+        int size = this.getCurrentTurn().getActions().size();
+        Action lastAction = size > 0 ? getCurrentTurn().getActions().get(size-1) : null;
+        if (lastAction != null && lastActionProcessed != lastAction) {
+            lastActionProcessed = lastAction;
+            if (lastAction instanceof CardPlayed || lastAction instanceof CardDrawn || lastAction instanceof Kill || lastAction instanceof Damage || lastAction instanceof Frozen) {
+                return true;
+            } else {
+                if (size > 1) {
+                    Action beforeLastAction = this.getCurrentTurn().getActions().get(size-2);
+                    if (beforeLastAction instanceof ZonePositionChange) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

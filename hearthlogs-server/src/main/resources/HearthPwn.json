@@ -47,7 +47,7 @@
 { "cardId": "LOEA06_03h", "name": "Animate Earthen", "href": "/cards/27359-animate-earthen", "hearthPwnId": "27359" },
 { "cardId": "LOEA16_17", "name": "Animated Statue", "href": "/cards/27444-animated-statue", "hearthPwnId": "27444" },
 { "cardId": "LOEA04_27", "name": "Animated Statue", "href": "/cards/27334-animated-statue", "hearthPwnId": "27334" },
-{ "cardId": "GVG_085,TB_MechWar_Boss1", "name": "Annoy-o-Tron", "href": "/cards/12181-annoy-o-tron", "hearthPwnId": "12181" },
+{ "cardId": "GVG_085", "name": "Annoy-o-Tron", "href": "/cards/12181-annoy-o-tron", "hearthPwnId": "12181" },
 { "cardId": "TB_MechWar_Boss1", "name": "Annoy-o-Tron", "href": "/cards/22512-annoy-o-tron", "hearthPwnId": "22512" },
 { "cardId": "GVG_030", "name": "Anodized Robo Cub", "href": "/cards/12219-anodized-robo-cub", "hearthPwnId": "12219" },
 { "cardId": "GVG_069", "name": "Antique Healbot", "href": "/cards/12227-antique-healbot", "hearthPwnId": "12227" },

@@ -19,7 +19,9 @@ public enum Zone {
     SECRET,
     GRAVEYARD,
     REMOVEDFROMGAME,
-    SETASIDE;
+    SETASIDE,
+
+    DELAYED_PLAY; // this isnt a real zone...it is for cards that were created in PLAY but we don't mark them that way until it happens...this is because we store all cards info ahead of time..so we need to delay this.
 
     public boolean eq(String zone) {
         return this.toString().equals(zone);

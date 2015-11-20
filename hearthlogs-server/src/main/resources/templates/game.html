@@ -237,30 +237,88 @@
 
     <h4 class="info-heading">Turn By Turn Summary</h4>
 
-    <div>
-        <h5>Turn 1 - Seekay</h5>
+    <div th:each="turnInfo,iterStat : ${turnInfos}">
+        <h5>Turn <span th:text="${turnInfo.turnNumber}">1</span> - <span th:text="${turnInfo.whoseTurn}" th:class="${#strings.toLowerCase(turnInfo.turnClass)}">Seekay</span></h5>
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Seekay Hand: <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a></th>
-                <th colspan="2">Seekay</th>
-                <th colspan="2">Opponent</th>
-            </tr>
-            <tr>
-                <th>Opponent Hand: <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a> <a href="http://www.hearthpwn.com/cards/14711-golemagg" data-tooltip-href="http://www.hearthpwn.com/cards/14711-golemagg"><img src="../static/images/cardback.png"/></a></th>
-                <th>Health</th>
-                <th>Mana</th>
-                <th>Health</th>
-                <th>Mana</th>
+                <th></th>
+                <th>Hand</th>
+                <th>Weapon</th>
+                <th>Secrets</th>
+                <th>Minions In Play</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>Gargantua has drawn Leper Gnome, id=61</td>
-                <td class="warrior">30</td>
-                <td class="warrior">30</td>
-                <td class="hunter">--</td>
-                <td class="hunter">30</td>
+                <td><span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}"></span></td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.friendlyHand}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.friendlyHand}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.friendlyWeapon}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.friendlyWeapon}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.friendlySecret}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.friendlySecret}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.friendlyPlay}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.friendlyPlay}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td><span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}"></span></td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.opposingHand}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.opposingHand}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.opposingWeapon}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.opposingWeapon}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.opposingSecret}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.opposingSecret}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
+                <td>
+                    <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.opposingPlay}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
+                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
+                    </a>
+                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.opposingPlay}">
+                        <img src="http://images.hearthlogs.com/cardback.png" />
+                    </a>
+                </td>
             </tr>
             </tbody>
         </table>

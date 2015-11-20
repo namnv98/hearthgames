@@ -18,17 +18,6 @@ public class Turn implements Serializable {
 
     private int tempManaUsed; // this is the amount that was JUST used and should be zero'd out after read
 
-    private Set<Card> friendlyCardsPutInPlay = new LinkedHashSet<>();
-    private Set<Card> friendlyCardsRemovedFromPlay = new LinkedHashSet<>();
-    private Set<Card> opposingCardsPutInPlay = new LinkedHashSet<>();
-    private Set<Card> opposingCardsRemovedFromPlay = new LinkedHashSet<>();
-
-    private Set<Card> friendlyCardsInHand = new HashSet<>();
-    private Set<Card> opposingCardsInHand = new HashSet<>();
-
-    private Set<Card> friendlyCardsInPlay = new HashSet<>();
-    private Set<Card> opposingCardsInPlay = new HashSet<>();
-
     private List<Action> actions = new ArrayList<>();
 
     public List<Action> getActions() {
@@ -113,71 +102,6 @@ public class Turn implements Serializable {
         this.whoseTurn = whoseTurn;
     }
 
-    public Set<Card> getFriendlyCardsPutInPlay() {
-        return friendlyCardsPutInPlay;
-    }
-
-    public void setFriendlyCardsPutInPlay(Set<Card> friendlyCardsPutInPlay) {
-        this.friendlyCardsPutInPlay = friendlyCardsPutInPlay;
-    }
-
-    public Set<Card> getFriendlyCardsRemovedFromPlay() {
-        return friendlyCardsRemovedFromPlay;
-    }
-
-    public void setFriendlyCardsRemovedFromPlay(Set<Card> friendlyCardsRemovedFromPlay) {
-        this.friendlyCardsRemovedFromPlay = friendlyCardsRemovedFromPlay;
-    }
-
-    public Set<Card> getOpposingCardsPutInPlay() {
-        return opposingCardsPutInPlay;
-    }
-
-    public void setOpposingCardsPutInPlay(Set<Card> opposingCardsPutInPlay) {
-        this.opposingCardsPutInPlay = opposingCardsPutInPlay;
-    }
-
-    public Set<Card> getOpposingCardsRemovedFromPlay() {
-        return opposingCardsRemovedFromPlay;
-    }
-
-    public void setOpposingCardsRemovedFromPlay(Set<Card> opposingCardsRemovedFromPlay) {
-        this.opposingCardsRemovedFromPlay = opposingCardsRemovedFromPlay;
-    }
-
-
-    public Set<Card> getFriendlyCardsInPlay() {
-        return friendlyCardsInPlay;
-    }
-
-    public void setFriendlyCardsInPlay(Set<Card> friendlyCardsInPlay) {
-        this.friendlyCardsInPlay = friendlyCardsInPlay;
-    }
-
-    public Set<Card> getOpposingCardsInPlay() {
-        return opposingCardsInPlay;
-    }
-
-    public void setOpposingCardsInPlay(Set<Card> opposingCardsInPlay) {
-        this.opposingCardsInPlay = opposingCardsInPlay;
-    }
-
-    public Set<Card> getFriendlyCardsInHand() {
-        return friendlyCardsInHand;
-    }
-
-    public void setFriendlyCardsInHand(Set<Card> friendlyCardsInHand) {
-        this.friendlyCardsInHand = friendlyCardsInHand;
-    }
-
-    public Set<Card> getOpposingCardsInHand() {
-        return opposingCardsInHand;
-    }
-
-    public void setOpposingCardsInHand(Set<Card> opposingCardsInHand) {
-        this.opposingCardsInHand = opposingCardsInHand;
-    }
-
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
@@ -192,5 +116,24 @@ public class Turn implements Serializable {
 
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public Board findFirstBoard() {
+        for (Action action: getActions()) {
+            if (action instanceof Board) {
+                return (Board) action;
+            }
+        }
+        return null;
+    }
+
+    public Board findLastBoard() {
+        Board board = null;
+        for (Action action: getActions()) {
+            if (action instanceof Board) {
+                board = (Board) action;
+            }
+        }
+        return board;
     }
 }

@@ -334,6 +334,7 @@ public class GameContext {
 
     public void endCreateCard(LocalDateTime dateTime) {
         Card card = getCurrentCard();
+        String zone = card.getZone();
         if (!isGameUpdating()) {
             startingCardIds.add(card.getEntityId());
 //            System.out.println("Adding " + card.getCardid() + " to starting cards (id=" + card.getEntityId()+ ")");
@@ -343,11 +344,19 @@ public class GameContext {
                 friendlyPlayer = opposingPlayer;
                 opposingPlayer = swap;
             }
+        } else {
+            card.setZone(Zone.DELAYED_PLAY.toString());
         }
         getCards().add(getCurrentCard());
 
         Activity activity = createActivity(dateTime, getCurrentCard());
         addActivity(activity);
+        if (Zone.DELAYED_PLAY.eq(card.getZone())) {
+            Map<String, String> data = new HashMap<>();
+            data.put("zone", zone);
+            activity = createActivity(dateTime, Activity.Type.TAG_CHANGE, card, data);
+            addActivity(activity);
+        }
         setCurrentCard(null);
         setCreateCard(false);
     }

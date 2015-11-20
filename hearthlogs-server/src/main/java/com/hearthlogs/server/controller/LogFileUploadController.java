@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.context.WebContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +56,7 @@ public class LogFileUploadController {
                     List<HealthArmorInfo> healthArmorInfos = gameAnalysisService.getHealthArmorInfo(result, context);
                     List<BoardControlInfo> boardControlInfos = gameAnalysisService.getBoardControlInfo(result, context);
                     List<CardAdvantageInfo> cardAdvantageInfos = gameAnalysisService.getCardAdvantageInfo(result, context);
+                    List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
                     ManaInfo manaInfo = gameAnalysisService.getManaInfo(result, context);
 
@@ -64,6 +66,19 @@ public class LogFileUploadController {
                     modelAndView.addObject("manaInfo", manaInfo);
                     modelAndView.addObject("boardControlInfos", boardControlInfos);
                     modelAndView.addObject("cardAdvantageInfos", cardAdvantageInfos);
+                    modelAndView.addObject("turnInfos", turnInfos);
+
+                    //hack for Thymeleaf plugin - duplicate model properties
+                    if (false) {
+                        WebContext webContext = new org.thymeleaf.context.WebContext(null, null, null);
+                        webContext.setVariable("cardInfo", cardInfo);
+                        webContext.setVariable("versusInfo", versusInfo);
+                        webContext.setVariable("healthArmorInfos", healthArmorInfos);
+                        webContext.setVariable("manaInfo", manaInfo);
+                        webContext.setVariable("boardControlInfos", boardControlInfos);
+                        webContext.setVariable("cardAdvantageInfos", cardAdvantageInfos);
+                        webContext.setVariable("turnInfos", turnInfos);
+                    }
                 }
 
             } catch (Exception e) {

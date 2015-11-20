@@ -17,6 +17,9 @@ public class PlayerHandler implements Handler {
         Player before = (Player) context.getEntityById(activity.getEntityId());
         Player after = (Player) activity.getDelta();
 
+        if (after.getNumTurnsLeft() != null && FALSE_OR_ZERO.equals(after.getNumTurnsLeft())) {
+            result.addEndofTurn();
+        }
 
         if (after.getNumOptions() != null) {
             result.addNumOptions(Integer.parseInt(after.getNumOptions()));

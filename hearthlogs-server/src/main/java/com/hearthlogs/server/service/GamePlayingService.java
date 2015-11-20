@@ -3,6 +3,7 @@ package com.hearthlogs.server.service;
 import com.hearthlogs.server.game.parse.domain.Activity;
 import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.parse.GameContext;
+import com.hearthlogs.server.game.play.domain.Board;
 import com.hearthlogs.server.game.play.handler.Handler;
 import com.hearthlogs.server.game.play.handler.PlayHandlers;
 import com.hearthlogs.server.game.play.GameResult;
@@ -77,6 +78,9 @@ public class GamePlayingService {
     private void doActivity(GameResult result, GameContext context, Activity activity) {
         playActivity(result, context, activity);
         updateGameActivityData(context, activity);
+        if (result.isUpdateBoardState()) {
+            result.getCurrentTurn().addAction(new Board(context.getCards(), context.getFriendlyPlayer()));
+        }
     }
 
     private void playActivity(GameResult result, GameContext context, Activity activity) {

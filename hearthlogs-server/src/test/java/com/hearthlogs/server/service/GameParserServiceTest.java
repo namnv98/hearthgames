@@ -36,7 +36,7 @@ public class GameParserServiceTest {
         gameParserService = new GameParserService();
         gamePlayingService = new GamePlayingService(cardService);
         rawLogProcessingService = new RawLogProcessingService(new PowerLineFilter(), new BobLineFilter(), new AssetLineFilter());
-        gameAnalysisService = new GameAnalysisService(new ManaInfoAnalyzer(), new HealthArmorInfoAnalyzer(), new VersusInfoAnalyzer(), new CardInfoAnalyzer(), new BoardControlInfoAnalyzer(), new CardAdvantageInfoAnalyzer());
+        gameAnalysisService = new GameAnalysisService(new ManaInfoAnalyzer(), new HealthArmorInfoAnalyzer(), new VersusInfoAnalyzer(), new CardInfoAnalyzer(), new BoardControlInfoAnalyzer(), new CardAdvantageInfoAnalyzer(), new TurnInfoAnalyzer());
     }
 
     @Test
@@ -55,13 +55,9 @@ public class GameParserServiceTest {
         ManaInfo manaInfo = gameAnalysisService.getManaInfo(result, context);
         List<BoardControlInfo> boardControlInfos = gameAnalysisService.getBoardControlInfo(result, context);
         List<CardAdvantageInfo> cardAdvantageInfos = gameAnalysisService.getCardAdvantageInfo(result, context);
+        List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
-        System.out.println(manaInfo.getFriendlyManaEfficiency());
-        System.out.println(manaInfo.getOpposingManaEfficiency());
-        System.out.println(manaInfo.getFriendlyManaUsed() + " / " + manaInfo.getFriendlyTotalMana());
-        System.out.println(manaInfo.getOpposingManaUsed() + " / " + manaInfo.getOpposingTotalMana());
         System.out.println();
-
     }
 
     private byte[] getData(String filename) throws IOException {

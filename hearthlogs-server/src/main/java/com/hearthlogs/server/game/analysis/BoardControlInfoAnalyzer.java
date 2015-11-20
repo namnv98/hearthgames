@@ -6,10 +6,10 @@ import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.play.GameResult;
+import com.hearthlogs.server.game.play.domain.Board;
 import com.hearthlogs.server.game.play.domain.Turn;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -38,12 +38,14 @@ public class BoardControlInfoAnalyzer extends PagingAbstractAnalyzer<BoardContro
 
         for (Turn turn: turns) {
 
+            Board board = turn.findLastBoard();
+
             boolean friendlyBoardControl = false;
             boolean opposingBoardControl = false;
-            if (turn.getFriendlyCardsInPlay().size() != turn.getOpposingCardsInPlay().size()) {
+            if (board.getFriendlyPlay().size() != board.getOpposingPlay().size()) {
                 int friendlyAttackTotal = 0;
                 int friendlyHealthTotal = 0;
-                for (Card c: turn.getFriendlyCardsInPlay()) {
+                for (Card c: board.getFriendlyPlay()) {
                     if (c.getAtk() != null) {
                         friendlyAttackTotal += Integer.parseInt(c.getAtk());
                     }
@@ -54,7 +56,7 @@ public class BoardControlInfoAnalyzer extends PagingAbstractAnalyzer<BoardContro
 
                 int opposingAttackTotal = 0;
                 int opposingHealthTotal = 0;
-                for (Card c: turn.getOpposingCardsInPlay()) {
+                for (Card c: board.getOpposingPlay()) {
                     if (c.getAtk() != null) {
                         opposingAttackTotal += Integer.parseInt(c.getAtk());
                     }

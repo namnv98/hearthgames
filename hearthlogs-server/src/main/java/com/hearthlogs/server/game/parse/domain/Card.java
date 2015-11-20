@@ -25,6 +25,8 @@ public class Card extends Entity implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    public static final String THE_COIN = "GAME_005";
+
     public enum Type {
         MINION,
         SPELL,

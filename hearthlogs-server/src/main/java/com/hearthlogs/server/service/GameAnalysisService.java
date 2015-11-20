@@ -18,6 +18,7 @@ public class GameAnalysisService {
     private CardInfoAnalyzer cardInfoAnalyzer;
     private BoardControlInfoAnalyzer boardControlInfoAnalyzer;
     private CardAdvantageInfoAnalyzer cardAdvantageInfoAnalyzer;
+    private TurnInfoAnalyzer turnInfoAnalyzer;
 
     @Autowired
     public GameAnalysisService(ManaInfoAnalyzer manaInfoAnalyzer,
@@ -25,13 +26,15 @@ public class GameAnalysisService {
                                VersusInfoAnalyzer versusInfoAnalyzer,
                                CardInfoAnalyzer cardInfoAnalyzer,
                                BoardControlInfoAnalyzer boardControlInfoAnalyzer,
-                               CardAdvantageInfoAnalyzer cardAdvantageInfoAnalyzer) {
+                               CardAdvantageInfoAnalyzer cardAdvantageInfoAnalyzer,
+                               TurnInfoAnalyzer turnInfoAnalyzer) {
         this.manaInfoAnalyzer = manaInfoAnalyzer;
         this.healthArmorInfoAnalyzer = healthArmorInfoAnalyzer;
         this.versusInfoAnalyzer = versusInfoAnalyzer;
         this.cardInfoAnalyzer = cardInfoAnalyzer;
         this.boardControlInfoAnalyzer = boardControlInfoAnalyzer;
         this.cardAdvantageInfoAnalyzer = cardAdvantageInfoAnalyzer;
+        this.turnInfoAnalyzer = turnInfoAnalyzer;
     }
 
     public VersusInfo getVersusInfo(GameResult result, GameContext context) {
@@ -40,7 +43,6 @@ public class GameAnalysisService {
 
     public List<HealthArmorInfo> getHealthArmorInfo(GameResult result, GameContext context) {
         return healthArmorInfoAnalyzer.analyze(result, context);
-
     }
 
     public ManaInfo getManaInfo(GameResult result, GameContext context) {
@@ -59,4 +61,7 @@ public class GameAnalysisService {
         return cardAdvantageInfoAnalyzer.analyze(result, context);
     }
 
+    public List<TurnInfo> getTurnInfo(GameResult result, GameContext context) {
+        return turnInfoAnalyzer.analyze(result, context);
+    }
 }
