@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.context.WebContext;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -59,12 +60,12 @@ public class LogFileUploadController {
                     List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
                     List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
-                    ManaInfo manaInfo = gameAnalysisService.getManaInfo(result, context);
+                    GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context);
 
-                    modelAndView.addObject("cardInfo", cardInfo);
+                    modelAndView.addObject("cardInfos", Collections.singletonList(cardInfo));
                     modelAndView.addObject("versusInfo", versusInfo);
                     modelAndView.addObject("healthArmorInfos", healthArmorInfos);
-                    modelAndView.addObject("manaInfo", manaInfo);
+                    modelAndView.addObject("manaInfos", Collections.singletonList(manaInfo));
                     modelAndView.addObject("boardControlInfos", boardControlInfos);
                     modelAndView.addObject("cardAdvantageInfos", cardAdvantageInfos);
                     modelAndView.addObject("turnInfos", turnInfos);
@@ -72,10 +73,10 @@ public class LogFileUploadController {
                     //hack for Thymeleaf plugin - duplicate model properties
                     if (false) {
                         WebContext webContext = new org.thymeleaf.context.WebContext(null, null, null);
-                        webContext.setVariable("cardInfo", cardInfo);
+                        webContext.setVariable("cardInfos", Collections.singletonList(cardInfo));
                         webContext.setVariable("versusInfo", versusInfo);
                         webContext.setVariable("healthArmorInfos", healthArmorInfos);
-                        webContext.setVariable("manaInfo", manaInfo);
+                        webContext.setVariable("manaInfos", Collections.singletonList(manaInfo));
                         webContext.setVariable("boardControlInfos", boardControlInfos);
                         webContext.setVariable("cardAdvantageInfos", cardAdvantageInfos);
                         webContext.setVariable("turnInfos", turnInfos);

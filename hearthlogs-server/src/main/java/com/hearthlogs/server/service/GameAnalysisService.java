@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class GameAnalysisService {
 
-    private ManaInfoAnalyzer manaInfoAnalyzer;
+    private ManaSummaryAnalyzer manaSummaryAnalyzer;
     private HealthArmorAnalyzer healthArmorAnalyzer;
     private VersusInfoAnalyzer versusInfoAnalyzer;
     private CardSummaryAnalyzer cardSummaryAnalyzer;
@@ -22,14 +22,14 @@ public class GameAnalysisService {
     private TurnInfoAnalyzer turnInfoAnalyzer;
 
     @Autowired
-    public GameAnalysisService(ManaInfoAnalyzer manaInfoAnalyzer,
+    public GameAnalysisService(ManaSummaryAnalyzer manaSummaryAnalyzer,
                                HealthArmorAnalyzer healthArmorAnalyzer,
                                VersusInfoAnalyzer versusInfoAnalyzer,
                                CardSummaryAnalyzer cardSummaryAnalyzer,
                                BoardControlAnalyzer boardControlAnalyzer,
                                CardAdvantageAnalyzer cardAdvantageAnalyzer,
                                TurnInfoAnalyzer turnInfoAnalyzer) {
-        this.manaInfoAnalyzer = manaInfoAnalyzer;
+        this.manaSummaryAnalyzer = manaSummaryAnalyzer;
         this.healthArmorAnalyzer = healthArmorAnalyzer;
         this.versusInfoAnalyzer = versusInfoAnalyzer;
         this.cardSummaryAnalyzer = cardSummaryAnalyzer;
@@ -46,8 +46,8 @@ public class GameAnalysisService {
         return healthArmorAnalyzer.analyze(result, context);
     }
 
-    public ManaInfo getManaInfo(GameResult result, GameContext context) {
-        return manaInfoAnalyzer.analyze(result, context);
+    public GenericTable getManaInfo(GameResult result, GameContext context) {
+        return manaSummaryAnalyzer.analyze(result, context);
     }
 
     public GenericTable getCardSummary(GameResult result, GameContext context) {

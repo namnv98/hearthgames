@@ -9,10 +9,10 @@
 .health-info {width: auto;}
 .health-info th:first-child { width: 130px; text-align: left; }
 
-#card-info th:first-child { width: 130px; text-align: left; }
+.card-info th:first-child { width: 130px; text-align: left; }
 
-#mana-info {width: auto;}
-#mana-info th:first-child { width: 130px; text-align: left; }
+.mana-info {width: auto;}
+.mana-info th:first-child { width: 130px; text-align: left; }
 
 .board-control-info { width: auto; }
 .board-control-info th:first-child { width: 130px; text-align: left; }

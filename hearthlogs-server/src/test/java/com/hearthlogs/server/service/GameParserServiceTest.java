@@ -37,7 +37,7 @@ public class GameParserServiceTest {
         gameParserService = new GameParserService();
         gamePlayingService = new GamePlayingService(cardService);
         rawLogProcessingService = new RawLogProcessingService(new PowerLineFilter(), new BobLineFilter(), new AssetLineFilter());
-        gameAnalysisService = new GameAnalysisService(new ManaInfoAnalyzer(), new HealthArmorAnalyzer(), new VersusInfoAnalyzer(), new CardSummaryAnalyzer(), new BoardControlAnalyzer(), new CardAdvantageAnalyzer(), new TurnInfoAnalyzer());
+        gameAnalysisService = new GameAnalysisService(new ManaSummaryAnalyzer(), new HealthArmorAnalyzer(), new VersusInfoAnalyzer(), new CardSummaryAnalyzer(), new BoardControlAnalyzer(), new CardAdvantageAnalyzer(), new TurnInfoAnalyzer());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class GameParserServiceTest {
         GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
         VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
         List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context);
-        ManaInfo manaInfo = gameAnalysisService.getManaInfo(result, context);
+        GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context);
         List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
         List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
         List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
