@@ -59,7 +59,7 @@
     <div th:include="::tablefrag (${boardControlInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'board-control-info','turn','-bg bcontrol-info',4)"></div>
 
 
-    <h4 class="info-heading">Turn By Turn Summary</h4>
+    <h4 class="info-heading">Turn By Turn Play</h4>
 
     <div th:each="turnInfo,iterStat : ${turnInfos}">
         <h5>Turn <span th:text="${turnInfo.turnNumber}">1</span> - <span th:text="${turnInfo.whoseTurn}" th:class="${#strings.toLowerCase(turnInfo.turnClass)}">Seekay</span></h5>
@@ -102,10 +102,10 @@
                 </td>
                 <td>
                     <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.friendlyPlay}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
-                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
-                    </a>
-                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.friendlyPlay}">
-                        <img src="http://images.hearthlogs.com/cardback.png" />
+                        <div class="minion-attack-health-bg" th:style="'background-image: url(http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png)'" >
+                            <div class="minion-attack-bg"><div th:text="${card.atk}"></div></div>
+                            <div class="minion-health-bg"><div th:text="${card.health}"></div></div>
+                        </div>
                     </a>
                 </td>
             </tr>
@@ -137,10 +137,10 @@
                 </td>
                 <td>
                     <a th:if="${card.cardDetails != null}" th:each="card : ${turnInfo.opposingPlay}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
-                        <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
-                    </a>
-                    <a th:if="${card.cardDetails == null}" th:each="card : ${turnInfo.opposingPlay}">
-                        <img src="http://images.hearthlogs.com/cardback.png" />
+                        <div class="minion-attack-health-bg" th:style="'background-image: url(http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png)'" >
+                            <div class="minion-attack-bg"><div th:text="${card.atk}"></div></div>
+                            <div class="minion-health-bg"><div th:text="${card.health}"></div></div>
+                        </div>
                     </a>
                 </td>
             </tr>

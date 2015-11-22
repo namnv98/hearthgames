@@ -32,3 +32,10 @@
 
 .armor-bg { position:relative; background-image: url(armor.png); width: 22px; height: 25px; font-size: 12px; text-align: center; }
 .armor-bg > div { position: absolute; bottom: 5px; text-shadow: 1px 1px 1px #000; width: 22px; text-align: center; font-weight: bold; }
+
+.minion-attack-health-bg { position:relative; width: 40px; height: 55px; display: inline-block; margin: 0 3px; }
+.minion-health-bg { background-image: url(health-bg.png); position: absolute; bottom: -3px; right: -5px; width: 20px; height: 20px; }
+.minion-health-bg > div { position: absolute; bottom: 1px; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 1px #000; text-align: center; width: 20px; color: #fff; }
+
+.minion-attack-bg { background-image: url(attack-bg.png); position: absolute; bottom: -3px; left: -5px; width: 20px; height: 20px; }
+.minion-attack-bg > div { position: absolute; bottom: 1px; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 1px #000; text-align: center; width: 20px; color: #fff; }
