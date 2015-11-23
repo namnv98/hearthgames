@@ -20,30 +20,30 @@ public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
     @Override
     public GenericTable analyze(GameResult result, GameContext context) {
 
-        GenericTable info = new GenericTable();
+        GenericTable table = new GenericTable();
 
         GenericRow header = new GenericRow();
         header.addColumn(new GenericColumn(""));
         header.addColumn(new GenericColumn("Starting Hand"));
         header.addColumn(new GenericColumn("Mulliganed Cards"));
         header.addColumn(new GenericColumn("Cards In Deck"));
-        info.setHeader(header);
+        table.setHeader(header);
 
         GenericRow friendly = new GenericRow();
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyStartingCards()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyMulliganedCards()));
         friendly.addColumn(new GenericColumn<>(getStartingDeck(context, context.getFriendlyPlayer().getController())));
-        info.setFriendly(friendly);
+        table.setFriendly(friendly);
 
         GenericRow opposing = new GenericRow();
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
         opposing.addColumn(new GenericColumn<>(result.getOpposingStartingCards()));
         opposing.addColumn(new GenericColumn<>(result.getOpposingMulliganedCards()));
         opposing.addColumn(new GenericColumn<>(getStartingDeck(context, context.getOpposingPlayer().getController())));
-        info.setOpposing(opposing);
+        table.setOpposing(opposing);
 
-        return info;
+        return table;
     }
 
     private Set<Card> getStartingDeck(GameContext context, String controller) {

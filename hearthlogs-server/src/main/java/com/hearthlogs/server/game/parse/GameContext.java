@@ -530,20 +530,20 @@ public class GameContext {
             currentActivity = getActivityStack().peek();
         }
         if (currentActivity == null) {
-            StringBuilder sb = new StringBuilder();
-            for (int i=0; i < getActivityStack().size(); i++) {
-                sb.append("    ");
-            }
+//            StringBuilder sb = new StringBuilder();
+//            for (int i=0; i < getActivityStack().size(); i++) {
+//                sb.append("    ");
+//            }
 //            System.out.println(currentLine.getLine());
-            System.out.println(sb.toString()+activity);
+//            System.out.println(sb.toString()+activity);
             getActivities().add(activity);
         } else {
-            StringBuilder sb = new StringBuilder();
-            for (int i=0; i < getActivityStack().size(); i++) {
-                sb.append("    ");
-            }
+//            StringBuilder sb = new StringBuilder();
+//            for (int i=0; i < getActivityStack().size(); i++) {
+//                sb.append("    ");
+//            }
 //            System.out.println(currentLine.getLine());
-            System.out.println(sb.toString()+activity);
+//            System.out.println(sb.toString()+activity);
             currentActivity.addChildGameEvent(activity);
         }
 

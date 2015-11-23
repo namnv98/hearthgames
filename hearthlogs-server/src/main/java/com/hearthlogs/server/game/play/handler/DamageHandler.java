@@ -31,21 +31,33 @@ public class DamageHandler implements Handler {
         int damage = Integer.parseInt(after.getPredamage());
         if (before == attacker) {
             if (defender == null) {
-                result.addDamage(attacker, before, damage);
-                System.out.println(context.getSide(attacker) + " " + attacker.getName() + " has done " + damage + " damage to " + context.getSide(before) + before.getName());
+                String damagerSide = context.getSide(attacker);
+                String damagedSide = context.getSide(before);
+
+                result.addDamage(damagerSide, damagedSide, attacker, before, damage);
+                System.out.println(damagerSide + " " + attacker.getName() + " has done " + damage + " damage to " + damagedSide + before.getName());
                 return true;
             } else {
-                result.addDamage(defender, before, damage);
-                System.out.println(context.getSide(defender) + " " + defender.getName() + " has done " + damage + " damage to " + context.getSide(before) + " " + before.getName());
+                String damagerSide = context.getSide(defender);
+                String damagedSide = context.getSide(before);
+
+                result.addDamage(damagerSide, damagedSide, defender, before, damage);
+                System.out.println(damagerSide + " " + defender.getName() + " has done " + damage + " damage to " + damagedSide + " " + before.getName());
                 return true;
             }
         } else if (before == defender) {
-            result.addDamage(attacker, before, damage);
-            System.out.println((attacker != null ? context.getSide(attacker) + " " + attacker.getName() : "") + " has done " + damage + " damage to " + context.getSide(before) + " " + before.getName());
+            String damagerSide = context.getSide(attacker);
+            String damagedSide = context.getSide(before);
+
+            result.addDamage(damagerSide, damagedSide, attacker, before, damage);
+            System.out.println((attacker != null ? damagerSide + " " + attacker.getName() : "") + " has done " + damage + " damage to " + damagedSide + " " + before.getName());
             return true;
         } else {
-            result.addDamage(attacker, before, damage);
-            System.out.println((attacker != null ? context.getSide(attacker) + " " + attacker.getName() : "") + " has done " + damage + " damage to " + context.getSide(before) + " " + before.getName());
+            String damagerSide = context.getSide(attacker);
+            String damagedSide = context.getSide(before);
+
+            result.addDamage(damagerSide, damagedSide, attacker, before, damage);
+            System.out.println((attacker != null ? damagerSide + " " + attacker.getName() : "") + " has done " + damage + " damage to " + damagedSide + " " + before.getName());
             return true;
         }
     }

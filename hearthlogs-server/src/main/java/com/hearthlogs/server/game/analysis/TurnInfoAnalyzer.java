@@ -1,12 +1,14 @@
 package com.hearthlogs.server.game.analysis;
 
+import com.hearthlogs.server.game.analysis.domain.TurnColumn;
 import com.hearthlogs.server.game.analysis.domain.TurnInfo;
+import com.hearthlogs.server.game.analysis.domain.TurnRow;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
-import com.hearthlogs.server.game.play.domain.Board;
-import com.hearthlogs.server.game.play.domain.Turn;
+import com.hearthlogs.server.game.play.domain.*;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,19 +32,54 @@ public class TurnInfoAnalyzer implements Analyzer<List<TurnInfo>> {
             String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(opposingClass);
         }
-        Board board = turn.findFirstBoard();
 
-        info.setFriendlyHand(board.getFriendlyHand());
-        info.setFriendlyPlay(board.getFriendlyPlay());
-        info.setFriendlySecret(board.getFriendlySecret());
-        info.setFriendlyWeapon(board.getFriendlyWeapon());
+        List<TurnRow> rows = new ArrayList<>();
 
-        info.setOpposingHand(board.getOpposingHand());
-        info.setOpposingPlay(board.getOpposingPlay());
-        info.setOpposingSecret(board.getOpposingSecret());
-        info.setOpposingWeapon(board.getOpposingWeapon());
+        for (Action action: turn.getActions()) {
+            if (isRegularAction(action)) {
+                TurnRow row = new TurnRow(1);
+                row.addColumn(new TurnColumn(action));
+                rows.add(row);
+
+            } else if (action instanceof Board) {
+                TurnRow row = new TurnRow(2);
+                row.addColumn(new TurnColumn(""));
+                row.addColumn(new TurnColumn("Hand"));
+                row.addColumn(new TurnColumn("Weapon"));
+                row.addColumn(new TurnColumn("Secrets"));
+                row.addColumn(new TurnColumn("Minions In Play"));
+                rows.add(row);
+
+                Board board = (Board) action;
+                row = new TurnRow(3);
+                row.addColumn(new TurnColumn(context.getFriendlyPlayer().getName()));
+                row.addColumn(new TurnColumn(board.getFriendlyHand()));
+                row.addColumn(new TurnColumn(board.getFriendlyWeapon()));
+                row.addColumn(new TurnColumn(board.getFriendlySecret()));
+                row.addColumn(new TurnColumn(board.getFriendlyPlay()));
+                rows.add(row);
+
+                row = new TurnRow(4);
+                row.addColumn(new TurnColumn(context.getOpposingPlayer().getName()));
+                row.addColumn(new TurnColumn(board.getOpposingHand()));
+                row.addColumn(new TurnColumn(board.getOpposingWeapon()));
+                row.addColumn(new TurnColumn(board.getOpposingSecret()));
+                row.addColumn(new TurnColumn(board.getOpposingPlay()));
+                rows.add(row);
+            }
+        }
+        info.setRows(rows);
 
         return info;
+    }
+
+    private boolean isRegularAction(Action action) {
+        return action instanceof ArmorChange || action instanceof AttackChange || action instanceof CardCreation ||
+               action instanceof CardDrawn || action instanceof CardPlayed || action instanceof Damage ||
+               action instanceof Frozen || action instanceof HealthChange || action instanceof HeroHealthChange ||
+               action instanceof HeroPowerUsed || action instanceof Joust || action instanceof Kill ||
+               action instanceof ManaGained || action instanceof ManaUsed || action instanceof TempManaGained ||
+               action instanceof Trigger || action instanceof CardDiscarded;
     }
 
 }

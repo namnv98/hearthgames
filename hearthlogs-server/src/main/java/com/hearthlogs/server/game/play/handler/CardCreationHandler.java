@@ -19,9 +19,13 @@ public class CardCreationHandler implements Handler {
             if (created.getController() != null && created.getCreator() != null) {
                 Player beneficiary = context.getPlayerForCard(created);
                 Card creator = (Card) context.getEntityById(created.getCreator());
-                result.addCardCreation(beneficiary, creator, created);
-                System.out.println(context.getSide(creator) + " " + creator.getName() + " has created : " + context.getSide(created) + " " +  created.getName());
+                String creatorSide = context.getSide(creator);
+                String createdSide = context.getSide(created);
 
+                if (!created.isEnchantment()) {
+                    result.addCardCreation(creatorSide, createdSide, beneficiary, creator, created);
+                    System.out.println(creatorSide + " " + creator.getName() + " has created : " + createdSide + " " +  created.getName());
+                }
                 return true;
             }
         }

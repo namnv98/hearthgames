@@ -29,4 +29,9 @@ public class Attached implements Action, Serializable {
     public void setAttachedTo(Card attachedTo) {
         this.attachedTo = attachedTo;
     }
+
+    @Override
+    public int getType() {
+        return 2;
+    }
 }

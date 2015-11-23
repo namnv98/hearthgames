@@ -29,5 +29,10 @@ public class TempManaGained implements Action, Serializable {
     public void setCard(Card card) {
         this.card = card;
     }
+
+    @Override
+    public int getType() {
+        return 22;
+    }
 }
 

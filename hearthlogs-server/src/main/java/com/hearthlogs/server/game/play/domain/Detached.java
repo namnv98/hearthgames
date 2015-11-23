@@ -29,5 +29,10 @@ public class Detached implements Action, Serializable {
     public void setDetachedFrom(Card detachedFrom) {
         this.detachedFrom = detachedFrom;
     }
+
+    @Override
+    public int getType() {
+        return 9;
+    }
 }
 

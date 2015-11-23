@@ -22,7 +22,7 @@ public class PlayerHandler implements Handler {
         }
 
         if (after.getNumOptions() != null) {
-            result.addNumOptions(Integer.parseInt(after.getNumOptions()));
+//            result.addNumOptions(Integer.parseInt(after.getNumOptions()));
 //            System.out.println(result.getCurrentTurn().getWhoseTurn().getName() + " has " + after.getNumOptions() + " possible moves to make.");
         }
 

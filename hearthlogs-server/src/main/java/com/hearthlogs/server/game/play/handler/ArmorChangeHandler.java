@@ -18,8 +18,10 @@ public class ArmorChangeHandler implements Handler {
         Card after = context.getAfter(activity);
 
         int armor = Integer.parseInt(after.getArmor());
-        result.addArmorChange(before, armor);
-        System.out.println(context.getSide(before) + " " + before.getName() + " armor is now : " + armor);
+        String side = context.getSide(before);
+        result.addArmorChange(side, before, armor);
+
+        System.out.println(side + " " + before.getName() + " armor is now : " + armor);
 
         return true;
     }

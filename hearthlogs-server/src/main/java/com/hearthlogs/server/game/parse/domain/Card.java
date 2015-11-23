@@ -561,4 +561,19 @@ public class Card extends Entity implements Serializable {
         return cardDetails != null && cardDetails.getAttack() != null ? cardDetails.getAttack() : "0";
     }
 
+    public boolean isSpell() {
+        return Type.SPELL.eq(this.getCardtype());
+    }
+
+    public boolean isMinion() {
+        return Type.MINION.eq(this.getCardtype());
+    }
+
+    public boolean isWeapon() {
+        return Type.WEAPON.eq(this.getCardtype());
+    }
+
+    public boolean isEnchantment() {
+        return Type.ENCHANTMENT.eq(this.getCardtype());
+    }
 }

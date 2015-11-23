@@ -1,6 +1,5 @@
 package com.hearthlogs.server.game.play.domain;
 
-import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.parse.domain.Player;
 
 import java.io.Serializable;

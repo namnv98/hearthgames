@@ -70,4 +70,9 @@ public class Joust implements Action, Serializable {
     public void setWinner(boolean winner) {
         this.winner = winner;
     }
+
+    @Override
+    public int getType() {
+        return 15;
+    }
 }

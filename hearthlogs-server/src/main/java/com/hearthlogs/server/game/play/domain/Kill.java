@@ -7,13 +7,19 @@ import java.io.Serializable;
 
 public class Kill implements Action, Serializable {
 
+    private String kind;
+    private String killerSide;
+    private String killedSide;
     private Player beneficiary;
     private Card killer;
     private Card killed;
     private boolean favorableTrade;
     private boolean evenTrade;
 
-    public Kill(Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
+    public Kill(String kind, String killerSide, String killedSide, Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
+        this.kind = kind;
+        this.killerSide = killerSide;
+        this.killedSide = killedSide;
         this.beneficiary = beneficiary;
         this.killer = killer;
         this.killed = killed;
@@ -59,5 +65,34 @@ public class Kill implements Action, Serializable {
 
     public void setEvenTrade(boolean evenTrade) {
         this.evenTrade = evenTrade;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getKillerSide() {
+        return killerSide;
+    }
+
+    public void setKillerSide(String killerSide) {
+        this.killerSide = killerSide;
+    }
+
+    public String getKilledSide() {
+        return killedSide;
+    }
+
+    public void setKilledSide(String killedSide) {
+        this.killedSide = killedSide;
+    }
+
+    @Override
+    public int getType() {
+        return 16;
     }
 }

@@ -20,6 +20,7 @@ public class GameAnalysisService {
     private BoardControlAnalyzer boardControlAnalyzer;
     private CardAdvantageAnalyzer cardAdvantageAnalyzer;
     private TurnInfoAnalyzer turnInfoAnalyzer;
+    private TradeAnalyzer tradeAnalyzer;
 
     @Autowired
     public GameAnalysisService(ManaSummaryAnalyzer manaSummaryAnalyzer,
@@ -28,7 +29,8 @@ public class GameAnalysisService {
                                CardSummaryAnalyzer cardSummaryAnalyzer,
                                BoardControlAnalyzer boardControlAnalyzer,
                                CardAdvantageAnalyzer cardAdvantageAnalyzer,
-                               TurnInfoAnalyzer turnInfoAnalyzer) {
+                               TurnInfoAnalyzer turnInfoAnalyzer,
+                               TradeAnalyzer tradeAnalyzer) {
         this.manaSummaryAnalyzer = manaSummaryAnalyzer;
         this.healthArmorAnalyzer = healthArmorAnalyzer;
         this.versusInfoAnalyzer = versusInfoAnalyzer;
@@ -36,6 +38,7 @@ public class GameAnalysisService {
         this.boardControlAnalyzer = boardControlAnalyzer;
         this.cardAdvantageAnalyzer = cardAdvantageAnalyzer;
         this.turnInfoAnalyzer = turnInfoAnalyzer;
+        this.tradeAnalyzer = tradeAnalyzer;
     }
 
     public VersusInfo getVersusInfo(GameResult result, GameContext context) {
@@ -64,5 +67,9 @@ public class GameAnalysisService {
 
     public List<TurnInfo> getTurnInfo(GameResult result, GameContext context) {
         return turnInfoAnalyzer.analyze(result, context);
+    }
+
+    public GenericTable getTradeInfo(GameResult result, GameContext context) {
+        return tradeAnalyzer.analyze(result, context);
     }
 }

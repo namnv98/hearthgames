@@ -183,32 +183,36 @@ public class GameResult {
         this.turns.add(currentTurn);
     }
 
-    public void addKill(Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
-        this.currentTurn.addAction(new Kill(beneficiary, killer, killed, favorableTrade, evenTrade));
+    public void addKill(String kind, String killerSide, String killedSide, Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
+        this.currentTurn.addAction(new Kill(kind, killerSide, killedSide, beneficiary, killer, killed, favorableTrade, evenTrade));
     }
 
-    public void addDamage(Card damager, Card damaged, int amount) {
-        this.currentTurn.addAction(new Damage(damager, damaged, amount));
+    public void addDamage(String damagerSide, String damagedSide, Card damager, Card damaged, int amount) {
+        this.currentTurn.addAction(new Damage(damagerSide, damagedSide, damager, damaged, amount));
     }
 
-    public void addCardCreation(Player beneficiary, Card creator, Card created) {
-        this.currentTurn.addAction(new CardCreation(beneficiary, creator, created));
+    public void addCardCreation(String creatorSide, String createdSide, Player beneficiary, Card creator, Card created) {
+        this.currentTurn.addAction(new CardCreation(creatorSide, createdSide, beneficiary, creator, created));
     }
 
-    public void addHeroHealthChange(Card card, int health) {
-        this.currentTurn.addAction(new HeroHealthChange(card, health));
+    public void addHeroHealthChange(String side, Card card, int health) {
+        this.currentTurn.addAction(new HeroHealthChange(side, card, health));
     }
 
-    public void addArmorChange(Card card, int armor) {
-        this.currentTurn.addAction(new ArmorChange(card, armor));
+    public void addArmorChange(String side, Card card, int armor) {
+        this.currentTurn.addAction(new ArmorChange(side, card, armor));
     }
 
     public void addCardDrawn(Player beneficiary, Card card, Entity trigger) {
         this.currentTurn.addAction(new CardDrawn(beneficiary, card, trigger));
     }
 
-    public void addCardPlayed(Player beneficiary, Card card) {
-        this.currentTurn.addAction(new CardPlayed(beneficiary, card));
+    public void addCardPlayed(Zone fromZone, Zone toZone, Player beneficiary, Card card) {
+        this.currentTurn.addAction(new CardPlayed(fromZone, toZone, beneficiary, card));
+    }
+
+    public void addCardDiscarded(String causeSide, String cardSide, Zone fromZone, Zone toZone, Player player, Card card, Card cause) {
+        this.currentTurn.addAction(new CardDiscarded(causeSide, cardSide, fromZone, toZone, player, card, cause));
     }
 
     public void addManaGained(int mana) {
@@ -231,8 +235,8 @@ public class GameResult {
         this.currentTurn.addAction(new TempManaGained(card, mana));
     }
 
-    public void addFrozen(Card card, boolean frozen) {
-        this.currentTurn.addAction(new Frozen(card, frozen));
+    public void addFrozen(String side, Card card, boolean frozen) {
+        this.currentTurn.addAction(new Frozen(side, card, frozen));
     }
 
     public void addAttached(Card card, Card attachedTo) {
@@ -247,12 +251,12 @@ public class GameResult {
         this.currentTurn.addAction(new Trigger(card));
     }
 
-    public void addHealthChange(Card card, int amount) {
-        this.currentTurn.addAction(new HealthChange(card, amount));
+    public void addHealthChange(String side, Card card, int amount, int newHealth) {
+        this.currentTurn.addAction(new HealthChange(side, card, amount, newHealth));
     }
 
-    public void addAttackChange(Card card, int amount) {
-        this.currentTurn.addAction(new AttackChange(card, amount));
+    public void addAttackChange(String side, Card card, int amount, int newAttack) {
+        this.currentTurn.addAction(new AttackChange(side, card, amount, newAttack));
     }
 
     public void addJoust(Player friendly, Player opposing, String friendlyCardId, String oppsosingCardId, Card card, boolean winner) {
@@ -292,7 +296,20 @@ public class GameResult {
         Action lastAction = size > 0 ? getCurrentTurn().getActions().get(size-1) : null;
         if (lastAction != null && lastActionProcessed != lastAction) {
             lastActionProcessed = lastAction;
-            if (lastAction instanceof CardPlayed || lastAction instanceof CardDrawn || lastAction instanceof Kill || lastAction instanceof Damage || lastAction instanceof Frozen) {
+            if (lastAction instanceof CardPlayed || lastAction instanceof CardDrawn || lastAction instanceof Kill ||
+                lastAction instanceof Damage || lastAction instanceof Frozen || lastAction instanceof CardDiscarded) {
+                if (lastAction instanceof Damage) {
+                    Damage damage = (Damage) lastAction;
+                    if (Card.Type.HERO.eq(damage.getDamaged().getCardtype())) {
+                        return false;
+                    }
+                }
+                if (lastAction instanceof CardPlayed) {
+                    CardPlayed cardPlayed = (CardPlayed) lastAction;
+                    if (cardPlayed.getCard().isSpell()) {
+                        return false;
+                    }
+                }
                 return true;
             } else {
                 if (size > 1) {

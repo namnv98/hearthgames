@@ -52,4 +52,9 @@ public class ZonePositionChange implements Action, Serializable {
     public List<ZonePositionChange> getZonePositionChanges() {
         return zonePositionChanges;
     }
+
+    @Override
+    public int getType() {
+        return 24;
+    }
 }

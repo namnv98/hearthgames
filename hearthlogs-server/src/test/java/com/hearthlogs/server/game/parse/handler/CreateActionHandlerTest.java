@@ -5,10 +5,11 @@ import com.hearthlogs.server.game.parse.domain.GameEntity;
 import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.log.domain.LogLineData;
-import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.time.LocalDateTime;
 
 import static junit.framework.TestCase.assertEquals;
 

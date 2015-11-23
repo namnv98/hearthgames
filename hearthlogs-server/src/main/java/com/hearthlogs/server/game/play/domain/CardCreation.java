@@ -7,11 +7,15 @@ import java.io.Serializable;
 
 public class CardCreation implements Action, Serializable {
 
+    private String creatorSide;
+    private String createdSide;
     private Player beneficiary;
     private Card creator;
     private Card created;
 
-    public CardCreation(Player beneficiary, Card creator, Card created) {
+    public CardCreation(String creatorSide, String createdSide, Player beneficiary, Card creator, Card created) {
+        this.creatorSide = creatorSide;
+        this.createdSide = createdSide;
         this.beneficiary = beneficiary;
         this.creator = creator;
         this.created = created;
@@ -39,5 +43,26 @@ public class CardCreation implements Action, Serializable {
 
     public void setCreated(Card created) {
         this.created = created;
+    }
+
+    public String getCreatorSide() {
+        return creatorSide;
+    }
+
+    public void setCreatorSide(String creatorSide) {
+        this.creatorSide = creatorSide;
+    }
+
+    public String getCreatedSide() {
+        return createdSide;
+    }
+
+    public void setCreatedSide(String createdSide) {
+        this.createdSide = createdSide;
+    }
+
+    @Override
+    public int getType() {
+        return 5;
     }
 }

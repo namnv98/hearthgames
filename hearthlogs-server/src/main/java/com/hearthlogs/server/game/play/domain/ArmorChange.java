@@ -6,10 +6,12 @@ import java.io.Serializable;
 
 public class ArmorChange implements Action, Serializable {
 
+    private String side;
     private Card card;
     private int armor;
 
-    public ArmorChange(Card card, int armor) {
+    public ArmorChange(String side, Card card, int armor) {
+        this.side = side;
         this.card = card;
         this.armor = armor;
     }
@@ -28,5 +30,18 @@ public class ArmorChange implements Action, Serializable {
 
     public void setArmor(int armor) {
         this.armor = armor;
+    }
+
+    public String getSide() {
+        return side;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
+    }
+
+    @Override
+    public int getType() {
+        return 1;
     }
 }

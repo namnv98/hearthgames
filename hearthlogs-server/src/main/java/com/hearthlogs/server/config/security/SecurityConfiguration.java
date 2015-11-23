@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -20,24 +21,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OAuth2ClientContextFilter oAuth2ClientContextFilter;
 
     @Autowired
-    private HearthLogsAuthenticationFilter hearthLogsAuthenticationFilter;
+    private OAuth2RestOperations restTemplate;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        String LOGIN_URL = "/login";
+        http.addFilterAfter(oAuth2ClientContextFilter, AbstractPreAuthenticatedProcessingFilter.class)
+                .addFilterAfter(new HearthLogsAuthenticationFilter(LOGIN_URL, restTemplate), OAuth2ClientContextFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(LOGIN_URL))
+                .and().authorizeRequests()
+                .antMatchers(GET, "/").permitAll()
+                .antMatchers(GET, "/where").permitAll()
+                .antMatchers(POST, "/upload").authenticated()
+                .antMatchers(GET, "/test").authenticated().and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/")
+                .permitAll();
 
-        http.addFilterAfter(oAuth2ClientContextFilter, AbstractPreAuthenticatedProcessingFilter.class);
-        http.addFilterAfter(hearthLogsAuthenticationFilter, OAuth2ClientContextFilter.class);
-
-        http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
-
-        http.authorizeRequests().antMatchers(GET, "/").permitAll();
-        http.authorizeRequests().antMatchers(POST, "/upload").permitAll();
-
-        http.authorizeRequests().antMatchers(GET, "/match/**").authenticated();
-
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").permitAll();
-
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
     }
 }

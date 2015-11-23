@@ -4,7 +4,7 @@ import com.hearthlogs.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.game.parse.GameContext;
-import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.CardWrapper;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.play.domain.Board;
 import com.hearthlogs.server.game.play.domain.Turn;
@@ -18,21 +18,21 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
     @Override
     protected GenericTable getInfo(GameResult result, GameContext context, List<Turn> turns) {
 
-        GenericTable info = new GenericTable();
+        GenericTable table = new GenericTable();
 
         GenericRow header = new GenericRow();
-        info.setHeader(header);
+        table.setHeader(header);
         header.addColumn(new GenericColumn(""));
         for (Turn turn: turns) {
             header.addColumn(new GenericColumn(""+turn.getTurnNumber()));
         }
 
         GenericRow friendly = new GenericRow();
-        info.setFriendly(friendly);
+        table.setFriendly(friendly);
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
 
         GenericRow opposing = new GenericRow();
-        info.setOpposing(opposing);
+        table.setOpposing(opposing);
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
 
 
@@ -45,23 +45,23 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
             if (board.getFriendlyPlay().size() != board.getOpposingPlay().size()) {
                 int friendlyAttackTotal = 0;
                 int friendlyHealthTotal = 0;
-                for (Card c: board.getFriendlyPlay()) {
-                    if (c.getAtk() != null) {
-                        friendlyAttackTotal += Integer.parseInt(c.getAtk());
+                for (CardWrapper c: board.getFriendlyPlay()) {
+                    if (c.getCard().getAtk() != null) {
+                        friendlyAttackTotal += Integer.parseInt(c.getCard().getAtk());
                     }
-                    if (c.getHealth() != null) {
-                        friendlyHealthTotal += Integer.parseInt(c.getHealth());
+                    if (c.getCard().getHealth() != null) {
+                        friendlyHealthTotal += Integer.parseInt(c.getCard().getHealth());
                     }
                 }
 
                 int opposingAttackTotal = 0;
                 int opposingHealthTotal = 0;
-                for (Card c: board.getOpposingPlay()) {
-                    if (c.getAtk() != null) {
-                        opposingAttackTotal += Integer.parseInt(c.getAtk());
+                for (CardWrapper c: board.getOpposingPlay()) {
+                    if (c.getCard().getAtk() != null) {
+                        opposingAttackTotal += Integer.parseInt(c.getCard().getAtk());
                     }
-                    if (c.getHealth() != null) {
-                        opposingHealthTotal += Integer.parseInt(c.getHealth());
+                    if (c.getCard().getHealth() != null) {
+                        opposingHealthTotal += Integer.parseInt(c.getCard().getHealth());
                     }
                 }
 
@@ -84,7 +84,7 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
             }
         }
 
-        return info;
+        return table;
     }
 
     private void addFriendlyOpposingColumns(String friendlyClass, String opposingClass, GenericRow friendly, GenericRow opposing) {

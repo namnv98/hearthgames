@@ -9,13 +9,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@Controller
+//@Controller
 public class CardLinkUpdateController {
 
     @Autowired
     private CardParser cardParser;
 
-    @RequestMapping("/link")
+//    @RequestMapping("/link")
     public ModelAndView link() throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("links");

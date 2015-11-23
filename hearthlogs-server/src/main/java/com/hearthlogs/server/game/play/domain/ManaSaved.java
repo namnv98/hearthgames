@@ -29,6 +29,11 @@ public class ManaSaved implements Action, Serializable {
     public void setCard(Card card) {
         this.card = card;
     }
+
+    @Override
+    public int getType() {
+        return 19;
+    }
 }
 
 

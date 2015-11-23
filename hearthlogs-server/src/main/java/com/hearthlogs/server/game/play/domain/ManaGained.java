@@ -17,4 +17,9 @@ public class ManaGained implements Action, Serializable {
     public void setManaGained(int manaGained) {
         this.manaGained = manaGained;
     }
+
+    @Override
+    public int getType() {
+        return 17;
+    }
 }

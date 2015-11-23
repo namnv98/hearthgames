@@ -68,10 +68,13 @@ public class KillHandler implements Handler {
                         }
                     }
                 }
-                result.addKill(killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), card, before, favorableTrade, evenTrade);
+                String killerSide = context.getSide(card);
+                String killedSide = context.getSide(before);
+                result.addKill("killed", killerSide, killedSide, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), card, before, favorableTrade, evenTrade);
 
                 String msg = getMessage(favorableTrade, evenTrade, killerFriendly);
-                System.out.println(context.getSide(card) + " " + cardDetails.getName() + " has killed " + context.getSide(before) + " " + before.getName() + msg);
+
+                System.out.println(killerSide + " " + cardDetails.getName() + " has killed " + killedSide + " " + before.getName() + msg);
                 return true;
             }
         }
@@ -114,10 +117,12 @@ public class KillHandler implements Handler {
                                     }
                                 }
                             }
-                            result.addKill(killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
+                            String killerSide = context.getSide(parentCard);
+                            String killedSide = context.getSide(card);
+                            result.addKill("destroyed", killerSide, killedSide, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
 
                             String msg = getMessage(favorableTrade, evenTrade, killerFriendly);
-                            System.out.println(context.getSide(parentCard) + " " + parentCardDetails.getName() + " has destroyed " + context.getSide(card) + " " + cardDetails.getName() + msg);
+                            System.out.println(killerSide + " " + parentCardDetails.getName() + " has destroyed " + killedSide + " " + cardDetails.getName() + msg);
                             return true;
                         }
                     }

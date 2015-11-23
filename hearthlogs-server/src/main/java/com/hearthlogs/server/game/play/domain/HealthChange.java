@@ -6,12 +6,16 @@ import java.io.Serializable;
 
 public class HealthChange implements Action, Serializable {
 
+    private String side;
     private Card card;
-    private int amount;
+    private int amount; // amount increased or decreased
+    private int newHealth;
 
-    public HealthChange(Card card, int amount) {
+    public HealthChange(String side, Card card, int amount, int newHealth) {
+        this.side = side;
         this.card = card;
         this.amount = amount;
+        this.newHealth = newHealth;
     }
 
     public Card getCard() {
@@ -28,5 +32,26 @@ public class HealthChange implements Action, Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getSide() {
+        return side;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
+    }
+
+    public int getNewHealth() {
+        return newHealth;
+    }
+
+    public void setNewHealth(int newHealth) {
+        this.newHealth = newHealth;
+    }
+
+    @Override
+    public int getType() {
+        return 12;
     }
 }

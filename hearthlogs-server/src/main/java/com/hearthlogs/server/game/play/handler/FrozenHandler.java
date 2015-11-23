@@ -17,9 +17,10 @@ public class FrozenHandler implements Handler {
         Card after = context.getAfter(activity);
 
         boolean frozen = TRUE_OR_ONE.equals(after.getFrozen());
-        result.addFrozen(before, frozen);
+        String side = context.getSide(before);
+        result.addFrozen(side, before, frozen);
 
-        System.out.println(context.getSide(before) + " " + before.getName() + " has been frozen");
+        System.out.println(side + " " + before.getName() + " has been frozen");
 
         return true;
     }

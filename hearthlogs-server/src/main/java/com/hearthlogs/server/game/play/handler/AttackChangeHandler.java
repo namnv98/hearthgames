@@ -22,8 +22,9 @@ public class AttackChangeHandler implements Handler {
         int currentAttack = Integer.parseInt(before.getAtk() == null ? before.getCardDetailsAttack() : before.getAtk());
 
         int diffAttack = newAttack - currentAttack;
-        result.addAttackChange(before, diffAttack);
-        System.out.println(context.getSide(before) + " " + before.getName() + " attack is now : " + newAttack);
+        String side = context.getSide(before);
+        result.addAttackChange(side, before, diffAttack, newAttack);
+        System.out.println(side + " " + before.getName() + " attack is now : " + newAttack);
 
         return true;
     }

@@ -41,4 +41,9 @@ public class CardDrawn implements Action, Serializable {
     public void setTrigger(Entity trigger) {
         this.trigger = trigger;
     }
+
+    @Override
+    public int getType() {
+        return 6;
+    }
 }

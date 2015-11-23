@@ -14,6 +14,9 @@
 .mana-info {width: auto;}
 .mana-info th:first-child { width: 130px; text-align: left; }
 
+.trade-info {width: auto;}
+.trade-info th:first-child { width: 130px; text-align: left; }
+
 .board-control-info { width: auto; }
 .board-control-info th:first-child { width: 130px; text-align: left; }
 .bcontrol-info { width: 25px; height: 25px; }
@@ -39,3 +42,9 @@
 
 .minion-attack-bg { background-image: url(attack-bg.png); position: absolute; bottom: -3px; left: -5px; width: 20px; height: 20px; }
 .minion-attack-bg > div { position: absolute; bottom: 1px; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 1px #000; text-align: center; width: 20px; color: #fff; }
+
+.turn-info-board1 { width: 130px; }
+.turn-info-board2 { width: 33%; }
+.turn-info-board3 { width: 10%; }
+.turn-info-board4 { width: 10%; }
+.turn-info-board5 { width: auto; }

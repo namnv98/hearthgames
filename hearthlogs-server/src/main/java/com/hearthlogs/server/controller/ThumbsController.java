@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
 
-@Controller
+//@Controller
 public class ThumbsController {
 
     @Autowired
     private CardParser cardParser;
 
-    @RequestMapping("/thumbs")
+//    @RequestMapping("/thumbs")
     public String thumbs() throws IOException {
 
         cardParser.makeThumbnails();

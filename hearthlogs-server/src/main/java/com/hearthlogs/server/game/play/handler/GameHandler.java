@@ -87,6 +87,10 @@ public class GameHandler implements Handler {
                 result.setLoserClass(friendlyCardDetails.getPlayerClass());
             }
 
+            context.getFriendlyPlayer().setPlayerClass(friendlyCardDetails.getPlayerClass());
+            context.getOpposingPlayer().setPlayerClass(opposingCardDetails.getPlayerClass());
+            context.getFriendlyPlayer().setHeroCard(friendlyHeroCard);
+            context.getOpposingPlayer().setHeroCard(opposingHeroCard);
 
             System.out.println("--------------------------  Game Over  ----------------------------------------");
         }

@@ -59,13 +59,14 @@ public class LogFileUploadController {
                     List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
                     List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
                     List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
-
+                    GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context);
                     GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context);
 
                     modelAndView.addObject("cardInfos", Collections.singletonList(cardInfo));
                     modelAndView.addObject("versusInfo", versusInfo);
                     modelAndView.addObject("healthArmorInfos", healthArmorInfos);
                     modelAndView.addObject("manaInfos", Collections.singletonList(manaInfo));
+                    modelAndView.addObject("tradeInfos", Collections.singletonList(tradeInfo));
                     modelAndView.addObject("boardControlInfos", boardControlInfos);
                     modelAndView.addObject("cardAdvantageInfos", cardAdvantageInfos);
                     modelAndView.addObject("turnInfos", turnInfos);
@@ -77,6 +78,7 @@ public class LogFileUploadController {
                         webContext.setVariable("versusInfo", versusInfo);
                         webContext.setVariable("healthArmorInfos", healthArmorInfos);
                         webContext.setVariable("manaInfos", Collections.singletonList(manaInfo));
+                        webContext.setVariable("tradeInfos", Collections.singletonList(tradeInfo));
                         webContext.setVariable("boardControlInfos", boardControlInfos);
                         webContext.setVariable("cardAdvantageInfos", cardAdvantageInfos);
                         webContext.setVariable("turnInfos", turnInfos);

@@ -21,9 +21,10 @@ public class HealthChangeHandler implements Handler {
         int currentHealth = Integer.parseInt(before.getHealth() == null ? before.getCardDetailsHealth() : before.getHealth());
 
         int diffHealth = newHealth - currentHealth;
-        result.addHealthChange(before, diffHealth);
+        String side = context.getSide(before);
+        result.addHealthChange(side, before, diffHealth, newHealth);
 
-        System.out.println(context.getSide(before) + " " + before.getName() + " health is now : " + newHealth);
+        System.out.println(side + " " + before.getName() + " health is now : " + newHealth);
         return true;
     }
 }

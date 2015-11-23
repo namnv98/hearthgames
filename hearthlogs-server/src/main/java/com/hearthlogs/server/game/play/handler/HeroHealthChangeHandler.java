@@ -24,8 +24,9 @@ public class HeroHealthChangeHandler implements Handler {
         int damage = Integer.parseInt(after.getDamage());
         int newHealth = health - damage;
 
-        result.addHeroHealthChange(before, newHealth);
-        System.out.println(context.getSide(before) + " " + before.getName() + " hero health is now : " + (health - damage));
+        String side = context.getSide(before);
+        result.addHeroHealthChange(side, before, newHealth);
+        System.out.println(side + " " + before.getName() + " hero health is now : " + (health - damage));
         return true;
     }
 }

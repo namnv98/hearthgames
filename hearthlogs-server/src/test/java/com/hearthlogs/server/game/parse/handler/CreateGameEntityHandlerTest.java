@@ -4,10 +4,11 @@ import static org.junit.Assert.*;
 
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.log.domain.LogLineData;
-import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.time.LocalDateTime;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateGameEntityHandlerTest {

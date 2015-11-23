@@ -1,6 +1,7 @@
 package com.hearthlogs.server.game.play.domain;
 
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.CardWrapper;
 import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.parse.domain.Zone;
 
@@ -9,107 +10,112 @@ import java.util.List;
 
 public class Board implements Action {
 
-    private List<Card> friendlyHand = new ArrayList<>();
-    private List<Card> friendlySecret = new ArrayList<>();
-    private List<Card> friendlyPlay = new ArrayList<>();
-    private List<Card> friendlyWeapon = new ArrayList<>();
+    private List<CardWrapper> friendlyHand = new ArrayList<>();
+    private List<CardWrapper> friendlySecret = new ArrayList<>();
+    private List<CardWrapper> friendlyPlay = new ArrayList<>();
+    private List<CardWrapper> friendlyWeapon = new ArrayList<>();
 
-    private List<Card> opposingHand = new ArrayList<>();
-    private List<Card> opposingSecret = new ArrayList<>();
-    private List<Card> opposingPlay = new ArrayList<>();
-    private List<Card> opposingWeapon = new ArrayList<>();
+    private List<CardWrapper> opposingHand = new ArrayList<>();
+    private List<CardWrapper> opposingSecret = new ArrayList<>();
+    private List<CardWrapper> opposingPlay = new ArrayList<>();
+    private List<CardWrapper> opposingWeapon = new ArrayList<>();
 
     public Board(List<Card> cards, Player friendly) {
         for (Card c: cards) {
             if (Zone.HAND.eq(c.getZone())) {
                 if (c.getController().equals(friendly.getController())) {
-                    friendlyHand.add(c);
+                    friendlyHand.add(new CardWrapper(c));
                 } else {
-                    opposingHand.add(c);
+                    opposingHand.add(new CardWrapper(c));
                 }
             } else if (Zone.PLAY.eq(c.getZone()) && Card.Type.MINION.eq(c.getCardtype())) {
                 if (c.getController().equals(friendly.getController())) {
-                    friendlyPlay.add(c);
+                    friendlyPlay.add(new CardWrapper(c));
                 } else {
-                    opposingPlay.add(c);
+                    opposingPlay.add(new CardWrapper(c));
                 }
             } else if (Zone.SECRET.eq(c.getZone()) && Card.Type.SPELL.eq(c.getCardtype())) {
                 if (c.getController().equals(friendly.getController())) {
-                    friendlySecret.add(c);
+                    friendlySecret.add(new CardWrapper(c));
                 } else {
-                    opposingSecret.add(c);
+                    opposingSecret.add(new CardWrapper(c));
                 }
             } else if (Zone.PLAY.eq(c.getZone()) && Card.Type.WEAPON.eq(c.getCardtype())) {
                 if (c.getController().equals(friendly.getController())) {
-                    friendlyWeapon.add(c);
+                    friendlyWeapon.add(new CardWrapper(c));
                 } else {
-                    opposingWeapon.add(c);
+                    opposingWeapon.add(new CardWrapper(c));
                 }
             }
         }
     }
 
-    public List<Card> getFriendlyHand() {
+    public List<CardWrapper> getFriendlyHand() {
         return friendlyHand;
     }
 
-    public void setFriendlyHand(List<Card> friendlyHand) {
+    public void setFriendlyHand(List<CardWrapper> friendlyHand) {
         this.friendlyHand = friendlyHand;
     }
 
-    public List<Card> getFriendlySecret() {
+    public List<CardWrapper> getFriendlySecret() {
         return friendlySecret;
     }
 
-    public void setFriendlySecret(List<Card> friendlySecret) {
+    public void setFriendlySecret(List<CardWrapper> friendlySecret) {
         this.friendlySecret = friendlySecret;
     }
 
-    public List<Card> getFriendlyPlay() {
+    public List<CardWrapper> getFriendlyPlay() {
         return friendlyPlay;
     }
 
-    public void setFriendlyPlay(List<Card> friendlyPlay) {
+    public void setFriendlyPlay(List<CardWrapper> friendlyPlay) {
         this.friendlyPlay = friendlyPlay;
     }
 
-    public List<Card> getFriendlyWeapon() {
+    public List<CardWrapper> getFriendlyWeapon() {
         return friendlyWeapon;
     }
 
-    public void setFriendlyWeapon(List<Card> friendlyWeapon) {
+    public void setFriendlyWeapon(List<CardWrapper> friendlyWeapon) {
         this.friendlyWeapon = friendlyWeapon;
     }
 
-    public List<Card> getOpposingHand() {
+    public List<CardWrapper> getOpposingHand() {
         return opposingHand;
     }
 
-    public void setOpposingHand(List<Card> opposingHand) {
+    public void setOpposingHand(List<CardWrapper> opposingHand) {
         this.opposingHand = opposingHand;
     }
 
-    public List<Card> getOpposingSecret() {
+    public List<CardWrapper> getOpposingSecret() {
         return opposingSecret;
     }
 
-    public void setOpposingSecret(List<Card> opposingSecret) {
+    public void setOpposingSecret(List<CardWrapper> opposingSecret) {
         this.opposingSecret = opposingSecret;
     }
 
-    public List<Card> getOpposingPlay() {
+    public List<CardWrapper> getOpposingPlay() {
         return opposingPlay;
     }
 
-    public void setOpposingPlay(List<Card> opposingPlay) {
+    public void setOpposingPlay(List<CardWrapper> opposingPlay) {
         this.opposingPlay = opposingPlay;
     }
 
-    public List<Card> getOpposingWeapon() {
+    public List<CardWrapper> getOpposingWeapon() {
         return opposingWeapon;
     }
 
-    public void setOpposingWeapon(List<Card> opposingWeapon) {
+    public void setOpposingWeapon(List<CardWrapper> opposingWeapon) {
         this.opposingWeapon = opposingWeapon;
+    }
+
+    @Override
+    public int getType() {
+        return 4;
     }
 }

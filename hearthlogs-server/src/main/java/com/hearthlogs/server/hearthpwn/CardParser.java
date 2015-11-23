@@ -4,7 +4,7 @@ import com.hearthlogs.server.game.parse.domain.CardDetails;
 import com.hearthlogs.server.service.CardService;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

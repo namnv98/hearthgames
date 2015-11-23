@@ -29,4 +29,9 @@ public class ManaUsed implements Action, Serializable {
     public void setEntity(Entity entity) {
         this.entity = entity;
     }
+
+    @Override
+    public int getType() {
+        return 20;
+    }
 }

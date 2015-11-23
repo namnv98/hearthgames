@@ -17,4 +17,9 @@ public class NumOptions implements Action, Serializable {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    @Override
+    public int getType() {
+        return 21;
+    }
 }

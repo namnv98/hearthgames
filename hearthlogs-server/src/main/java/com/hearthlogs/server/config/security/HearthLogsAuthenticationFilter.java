@@ -7,9 +7,7 @@ import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,15 +16,14 @@ import java.io.IOException;
 import static java.util.Optional.empty;
 import static org.springframework.security.core.authority.AuthorityUtils.NO_AUTHORITIES;
 
-@Component
 public class HearthLogsAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    @Resource
     private OAuth2RestOperations restTemplate;
 
-    protected HearthLogsAuthenticationFilter() {
-        super("/login");
-        setAuthenticationManager(authentication -> authentication);
+    protected HearthLogsAuthenticationFilter(String defaultFilterProcessesUrl, OAuth2RestOperations restTemplate) {
+        super(defaultFilterProcessesUrl);
+        this.restTemplate = restTemplate;
+        setAuthenticationManager(authentication -> authentication); // AbstractAuthenticationProcessingFilter requires an authentication manager.
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.CardWrapper;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.play.domain.Board;
 import com.hearthlogs.server.game.play.domain.Turn;
@@ -18,20 +19,20 @@ public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> 
     @Override
     protected GenericTable getInfo(GameResult result, GameContext context, List<Turn> turns) {
 
-        GenericTable info = new GenericTable();
+        GenericTable table = new GenericTable();
         GenericRow header = new GenericRow();
-        info.setHeader(header);
+        table.setHeader(header);
         header.addColumn(new GenericColumn(""));
         for (Turn turn: turns) {
             header.addColumn(new GenericColumn(""+turn.getTurnNumber()));
         }
 
         GenericRow friendly = new GenericRow();
-        info.setFriendly(friendly);
+        table.setFriendly(friendly);
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
 
         GenericRow opposing = new GenericRow();
-        info.setOpposing(opposing);
+        table.setOpposing(opposing);
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
 
         for (Turn turn: turns) {
@@ -56,7 +57,7 @@ public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> 
             }
         }
 
-        return info;
+        return table;
     }
 
     private void addFriendlyOpposingColumns(String friendlyData, String opposingData, GenericRow friendly, GenericRow opposing) {
@@ -64,9 +65,9 @@ public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> 
         opposing.addColumn(new GenericColumn(opposingData));
     }
 
-    private boolean hasTheCoin(List<Card> cards) {
-        for (Card card: cards) {
-            if (Card.THE_COIN.equals(card.getCardid())) {
+    private boolean hasTheCoin(List<CardWrapper> cards) {
+        for (CardWrapper wrapper: cards) {
+            if (Card.THE_COIN.equals(wrapper.getCard().getCardid())) {
                 return true;
             }
         }

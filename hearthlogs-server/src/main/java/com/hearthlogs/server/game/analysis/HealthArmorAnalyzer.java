@@ -18,21 +18,21 @@ import java.util.List;
 public class HealthArmorAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
     protected GenericTable getInfo(GameResult result, GameContext context, List<Turn> turns) {
-        GenericTable info = new GenericTable();
+        GenericTable table = new GenericTable();
 
         GenericRow header = new GenericRow();
-        info.setHeader(header);
+        table.setHeader(header);
         header.addColumn(new GenericColumn(""));
         for (Turn turn: turns) {
             header.addColumn(new GenericColumn(""+turn.getTurnNumber()));
         }
 
         GenericRow friendly = new GenericRow();
-        info.setFriendly(friendly);
+        table.setFriendly(friendly);
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
 
         GenericRow opposing = new GenericRow();
-        info.setOpposing(opposing);
+        table.setOpposing(opposing);
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
 
         Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
@@ -86,6 +86,6 @@ public class HealthArmorAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
             opposing.addColumn(col);
         }
 
-        return info;
+        return table;
     }
 }

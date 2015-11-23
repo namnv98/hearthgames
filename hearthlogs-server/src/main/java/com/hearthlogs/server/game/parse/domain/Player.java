@@ -49,6 +49,9 @@ public class Player extends Entity implements Serializable {
     private String resourcesUsed;
     private String tempResources;
 
+    private String playerClass;
+    private Card heroCard;
+
     public String getName() {
         return name;
     }
@@ -287,6 +290,22 @@ public class Player extends Entity implements Serializable {
 
     public void setTempResources(String tempResources) {
         this.tempResources = tempResources;
+    }
+
+    public String getPlayerClass() {
+        return playerClass;
+    }
+
+    public void setPlayerClass(String playerClass) {
+        this.playerClass = playerClass;
+    }
+
+    public Card getHeroCard() {
+        return heroCard;
+    }
+
+    public void setHeroCard(Card heroCard) {
+        this.heroCard = heroCard;
     }
 
     @Override
