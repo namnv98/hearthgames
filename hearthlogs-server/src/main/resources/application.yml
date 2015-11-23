@@ -14,6 +14,3 @@ server.ssl.key-store: classpath:keystore.p12
 server.ssl.key-store-password: 4me2know
 server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
-hearthlogs:
-  analytics:
-    tracking-code: UA-70109758-1
