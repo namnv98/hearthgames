@@ -51,11 +51,15 @@ public class LogFileUploadController {
                 List<RawMatchData> rawMatchDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
 
                 for (RawMatchData rawMatchData : rawMatchDatas) {
-                    GameContext context = gameParserService.parseLines(rawMatchData.getLines());
-                    GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
+                    try {
+                        GameContext context = gameParserService.parseLines(rawMatchData.getLines());
+                        GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
 
-                    if (!gamePlayedService.hasGameBeenPlayed(rawMatchData, context)) {
-                        gamePlayedService.createGamePlayed(rawMatchData, context, result, userInfo);
+                        if (!gamePlayedService.hasGameBeenPlayed(rawMatchData, context)) {
+                            gamePlayedService.createGamePlayed(rawMatchData, context, result, userInfo);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 

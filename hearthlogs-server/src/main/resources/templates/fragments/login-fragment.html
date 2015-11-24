@@ -8,10 +8,23 @@
 <div th:fragment="userNotLoggedIn" sec:authorize="hasRole('ROLE_ANONYMOUS')" class="anonymous">
     <a th:href="@{/login}"><img src="" th:src="@{/images/bnet.png}"/><span style="color: #fff; padding-left: 5px;">Login with Battle.net</span></a>
 </div>
+
 <div th:fragment="userLoggedIn" sec:authorize="hasRole('ROLE_USER')" class="user-logged-in">
     <span sec:authentication="principal.battletag"></span> <a th:href="@{/logout}">(Logout)</a>
     <div><a th:href="@{/games}">My Games</a> </div>
 </div>
+
+<div th:fragment="userLoggedInOnGames" sec:authorize="hasRole('ROLE_USER')" class="user-logged-in">
+    <span sec:authentication="principal.battletag"></span> <a th:href="@{/logout}">(Logout)</a>
+    <div><a th:href="@{/}">Upload Log</a> </div>
+</div>
+
+<div th:fragment="userLoggedInOnGame" sec:authorize="hasRole('ROLE_USER')" class="user-logged-in-on-game">
+    <span sec:authentication="principal.battletag"></span> <a th:href="@{/logout}">(Logout)</a>
+    <div><a th:href="@{/games}">My Games</a> </div>
+    <div><a th:href="@{/}">Upload Log</a> </div>
+</div>
+
 
 </body>
 </html>

@@ -16,6 +16,14 @@
 
 <div class="container">
 
+    <div th:replace="/fragments/beta-fragment::beta"></div>
+
+    <div th:replace="/fragments/login-fragment::userLoggedInOnGames"></div>
+
+    <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
+
+    <hr/>
+
     <h1>Games</h1>
     <ul>
         <li th:each="game: ${gamesPlayed}">
