@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthLogs.com - Game Result</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script type="text/javascript" src="http://static-hearth.cursecdn.com/current/js/syndication/tt.js"></script>
+
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/game.css" th:href="@{/css/game.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Games</h1>
+    <ul>
+        <li th:each="game: ${gamesPlayed}">
+            <a th:href="@{'/game/'+${game.id}}" href="game.html">
+                <span th:class="${#strings.toLowerCase(game.friendlyClass)}" th:text="${game.friendlyName}"></span>
+                <span> VS </span>
+                <span th:class="${#strings.toLowerCase(game.opposingClass)}" th:text="${game.opposingName}"></span>
+                <span> ( </span>
+                <span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}"></span>
+                <span> ) </span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+
+</body>
+</html>

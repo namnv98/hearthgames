@@ -4,6 +4,7 @@ import java.util.List;
 
 public class RawMatchData {
 
+    private List<String> rawLines;
     private List<LogLineData> lines;
     private Integer rank;
 
@@ -21,5 +22,13 @@ public class RawMatchData {
 
     public void setRank(Integer rank) {
         this.rank = rank;
+    }
+
+    public List<String> getRawLines() {
+        return rawLines;
+    }
+
+    public void setRawLines(List<String> rawLines) {
+        this.rawLines = rawLines;
     }
 }

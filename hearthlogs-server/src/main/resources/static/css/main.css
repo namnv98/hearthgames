@@ -4,10 +4,13 @@ body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; 
 
 h1, h2, h3, h4, h5 { text-shadow: 1px 1px 1px #000; }
 
+.anonymous { height: 30px; width: 180px; position: absolute; padding:5px; text-align: center; top: 10px; right: 10px; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
+.user-logged-in { height: 50px; width: 180px; position: absolute; padding:5px; text-align: center; top: 10px; right: 10px; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
+
+.beta { position: fixed; top: 0; left: 0; width: 100px; height: 115px; background-image: url(beta.png) }
+
 .hearthlogs-title { font-size: 80px; text-align: center; text-shadow: 2px 2px 4px #000; }
 .hearthlogs-title span { font-size: 17px; color: #5d5d5d; text-shadow: 2px 2px 4px #000; }
-
-.panel { color: #000; border-color: #000; background-color: #CFC395; }
 
 .druid { color: #FF7D0A; text-shadow: 1px 1px 1px #000; }
 .druid-bg { background-color: #FF7D0A; }

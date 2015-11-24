@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>HearthLogs.com - Upload a Hearhtstone Log File</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -10,18 +10,26 @@
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/js/fileinput.min.js" th:src="@{/webjars/bootstrap-fileinput/4.2.7/js/fileinput.min.js}"></script>
 
-    <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
-    <link href="../static/css/home.css" th:href="@{css/home.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet" media="screen"/>
 
     <script type="text/javascript">
         $(document).ready(function(){
             $("#upload").fileinput();
         });
     </script>
+
+    <script th:replace="/fragments/login-fragment::uploadNotAllowed">
+    </script>
 </head>
 <body>
 
 <div class="container">
+
+    <div th:replace="/fragments/beta-fragment::beta"></div>
+
+    <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
+    <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
     <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
     <div class="panel panel-primary">
@@ -29,7 +37,7 @@
             <h3 class="panel-title">SELECT A HEARTHSTONE LOG FILE TO UPLOAD</h3>
         </div>
         <div class="panel-body">
-            <form method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
+            <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
                 <input id="upload" name="file" type="file" class="file" data-show-preview="false"/>
             </form>
             <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>

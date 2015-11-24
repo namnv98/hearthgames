@@ -1,3 +1,5 @@
+.panel { color: #000; border-color: #000; background-color: #CFC395; }
+
 .bs-callout { padding: 20px; margin: 20px 0; border: 1px solid #1B809E; border-left-width: 5px; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; border-radius: 3px; }
 
 .bs-callout-info { border-left-color: #449D44; }

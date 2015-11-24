@@ -46,7 +46,7 @@ public class GameParserService {
         return context;
     }
 
-    protected String decompressGameData(byte[] data) {
+    public String decompressGameData(byte[] data) {
         try (
                 InputStream is = new ByteArrayInputStream(data);
                 InflaterInputStream iis = new InflaterInputStream(is);

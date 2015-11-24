@@ -46,6 +46,7 @@ public class RawLogProcessingService {
 
         boolean matchComplete = false;
         List<LogLineData> currentMatch = null;
+        List<String> currentRawMatch = null;
         Integer rank = null;
         for (String rawLine: lines) {
 
@@ -64,25 +65,32 @@ public class RawLogProcessingService {
                     matchComplete = false;
                     rank = null;
                     currentMatch = new ArrayList<>();
+                    currentRawMatch = new ArrayList<>();
                     LogLineData data = new LogLineData(timestamp, line);
                     currentMatch.add(data);
+                    currentRawMatch.add(rawLine);
                 } else if (currentMatch != null && line.startsWith(GAME_STATE_COMPLETE)) {
                     LogLineData data = new LogLineData(timestamp, line);
                     currentMatch.add(data);
+                    currentRawMatch.add(rawLine);
                     matchComplete = true;
                 } else if (currentMatch != null && matchComplete && line.startsWith(MEDAL_RANKED)) {
                     int rankFound = getRank(line);
                     if (rank == null || rankFound < rank) {
                         rank = rankFound;
                     }
+                    currentRawMatch.add(rawLine);
                 } else if (currentMatch != null && matchComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
+                    currentRawMatch.add(rawLine);
                     RawMatchData rawMatchData = new RawMatchData();
                     rawMatchData.setLines(currentMatch);
+                    rawMatchData.setRawLines(currentRawMatch);
                     rawMatchData.setRank(rank);
                     rawMatchDatas.add(rawMatchData);
                 } else if (currentMatch != null && filteredLineData.isLoggable()) {
                     LogLineData data = new LogLineData(timestamp, line);
                     currentMatch.add(data);
+                    currentRawMatch.add(rawLine);
                 }
             }
         }
