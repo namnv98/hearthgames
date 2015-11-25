@@ -17,6 +17,13 @@ public class CardDrawnHandler implements Handler {
         Player player = context.getPlayerForCard(before);
 
         if (context.getGameEntity().isMulliganOver()) {
+            if (context.getStartingCardIds().contains(before.getEntityId())) {
+                if (player == context.getFriendlyPlayer()) {
+                    result.addFriendlyDeckCard(before);
+                } else {
+                    result.addOpposingDeckCard(before);
+                }
+            }
             result.addCardDrawn(player, before, activity.getParent().getDelta());
             if (activity.getParent() != null && (activity.getParent().isTrigger() || activity.getParent().isPower())) {
                 Entity entity = activity.getParent().getDelta();

@@ -1,11 +1,15 @@
 package com.hearthlogs.server.controller;
 
 import com.hearthlogs.server.config.security.UserInfo;
-import com.hearthlogs.server.database.service.GamePlayedService;
+import com.hearthlogs.server.database.domain.GamePlayed;
+import com.hearthlogs.server.database.service.GameService;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.log.domain.RawMatchData;
 import com.hearthlogs.server.service.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +27,8 @@ import java.util.List;
 @PreAuthorize("hasRole('USER')")
 public class LogFileUploadController {
 
+    private static final Logger logger = LoggerFactory.getLogger(LogFileUploadController.class);
+
     @Autowired
     private RawLogProcessingService rawLogProcessingService;
 
@@ -33,7 +39,7 @@ public class LogFileUploadController {
     private GamePlayingService gamePlayingService;
 
     @Autowired
-    private GamePlayedService gamePlayedService;
+    private GameService gameService;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView upload(@RequestParam("file") MultipartFile file) {
@@ -55,17 +61,19 @@ public class LogFileUploadController {
                         GameContext context = gameParserService.parseLines(rawMatchData.getLines());
                         GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
 
-                        if (!gamePlayedService.hasGameBeenPlayed(rawMatchData, context)) {
-                            gamePlayedService.createGamePlayed(rawMatchData, context, result, userInfo);
+                        GamePlayed gamePlayed = gameService.createGamePlayed(rawMatchData, context, result, userInfo);
+                        if (!gameService.hasGameBeenPlayed(gamePlayed)) {
+                            gameService.saveGamePlayed(gamePlayed);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(ExceptionUtils.getStackTrace(e));
+                        gameService.saveRawMatchError(rawMatchData);
                     }
                 }
 
             } catch (Exception e) {
+                logger.error(ExceptionUtils.getStackTrace(e));
                 modelAndView.addObject("error", "An error has occured.");
-                e.printStackTrace();
             }
         }
 

@@ -38,4 +38,9 @@ public class CardLink {
     public void setHearthPwnId(String hearthPwnId) {
         this.hearthPwnId = hearthPwnId;
     }
+
+    @Override
+    public String toString() {
+        return "{ \"cardId\": \"" + cardId + "\", \"name\": \"" + name + "\", \"href\": \"" + href + "\", \"hearthPwnId\": \"" + hearthPwnId + "\" }";
+    }
 }

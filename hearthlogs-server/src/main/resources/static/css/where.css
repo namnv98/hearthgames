@@ -7,8 +7,8 @@
 
 .hearthlogs-where > h4 { color: #fff; }
 
-.bs-callout-android h4 { color: #1B809E; }
-.bs-callout-android { border-color: #1B809E; }
+.bs-callout-where h4 { color: #1B809E; }
+.bs-callout-where { border-color: #1B809E; }
 
 .bs-callout-warning h4 { color: #C9302C; }
 .bs-callout-warning { border-color: #C9302C; }

@@ -1,7 +1,7 @@
 package com.hearthlogs.server.controller;
 
 import com.hearthlogs.server.database.domain.GamePlayed;
-import com.hearthlogs.server.database.service.GamePlayedService;
+import com.hearthlogs.server.database.service.GameService;
 import com.hearthlogs.server.game.analysis.domain.TurnInfo;
 import com.hearthlogs.server.game.analysis.domain.VersusInfo;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
@@ -12,6 +12,7 @@ import com.hearthlogs.server.service.GameAnalysisService;
 import com.hearthlogs.server.service.GameParserService;
 import com.hearthlogs.server.service.GamePlayingService;
 import com.hearthlogs.server.service.RawLogProcessingService;
+import com.hearthlogs.server.util.GameCompressionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ import java.util.List;
 public class GameController {
 
     @Autowired
-    private GamePlayedService gamePlayedService;
+    private GameService gameService;
 
     @Autowired
     private RawLogProcessingService rawLogProcessingService;
@@ -48,10 +49,10 @@ public class GameController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("game");
 
-        GamePlayed gamePlayed = gamePlayedService.getById(gameId);
+        GamePlayed gamePlayed = gameService.getById(gameId);
         if (gamePlayed != null) {
             byte[] bytes = gamePlayed.getRawGame();
-            String logfile = gameParserService.decompressGameData(bytes);
+            String logfile = GameCompressionUtils.decompressGameData(bytes);
             String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
             String[] lines = logfile.split(splitStr);
 

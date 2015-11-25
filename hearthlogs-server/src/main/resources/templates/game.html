@@ -41,6 +41,9 @@
         <span th:if="${versusInfo.friendlyName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span> has Won! </span>
         <span th:if="${versusInfo.opposingName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span> has Won :( </span>
     </div>
+    <div class="versus-info">
+        <span th:if="${versusInfo.quitter != null}"> <span th:class="${#strings.toLowerCase(versusInfo.quitterClass)}" th:text="${versusInfo.quitter}">Seekay</span> has Quit! </span>
+    </div>
     <div class="versus-info-duration">
         <span>Duration: <span th:text="${versusInfo.duration}"></span></span>
     </div>
@@ -267,9 +270,9 @@
                     <!--/*Trigger*/*/-->
                     <div th:if="${action.type == 23}">
                         <span th:text="${turnInfo.whoseTurn}" th:class="${#strings.toLowerCase(turnInfo.turnClass)}">Seekay</span>
-                        <span th:text="${action.card.cardDetails.name}"></span>
+                        <span th:text="${action.card.name}"></span>
                         triggered its ability
-                        <span th:utext="${action.card.cardDetails.text}"></span>
+                        <span th:utext="${action.card.text}"></span>
                     </div>
 
                     <!--/*CardDiscarded*/-->

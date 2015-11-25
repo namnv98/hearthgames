@@ -52,11 +52,14 @@ public class RawLogProcessingService {
 
             String timestamp = "";
             String lineWithoutTimestamp = "";
+            FilteredLineData filteredLineData = null;
             if (rawLine.contains(": [")) {
                 timestamp = rawLine.substring(0, rawLine.indexOf(": ["));
                 lineWithoutTimestamp = rawLine.substring(rawLine.indexOf("["));
+                filteredLineData = filterLine(lineWithoutTimestamp);
+            } else {
+                filteredLineData = filterLine(rawLine); // For games that don't have timestamps
             }
-            FilteredLineData filteredLineData = filterLine(lineWithoutTimestamp);
 
             if (filteredLineData != null) {
                 String line = filteredLineData.getLine();
@@ -124,7 +127,7 @@ public class RawLogProcessingService {
                 r = matcher.group(1);
                 rank = Integer.parseInt(r);
             } catch (NumberFormatException e) {
-                logger.warn("Found a rank that was not parseable, maybe this is the Legend rank? : " + r);
+                logger.warn("Found a rank that was not parseable : " + r);
             }
         }
         return rank;

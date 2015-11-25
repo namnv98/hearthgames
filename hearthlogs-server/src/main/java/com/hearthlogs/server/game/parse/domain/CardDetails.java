@@ -1,11 +1,15 @@
 package com.hearthlogs.server.game.parse.domain;
 
 import com.hearthlogs.server.hearthpwn.CardLink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class CardDetails implements Serializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardDetails.class);
 
     private static final long serialVersionUID = 1;
 
@@ -197,6 +201,15 @@ public class CardDetails implements Serializable {
     }
 
     public CardLink getCardLink() {
+        if (cardLink == null) {
+            logger.error("Card Link for Card Id = " + id + " is not setup.  Please run /link to identify the new cards from hearthpwn.");
+            CardLink cardLink = new CardLink();
+            cardLink.setCardId("UNKNOWN");
+            cardLink.setName(name);
+            cardLink.setHref("");
+            cardLink.setHearthPwnId("");
+            return cardLink;
+        }
         return cardLink;
     }
 

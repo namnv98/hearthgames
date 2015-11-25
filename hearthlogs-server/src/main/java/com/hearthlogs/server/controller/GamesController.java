@@ -2,7 +2,7 @@ package com.hearthlogs.server.controller;
 
 import com.hearthlogs.server.config.security.UserInfo;
 import com.hearthlogs.server.database.domain.GamePlayed;
-import com.hearthlogs.server.database.service.GamePlayedService;
+import com.hearthlogs.server.database.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +17,7 @@ import java.util.List;
 public class GamesController {
 
     @Autowired
-    private GamePlayedService gamePlayedService;
+    private GameService gameService;
 
     @RequestMapping(value = "/games")
     public ModelAndView listGames() {
@@ -25,8 +25,8 @@ public class GamesController {
         modelAndView.setViewName("games");
 
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String gameAccountId = gamePlayedService.getGameAccountId(userInfo.getBattletag());
-        List<GamePlayed> gamesPlayed = gamePlayedService.getGamesPlayed(gameAccountId);
+        String gameAccountId = gameService.getGameAccountId(userInfo.getBattletag());
+        List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(gameAccountId);
 
         modelAndView.addObject("gamesPlayed", gamesPlayed);
         return modelAndView;

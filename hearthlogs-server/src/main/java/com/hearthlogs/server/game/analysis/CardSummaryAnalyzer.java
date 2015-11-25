@@ -33,28 +33,16 @@ public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyStartingCards()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyMulliganedCards()));
-        friendly.addColumn(new GenericColumn<>(getStartingDeck(context, context.getFriendlyPlayer().getController())));
+        friendly.addColumn(new GenericColumn<>(result.getFriendlyDeckCards()));
         table.setFriendly(friendly);
 
         GenericRow opposing = new GenericRow();
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
         opposing.addColumn(new GenericColumn<>(result.getOpposingStartingCards()));
         opposing.addColumn(new GenericColumn<>(result.getOpposingMulliganedCards()));
-        opposing.addColumn(new GenericColumn<>(getStartingDeck(context, context.getOpposingPlayer().getController())));
+        opposing.addColumn(new GenericColumn<>(result.getOpposingDeckCards()));
         table.setOpposing(opposing);
 
         return table;
     }
-
-    private Set<Card> getStartingDeck(GameContext context, String controller) {
-        Set<Card> cards = new HashSet<>();
-        List<String> ids = context.getStartingCardIds();
-        cards.addAll(context.getCards().stream()
-                .filter(card -> Objects.equals(card.getController(), controller) && ids.contains(card.getEntityId()) &&
-                                !Card.Type.HERO.eq(card.getCardtype()) && !Card.Type.HERO_POWER.eq(card.getCardtype()) &&
-                                !Objects.equals(card.getCardid(), Card.THE_COIN)
-                ).collect(Collectors.toList()));
-        return cards;
-    }
-
 }

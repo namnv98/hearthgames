@@ -26,7 +26,7 @@ public class PlayerHandler implements Handler {
 //            System.out.println(result.getCurrentTurn().getWhoseTurn().getName() + " has " + after.getNumOptions() + " possible moves to make.");
         }
 
-        if (after.getPlaystate() != null && Player.PlayState.QUIT.eq(after.getPlaystate())) {
+        if (after.getPlaystate() != null && (Player.PlayState.QUIT.eq(after.getPlaystate()) || Player.PlayState.CONCEDED.eq(after.getPlaystate()))) {
             System.out.println(before.getName() + " has quit.");
             result.setQuitter(before);
         }

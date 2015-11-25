@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthLogs.com - Game Result</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script type="text/javascript" src="http://static-hearth.cursecdn.com/current/js/syndication/tt.js"></script>
+
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/beta.css" th:href="@{/css/beta.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div th:replace="/fragments/beta-fragment::beta"></div>
+
+    <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
+
+    <hr/>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Enter your Battle.Net battle tag and an email address to send account activation.</h3>
+        </div>
+        <div class="panel-body">
+            <form id="betaSignUp" method="POST" action="signup.html" th:action="@{/signup}">
+                <div><label for="battletag">Battle Tag :</label><input type="text" id="battletag" name="battletag" required="required" /></div>
+                <div><label for="email">Email : </label><input type="text" id="email" name="email" required="required" /></div>
+                <div><input type="submit" id="signup" value="Sign Up"/></div>
+            </form>
+            <p>Note: Your email does not have to be your Battle.Net account email.  Any email will do that you can check.</p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

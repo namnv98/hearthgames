@@ -25,6 +25,9 @@ public class GameResult {
     private Set<Card> friendlyMulliganedCards = new LinkedHashSet<>();
     private Set<Card> opposingMulliganedCards = new LinkedHashSet<>();
 
+    private Set<Card> friendlyDeckCards = new LinkedHashSet<>();
+    private Set<Card> opposingDeckCards = new LinkedHashSet<>();
+
     private String winnerClass; // the class (i.e. warrior, hunter, etc...)
     private String loserClass;
 
@@ -34,10 +37,12 @@ public class GameResult {
 
     public void addFriendlyStartingCard(Card card) {
         friendlyStartingCards.add(card);
+        friendlyDeckCards.add(card);
     }
 
     public void addOpposingStartingCard(Card card) {
         opposingStartingCards.add(card);
+        opposingDeckCards.add(card);
     }
 
     public void mulliganFriendlyCard(Card card) {
@@ -48,6 +53,14 @@ public class GameResult {
     public void mulliganOpposingCard(Card card) {
         opposingMulliganedCards.add(card);
         opposingStartingCards.remove(card);
+    }
+
+    public void addFriendlyDeckCard(Card card) {
+        friendlyDeckCards.add(card);
+    }
+
+    public void addOpposingDeckCard(Card card) {
+        opposingDeckCards.add(card);
     }
 
     public Set<Card> getFriendlyStartingCards() {
@@ -64,6 +77,14 @@ public class GameResult {
 
     public Set<Card> getOpposingMulliganedCards() {
         return opposingMulliganedCards;
+    }
+
+    public Set<Card> getOpposingDeckCards() {
+        return opposingDeckCards;
+    }
+
+    public Set<Card> getFriendlyDeckCards() {
+        return friendlyDeckCards;
     }
 
     public Player getWinner() {
@@ -116,22 +137,6 @@ public class GameResult {
 
     public void setRank(Integer rank) {
         this.rank = rank;
-    }
-
-    public void setFriendlyStartingCards(Set<Card> friendlyStartingCards) {
-        this.friendlyStartingCards = friendlyStartingCards;
-    }
-
-    public void setOpposingStartingCards(Set<Card> opposingStartingCards) {
-        this.opposingStartingCards = opposingStartingCards;
-    }
-
-    public void setFriendlyMulliganedCards(Set<Card> friendlyMulliganedCards) {
-        this.friendlyMulliganedCards = friendlyMulliganedCards;
-    }
-
-    public void setOpposingMulliganedCards(Set<Card> opposingMulliganedCards) {
-        this.opposingMulliganedCards = opposingMulliganedCards;
     }
 
     public String getWinnerClass() {

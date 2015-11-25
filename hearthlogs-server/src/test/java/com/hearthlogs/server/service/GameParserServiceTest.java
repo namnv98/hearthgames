@@ -3,7 +3,7 @@ package com.hearthlogs.server.service;
 import com.hearthlogs.server.HearthlogsServerApplication;
 import com.hearthlogs.server.database.domain.GamePlayed;
 import com.hearthlogs.server.database.repository.GamePlayedRepository;
-import com.hearthlogs.server.database.service.GamePlayedService;
+import com.hearthlogs.server.database.service.GameService;
 import com.hearthlogs.server.game.analysis.domain.*;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.parse.GameContext;
@@ -36,7 +36,7 @@ public class GameParserServiceTest {
     GameAnalysisService gameAnalysisService;
 
     @Autowired
-    GamePlayedService gamePlayedService;
+    GameService gameService;
 
     @Autowired
     private GamePlayedRepository gamePlayedRepository;
@@ -65,16 +65,13 @@ public class GameParserServiceTest {
             List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
             List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
-            GamePlayed gamePlayed = gamePlayedService.createGamePlayed(rawMatchData, context, result, null);
+            GamePlayed gamePlayed = gameService.createGamePlayed(rawMatchData, context, result, null);
             System.out.println();
 
         }
-        List<GamePlayed> gamesPlayed = gamePlayedService.getGamesPlayed(accountId);
+        List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(accountId);
         System.out.println();
 
-        GamePlayed gamePlayed = gamePlayedRepository.findByFriendlyGameAccountIdAndOpposingGameAccountIdAndStartTime(
-            gamesPlayed.get(0).getFriendlyGameAccountId(), gamesPlayed.get(0).getOpposingGameAccountId(), gamesPlayed.get(0).getStartTime()
-        );
         System.out.println();
     }
 }

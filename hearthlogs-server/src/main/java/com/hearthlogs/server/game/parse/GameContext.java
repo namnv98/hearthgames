@@ -571,7 +571,7 @@ public class GameContext {
     }
 
     public Card getBefore(Activity activity) {
-        return  (Card) getEntityById(activity.getEntityId());
+        return (Card) getEntityById(activity.getEntityId());
     }
 
     public Card getAfter(Activity activity) {

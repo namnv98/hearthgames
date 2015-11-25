@@ -1,5 +1,7 @@
 package com.hearthlogs.server.game.log.domain;
 
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDateTime;
 
 public class LogLineData {
@@ -8,7 +10,7 @@ public class LogLineData {
     private String line;
 
     public LogLineData(String timestamp, String line) {
-        this.dateTime = LocalDateTime.parse(timestamp.replace(" ","T"));
+        this.dateTime = !StringUtils.isEmpty(timestamp) ? LocalDateTime.parse(timestamp.replace(" ","T")) : null;
         this.line = line;
     }
 

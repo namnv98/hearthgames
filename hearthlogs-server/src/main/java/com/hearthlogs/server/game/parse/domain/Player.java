@@ -9,7 +9,8 @@ public class Player extends Entity implements Serializable {
     public enum PlayState {
         WON,
         LOST,
-        QUIT;
+        QUIT, // This is what the value used to be when a player quit
+        CONCEDED; // This is the new "QUIT"...let's support both
 
         public boolean eq(String playState) {
             return this.toString().equals(playState);

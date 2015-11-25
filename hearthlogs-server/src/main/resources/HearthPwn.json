@@ -1449,4 +1449,15 @@
 { "cardId": "LOEA16_18", "name": "Zinaar", "href": "/cards/27445-zinaar", "hearthPwnId": "27445" },
 { "cardId": "LOEA02_01", "name": "Zinaar", "href": "/cards/27306-zinaar", "hearthPwnId": "27306" },
 { "cardId": "FP1_001", "name": "Zombie Chow", "href": "/cards/683-zombie-chow", "hearthPwnId": "683" },
-{ "cardId": "LOE_030", "name": "zzDELETE? Animated Armor", "href": "/cards/27495-zzdelete-animated-armor", "hearthPwnId": "27495" } ] }
+{ "cardId": "LOE_030", "name": "zzDELETE? Animated Armor", "href": "/cards/27495-zzdelete-animated-armor", "hearthPwnId": "27495" },
+{ "cardId": "LOE_077", "name": "Brann Bronzebeard", "href": "/cards/27214-brann-bronzebeard", "hearthPwnId": "27214" },
+{ "cardId": "LOE_003", "name": "Ethereal Conjurer", "href": "/cards/27249-ethereal-conjurer", "hearthPwnId": "27249" },
+{ "cardId": "LOE_111", "name": "Excavated Evil", "href": "/cards/27242-excavated-evil", "hearthPwnId": "27242" },
+{ "cardId": "LOE_022", "name": "Fierce Monkey", "href": "/cards/27255-fierce-monkey", "hearthPwnId": "27255" },
+{ "cardId": "LOE_017", "name": "Keeper of Uldaman", "href": "/cards/27260-keeper-of-uldaman", "hearthPwnId": "27260" },
+{ "cardId": "LOE_050", "name": "Mounted Raptor", "href": "/cards/27253-mounted-raptor", "hearthPwnId": "27253" },
+{ "cardId": "LOE_116", "name": "Reliquary Seeker", "href": "/cards/27256-reliquary-seeker", "hearthPwnId": "27256" },
+{ "cardId": "LOE_047", "name": "Tomb Spider", "href": "/cards/27226-tomb-spider", "hearthPwnId": "27226" },
+{ "cardId": "LOE_018", "name": "Tunnel Trogg", "href": "/cards/27246-tunnel-trogg", "hearthPwnId": "27246" },
+{ "cardId": "LOE_019", "name": "Unearthed Raptor", "href": "/cards/27220-unearthed-raptor", "hearthPwnId": "27220" }
+] }

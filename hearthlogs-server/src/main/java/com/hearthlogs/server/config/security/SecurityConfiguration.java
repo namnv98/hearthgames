@@ -1,5 +1,6 @@
 package com.hearthlogs.server.config.security;
 
+import com.hearthlogs.server.database.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -25,17 +26,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2RestOperations restTemplate;
 
+    @Autowired
+    private GameService gameService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         String LOGIN_URL = "/login";
         http.addFilterAfter(oAuth2ClientContextFilter, AbstractPreAuthenticatedProcessingFilter.class)
-                .addFilterAfter(new HearthLogsAuthenticationFilter(LOGIN_URL, restTemplate), OAuth2ClientContextFilter.class)
+                .addFilterAfter(new HearthLogsAuthenticationFilter(LOGIN_URL, restTemplate, gameService), OAuth2ClientContextFilter.class)
                 .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(LOGIN_URL))
                 .and().authorizeRequests()
-                .antMatchers(GET, "/").permitAll()
-                .antMatchers(GET, "/where").permitAll()
-                .antMatchers(POST, "/upload").authenticated()
-                .antMatchers(GET, "/test").authenticated().and()
+                .antMatchers("/").permitAll()
+                .antMatchers("/where").permitAll()
+                .antMatchers("/upload").authenticated()
+                .antMatchers("/game/*").authenticated()
+                .antMatchers("/games").authenticated().and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/")

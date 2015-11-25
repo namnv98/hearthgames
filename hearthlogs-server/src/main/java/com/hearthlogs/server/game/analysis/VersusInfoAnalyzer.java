@@ -5,6 +5,7 @@ import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.play.domain.Turn;
+import com.hearthlogs.server.util.DurationUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -42,18 +43,13 @@ public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
         Turn firstTurn = result.getTurns().iterator().next();
         Turn lastTurn = result.getCurrentTurn();
 
-        Duration duration = Duration.between(firstTurn.getStartDateTime(), lastTurn.getEndDateTime());
-        info.setDuration(format(duration));
+        if (firstTurn.getStartDateTime() != null) {
+            Duration duration = Duration.between(firstTurn.getStartDateTime(), lastTurn.getEndDateTime());
+            info.setDuration(DurationUtils.formatDuration(duration));
+        } else {
+            info.setDuration("Not Recorded");
+        }
 
         return info;
-    }
-
-    private String format(Duration duration) {
-        long hours = duration.toHours();
-        duration = duration.minusHours(hours);
-        long minutes = duration.toMinutes();
-        duration = duration.minusMinutes(minutes);
-
-        return String.format("%02d:%02d:%02d", hours, minutes, duration.getSeconds());
     }
 }
