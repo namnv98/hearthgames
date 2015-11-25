@@ -13,6 +13,7 @@ security:
       client-secret: PTywt4SWSv63EAKGhCyHumVc9dVuXQcw
       access-token-uri: https://us.battle.net/oauth/token
       user-authorization-uri: https://us.battle.net/oauth/authorize
+      pre-established-redirect-uri: https://hearthlogs.com/login
 multipart.maxFileSize: 50MB
 multipart.maxRequestSize: 50MB
 spring.jpa.hibernate.ddl-auto: validate
