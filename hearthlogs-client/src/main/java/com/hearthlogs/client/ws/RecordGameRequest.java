@@ -1,11 +1,14 @@
-package com.hearthlogs.client.match;
+package com.hearthlogs.client.ws;
 
-public class MatchData {
+import java.io.Serializable;
+
+public class RecordGameRequest implements Serializable {
+    private static final long serialVersionUID = 1;
 
     private byte[] data;
+    private String rank;
     private long startTime;
     private long endTime;
-    private String rank;
 
     public byte[] getData() {
         return data;
@@ -13,6 +16,14 @@ public class MatchData {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 
     public long getStartTime() {
@@ -29,13 +40,5 @@ public class MatchData {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
-    }
-
-    public String getRank() {
-        return rank;
-    }
-
-    public void setRank(String rank) {
-        this.rank = rank;
     }
 }

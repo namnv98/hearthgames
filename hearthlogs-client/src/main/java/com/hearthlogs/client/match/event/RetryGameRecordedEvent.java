@@ -1,22 +1,22 @@
 package com.hearthlogs.client.match.event;
 
-import com.hearthlogs.client.match.MatchData;
+import com.hearthlogs.client.match.GameData;
 import org.springframework.context.ApplicationEvent;
 
 import java.io.File;
 
-public class RetryMatchRecordedEvent extends ApplicationEvent {
+public class RetryGameRecordedEvent extends ApplicationEvent {
 
-    private MatchData data;
+    private GameData data;
     private File file;
 
-    public RetryMatchRecordedEvent(Object source, MatchData data, File file) {
+    public RetryGameRecordedEvent(Object source, GameData data, File file) {
         super(source);
         this.data = data;
         this.file = file;
     }
 
-    public MatchData getData() {
+    public GameData getData() {
         return data;
     }
 

@@ -1,6 +1,6 @@
 package com.hearthlogs.client.ws;
 
-public class RecordMatchResponse {
+public class RecordGameResponse {
     private static final long serialVersionUID = 1;
 
     private String url;

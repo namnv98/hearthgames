@@ -1,10 +1,10 @@
 package com.hearthlogs.client.ws;
 
-import com.hearthlogs.client.match.event.SaveMatchLocallyEvent;
+import com.hearthlogs.client.match.event.SaveGameLocallyEvent;
 import com.hearthlogs.client.config.ApplicationProperties;
-import com.hearthlogs.client.match.MatchData;
-import com.hearthlogs.client.match.event.MatchRecordedEvent;
-import com.hearthlogs.client.match.event.RetryMatchRecordedEvent;
+import com.hearthlogs.client.match.GameData;
+import com.hearthlogs.client.match.event.GameRecordedEvent;
+import com.hearthlogs.client.match.event.RetryGameRecordedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +36,17 @@ public class HearthLogsClient {
     }
 
     @EventListener
-    public void handleMatchRecorded(MatchRecordedEvent event) {
+    public void handleMatchRecorded(GameRecordedEvent event) {
         recordMatch(event.getData());
     }
 
     @EventListener
-    public void handleRetryMatchRecorded(RetryMatchRecordedEvent event) {
+    public void handleRetryGameRecorded(RetryGameRecordedEvent event) {
         retryRecordMatch(event.getData(), event.getFile());
     }
 
-    private RecordMatchRequest createRequestFromData(MatchData data) {
-        RecordMatchRequest request = new RecordMatchRequest();
+    private RecordGameRequest createRequestFromData(GameData data) {
+        RecordGameRequest request = new RecordGameRequest();
         request.setData(data.getData());
         request.setRank(data.getRank());
         request.setStartTime(data.getStartTime());
@@ -54,8 +54,8 @@ public class HearthLogsClient {
         return request;
     }
 
-    private void retryRecordMatch(MatchData matchData, File file) {
-        ResponseEntity<RecordMatchResponse> response = postMatchToServer(createRequestFromData(matchData));
+    private void retryRecordMatch(GameData gameData, File file) {
+        ResponseEntity<RecordGameResponse> response = postMatchToServer(createRequestFromData(gameData));
         if (response != null && response.getStatusCode() == HttpStatus.OK) {
             logger.info("Game recorded and available for viewing at: " + response.getBody().getUrl());
             deleteFile(file);
@@ -66,28 +66,28 @@ public class HearthLogsClient {
         }
     }
 
-    private void recordMatch(MatchData matchData) {
-        ResponseEntity<RecordMatchResponse> response = postMatchToServer(createRequestFromData(matchData));
+    private void recordMatch(GameData gameData) {
+        ResponseEntity<RecordGameResponse> response = postMatchToServer(createRequestFromData(gameData));
         if (response != null && response.getStatusCode() == HttpStatus.OK) {
             logger.info("Game recorded: " + response.getBody().getUrl());
         } else if (response != null && response.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
             logger.info("The game type is not recordable. Somehow a non-play mode game was uploaded.");
         } else if (response == null){
             logger.info("Attempting to save match to local cache for later upload, on restart of the client.");
-            publisher.publishEvent(new SaveMatchLocallyEvent(this, matchData));
+            publisher.publishEvent(new SaveGameLocallyEvent(this, gameData));
         }
     }
 
-    private ResponseEntity<RecordMatchResponse> postMatchToServer(RecordMatchRequest request) {
+    private ResponseEntity<RecordGameResponse> postMatchToServer(RecordGameRequest request) {
         if (request.getRank() == null) {
             logger.info("Posting Non-Ranked Play Mode match to the server...");
         } else {
             logger.info("Posting Ranked Play Mode match to the server");
             logger.info("Rank detected : " + request.getRank());
         }
-        ResponseEntity<RecordMatchResponse> response = null;
+        ResponseEntity<RecordGameResponse> response = null;
         try {
-            response = restTemplate.postForEntity(this.properties.getUploadUrl(), request, RecordMatchResponse.class);
+            response = restTemplate.postForEntity(this.properties.getUploadUrl(), request, RecordGameResponse.class);
         } catch (Exception e) {
             logger.info("HearthLogs.com not available.");
         }

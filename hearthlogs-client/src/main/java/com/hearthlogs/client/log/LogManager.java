@@ -1,7 +1,7 @@
 package com.hearthlogs.client.log;
 
-import com.hearthlogs.client.match.MatchData;
-import com.hearthlogs.client.match.event.RetryMatchRecordedEvent;
+import com.hearthlogs.client.match.GameData;
+import com.hearthlogs.client.match.event.RetryGameRecordedEvent;
 import com.hearthlogs.client.log.listener.LogListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.Tailer;
@@ -44,30 +44,30 @@ public class LogManager {
     }
 
     private void uploadCachedLogs() {
-        Collection<File> files = FileUtils.listFiles(new File(System.getProperty("java.io.tmpdir")), new String[]{"chm"}, false);
+        Collection<File> files = FileUtils.listFiles(new File(System.getProperty("java.io.tmpdir")), new String[]{"chg"}, false);
         if (files.size() > 0) {
             logger.info("Found " + files.size() + " recorded game files that haven't been uploaded.");
         }
         for (File file: files) {
             try {
                 byte[] data = FileUtils.readFileToByteArray(file);
-                MatchData matchData = new MatchData();
+                GameData gameData = new GameData();
                 if (file.getName().startsWith("nonranked")) {
                     logger.info("Found Non Ranked match for upload : " + file.getName());
-                    String[] gameInfo = file.getName().replace(".chm","").split("_");
-                    matchData.setData(data);
-                    matchData.setStartTime(Long.parseLong(gameInfo[1]));
-                    matchData.setEndTime(Long.parseLong(gameInfo[2]));
+                    String[] gameInfo = file.getName().replace(".chg","").split("_");
+                    gameData.setData(data);
+                    gameData.setStartTime(Long.parseLong(gameInfo[1]));
+                    gameData.setEndTime(Long.parseLong(gameInfo[2]));
 
                 } else if (file.getName().startsWith("ranked")) {
                     logger.info("Found Ranked match for upload : " + file.getName());
-                    String[] gameInfo = file.getName().replace(".chm","").split("_");
-                    matchData.setData(data);
-                    matchData.setStartTime(Long.parseLong(gameInfo[1]));
-                    matchData.setEndTime(Long.parseLong(gameInfo[2]));
-                    matchData.setRank(gameInfo[3]);
+                    String[] gameInfo = file.getName().replace(".chg","").split("_");
+                    gameData.setData(data);
+                    gameData.setStartTime(Long.parseLong(gameInfo[1]));
+                    gameData.setEndTime(Long.parseLong(gameInfo[2]));
+                    gameData.setRank(gameInfo[3]);
                 }
-                publisher.publishEvent(new RetryMatchRecordedEvent(this, matchData, file));
+                publisher.publishEvent(new RetryGameRecordedEvent(this, gameData, file));
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.error("Failed to read file : " + file.getName());

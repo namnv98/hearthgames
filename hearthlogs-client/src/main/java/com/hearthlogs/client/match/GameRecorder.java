@@ -1,7 +1,7 @@
 package com.hearthlogs.client.match;
 
-import com.hearthlogs.client.match.event.MatchRecordedEvent;
-import com.hearthlogs.client.match.event.SaveMatchLocallyEvent;
+import com.hearthlogs.client.match.event.GameRecordedEvent;
+import com.hearthlogs.client.match.event.SaveGameLocallyEvent;
 import com.hearthlogs.client.log.event.LineReadEvent;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
 import java.util.zip.DeflaterOutputStream;
 
 @Component
-public class MatchRecorder {
+public class GameRecorder {
 
-    private static final Logger logger = LoggerFactory.getLogger(MatchRecorder.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameRecorder.class);
 
     private static final Pattern medalRankPattern = Pattern.compile("name=Medal_Ranked_(.*) family");
     private static final String MEDAL_RANKED = "unloading name=Medal_Ranked";
@@ -39,7 +39,7 @@ public class MatchRecorder {
     private long startTime;
     private long endTime;
 
-    private List<MatchData> recordedMatches = new ArrayList<>();
+    private List<GameData> recordedMatches = new ArrayList<>();
 
     @EventListener
     public void handleLine(LineReadEvent event) {
@@ -60,17 +60,17 @@ public class MatchRecorder {
                 rank = rankFound;
             }
         } else if (currentMatch != null && matchComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
-            MatchData matchData = new MatchData();
-            matchData.setData(compress(currentMatch.toString()));
-            matchData.setStartTime(startTime);
-            matchData.setEndTime(endTime);
-            matchData.setRank(rank+"");
+            GameData gameData = new GameData();
+            gameData.setData(compress(currentMatch.toString()));
+            gameData.setStartTime(startTime);
+            gameData.setEndTime(endTime);
+            gameData.setRank(rank+"");
 
             currentMatch = null;
-            if (!hasMatchBeenRecorded(matchData)) {
+            if (!hasMatchBeenRecorded(gameData)) {
                 logger.info("The Game has been recorded. Attempting to record @ HearthLogs.com");
-                recordedMatches.add(matchData);
-                publisher.publishEvent(new MatchRecordedEvent(this, matchData));
+                recordedMatches.add(gameData);
+                publisher.publishEvent(new GameRecordedEvent(this, gameData));
             }
 
         } else if (currentMatch != null && event.isLoggable()) {
@@ -80,8 +80,8 @@ public class MatchRecorder {
 
     // This method is needed because of a bug in Tailer that results in the log being re-read from the beginning when
     // hearthstone is exited out. So we have to unfortunately compare previous games data.
-    private boolean hasMatchBeenRecorded(MatchData data) {
-        for (MatchData md : recordedMatches) {
+    private boolean hasMatchBeenRecorded(GameData data) {
+        for (GameData md : recordedMatches) {
             if (Arrays.equals(data.getData(), md.getData())) {
                 return true;
             }
@@ -98,29 +98,29 @@ public class MatchRecorder {
                 r = matcher.group(1);
                 rank = Integer.parseInt(r);
             } catch (NumberFormatException e) {
-                logger.warn("Found a rank that was not parseable, maybe this is the Legend rank? : " + r);
+                logger.warn("Found a rank that was not parseable : " + r);
             }
         }
         return rank;
     }
 
     @EventListener
-    public void handleData(SaveMatchLocallyEvent event) {
+    public void handleData(SaveGameLocallyEvent event) {
         saveGameToFile(event.getData());
     }
 
-    private void saveGameToFile(MatchData matchData) {
+    private void saveGameToFile(GameData gameData) {
         String fileName = System.getProperty("java.io.tmpdir");
         if (rank != null) {
-            fileName += "ranked_"+startTime+"_"+endTime+"_" + rank + ".chm";
+            fileName += "ranked_"+startTime+"_"+endTime+"_" + rank + ".chg";
         } else {
-            fileName += "nonranked_"+startTime+"_"+endTime+".chm";
+            fileName += "nonranked_"+startTime+"_"+endTime+".chg";
 
         }
         File file = new File(fileName);
         logger.info("Saving match to : " + fileName);
         try {
-            FileUtils.writeByteArrayToFile(file, matchData.getData());
+            FileUtils.writeByteArrayToFile(file, gameData.getData());
         } catch (IOException e) {
             logger.error("Error saving match to : " + fileName);
             StringWriter sw = new StringWriter();
