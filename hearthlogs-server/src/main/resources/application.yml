@@ -20,9 +20,15 @@ security:
       use-current-uri: false
 multipart.maxFileSize: 50MB
 multipart.maxRequestSize: 50MB
-spring.jpa.hibernate.ddl-auto: validate
+#spring.jpa.hibernate.ddl-auto: cr
 ---
 spring.profiles: dev
+security:
+  oauth2:
+    client:
+      client-id: h79cq4trvze7f7xuypzzy37jd4hqtevu
+      client-secret: kNjgD9sCZV6RR8QSxukP8cCYJGszgyFd
+      pre-established-redirect-uri: https://localhost:8443/login
 server.port: 8443
 server.ssl.key-store: classpath:keystore.p12
 server.ssl.key-store-password: 4me2know

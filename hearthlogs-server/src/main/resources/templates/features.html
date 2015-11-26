@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthLogs.com - Features</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script type="text/javascript" src="http://static-hearth.cursecdn.com/current/js/syndication/tt.js"></script>
+
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/features.css" th:href="@{/css/features.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div th:replace="/fragments/beta-fragment::beta"></div>
+
+    <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
+
+    <hr/>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Features</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li>Win-Loss record keeping</li>
+                <li>Track play mode and ranked mode games separately</li>
+                <li>Win Rating (Did you crush your opponent, or was it a battle to the end?)</li>
+                <li>Track how well your deck is doing over multiple games with insights into how well it plays against other deck archetypes</li>
+                <li>See how well you compare with other people playing similar decks</li>
+                <li>Find errors in your play (i.e. did you have lethal and didn't know it?)</li>
+                <li>And much more...</li>
+            </ul>
+
+            <div>Have a suggestion for a feature?  Email me at: hearthlogs at gmail.com</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

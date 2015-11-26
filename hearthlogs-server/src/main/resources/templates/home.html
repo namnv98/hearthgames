@@ -41,9 +41,18 @@
             <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
                 <input id="upload" name="file" type="file" class="file" data-show-preview="false"/>
             </form>
+            <br/>
             <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
+            <div class="beta-test">
+                Want to help beta test?  Sign up <a th:href="@{/beta}" href="beta.html">here</a>.
+                <br/>
+                Want to see a <a th:href="@{/sample}" href="sample.html">Sample Game</a>.
+                <br/>
+            </div>
+            <a th:href="@{/features}" href="features.html">What features are planned?</a>
         </div>
     </div>
+
 
 </div>
 
