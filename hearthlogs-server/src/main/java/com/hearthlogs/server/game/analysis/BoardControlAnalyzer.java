@@ -39,46 +39,49 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
         for (Turn turn: turns) {
 
             Board board = turn.findLastBoard();
-
-            boolean friendlyBoardControl = false;
-            boolean opposingBoardControl = false;
-            if (board.getFriendlyPlay().size() != board.getOpposingPlay().size()) {
-                int friendlyAttackTotal = 0;
-                int friendlyHealthTotal = 0;
-                for (CardWrapper c: board.getFriendlyPlay()) {
-                    if (c.getCard().getAtk() != null) {
-                        friendlyAttackTotal += Integer.parseInt(c.getCard().getAtk());
+            if (board != null) {
+                boolean friendlyBoardControl = false;
+                boolean opposingBoardControl = false;
+                if (board.getFriendlyPlay().size() != board.getOpposingPlay().size()) {
+                    int friendlyAttackTotal = 0;
+                    int friendlyHealthTotal = 0;
+                    for (CardWrapper c : board.getFriendlyPlay()) {
+                        if (c.getCard().getAtk() != null) {
+                            friendlyAttackTotal += Integer.parseInt(c.getCard().getAtk());
+                        }
+                        if (c.getCard().getHealth() != null) {
+                            friendlyHealthTotal += Integer.parseInt(c.getCard().getHealth());
+                        }
                     }
-                    if (c.getCard().getHealth() != null) {
-                        friendlyHealthTotal += Integer.parseInt(c.getCard().getHealth());
+
+                    int opposingAttackTotal = 0;
+                    int opposingHealthTotal = 0;
+                    for (CardWrapper c : board.getOpposingPlay()) {
+                        if (c.getCard().getAtk() != null) {
+                            opposingAttackTotal += Integer.parseInt(c.getCard().getAtk());
+                        }
+                        if (c.getCard().getHealth() != null) {
+                            opposingHealthTotal += Integer.parseInt(c.getCard().getHealth());
+                        }
+                    }
+
+                    if (friendlyAttackTotal > opposingHealthTotal && friendlyHealthTotal > opposingAttackTotal) {
+                        friendlyBoardControl = true;
+                    } else if (opposingAttackTotal > friendlyHealthTotal && opposingHealthTotal > friendlyAttackTotal) {
+                        opposingBoardControl = true;
                     }
                 }
 
-                int opposingAttackTotal = 0;
-                int opposingHealthTotal = 0;
-                for (CardWrapper c: board.getOpposingPlay()) {
-                    if (c.getCard().getAtk() != null) {
-                        opposingAttackTotal += Integer.parseInt(c.getCard().getAtk());
-                    }
-                    if (c.getCard().getHealth() != null) {
-                        opposingHealthTotal += Integer.parseInt(c.getCard().getHealth());
-                    }
+                String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
+                String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
+
+                if (friendlyBoardControl) {
+                    addFriendlyOpposingColumns(friendlyClass, "", friendly, opposing);
+                } else if (opposingBoardControl) {
+                    addFriendlyOpposingColumns("", opposingClass, friendly, opposing);
+                } else {
+                    addFriendlyOpposingColumns("", "", friendly, opposing);
                 }
-
-                if (friendlyAttackTotal > opposingHealthTotal && friendlyHealthTotal > opposingAttackTotal) {
-                    friendlyBoardControl = true;
-                } else if (opposingAttackTotal > friendlyHealthTotal && opposingHealthTotal > friendlyAttackTotal) {
-                    opposingBoardControl = true;
-                }
-            }
-
-            String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
-            String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
-
-            if (friendlyBoardControl) {
-                addFriendlyOpposingColumns(friendlyClass, "", friendly, opposing);
-            } else if (opposingBoardControl) {
-                addFriendlyOpposingColumns("", opposingClass, friendly, opposing);
             } else {
                 addFriendlyOpposingColumns("", "", friendly, opposing);
             }

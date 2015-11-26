@@ -38,20 +38,23 @@ public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> 
         for (Turn turn: turns) {
 
             Board board = turn.findLastBoard();
+            if (board != null) {
+                int friendlyCards = board.getFriendlyHand().size() + board.getFriendlyPlay().size()
+                        + board.getFriendlyWeapon().size() + board.getFriendlySecret().size() -
+                        (hasTheCoin(board.getFriendlyHand()) ? 1 : 0);
+                int opposingCards = board.getOpposingHand().size() + board.getOpposingPlay().size()
+                        + board.getOpposingWeapon().size() + board.getOpposingSecret().size() -
+                        (hasTheCoin(board.getOpposingHand()) ? 1 : 0);
 
-            int friendlyCards = board.getFriendlyHand().size() + board.getFriendlyPlay().size()
-                    + board.getFriendlyWeapon().size() + board.getFriendlySecret().size() -
-                    (hasTheCoin(board.getFriendlyHand()) ? 1 : 0);
-            int opposingCards = board.getOpposingHand().size() + board.getOpposingPlay().size()
-                    + board.getOpposingWeapon().size() + board.getOpposingSecret().size() -
-                    (hasTheCoin(board.getOpposingHand()) ? 1 : 0);
-
-            if (friendlyCards - opposingCards > 0) {
-                int cardAdvantage = friendlyCards - opposingCards;
-                addFriendlyOpposingColumns(""+cardAdvantage, "", friendly, opposing);
-            } else if (opposingCards - friendlyCards > 0) {
-                int cardAdvantage = opposingCards - friendlyCards;
-                addFriendlyOpposingColumns("", ""+cardAdvantage, friendly, opposing);
+                if (friendlyCards - opposingCards > 0) {
+                    int cardAdvantage = friendlyCards - opposingCards;
+                    addFriendlyOpposingColumns(""+cardAdvantage, "", friendly, opposing);
+                } else if (opposingCards - friendlyCards > 0) {
+                    int cardAdvantage = opposingCards - friendlyCards;
+                    addFriendlyOpposingColumns("", ""+cardAdvantage, friendly, opposing);
+                } else {
+                    addFriendlyOpposingColumns("", "", friendly, opposing);
+                }
             } else {
                 addFriendlyOpposingColumns("", "", friendly, opposing);
             }

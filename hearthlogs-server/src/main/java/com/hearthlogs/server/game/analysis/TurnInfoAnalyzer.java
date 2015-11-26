@@ -4,6 +4,7 @@ import com.hearthlogs.server.game.analysis.domain.TurnColumn;
 import com.hearthlogs.server.game.analysis.domain.TurnInfo;
 import com.hearthlogs.server.game.analysis.domain.TurnRow;
 import com.hearthlogs.server.game.parse.GameContext;
+import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.play.domain.*;
 import org.springframework.stereotype.Component;
@@ -23,9 +24,13 @@ public class TurnInfoAnalyzer implements Analyzer<List<TurnInfo>> {
     private TurnInfo getTurnInfo(GameResult result, GameContext context, Turn turn) {
         TurnInfo info = new TurnInfo();
 
+        Player whoseTurn = turn.getWhoseTurn();
+        if (whoseTurn == null) {
+            whoseTurn = "1".equals(result.getFriendly().getFirstPlayer()) ? result.getFriendly() : result.getOpposing();
+        }
         info.setTurnNumber(""+turn.getTurnNumber());
-        info.setWhoseTurn(turn.getWhoseTurn().getName());
-        if (turn.getWhoseTurn() == context.getFriendlyPlayer()) {
+        info.setWhoseTurn(whoseTurn.getName());
+        if (whoseTurn == context.getFriendlyPlayer()) {
             String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(friendlyClass);
         } else {
