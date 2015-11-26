@@ -6,7 +6,7 @@
 	<groupId>com.hearthlogs</groupId>
 	<artifactId>hearthlogs-server</artifactId>
 	<version>0.0.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>hearthlogs-server</name>
 	<description>HearthLogs Server</description>
@@ -78,6 +78,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -118,6 +123,7 @@
     </dependencies>
 
     <build>
+        <finalName>hl</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
