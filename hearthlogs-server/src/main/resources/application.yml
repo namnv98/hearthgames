@@ -21,6 +21,7 @@ security:
 multipart.maxFileSize: 50MB
 multipart.maxRequestSize: 50MB
 #spring.jpa.hibernate.ddl-auto: cr
+hearthlogs.redirect-url: http://hearthlogs.com/
 ---
 spring.profiles: dev
 security:
@@ -34,3 +35,4 @@ server.ssl.key-store: classpath:keystore.p12
 server.ssl.key-store-password: 4me2know
 server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
+hearthlogs.redirect-url: https://localhost:8443/
