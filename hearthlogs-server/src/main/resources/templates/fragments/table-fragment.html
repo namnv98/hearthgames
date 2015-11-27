@@ -36,7 +36,7 @@
                     <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
                 </a>
                 <a th:if="${type == 5 and iterStat.count gt 1 and iterStat.count lt 4 and card.cardDetails == null}" th:each="card : ${column.datas}">
-                    <img src="http://images.hearthlogs.com/cardback.png" />
+                    <div class="cardback"></div>
                 </a>
 
                 <span th:if="${type == 6}" th:text="${column.data}"></span>
@@ -67,7 +67,7 @@
                     <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
                 </a>
                 <a th:if="${type == 5 and iterStat.count gt 1 and iterStat.count lt 4 and card.cardDetails == null}" th:each="card : ${column.datas}">
-                    <img src="http://images.hearthlogs.com/cardback.png" />
+                    <div class="cardback"></div>
                 </a>
 
                 <span th:if="${type == 6}" th:text="${column.data}"></span>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="card (card)" th:class="'card '+${card}"></div>
+<div th:fragment="cardLarge (card)" th:class="'card_large '+${card}+'_large'"></div>
+
+</body>
+</html>

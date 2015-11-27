@@ -85,4 +85,8 @@ public class CardService {
         return cards.values().stream().filter(cardDetails -> cardDetails.getName().equals(name)).collect(Collectors.toList());
     }
 
+    public Collection<CardDetails> getCardDetails() {
+        return cards.values();
+    }
+
 }
