@@ -5,10 +5,10 @@ spring:
   application:
     name: HearthLogs Server
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:./hearthlogs
-    username: sa
-    password:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://hearthlogs.com:5432/hearthlogs
+    username: hl
+    password: fuckmi69
 security:
   oauth2:
     client:
@@ -20,7 +20,6 @@ security:
       use-current-uri: false
 multipart.maxFileSize: 50MB
 multipart.maxRequestSize: 50MB
-#spring.jpa.hibernate.ddl-auto: cr
 hearthlogs.redirect-url: http://hearthlogs.com/
 ---
 spring.profiles: dev

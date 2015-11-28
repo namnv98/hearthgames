@@ -20,7 +20,6 @@ public class GamePlayed {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @Lob
     @Column(nullable = false)
     private byte[] rawGame;
 
