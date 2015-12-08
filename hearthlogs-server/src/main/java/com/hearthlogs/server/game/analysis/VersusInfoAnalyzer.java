@@ -27,8 +27,8 @@ public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
             info.setQuitterClass(result.getQuitter() == result.getWinner() ? result.getWinnerClass() : result.getLoserClass());
         }
 
-        String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
-        String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
+        String friendlyClass = result.getWinner() == context.getFriendlyPlayer() ? result.getWinnerClass() : result.getLoserClass();
+        String opposingClass = result.getWinner() == context.getOpposingPlayer() ? result.getWinnerClass() : result.getLoserClass();
         info.setFriendlyClass(friendlyClass);
         info.setOpposingClass(opposingClass);
         info.setFriendlyName(context.getFriendlyPlayer().getName());

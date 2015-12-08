@@ -33,26 +33,18 @@
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
     <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">SELECT A HEARTHSTONE LOG FILE TO UPLOAD</h3>
-        </div>
-        <div class="panel-body">
-            <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
-                <input id="upload" name="file" type="file" class="file" data-show-preview="false"/>
-            </form>
+    <div class="content">
+        <h3 class="panel-title">SELECT A HEARTHSTONE LOG FILE TO UPLOAD</h3>
+        <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
+            <input id="upload" name="file" type="file" class="file" data-show-preview="false"/>
+        </form>
+        <br/>
+        <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
+        <div class="beta-test">
+            Want to help beta test?  Sign up <a th:href="@{/beta}" href="beta.html">here</a>.
             <br/>
-            <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
-            <div class="beta-test">
-                Want to help beta test?  Sign up <a th:href="@{/beta}" href="beta.html">here</a>.
-                <br/>
-                Want to see a <a th:href="@{/sample}" href="sample.html">Sample Game</a>.
-                <br/>
-            </div>
-            <a th:href="@{/features}" href="features.html">What features are planned?</a>
         </div>
     </div>
-
 
 </div>
 

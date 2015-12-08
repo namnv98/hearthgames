@@ -34,9 +34,9 @@
     <hr/>
     <div class="versus-info">
         <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span>
-        <div th:replace="/fragments/card-fragment::cardLarge (${versusInfo.friendlyHeroCardId})" />
+        <div th:replace="/fragments/card-fragment::cardh (${versusInfo.friendlyHeroCardId})" />
         <span class="versus">VS</span>
-        <div th:replace="/fragments/card-fragment::cardLarge (${versusInfo.opposingHeroCardId})" />
+        <div th:replace="/fragments/card-fragment::cardh (${versusInfo.opposingHeroCardId})" />
         <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span>
     </div>
     <div class="versus-info">
@@ -76,7 +76,7 @@
         <h5>Turn <span th:text="${turnInfo.turnNumber}">1</span> - <span th:text="${turnInfo.whoseTurn}" th:class="${#strings.toLowerCase(turnInfo.turnClass)}">Seekay</span></h5>
         <table class="table table-bordered">
             <tbody>
-            <tr th:each="row: ${turnInfo.rows}">
+            <tr th:each="row: ${turnInfo.boards}">
 
                 <td th:if="${row.type == 1}" th:with="action=${row.columns[0].action}" th:colspan="5">
 
@@ -85,7 +85,7 @@
                         <span th:if="${action.side == 'FRIENDLY'}" th:text="${versusInfo.friendlyName}" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}"></span>
                         <span th:if="${action.side == 'OPPOSING'}" th:text="${versusInfo.opposingName}" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}"></span>
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                         Armor is now
                         <div class="armor-bg">
@@ -98,7 +98,7 @@
                         <span th:if="${action.side == 'FRIENDLY'}" th:text="${versusInfo.friendlyName}" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}"></span>
                         <span th:if="${action.side == 'OPPOSING'}" th:text="${versusInfo.opposingName}" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}"></span>
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                         Attack is now
                         <span th:text="${action.newAttack}"></span>
@@ -133,7 +133,7 @@
                     <div th:if="${action.type == 6}">
                         <span th:text="${turnInfo.whoseTurn}" th:class="${#strings.toLowerCase(turnInfo.turnClass)}">Seekay</span> has drawn
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                         <a th:if="${action.card.cardDetails == null}">
                             <div class="cardback"></div>
@@ -147,7 +147,7 @@
                         <span th:if="${action.card.isSpell()}"> has cast </span>
                         <span th:if="${action.card.isWeapon()}"> has equipped </span>
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                     </div>
 
@@ -189,7 +189,7 @@
                         <span th:if="${action.side == 'FRIENDLY'}" th:text="${versusInfo.friendlyName}" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}"></span>
                         <span th:if="${action.side == 'OPPOSING'}" th:text="${versusInfo.opposingName}" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}"></span>
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                         is now
                         <span th:if="${action.frozen}"> Frozen</span>
@@ -201,7 +201,7 @@
                         <span th:if="${action.side == 'FRIENDLY'}" th:text="${versusInfo.friendlyName}" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}"></span>
                         <span th:if="${action.side == 'OPPOSING'}" th:text="${versusInfo.opposingName}" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}"></span>
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                         Health is now
                         <span th:text="${action.newHealth}"></span>
@@ -212,7 +212,7 @@
                         <span th:if="${action.side == 'FRIENDLY'}" th:text="${versusInfo.friendlyName}" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}"></span>
                         <span th:if="${action.side == 'OPPOSING'}" th:text="${versusInfo.opposingName}" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}"></span>
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                         Health is now
                         <div style="display: inline-block; color: #fff;" class="health-bg">
@@ -224,7 +224,7 @@
                     <div th:if="${action.type == 14}">
                         <span th:text="${action.player.name}" th:class="${#strings.toLowerCase(action.player.playerClass)}">Seekay</span> has activated hero power
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                     </div>
 
@@ -290,7 +290,7 @@
                         <span th:if="${action.cardSide == 'FRIENDLY'}" th:text="${versusInfo.friendlyName}" th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}"></span>
                         <span th:if="${action.cardSide == 'OPPOSING'}" th:text="${versusInfo.opposingName}" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}"></span>
                         <a th:if="${action.card.cardDetails != null}" th:href="@{'http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${action.card.cardDetails.cardLink.href}">
-                            <div th:replace="/fragments/card-fragment::card (${action.card.cardDetails.cardLink.cardId})"></div>
+                            <div th:replace="/fragments/card-fragment::card (${action.card.cardId})"></div>
                         </a>
                     </div>
 
@@ -304,14 +304,14 @@
                     <span th:if="${row.type == 4 and column.data != null}" th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${column.data}"></span>
 
                     <a th:if="${row.type gt 2 and column.cards != null and iterStat.count != 5 and card.card.cardDetails != null}" th:each="card: ${column.cards}" th:href="@{'http://www.hearthpwn.com'+${card.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.card.cardDetails.cardLink.href}">
-                        <div th:replace="/fragments/card-fragment::card (${card.card.cardDetails.cardLink.cardId})"></div>
+                        <div th:replace="/fragments/card-fragment::card (${card.card.cardId})"></div>
                     </a>
                     <a th:if="${row.type gt 2 and column.cards != null and iterStat.count != 5 and card.card.cardDetails == null}" th:each="card: ${column.cards}">
                         <div class="cardback"></div>
                     </a>
 
                     <a th:if="${row.type gt 2 and column.cards != null and iterStat.count == 5 and card.card.cardDetails != null}" th:each="card: ${column.cards}" th:href="@{'http://www.hearthpwn.com'+${card.card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.card.cardDetails.cardLink.href}">
-                        <div th:class="'minion-attack-health-bg '+${card.card.cardDetails.cardLink.cardId}">
+                        <div th:class="'minion-attack-health-bg '+${card.card.cardId}">
                             <div class="minion-attack-bg"><div th:text="${card.realAttack}"></div></div>
                             <div class="minion-health-bg"><div th:text="${card.realHealth}"></div></div>
                         </div>

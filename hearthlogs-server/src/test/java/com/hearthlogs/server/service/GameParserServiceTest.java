@@ -54,7 +54,7 @@ public class GameParserServiceTest {
             GameContext context = gameParserService.parseLines(rawMatchData.getLines());
             accountId = context.getFriendlyPlayer().getGameAccountIdLo();
 
-            GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
+            GameResult result = gamePlayingService.processGame(context, rawMatchData.getRank());
 
             GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
             VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);

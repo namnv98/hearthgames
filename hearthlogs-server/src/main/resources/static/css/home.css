@@ -1,4 +1,6 @@
-.panel { color: #000; border-color: #000; background-color: #CFC395;  }
+.container { background-image: url("../images/welcome.png"); width: 1024px; height: 638px; margin: auto; }
 
-.hearthlogs-title { margin-top: 33%; text-align: center; }
+.content { margin: 20px 40px; }
+
+.hearthlogs-title { margin-top: 80px; text-align: center; }
 .hearthlogs-title span { color: #fff; }

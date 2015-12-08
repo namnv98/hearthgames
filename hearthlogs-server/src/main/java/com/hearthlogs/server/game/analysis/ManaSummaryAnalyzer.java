@@ -48,10 +48,10 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
         }
 
         GenericRow friendly = new GenericRow();
-        long friendlyManaUsed = calcFriendlyManaUsed(result.getTurns(), result.getFriendly());
-        long friendlyManaGained = calcFriendlyManaGained(result.getTurns(), result.getFriendly());
-        long friendlyManaLost = calcFriendlyManaLost(result.getTurns(), result.getFriendly());
-        long friendlyManaSaved = calcFriendlyManaSaved(result.getTurns(), result.getFriendly());
+        long friendlyManaUsed = calcFriendlyManaUsed(result.getTurns(), context.getFriendlyPlayer());
+        long friendlyManaGained = calcFriendlyManaGained(result.getTurns(), context.getFriendlyPlayer());
+        long friendlyManaLost = calcFriendlyManaLost(result.getTurns(), context.getFriendlyPlayer());
+        long friendlyManaSaved = calcFriendlyManaSaved(result.getTurns(), context.getFriendlyPlayer());
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
         friendly.addColumn(new GenericColumn(""+friendlyManaUsed));
         friendly.addColumn(new GenericColumn(""+friendlyManaGained));
@@ -64,10 +64,10 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
         table.setFriendly(friendly);
 
         GenericRow opposing = new GenericRow();
-        long opposingManaUsed = calcOpposingManaUsed(result.getTurns(), result.getOpposing());
-        long opposingManaGained = calcOpposingManaGained(result.getTurns(), result.getOpposing());
-        long opposingManaLost = calcOpposingManaLost(result.getTurns(), result.getOpposing());
-        long opposingManaSaved = calcOpposingManaSaved(result.getTurns(), result.getOpposing());
+        long opposingManaUsed = calcOpposingManaUsed(result.getTurns(), context.getOpposingPlayer());
+        long opposingManaGained = calcOpposingManaGained(result.getTurns(), context.getOpposingPlayer());
+        long opposingManaLost = calcOpposingManaLost(result.getTurns(), context.getOpposingPlayer());
+        long opposingManaSaved = calcOpposingManaSaved(result.getTurns(), context.getOpposingPlayer());
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
         opposing.addColumn(new GenericColumn(""+opposingManaUsed));
         opposing.addColumn(new GenericColumn(""+opposingManaGained));

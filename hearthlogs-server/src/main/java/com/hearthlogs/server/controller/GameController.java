@@ -1,5 +1,7 @@
 package com.hearthlogs.server.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hearthlogs.server.database.domain.GamePlayed;
 import com.hearthlogs.server.database.service.GameService;
 import com.hearthlogs.server.game.analysis.domain.TurnInfo;
@@ -47,7 +49,7 @@ public class GameController {
     @RequestMapping(value = "/game/{gameId}")
     public ModelAndView getGame(@PathVariable Long gameId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("game");
+        modelAndView.setViewName("game2");
 
         GamePlayed gamePlayed = gameService.getById(gameId);
         if (gamePlayed != null) {
@@ -60,7 +62,7 @@ public class GameController {
             if (rawMatchDatas != null && rawMatchDatas.size() == 1) {
                 RawMatchData rawMatchData = rawMatchDatas.get(0);
                 GameContext context = gameParserService.parseLines(rawMatchData.getLines());
-                GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
+                GameResult result = gamePlayingService.processGame(context, rawMatchData.getRank());
 
                 GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
                 VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
@@ -78,7 +80,15 @@ public class GameController {
                 modelAndView.addObject("tradeInfos", Collections.singletonList(tradeInfo));
                 modelAndView.addObject("boardControlInfos", boardControlInfos);
                 modelAndView.addObject("cardAdvantageInfos", cardAdvantageInfos);
-                modelAndView.addObject("turnInfos", turnInfos);
+
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    String jsonInString = mapper.writeValueAsString(turnInfos);
+                    modelAndView.addObject("turnInfos", jsonInString);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
 
                 //hack for Thymeleaf plugin - duplicate model properties
                 if (false) {

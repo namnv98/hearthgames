@@ -2,7 +2,6 @@ package com.hearthlogs.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hearthlogs.server.game.parse.domain.CardSets;
-import com.hearthlogs.server.hearthpwn.CardLinks;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -28,10 +27,5 @@ public class HearthlogsServerApplication extends SpringBootServletInitializer {
     @Bean
     public CardSets cardSets() throws IOException {
         return new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class);
-    }
-
-    @Bean
-    public CardLinks cards() throws IOException {
-        return new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("HearthPwn.json"), CardLinks.class);
     }
 }

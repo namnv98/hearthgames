@@ -7,6 +7,7 @@ import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.play.domain.*;
+import com.hearthlogs.server.game.play.domain.board.Board;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -26,54 +27,31 @@ public class TurnInfoAnalyzer implements Analyzer<List<TurnInfo>> {
 
         Player whoseTurn = turn.getWhoseTurn();
         if (whoseTurn == null) {
-            whoseTurn = "1".equals(result.getFriendly().getFirstPlayer()) ? result.getFriendly() : result.getOpposing();
+            whoseTurn = "1".equals(context.getFriendlyPlayer().getFirstPlayer()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
         }
         info.setTurnNumber(""+turn.getTurnNumber());
         info.setWhoseTurn(whoseTurn.getName());
         if (whoseTurn == context.getFriendlyPlayer()) {
-            String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
+            String friendlyClass = result.getWinner() == context.getFriendlyPlayer() ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(friendlyClass);
         } else {
-            String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
+            String opposingClass = result.getWinner() == context.getOpposingPlayer() ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(opposingClass);
         }
 
-        List<TurnRow> rows = new ArrayList<>();
-
+        List<Board> boards = new ArrayList<>();
+        List<Action> actionsForBoard = new ArrayList<>();
         for (Action action: turn.getActions()) {
             if (isRegularAction(action)) {
-                TurnRow row = new TurnRow(1);
-                row.addColumn(new TurnColumn(action));
-                rows.add(row);
-
+                actionsForBoard.add(action);
             } else if (action instanceof Board) {
-                TurnRow row = new TurnRow(2);
-                row.addColumn(new TurnColumn(""));
-                row.addColumn(new TurnColumn("Hand"));
-                row.addColumn(new TurnColumn("Weapon"));
-                row.addColumn(new TurnColumn("Secrets"));
-                row.addColumn(new TurnColumn("Minions In Play"));
-                rows.add(row);
-
                 Board board = (Board) action;
-                row = new TurnRow(3);
-                row.addColumn(new TurnColumn(context.getFriendlyPlayer().getName()));
-                row.addColumn(new TurnColumn(board.getFriendlyHand()));
-                row.addColumn(new TurnColumn(board.getFriendlyWeapon()));
-                row.addColumn(new TurnColumn(board.getFriendlySecret()));
-                row.addColumn(new TurnColumn(board.getFriendlyPlay()));
-                rows.add(row);
-
-                row = new TurnRow(4);
-                row.addColumn(new TurnColumn(context.getOpposingPlayer().getName()));
-                row.addColumn(new TurnColumn(board.getOpposingHand()));
-                row.addColumn(new TurnColumn(board.getOpposingWeapon()));
-                row.addColumn(new TurnColumn(board.getOpposingSecret()));
-                row.addColumn(new TurnColumn(board.getOpposingPlay()));
-                rows.add(row);
+                actionsForBoard.forEach(board::addAction);
+                actionsForBoard = new ArrayList<>();
+                boards.add(board);
             }
         }
-        info.setRows(rows);
+        info.setBoards(boards);
 
         return info;
     }

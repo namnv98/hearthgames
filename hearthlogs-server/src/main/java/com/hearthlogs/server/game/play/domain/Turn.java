@@ -1,6 +1,7 @@
 package com.hearthlogs.server.game.play.domain;
 
 import com.hearthlogs.server.game.parse.domain.Player;
+import com.hearthlogs.server.game.play.domain.board.Board;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -115,15 +116,6 @@ public class Turn implements Serializable {
 
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
-    }
-
-    public Board findFirstBoard() {
-        for (Action action: getActions()) {
-            if (action instanceof Board) {
-                return (Board) action;
-            }
-        }
-        return null;
     }
 
     public Board findLastBoard() {

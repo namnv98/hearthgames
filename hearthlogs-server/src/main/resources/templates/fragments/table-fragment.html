@@ -32,9 +32,9 @@
                 <div th:if="${type == 4 and !iterStat.first}" th:class="${#strings.toLowerCase(column.data)}+${columnDataClass}"></div>
 
                 <span th:if="${type == 5 and iterStat.count == 1}" th:class="${#strings.toLowerCase(friendlyClass)}" th:text="${column.data}"></span>
-                <a    th:if="${type == 5 and iterStat.count gt 1 and card.cardDetails != null}" th:each="card : ${column.datas}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
-                    <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
-                </a>
+                <div  th:if="${type == 5 and iterStat.count gt 1 and card.cardDetails != null}" th:each="card : ${column.datas}" th:class="card">
+                    <div th:class="'tt tt-'+${card.cardid}+' '+${card.cardid}"></div>
+                </div>
                 <a th:if="${type == 5 and iterStat.count gt 1 and iterStat.count lt 4 and card.cardDetails == null}" th:each="card : ${column.datas}">
                     <div class="cardback"></div>
                 </a>
@@ -63,9 +63,9 @@
                 <div th:if="${type == 4 and !iterStat.first}" th:class="${#strings.toLowerCase(column.data)}+${columnDataClass}"></div>
 
                 <span th:if="${type == 5 and iterStat.count == 1}" th:class="${#strings.toLowerCase(opposingClass)}" th:text="${column.data}"></span>
-                <a    th:if="${type == 5 and iterStat.count gt 1 and card.cardDetails != null}" th:each="card : ${column.datas}" th:href="@{'http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}}" th:attr="data-tooltip-href='http://www.hearthpwn.com'+${card.cardDetails.cardLink.href}">
-                    <img src="" th:src="@{'http://images.hearthlogs.com/'+${card.cardDetails.cardLink.cardId}+'.png'}" />
-                </a>
+                <div  th:if="${type == 5 and iterStat.count gt 1 and card.cardDetails != null}" th:each="card : ${column.datas}" th:class="card">
+                    <div th:class="'tt tt-'+${card.cardid}+' '+${card.cardid}"></div>
+                </div>
                 <a th:if="${type == 5 and iterStat.count gt 1 and iterStat.count lt 4 and card.cardDetails == null}" th:each="card : ${column.datas}">
                     <div class="cardback"></div>
                 </a>

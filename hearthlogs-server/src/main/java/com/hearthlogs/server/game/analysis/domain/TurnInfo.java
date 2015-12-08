@@ -1,5 +1,7 @@
 package com.hearthlogs.server.game.analysis.domain;
 
+import com.hearthlogs.server.game.play.domain.board.Board;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +11,14 @@ public class TurnInfo {
     private String whoseTurn;
     private String turnClass;
 
-    private List<TurnRow> rows = new ArrayList<>();
+    private List<Board> boards = new ArrayList<>();
 
-    public List<TurnRow> getRows() {
-        return rows;
+    public List<Board> getBoards() {
+        return boards;
     }
 
-    public void setRows(List<TurnRow> rows) {
-        this.rows = rows;
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
     }
 
     public String getTurnNumber() {

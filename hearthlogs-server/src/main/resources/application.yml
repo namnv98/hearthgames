@@ -6,7 +6,7 @@ spring:
     name: HearthLogs Server
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://hearthlogs.com:5432/hearthlogs
+    url: jdbc:postgresql://localhost:5432/hearthlogs
     username: hl
     password: fuckmi69
 security:
@@ -18,11 +18,18 @@ security:
       user-authorization-uri: https://us.battle.net/oauth/authorize
       pre-established-redirect-uri: https://hearthlogs.com/login
       use-current-uri: false
-multipart.maxFileSize: 50MB
-multipart.maxRequestSize: 50MB
+multipart.maxFileSize: 100MB
+multipart.maxRequestSize: 100MB
 hearthlogs.redirect-url: http://hearthlogs.com/
 ---
 spring.profiles: dev
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/hearthlogs
+    username: hl
+    password: fuckmi69
+#spring.jpa.hibernate.ddl-auto: create
 security:
   oauth2:
     client:

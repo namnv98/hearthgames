@@ -1,15 +1,12 @@
 package com.hearthlogs.server.game.analysis;
 
 import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
-import com.hearthlogs.server.game.play.domain.HeroHealthChange;
 import com.hearthlogs.server.game.play.domain.Turn;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.game.parse.GameContext;
-import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.play.GameResult;
-import com.hearthlogs.server.game.play.domain.Action;
-import com.hearthlogs.server.game.play.domain.ArmorChange;
+import static com.hearthlogs.server.util.HeroStatsUtil.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,52 +32,33 @@ public class HealthArmorAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
         table.setOpposing(opposing);
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
 
-        Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
-        Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
-
-        int friendlyHealth = Integer.parseInt(friendlyHeroCard.getHealth());
-        int opposingHealth = Integer.parseInt(opposingHeroCard.getHealth());
-
-        int friendlyArmor;
-        try {
-            friendlyArmor = Integer.parseInt(friendlyHeroCard.getArmor());
-        } catch (NumberFormatException e) {
-            friendlyArmor = 0;
-        }
-        int opposingArmor;
-        try {
-            opposingArmor = Integer.parseInt(opposingHeroCard.getArmor());
-        } catch (NumberFormatException e) {
-            opposingArmor = 0;
-        }
+        Integer friendlyHealth = getCurrentHealth(context.getFriendlyPlayer(), context);
+        Integer opposingHealth = getCurrentHealth(context.getOpposingPlayer(), context);
+        Integer friendlyArmor = getCurrentArmor(context.getFriendlyPlayer(), context);
+        Integer opposingArmor = getCurrentArmor(context.getOpposingPlayer(), context);
 
         for (Turn turn: turns) {
-            for (Action action: turn.getActions()) {
-                if (action instanceof HeroHealthChange) {
-                    HeroHealthChange change = (HeroHealthChange) action;
-                    if (change.getCard().getController().equals(context.getFriendlyPlayer().getController())) {
-                        friendlyHealth = change.getHealth();
-                    } else {
-                        opposingHealth = change.getHealth();
-                    }
-                } else if (action instanceof ArmorChange) {
-                    ArmorChange change = (ArmorChange) action;
-                    if (change.getCard().getController().equals(context.getFriendlyPlayer().getController())) {
-                        friendlyArmor = change.getArmor();
-                    } else {
-                        opposingArmor = change.getArmor();
-                    }
-                }
-
+            if (hasHealthChanged(context.getFriendlyPlayer(), turn.getActions())) {
+                friendlyHealth = getHealth(context.getFriendlyPlayer(), turn.getActions());
             }
+            if (hasArmorChanged(context.getFriendlyPlayer(), turn.getActions())) {
+                friendlyArmor = getArmor(context.getFriendlyPlayer(), turn.getActions());
+            }
+            if (hasHealthChanged(context.getOpposingPlayer(), turn.getActions())) {
+                opposingHealth = getHealth(context.getOpposingPlayer(), turn.getActions());
+            }
+            if (hasArmorChanged(context.getOpposingPlayer(), turn.getActions())) {
+                opposingArmor = getArmor(context.getOpposingPlayer(), turn.getActions());
+            }
+
             GenericColumn col = new GenericColumn(""+friendlyHealth);
-            if (friendlyArmor != 0) {
+            if (friendlyArmor != null && friendlyArmor != 0) {
                 col.setExtraData(""+friendlyArmor);
             }
             friendly.addColumn(col);
 
             col = new GenericColumn(""+opposingHealth);
-            if (opposingArmor != 0) {
+            if (opposingArmor != null && opposingArmor != 0) {
                 col.setExtraData(""+opposingArmor);
             }
             opposing.addColumn(col);

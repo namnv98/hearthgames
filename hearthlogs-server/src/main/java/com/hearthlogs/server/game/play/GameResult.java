@@ -1,17 +1,12 @@
 package com.hearthlogs.server.game.play;
 
-import com.hearthlogs.server.game.parse.domain.Card;
-import com.hearthlogs.server.game.parse.domain.Zone;
+import com.hearthlogs.server.game.parse.domain.*;
 import com.hearthlogs.server.game.play.domain.*;
-import com.hearthlogs.server.game.parse.domain.Entity;
-import com.hearthlogs.server.game.parse.domain.Player;
 
 import java.util.*;
 
 public class GameResult {
 
-    private Player friendly;
-    private Player opposing;
     private Player winner;
     private Player loser;
     private Player quitter;
@@ -167,22 +162,6 @@ public class GameResult {
         this.turnNumber = turnNumber;
     }
 
-    public Player getFriendly() {
-        return friendly;
-    }
-
-    public void setFriendly(Player friendly) {
-        this.friendly = friendly;
-    }
-
-    public Player getOpposing() {
-        return opposing;
-    }
-
-    public void setOpposing(Player opposing) {
-        this.opposing = opposing;
-    }
-
     public void addTurn() {
         currentTurn = new Turn(turnNumber);
         this.turns.add(currentTurn);
@@ -326,5 +305,15 @@ public class GameResult {
             }
         }
         return false;
+    }
+
+    private Activity lastActivityProcessed;
+
+    public Activity getLastActivityProcessed() {
+        return lastActivityProcessed;
+    }
+
+    public void setLastActivityProcessed(Activity lastActivityProcessed) {
+        this.lastActivityProcessed = lastActivityProcessed;
     }
 }

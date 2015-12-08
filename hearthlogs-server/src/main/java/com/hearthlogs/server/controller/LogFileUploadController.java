@@ -59,7 +59,7 @@ public class LogFileUploadController {
                 for (RawMatchData rawMatchData : rawMatchDatas) {
                     try {
                         GameContext context = gameParserService.parseLines(rawMatchData.getLines());
-                        GameResult result = gamePlayingService.processMatch(context, rawMatchData.getRank());
+                        GameResult result = gamePlayingService.processGame(context, rawMatchData.getRank());
 
                         GamePlayed gamePlayed = gameService.createGamePlayed(rawMatchData, context, result, userInfo);
                         if (!gameService.hasGameBeenPlayed(gamePlayed)) {

@@ -6,8 +6,9 @@ import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.CardWrapper;
 import com.hearthlogs.server.game.play.GameResult;
-import com.hearthlogs.server.game.play.domain.Board;
+import com.hearthlogs.server.game.play.domain.board.Board;
 import com.hearthlogs.server.game.play.domain.Turn;
+import com.hearthlogs.server.game.play.domain.board.MinionInPlay;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -42,27 +43,19 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
             if (board != null) {
                 boolean friendlyBoardControl = false;
                 boolean opposingBoardControl = false;
-                if (board.getFriendlyPlay().size() != board.getOpposingPlay().size()) {
+                if (board.getFriendlyHero().getMinionsInPlay().size() != board.getOpposingHero().getMinionsInPlay().size()) {
                     int friendlyAttackTotal = 0;
                     int friendlyHealthTotal = 0;
-                    for (CardWrapper c : board.getFriendlyPlay()) {
-                        if (c.getCard().getAtk() != null) {
-                            friendlyAttackTotal += Integer.parseInt(c.getCard().getAtk());
-                        }
-                        if (c.getCard().getHealth() != null) {
-                            friendlyHealthTotal += Integer.parseInt(c.getCard().getHealth());
-                        }
+                    for (MinionInPlay minion : board.getFriendlyHero().getMinionsInPlay()) {
+                        friendlyAttackTotal += minion.getAttack();
+                        friendlyHealthTotal += minion.getHealth();
                     }
 
                     int opposingAttackTotal = 0;
                     int opposingHealthTotal = 0;
-                    for (CardWrapper c : board.getOpposingPlay()) {
-                        if (c.getCard().getAtk() != null) {
-                            opposingAttackTotal += Integer.parseInt(c.getCard().getAtk());
-                        }
-                        if (c.getCard().getHealth() != null) {
-                            opposingHealthTotal += Integer.parseInt(c.getCard().getHealth());
-                        }
+                    for (MinionInPlay minion : board.getOpposingHero().getMinionsInPlay()) {
+                        opposingAttackTotal += minion.getAttack();
+                        opposingHealthTotal += minion.getHealth();
                     }
 
                     if (friendlyAttackTotal > opposingHealthTotal && friendlyHealthTotal > opposingAttackTotal) {
@@ -72,8 +65,8 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
                     }
                 }
 
-                String friendlyClass = result.getWinner() == result.getFriendly() ? result.getWinnerClass() : result.getLoserClass();
-                String opposingClass = result.getWinner() == result.getOpposing() ? result.getWinnerClass() : result.getLoserClass();
+                String friendlyClass = result.getWinner() == context.getFriendlyPlayer() ? result.getWinnerClass() : result.getLoserClass();
+                String opposingClass = result.getWinner() == context.getOpposingPlayer() ? result.getWinnerClass() : result.getLoserClass();
 
                 if (friendlyBoardControl) {
                     addFriendlyOpposingColumns(friendlyClass, "", friendly, opposing);
