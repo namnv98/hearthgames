@@ -48,6 +48,7 @@ public class GamePlayingService {
         for (Activity activity: context.getActivities()) {
             handle(result, context, activity);
         }
+        result.getCurrentTurn().addAction(new Board(result, context));
 
         return result;
     }

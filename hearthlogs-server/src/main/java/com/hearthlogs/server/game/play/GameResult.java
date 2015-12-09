@@ -118,6 +118,17 @@ public class GameResult {
         return turns;
     }
 
+    public Turn getTurnBefore(Turn turn) {
+        Turn lastTurn = null;
+        for (Turn t: turns) {
+            if (t == turn) {
+                return lastTurn;
+            }
+            lastTurn = t;
+        }
+        return lastTurn;
+    }
+
     public void setTurns(Set<Turn> turns) {
         this.turns = turns;
     }

@@ -54,9 +54,9 @@
 .turn-info-board5 { width: auto; }
 
 #game-board-content { position: relative; }
-#next { background-image: url(../images/next.png); height: 50px; width: 61px; position: absolute; top: 210px; right: 1px; cursor: pointer; }
-#previous { background-image: url(../images/previous.png); height: 50px; width: 61px; position: absolute; top: 210px; left: 1px; cursor: pointer; }
-
+#next { margin: 0 5px; display: inline-block; cursor: pointer; }
+#previous { margin: 0 5px; display: inline-block; cursor: pointer; }
+#turn-status { position: relative; top: 10px; left: 10px; }
 
 #game-board { position: relative; background-image: url(../images/game-board-bg.png); width: 1024px; height: 512px; margin: 150px auto; }
 
@@ -70,7 +70,7 @@
 .hero-armor-bg { position: absolute; bottom: 52px; right: 6px; width: 40px; height: 43px; background-image: url(../images/hero-armor-bg.png);}
 .hero-armor-amount { position: absolute; bottom: 9px; right: 4px; font-size: 20px; font-weight: bold; text-shadow: 1px 1px 1px #000; text-align: center; width: 30px; color: #fff; }
 
-#friendly-hand { position: absolute; bottom: -130px; left: 1px; }
+#friendly-hand { position: absolute; bottom: -61px; left: 1px; }
 #opposing-hand { position: absolute; top: -61px; left: 1px; }
 
 .cardback { width: 40px; height: 50px; display: inline-block;  vertical-align: middle; background-image: url("http://images.hearthlogs.com/cardback.png"); }
@@ -82,15 +82,24 @@
 
 .minion { display: inline-block; position: relative; width: 93px; height: 120px; margin-left: 25px;}
 .minion .card { width: 93px; height: 120px; }
-.minion .attack { background-image: url(../images/minion-attack.png); position: absolute; bottom: 5px; left: 4px; width: 31px; height: 35px; z-index: 2;}
-.minion .attack .amount { position: absolute; bottom: 2px; left: 0; text-shadow: 1px 1px 1px #000; text-align: center; width: 35px; color: #fff; font-size: 18px; font-weight: bold;}
-.minion .health { background-image: url(../images/minion-health.png); position: absolute; bottom: 5px; right: 10px; width: 24px; height: 35px; z-index: 2;}
-.minion .health .amount { position: absolute; bottom: 2px; right: -5px; text-shadow: 1px 1px 1px #000; text-align: center; width: 35px; color: #fff; font-size: 18px; font-weight: bold; }
+.minion .attack { background-image: url(../images/minion-attack.png); position: absolute; bottom: 5px; left: 4px; width: 31px; height: 35px; z-index: 2; color: #fff;}
+.minion .attack .amount { position: absolute; bottom: 2px; left: 0; text-shadow: 1px 1px 1px #000; text-align: center; width: 35px;  font-size: 18px; font-weight: bold;}
+.minion .health { background-image: url(../images/minion-health.png); position: absolute; bottom: 5px; right: 10px; width: 24px; height: 35px; z-index: 2; color: #fff; }
+.minion .health .amount { position: absolute; bottom: 2px; right: -5px; text-shadow: 1px 1px 1px #000; text-align: center; width: 35px; font-size: 18px; font-weight: bold; }
+.minion .health .damaged { color: red; }
 .minion .legendary { background-image: url(../images/minion-legendary.png); position: absolute; top: -13px; left: 7px; width: 110px; height: 83px; z-index: 2; }
 .minion .taunting { background-image: url(../images/minion-taunting.png); position: absolute; top: -8px; left: -8px; width: 107px; height: 140px; z-index: 1; }
 .minion .shielded { background-image: url(../images/minion-shielded.png); position: absolute; top: -10px; left: -9px; width: 108px; height: 142px; z-index: 3; }
 .minion .frozen { background-image: url(../images/minion-frozen.png); position: absolute; top: -18px; left: -22px; width: 134px; height: 150px; z-index: 3; }
+.minion .exhausted { background-image: url(../images/zzz.png); position: absolute; top: -8px; right: -4px; width: 22px; height: 25px; z-index: 4; }
+.minion .inspire { background-image: url(../images/inspire.png); position: absolute; bottom: -5px; left: 31px; width: 28px; height: 25px; z-index: 4; }
+.minion .trigger { background-image: url(../images/trigger.png); position: absolute; bottom: -6px; left: 36px; width: 22px; height: 25px; z-index: 4; }
+.minion .deathrattle { background-image: url(../images/deathrattle.png); position: absolute; bottom: -5px; left: 31px; width: 32px; height: 25px; z-index: 4; }
 
+#friendly-mana { position: absolute; bottom: -45px; right: 260px; background-image: url(../images/mana-count.png); height: 41px; width: 77px; }
+#friendly-mana .amount { margin-top: 10px; height: 21px; width: 77px; text-align: center; text-shadow: 1px 1px 1px #000; }
+#opposing-mana { position: absolute; top: -45px; right: 260px; background-image: url(../images/mana-count.png); height: 41px; width: 77px; }
+#opposing-mana .amount { margin-top: 10px; height: 21px; width: 77px; text-align: center; text-shadow: 1px 1px 1px #000; }
 
 
 #friendly-hero-power { position: absolute; bottom: -26px; right: 342px; }

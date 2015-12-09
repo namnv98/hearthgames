@@ -10,6 +10,8 @@ public class MinionInPlay {
     private String icon; // i.e. Inspire, Trigger, Deathrattle, etc...
     private int attack;
     private int health;
+    private boolean damaged;
+    private boolean exhausted;
 
     public String getId() {
         return id;
@@ -73,5 +75,21 @@ public class MinionInPlay {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public boolean isDamaged() {
+        return damaged;
+    }
+
+    public void setDamaged(boolean damaged) {
+        this.damaged = damaged;
+    }
+
+    public boolean isExhausted() {
+        return exhausted;
+    }
+
+    public void setExhausted(boolean exhausted) {
+        this.exhausted = exhausted;
     }
 }

@@ -6,6 +6,8 @@ import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.parse.domain.Zone;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.play.domain.Action;
+import com.hearthlogs.server.game.play.domain.Turn;
+
 import static com.hearthlogs.server.util.HeroStatsUtil.*;
 
 import java.util.ArrayList;
@@ -16,12 +18,22 @@ public class Board implements Action {
     public static final String TRUE = "1";
     public static final String LEGENDARY = "Legendary";
 
+    private TurnData turnData = new TurnData();
+
     private Hero friendlyHero = new Hero();
     private Hero opposingHero = new Hero();
 
     private List<Action> actions = new ArrayList<>();
 
     public Board(GameResult result, GameContext context) {
+
+        Board previousBoard = result.getCurrentTurn().findLastBoard();
+        if (previousBoard != null) {
+            turnData.setBoard(previousBoard.getTurnData().getBoard()+1);
+        } else {
+            turnData.setBoard(1);
+        }
+        turnData.setTurn(result.getCurrentTurn().getTurnNumber());
 
         setHeroIds(context, friendlyHero, opposingHero);
         setHeroHealthArmor(result, context, friendlyHero, opposingHero);
@@ -46,6 +58,11 @@ public class Board implements Action {
 //        return actions;
 //    }
 
+
+    public TurnData getTurnData() {
+        return turnData;
+    }
+
     @Override
     public int getType() {
         return 4;
@@ -58,10 +75,30 @@ public class Board implements Action {
 
     private void setHeroHealthArmor(GameResult result, GameContext context, Hero friendlyHero, Hero opposingHero) {
 
-        Integer friendlyHealth = getCurrentHealth(context.getFriendlyPlayer(), context);
-        Integer opposingHealth = getCurrentHealth(context.getOpposingPlayer(), context);
-        Integer friendlyArmor = getCurrentArmor(context.getFriendlyPlayer(), context);
-        Integer opposingArmor = getCurrentArmor(context.getOpposingPlayer(), context);
+        Integer friendlyHealth;
+        Integer opposingHealth;
+        Integer friendlyArmor;
+        Integer opposingArmor;
+
+        Turn currentTurn = result.getCurrentTurn();
+        Turn previousTurn = result.getTurnBefore(currentTurn);
+        Board previousBoard = currentTurn.findLastBoard();
+
+        if (result.getCurrentTurn().getTurnNumber() == 1 && previousBoard == null) {
+            friendlyHealth = getCurrentHealth(context.getFriendlyPlayer(), context);
+            opposingHealth = getCurrentHealth(context.getOpposingPlayer(), context);
+            friendlyArmor = getCurrentArmor(context.getFriendlyPlayer(), context);
+            opposingArmor = getCurrentArmor(context.getOpposingPlayer(), context);
+        } else {
+            if (previousBoard == null) {
+                previousBoard = previousTurn.findLastBoard();;
+            }
+            friendlyHealth = previousBoard.getFriendlyHero().getHealth();
+            friendlyArmor = previousBoard.getFriendlyHero().getArmor();
+            opposingHealth = previousBoard.getOpposingHero().getHealth();
+            opposingArmor = previousBoard.getOpposingHero().getArmor();
+        }
+
 
         if (hasHealthChanged(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
             friendlyHealth = getHealth(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
@@ -88,12 +125,12 @@ public class Board implements Action {
         Integer friendlyManaGained = getManaGained(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
         Integer friendlyManaUsed = getManaUsed(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
         friendlyHero.setMana(friendlyManaGained-friendlyManaUsed);
-        friendlyHero.setManaTotal(friendlyManaUsed);
+        friendlyHero.setManaTotal(friendlyManaGained);
 
         Integer opposingManaGained = getManaGained(context.getOpposingPlayer(), result.getCurrentTurn(), this);
         Integer opposingManaUsed = getManaUsed(context.getOpposingPlayer(), result.getCurrentTurn(), this);
         opposingHero.setMana(opposingManaGained-opposingManaUsed);
-        opposingHero.setManaTotal(opposingManaUsed);
+        opposingHero.setManaTotal(opposingManaGained);
     }
 
     private void setHeroPowerStatus(GameContext context, Hero friendlyHero, Hero opposingHero) {
@@ -131,17 +168,34 @@ public class Board implements Action {
             } else if (Zone.PLAY.eq(c.getZone()) && Card.Type.MINION.eq(c.getCardtype())) {
                 MinionInPlay minionInPlay = new MinionInPlay();
                 minionInPlay.setId(c.getCardid());
-                minionInPlay.setHealth(c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0);
+                int health = c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0;
+                if (c.getDamage() != null) {
+                    health = health - Integer.parseInt(c.getDamage());
+                    minionInPlay.setDamaged(true);
+                } else if (c.getPredamage() != null) {
+                    health = health - Integer.parseInt(c.getPredamage());
+                    minionInPlay.setDamaged(true);
+                }
+                minionInPlay.setHealth(health);
                 minionInPlay.setAttack(c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0);
                 minionInPlay.setFrozen(c.getFrozen() != null && TRUE.equals(c.getFrozen()));
                 minionInPlay.setLegendary(LEGENDARY.equals(c.getCardDetails().getRarity()));
                 minionInPlay.setShielded(TRUE.equals(c.getDivineShield()));
                 minionInPlay.setTaunting(TRUE.equals(c.getTaunt()));
+                minionInPlay.setExhausted(TRUE.equals(c.getExhausted()));
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getMinionsInPlay().add(minionInPlay);
                 } else {
                     opposingHero.getMinionsInPlay().add(minionInPlay);
                 }
+                if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("Inspire")) {
+                    minionInPlay.setIcon("inspire");
+                } else if (TRUE.equals(c.getTriggerVisual())) {
+                    minionInPlay.setIcon("trigger");
+                } else if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("Deathrattle")) {
+                    minionInPlay.setIcon("deathrattle");
+                }
+
             } else if (Zone.SECRET.eq(c.getZone()) && Card.Type.SPELL.eq(c.getCardtype())) {
                 CardInSecret cardInSecret = new CardInSecret();
                 cardInSecret.setId(c.getCardid());

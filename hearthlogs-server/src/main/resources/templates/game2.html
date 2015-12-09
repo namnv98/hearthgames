@@ -8,7 +8,7 @@
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-    <script src="http://cdn.jsdelivr.net/jquery.tooltipster/3.3.0/js/jquery.tooltipster.js" th:src="@{/webjars/tooltipster/3.3.0/js/jquery.tooltipster.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/jquery.tooltipster/3.3.0/js/jquery.tooltipster.min.js" th:src="@{/webjars/tooltipster/3.3.0/js/jquery.tooltipster.min.js}"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
     <script src="http://cdn.jsdelivr.net/handlebarsjs/4.0.2/handlebars.min.js" th:src="@{/webjars/handlebars/4.0.2/handlebars.min.js}"></script>
 
@@ -17,8 +17,13 @@
     <link href="../static/css/game.css" th:href="@{/css/game.css}" rel="stylesheet" media="screen"/>
 
     <script id="game-board-template" type="text/x-handlebars-template" th:inline="javascript">
-        <div id="next"></div>
-        <div id="previous"></div>
+
+        <div id="turn-status">
+            {{#with turnData}}
+            <span>Turn {{turn}} ( {{board}} )</span>
+            {{/with}}
+        </div>
+
         <div id="game-board">
             {{#with friendlyHero}}
             <div id="friendly-hero" class="tt tt-{{id}} {{id}}_h">
@@ -74,7 +79,7 @@
                         <div class="amount">{{attack}}</div>
                     </div>
                     <div class="health">
-                        <div class="amount">{{health}}</div>
+                        <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
                     </div>
                     {{#if frozen}}
                     <div class="frozen"></div>
@@ -88,10 +93,18 @@
                     {{#if taunting}}
                     <div class="taunting"></div>
                     {{/if}}
+                    {{#if exhausted}}
+                    <div class="exhausted"></div>
+                    {{/if}}
+                    {{#if icon}}
+                    <div class="{{icon}}"></div>
+                    {{/if}}
                 </div>
                 {{/each}}
             </div>
-            <div id="friendly-mana"></div>
+            <div id="friendly-mana">
+                <div class="amount">{{mana}} / {{manaTotal}}</div>
+            </div>
             <div id="friendly-graveyard"></div>
             <div id="friendly-deck"></div>
             {{/with}}
@@ -151,7 +164,7 @@
                         <div class="amount">{{attack}}</div>
                     </div>
                     <div class="health">
-                        <div class="amount">{{health}}</div>
+                        <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
                     </div>
                     {{#if frozen}}
                     <div class="frozen"></div>
@@ -165,10 +178,18 @@
                     {{#if taunting}}
                     <div class="taunting"></div>
                     {{/if}}
+                    {{#if exhausted}}
+                    <div class="exhausted"></div>
+                    {{/if}}
+                    {{#if icon}}
+                    <div class="{{icon}}"></div>
+                    {{/if}}
                 </div>
                 {{/each}}
             </div>
-            <div id="opposing-mana"></div>
+            <div id="opposing-mana">
+                <div class="amount">{{mana}} / {{manaTotal}}</div>
+            </div>
             <div id="opposing-graveyard"></div>
             <div id="opposing-deck"></div>
             {{/with}}
@@ -194,11 +215,11 @@
             var turnCount = 0;
             var boardCount = -1;
 
-            var enableTooltips = function() {
-                $('.tt').tooltipster({
+            $('body').on('mouseover mouseenter', '.tt', function(){
+                $(this).tooltipster({
                     content: '<div>Loading...</div>',
                     contentAsHTML: true,
-                    position: 'right',
+                    position: 'top-left',
                     speed: 0,
                     delay: 0,
                     functionBefore: function(origin, continueTooltip) {
@@ -214,9 +235,8 @@
                         origin.tooltipster('content', '<div class="' + className + '" style="width: 286px; height: 395px;"></div>');
                     }
                 });
-                $('#next').click(nextBoard);
-                $('#previous').click(previousBoard);
-            };
+                $(this).tooltipster('show');
+            });
 
             var nextBoard = function() {
 
@@ -234,7 +254,6 @@
                 var board = gameData[turnCount].boards[boardCount];
                 var html = template(board);
                 $('#game-board-content').html(html);
-                enableTooltips();
             };
 
 
@@ -252,11 +271,11 @@
                 var board = gameData[turnCount].boards[boardCount];
                 var html = template(board);
                 $('#game-board-content').html(html);
-                $('#next').click(nextBoard);
-                $('#previous').click(previousBoard);
-                enableTooltips();
             };
             nextBoard();
+
+            $('#next').click(nextBoard);
+            $('#previous').click(previousBoard);
 
         };
 
@@ -331,9 +350,10 @@
         <div id="menu7" class="tab-pane">
             <h4 class="info-heading">Board Control</h4>
             <div th:include="/fragments/table-fragment::tablefrag (${boardControlInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'board-control-info','turn','-bg bcontrol-info',4)"></div>
-
         </div>
         <div id="menu8" class="tab-pane active">
+            <div id="next">Next</div>
+            <div id="previous">Previous</div>
             <div id="game-board-content"></div>
         </div>
 
