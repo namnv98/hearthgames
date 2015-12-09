@@ -11,7 +11,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@PreAuthorize("hasRole('USER')")
 public class LogFileUploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(LogFileUploadController.class);
@@ -44,9 +42,8 @@ public class LogFileUploadController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView upload(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/games");
+        String viewName = null;
 
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -61,10 +58,17 @@ public class LogFileUploadController {
                         GameContext context = gameParserService.parseLines(rawMatchData.getLines());
                         GameResult result = gamePlayingService.processGame(context, rawMatchData.getRank());
 
+                        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                        UserInfo userInfo = null;
+                        if (principal != null && principal instanceof UserInfo) {
+                            userInfo = (UserInfo) principal;
+                        }
                         GamePlayed gamePlayed = gameService.createGamePlayed(rawMatchData, context, result, userInfo);
                         if (!gameService.hasGameBeenPlayed(gamePlayed)) {
                             gameService.saveGamePlayed(gamePlayed);
                         }
+                        viewName = "redirect:/account/"+gamePlayed.getFriendlyGameAccountId()+"/games";
+
                     } catch (Exception e) {
                         logger.error(ExceptionUtils.getStackTrace(e));
                         gameService.saveRawMatchError(rawMatchData);
@@ -76,7 +80,7 @@ public class LogFileUploadController {
                 modelAndView.addObject("error", "An error has occured.");
             }
         }
-
+        modelAndView.setViewName(viewName);
         return modelAndView;
     }
 }
