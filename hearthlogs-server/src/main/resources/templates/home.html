@@ -27,8 +27,6 @@
 
 <div class="container">
 
-    <div th:replace="/fragments/beta-fragment::beta"></div>
-
     <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
@@ -40,10 +38,6 @@
         </form>
         <br/>
         <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
-        <div class="beta-test">
-            Want to help beta test?  Sign up <a th:href="@{/beta}" href="beta.html">here</a>.
-            <br/>
-        </div>
     </div>
 
 </div>

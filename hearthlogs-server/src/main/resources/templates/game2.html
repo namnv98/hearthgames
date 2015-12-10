@@ -7,289 +7,14 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-    <script src="http://cdn.jsdelivr.net/jquery.tooltipster/3.3.0/js/jquery.tooltipster.min.js" th:src="@{/webjars/tooltipster/3.3.0/js/jquery.tooltipster.min.js}"></script>
-    <script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-    <script src="http://cdn.jsdelivr.net/handlebarsjs/4.0.2/handlebars.min.js" th:src="@{/webjars/handlebars/4.0.2/handlebars.min.js}"></script>
-
     <link href="http://cdn.jsdelivr.net/jquery.tooltipster/3.3.0/css/tooltipster.css" rel="stylesheet" type="text/css"  />
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
     <link href="../static/css/game.css" th:href="@{/css/game.css}" rel="stylesheet" media="screen"/>
-
-    <script id="game-board-template" type="text/x-handlebars-template" th:inline="javascript">
-
-        <div id="turn-status">
-            {{#with turnData}}
-            <span>Turn {{turn}} ( {{board}} )</span>
-            {{/with}}
-        </div>
-
-        <div id="game-board">
-            {{#with friendlyHero}}
-            <div id="friendly-hero" class="tt tt-{{id}} {{id}}_h">
-                <div class="hero-health-bg">
-                    <div class="hero-health-amount">{{health}}</div>
-                </div>
-                {{#if armor}}
-                    <div class="hero-armor-bg">
-                        <div class="hero-armor-amount">{{armor}}</div>
-                    </div>
-                {{/if}}
-                {{#if attack}}
-                    <div class="hero-attack-bg">
-                        <div class="hero-attack-amount">{{attack}}</div>
-                    </div>
-                {{/if}}
-            </div>
-            <div id="friendly-hero-power">
-                <div class="heropower">
-                    {{#if powerUsed}}
-                    <div class="tt tt-{{powerId}} used"></div>
-                    {{else}}
-                    <div class="tt tt-{{powerId}} {{powerId}}"></div>
-                    {{/if}}
-                </div>
-            </div>
-            <div id="friendly-weapon">
-                <div class="weapon">
-                    {{#if weapon}}
-                    <div class="tt tt-{{weapon.id}} {{weapon.id}}">
-                        <div class="attack">
-                            <div class="amount">{{weapon.attack}}</div>
-                        </div>
-                        <div class="durability">
-                            <div class="amount">{{weapon.durability}}</div>
-                        </div>
-                    </div>
-                    {{/if}}
-                </div>
-            </div>
-            <div id="friendly-hand">
-                {{#each cardsInHand}}
-                <div class="card">
-                    <div class="tt tt-{{id}} {{id}}"></div>
-                </div>
-                {{/each}}
-            </div>
-            <div id="friendly-play">
-                {{#each minionsInPlay}}
-                <div class="tt minion tt-{{id}}">
-                    <div class="card {{id}}"></div>
-                    <div class="attack">
-                        <div class="amount">{{attack}}</div>
-                    </div>
-                    <div class="health">
-                        <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
-                    </div>
-                    {{#if frozen}}
-                    <div class="frozen"></div>
-                    {{/if}}
-                    {{#if shielded}}
-                    <div class="shielded"></div>
-                    {{/if}}
-                    {{#if legendary}}
-                    <div class="legendary"></div>
-                    {{/if}}
-                    {{#if taunting}}
-                    <div class="taunting"></div>
-                    {{/if}}
-                    {{#if exhausted}}
-                    <div class="exhausted"></div>
-                    {{/if}}
-                    {{#if icon}}
-                    <div class="{{icon}}"></div>
-                    {{/if}}
-                </div>
-                {{/each}}
-            </div>
-            <div id="friendly-mana">
-                <div class="amount">{{mana}} / {{manaTotal}}</div>
-            </div>
-            <div id="friendly-graveyard"></div>
-            <div id="friendly-deck"></div>
-            {{/with}}
-
-
-            {{#with opposingHero}}
-            <div id="opposing-hero" class="tt tt-{{id}} {{id}}_h">
-                <div class="hero-health-bg">
-                    <div class="hero-health-amount">{{health}}</div>
-                </div>
-                {{#if armor}}
-                    <div class="hero-armor-bg">
-                        <div class="hero-armor-amount">{{armor}}</div>
-                    </div>
-                {{/if}}
-                {{#if attack}}
-                    <div class="hero-attack-bg">
-                        <div class="hero-attack-amount">{{attack}}</div>
-                    </div>
-                {{/if}}
-            </div>
-            <div id="opposing-hero-power">
-                <div class="heropower">
-                    {{#if powerUsed}}
-                    <div class="tt tt-{{powerId}} used"></div>
-                    {{else}}
-                    <div class="tt tt-{{powerId}} {{powerId}}"></div>
-                    {{/if}}
-                </div>
-            </div>
-            <div id="opposing-weapon">
-                <div class="weapon">
-                    {{#if weapon}}
-                    <div class="tt tt-{{weapon.id}} {{weapon.id}}">
-                        <div class="attack">
-                            <div class="amount">{{weapon.attack}}</div>
-                        </div>
-                        <div class="durability">
-                            <div class="amount">{{weapon.durability}}</div>
-                        </div>
-                    </div>
-                    {{/if}}
-                </div>
-            </div>
-            <div id="opposing-hand">
-                {{#each cardsInHand}}
-                <div class="card">
-                    <div class="tt tt-{{id}} {{id}}"></div>
-                </div>
-                {{/each}}
-            </div>
-            <div id="opposing-play">
-                {{#each minionsInPlay}}
-                <div class="tt minion tt-{{id}}">
-                    <div class="card {{id}}"></div>
-                    <div class="attack">
-                        <div class="amount">{{attack}}</div>
-                    </div>
-                    <div class="health">
-                        <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
-                    </div>
-                    {{#if frozen}}
-                    <div class="frozen"></div>
-                    {{/if}}
-                    {{#if shielded}}
-                    <div class="shielded"></div>
-                    {{/if}}
-                    {{#if legendary}}
-                    <div class="legendary"></div>
-                    {{/if}}
-                    {{#if taunting}}
-                    <div class="taunting"></div>
-                    {{/if}}
-                    {{#if exhausted}}
-                    <div class="exhausted"></div>
-                    {{/if}}
-                    {{#if icon}}
-                    <div class="{{icon}}"></div>
-                    {{/if}}
-                </div>
-                {{/each}}
-            </div>
-            <div id="opposing-mana">
-                <div class="amount">{{mana}} / {{manaTotal}}</div>
-            </div>
-            <div id="opposing-graveyard"></div>
-            <div id="opposing-deck"></div>
-            {{/with}}
-        </div>
-    </script>
-
-    <script th:inline="javascript">
-    /*<![CDATA[*/
-        $(document).ready(function(){
-            HearthLogs();
-        });
-
-        var HearthLogs = function() {
-
-            var gameData = JSON.parse([[${turnInfos}]]);
-
-            console.log(gameData);
-            console.log(gameData.length);
-
-            var source = $("#game-board-template").html();
-            var template = Handlebars.compile(source);
-
-            var turnCount = 0;
-            var boardCount = -1;
-
-            $('body').on('mouseover mouseenter', '.tt', function(){
-                $(this).tooltipster({
-                    content: '<div>Loading...</div>',
-                    contentAsHTML: true,
-                    position: 'top-left',
-                    speed: 0,
-                    delay: 0,
-                    functionBefore: function(origin, continueTooltip) {
-                        var className = '';
-                        var classes = $(this).attr('class').split(" ");
-                        for (var i=0; i < classes.length; i++) {
-                            if (classes[i].indexOf('tt-') != -1) {
-                                className = classes[i].substr(3);
-                                break;
-                            }
-                        }
-                        continueTooltip();
-                        origin.tooltipster('content', '<div class="' + className + '" style="width: 286px; height: 395px;"></div>');
-                    }
-                });
-                $(this).tooltipster('show');
-            });
-
-            var nextBoard = function() {
-
-                boardCount++;
-                if (boardCount >= gameData[turnCount].boards.length) {
-                    turnCount++;
-                    if (turnCount >= gameData.length) {
-                        turnCount--;
-                        boardCount--;
-                        return;
-                    } else {
-                        boardCount = 0;
-                    }
-                }
-                var board = gameData[turnCount].boards[boardCount];
-                var html = template(board);
-                $('#game-board-content').html(html);
-            };
-
-
-            var previousBoard = function() {
-                boardCount--;
-                if (boardCount < 0) {
-                    turnCount--;
-                    if (turnCount < 0) {
-                        boardCount = 0;
-                        turnCount = 0;
-                    } else {
-                        boardCount = gameData[turnCount].boards.length-1;
-                    }
-                }
-                var board = gameData[turnCount].boards[boardCount];
-                var html = template(board);
-                $('#game-board-content').html(html);
-            };
-            nextBoard();
-
-            $('#next').click(nextBoard);
-            $('#previous').click(previousBoard);
-
-        };
-
-    /*]]>*/
-    </script>
-
-
 
 </head>
 <body>
 
 <div class="container">
-
-    <div th:replace="/fragments/beta-fragment::beta"></div>
 
     <div th:replace="/fragments/login-fragment::userLoggedInOnGame"></div>
 
@@ -354,6 +79,10 @@
         <div id="menu8" class="tab-pane active">
             <div id="next">Next</div>
             <div id="previous">Previous</div>
+            <div id="actions">
+                <textarea id="game-actions"></textarea>
+            </div>
+
             <div id="game-board-content"></div>
         </div>
 
@@ -362,6 +91,289 @@
 
 
 </div>
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/jquery.tooltipster/3.3.0/js/jquery.tooltipster.min.js" th:src="@{/webjars/tooltipster/3.3.0/js/jquery.tooltipster.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/handlebarsjs/4.0.2/handlebars.min.js" th:src="@{/webjars/handlebars/4.0.2/handlebars.min.js}"></script>
+
+<script id="game-board-template" type="text/x-handlebars-template" th:inline="javascript">
+
+    <div id="turn-status">
+        {{#with turnData}}
+        <span>Turn {{turn}} ( {{board}} )</span>
+        {{/with}}
+    </div>
+
+    <div id="game-board">
+        {{#with friendlyHero}}
+        <div id="friendly-hero" class="{{id}}_h">
+            <div class="hero-health-bg">
+                <div class="hero-health-amount">{{health}}</div>
+            </div>
+            {{#if armor}}
+            <div class="hero-armor-bg">
+                <div class="hero-armor-amount">{{armor}}</div>
+            </div>
+            {{/if}}
+            {{#if attack}}
+            <div class="hero-attack-bg">
+                <div class="hero-attack-amount">{{attack}}</div>
+            </div>
+            {{/if}}
+            {{#each cardsInSecret}}
+            <div class="secret secret{{@index}} {{cardClass}}-secret tt tt-{{id}}"></div>
+            {{/each}}
+        </div>
+        <div id="friendly-hero-power">
+            <div class="heropower">
+                {{#if powerUsed}}
+                <div class="tt tt-{{powerId}} used"></div>
+                {{else}}
+                <div class="tt tt-{{powerId}} {{powerId}}"></div>
+                {{/if}}
+            </div>
+        </div>
+        <div id="friendly-weapon">
+            <div class="weapon">
+                {{#if weapon}}
+                <div class="tt tt-{{weapon.id}} {{weapon.id}}">
+                    <div class="attack">
+                        <div class="amount">{{weapon.attack}}</div>
+                    </div>
+                    <div class="durability">
+                        <div class="amount">{{weapon.durability}}</div>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        <div id="friendly-hand">
+            {{#each cardsInHand}}
+            <div class="card">
+                <div class="tt tt-{{id}} {{id}}"></div>
+            </div>
+            {{/each}}
+        </div>
+        <div id="friendly-play">
+            {{#each minionsInPlay}}
+            <div class="tt minion tt-{{id}}">
+                <div class="card {{id}}"></div>
+                <div class="attack">
+                    <div class="amount">{{attack}}</div>
+                </div>
+                <div class="health">
+                    <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
+                </div>
+                {{#if frozen}}
+                <div class="frozen"></div>
+                {{/if}}
+                {{#if shielded}}
+                <div class="shielded"></div>
+                {{/if}}
+                {{#if legendary}}
+                <div class="legendary"></div>
+                {{/if}}
+                {{#if taunting}}
+                <div class="taunting"></div>
+                {{/if}}
+                {{#if exhausted}}
+                <div class="exhausted"></div>
+                {{/if}}
+                {{#if icon}}
+                <div class="{{icon}}"></div>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        <div id="friendly-mana">
+            <div class="amount">{{mana}} / {{manaTotal}}</div>
+        </div>
+        <div id="friendly-graveyard"></div>
+        <div id="friendly-deck"></div>
+        {{/with}}
+
+
+        {{#with opposingHero}}
+        <div id="opposing-hero" class="{{id}}_h">
+            <div class="hero-health-bg">
+                <div class="hero-health-amount">{{health}}</div>
+            </div>
+            {{#if armor}}
+            <div class="hero-armor-bg">
+                <div class="hero-armor-amount">{{armor}}</div>
+            </div>
+            {{/if}}
+            {{#if attack}}
+            <div class="hero-attack-bg">
+                <div class="hero-attack-amount">{{attack}}</div>
+            </div>
+            {{/if}}
+            {{#each cardsInSecret}}
+            <div class="secret secret{{@index}} {{cardClass}}-secret tt tt-{{id}}"></div>
+            {{/each}}
+        </div>
+        <div id="opposing-hero-power">
+            <div class="heropower">
+                {{#if powerUsed}}
+                <div class="tt tt-{{powerId}} used"></div>
+                {{else}}
+                <div class="tt tt-{{powerId}} {{powerId}}"></div>
+                {{/if}}
+            </div>
+        </div>
+        <div id="opposing-weapon">
+            <div class="weapon">
+                {{#if weapon}}
+                <div class="tt tt-{{weapon.id}} {{weapon.id}}">
+                    <div class="attack">
+                        <div class="amount">{{weapon.attack}}</div>
+                    </div>
+                    <div class="durability">
+                        <div class="amount">{{weapon.durability}}</div>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        <div id="opposing-hand">
+            {{#each cardsInHand}}
+            <div class="card">
+                <div class="tt tt-{{id}} {{id}}"></div>
+            </div>
+            {{/each}}
+        </div>
+        <div id="opposing-play">
+            {{#each minionsInPlay}}
+            <div class="tt minion tt-{{id}}">
+                <div class="card {{id}}"></div>
+                <div class="attack">
+                    <div class="amount">{{attack}}</div>
+                </div>
+                <div class="health">
+                    <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
+                </div>
+                {{#if frozen}}
+                <div class="frozen"></div>
+                {{/if}}
+                {{#if shielded}}
+                <div class="shielded"></div>
+                {{/if}}
+                {{#if legendary}}
+                <div class="legendary"></div>
+                {{/if}}
+                {{#if taunting}}
+                <div class="taunting"></div>
+                {{/if}}
+                {{#if exhausted}}
+                <div class="exhausted"></div>
+                {{/if}}
+                {{#if icon}}
+                <div class="{{icon}}"></div>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        <div id="opposing-mana">
+            <div class="amount">{{mana}} / {{manaTotal}}</div>
+        </div>
+        <div id="opposing-graveyard"></div>
+        <div id="opposing-deck"></div>
+        {{/with}}
+    </div>
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function(){
+        HearthLogs();
+    });
+
+    var HearthLogs = function() {
+
+        var gameData = JSON.parse([[${turnInfos}]]);
+
+        console.log(gameData);
+        console.log(gameData.length);
+
+        var source = $("#game-board-template").html();
+        var template = Handlebars.compile(source);
+
+        var turnCount = 0;
+        var boardCount = -1;
+
+        $('body').on('mouseover mouseenter', '.tt', function(){
+            $(this).tooltipster({
+                content: '<div>Loading...</div>',
+                contentAsHTML: true,
+                position: 'top-left',
+                speed: 0,
+                delay: 0,
+                functionBefore: function(origin, continueTooltip) {
+                    var className = '';
+                    var classes = $(this).attr('class').split(" ");
+                    for (var i=0; i < classes.length; i++) {
+                        if (classes[i].indexOf('tt-') != -1) {
+                            className = classes[i].substr(3);
+                            break;
+                        }
+                    }
+                    continueTooltip();
+                    origin.tooltipster('content', '<div class="' + className + '" style="width: 286px; height: 395px;"></div>');
+                }
+            });
+            $(this).tooltipster('show');
+        });
+
+        var nextBoard = function() {
+
+            boardCount++;
+            if (boardCount >= gameData[turnCount].boards.length) {
+                turnCount++;
+                if (turnCount >= gameData.length) {
+                    turnCount--;
+                    boardCount--;
+                    return;
+                } else {
+                    boardCount = 0;
+                }
+            }
+            var board = gameData[turnCount].boards[boardCount];
+            var html = template(board);
+            $('#game-board-content').html(html);
+
+            for (var i=0; i < board.actions.length; i++) {
+                $('#game-actions').append(board.actions[i]+'\n');
+            }
+
+
+        };
+
+
+        var previousBoard = function() {
+            boardCount--;
+            if (boardCount < 0) {
+                turnCount--;
+                if (turnCount < 0) {
+                    boardCount = 0;
+                    turnCount = 0;
+                } else {
+                    boardCount = gameData[turnCount].boards.length-1;
+                }
+            }
+            var board = gameData[turnCount].boards[boardCount];
+            var html = template(board);
+            $('#game-board-content').html(html);
+        };
+        nextBoard();
+
+        $('#next').click(nextBoard);
+        $('#previous').click(previousBoard);
+
+    };
+
+    /*]]>*/
+</script>
 
 </body>
 </html>

@@ -24,7 +24,7 @@ public class HealthChangeHandler implements Handler {
         String side = context.getSide(before);
         result.addHealthChange(side, before, diffHealth, newHealth);
 
-        System.out.println(side + " " + before.getName() + " health is now : " + newHealth);
+        result.addActionLog(side + " " + before.getName() + " health is now : " + newHealth);
         return true;
     }
 }

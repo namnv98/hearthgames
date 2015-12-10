@@ -74,7 +74,7 @@ public class KillHandler implements Handler {
 
                 String msg = getMessage(favorableTrade, evenTrade, killerFriendly);
 
-                System.out.println(killerSide + " " + cardDetails.getName() + " has killed " + killedSide + " " + before.getName() + msg);
+                result.addActionLog(killerSide + " " + cardDetails.getName() + " has killed " + killedSide + " " + before.getName() + msg);
                 return true;
             }
         }
@@ -122,7 +122,7 @@ public class KillHandler implements Handler {
                             result.addKill("destroyed", killerSide, killedSide, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
 
                             String msg = getMessage(favorableTrade, evenTrade, killerFriendly);
-                            System.out.println(killerSide + " " + parentCardDetails.getName() + " has destroyed " + killedSide + " " + cardDetails.getName() + msg);
+                            result.addActionLog(killerSide + " " + parentCardDetails.getName() + " has destroyed " + killedSide + " " + cardDetails.getName() + msg);
                             return true;
                         }
                     }

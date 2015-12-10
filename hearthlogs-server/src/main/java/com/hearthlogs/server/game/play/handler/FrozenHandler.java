@@ -20,7 +20,7 @@ public class FrozenHandler implements Handler {
         String side = context.getSide(before);
         result.addFrozen(side, before, frozen);
 
-        System.out.println(side + " " + before.getName() + " has been frozen");
+        result.addActionLog(side + " " + before.getName() + " has been frozen");
 
         return true;
     }

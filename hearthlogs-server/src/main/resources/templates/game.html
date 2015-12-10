@@ -7,25 +7,13 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-    <script type="text/javascript" src="http://static-hearth.cursecdn.com/current/js/syndication/tt.js"></script>
-
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
     <link href="../static/css/game.css" th:href="@{/css/game.css}" rel="stylesheet" media="screen"/>
 
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#card-info").click(function(e){
-                e.preventDefault();
-            });
-        });
-    </script>
 </head>
 <body>
 
 <div class="container">
-
-    <div th:replace="/fragments/beta-fragment::beta"></div>
 
     <div th:replace="/fragments/login-fragment::userLoggedInOnGame"></div>
 
@@ -326,6 +314,17 @@
 
 
 </div>
+
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#card-info").click(function(e){
+            e.preventDefault();
+        });
+    });
+</script>
 
 </body>
 </html>

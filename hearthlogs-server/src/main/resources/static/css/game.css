@@ -1,6 +1,6 @@
 .tooltipster-default { border-radius: 0; border: 0 none; background: none; color: #fff; }
 
-.info-heading { color: #fff; font-weight: bold; text-shadow: 1px 1px 1px #000;}
+.info-heading { color: #fff; font-weight: bold; }
 
 .hearthlogs-title { text-align: center; }
 
@@ -72,6 +72,23 @@
 
 #friendly-hand { position: absolute; bottom: -61px; left: 1px; }
 #opposing-hand { position: absolute; top: -61px; left: 1px; }
+
+
+.secret { height: 32px; width: 32px; }
+.mage-secret { background-image: url(../images/mage-secret.png);  }
+.hunter-secret { background-image: url(../images/hunter-secret.png);  }
+.paladin-secret { background-image: url(../images/paladin-secret.png);  }
+#friendly-hero .secret0 { position: absolute; top: -8px; right: 68px; }
+#friendly-hero .secret1 { position: absolute; top: 15px; right: 108px; }
+#friendly-hero .secret2 { position: absolute; top: 53px; right: 132px; }
+#friendly-hero .secret3 { position: absolute; top: 15px; right: 30px; }
+#friendly-hero .secret4 { position: absolute; top: 53px; right: 6px; }
+
+#opposing-hero .secret0 { position: absolute; top: -8px; right: 68px; }
+#opposing-hero .secret1 { position: absolute; top: 15px; right: 108px; }
+#opposing-hero .secret2 { position: absolute; top: 53px; right: 132px; }
+#opposing-hero .secret3 { position: absolute; top: 15px; right: 30px; }
+#opposing-hero .secret4 { position: absolute; top: 53px; right: 6px; }
 
 .cardback { width: 40px; height: 50px; display: inline-block;  vertical-align: middle; background-image: url("http://images.hearthlogs.com/cardback.png"); }
 .card { width: 40px; height: 55px; display: inline-block; vertical-align: middle; }

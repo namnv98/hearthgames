@@ -18,7 +18,7 @@ public class ZonePositionChangeHandler implements Handler {
         Card after = context.getAfter(activity);
 
 //        result.addZonePositionChange(before, Zone.valueOf(before.getZone()), Integer.parseInt(after.getZonePosition()));
-//        System.out.println(before.getCardDetails() == null ? "unknown card" : before.getName() + " has moved to " + before.getZone() + ", position " + after.getZonePosition());
+//        result.addActionLog(before.getCardDetails() == null ? "unknown card" : before.getName() + " has moved to " + before.getZone() + ", position " + after.getZonePosition());
         return true;
     }
 }

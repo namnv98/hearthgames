@@ -1,10 +1,8 @@
 package com.hearthlogs.server.database.service;
 
 import com.hearthlogs.server.config.security.UserInfo;
-import com.hearthlogs.server.database.domain.BetaSignUp;
 import com.hearthlogs.server.database.domain.GamePlayed;
 import com.hearthlogs.server.database.domain.RawMatchError;
-import com.hearthlogs.server.database.repository.BetaSignUpRepository;
 import com.hearthlogs.server.database.repository.GamePlayedRepository;
 import com.hearthlogs.server.database.repository.RawMatchErrorRepository;
 import com.hearthlogs.server.game.log.domain.RawMatchData;
@@ -29,12 +27,10 @@ public class GameService {
     @Autowired
     private RawMatchErrorRepository rawMatchErrorRepository;
 
-    @Autowired
-    private BetaSignUpRepository betaSignUpRepository;
-
     public GamePlayed createGamePlayed(RawMatchData rawMatchData, GameContext context, GameResult result, UserInfo userInfo) {
 
         GamePlayed gamePlayed = new GamePlayed();
+        gamePlayed.setJustAdded(true);
         if (userInfo != null) {
             gamePlayed.setBattletag(userInfo.getBattletag());
             gamePlayed.setBattletagId(userInfo.getId());
@@ -104,27 +100,6 @@ public class GameService {
     public String getGameAccountId(String battletag) {
         GamePlayed gamePlayed = gamePlayedRepository.findFirstByBattletag(battletag);
         return gamePlayed != null ? gamePlayed.getFriendlyGameAccountId() : null;
-    }
-
-    public void signUp(BetaSignUp betaSignUp) {
-        betaSignUp.setApproved(false);
-        betaSignUpRepository.save(betaSignUp);
-    }
-
-    public void approve(Long id) {
-        BetaSignUp betaSignUp = betaSignUpRepository.findOne(id);
-        if (betaSignUp != null) {
-            betaSignUp.setApproved(true);
-            betaSignUpRepository.save(betaSignUp);
-        }
-    }
-
-    public BetaSignUp getByBattletag(String battletag) {
-        return betaSignUpRepository.findByBattletag(battletag);
-    }
-
-    public List<BetaSignUp> getSignupsToBeApproved() {
-        return betaSignUpRepository.findByApproved(false);
     }
 
     private String linesToString(List<String> lines) {

@@ -28,9 +28,9 @@ public class CardDrawnHandler implements Handler {
             if (activity.getParent() != null && (activity.getParent().isTrigger() || activity.getParent().isPower())) {
                 Entity entity = activity.getParent().getDelta();
                 if (entity instanceof Card) {
-                    System.out.println(player.getName() + " has drawn " + before.getName() + ", id="+before.getEntityId());
+                    result.addActionLog(player.getName() + " has drawn " + before.getName() + ", id="+before.getEntityId());
                 } else if (entity instanceof Player) {
-                    System.out.println(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
+                    result.addActionLog(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
                 }
                 return true;
             }
@@ -38,13 +38,13 @@ public class CardDrawnHandler implements Handler {
             if (player == context.getFriendlyPlayer()) {
                 if (context.getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
                     result.addFriendlyStartingCard(before);
-                    System.out.println(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
+                    result.addActionLog(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
                     return true;
                 }
             } else {
                 if (context.getStartingCardIds().contains(before.getEntityId())) {
                     result.addOpposingStartingCard(before);
-                    System.out.println(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
+                    result.addActionLog(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
                     return true;
                 }
             }

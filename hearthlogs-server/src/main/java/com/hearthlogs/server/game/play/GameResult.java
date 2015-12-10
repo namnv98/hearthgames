@@ -30,6 +30,17 @@ public class GameResult {
     private Turn currentTurn;
     private int turnNumber;
 
+    private List<String> actionLogs = new ArrayList<>();
+
+    public void addActionLog(String log) {
+        System.out.println(log);
+        actionLogs.add(log);
+    }
+
+    public List<String> getActionLogs() {
+        return actionLogs;
+    }
+
     public void addFriendlyStartingCard(Card card) {
         friendlyStartingCards.add(card);
         friendlyDeckCards.add(card);

@@ -1,8 +1,6 @@
 package com.hearthlogs.server.game.analysis;
 
-import com.hearthlogs.server.game.analysis.domain.TurnColumn;
 import com.hearthlogs.server.game.analysis.domain.TurnInfo;
-import com.hearthlogs.server.game.analysis.domain.TurnRow;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.play.GameResult;
@@ -40,29 +38,10 @@ public class TurnInfoAnalyzer implements Analyzer<List<TurnInfo>> {
         }
 
         List<Board> boards = new ArrayList<>();
-        List<Action> actionsForBoard = new ArrayList<>();
-        for (Action action: turn.getActions()) {
-            if (isRegularAction(action)) {
-                actionsForBoard.add(action);
-            } else if (action instanceof Board) {
-                Board board = (Board) action;
-                actionsForBoard.forEach(board::addAction);
-                actionsForBoard = new ArrayList<>();
-                boards.add(board);
-            }
-        }
+        turn.getActions().stream().filter(action -> action instanceof Board).forEach(action -> boards.add((Board) action));
         info.setBoards(boards);
 
         return info;
-    }
-
-    private boolean isRegularAction(Action action) {
-        return action instanceof ArmorChange || action instanceof AttackChange || action instanceof CardCreation ||
-               action instanceof CardDrawn || action instanceof CardPlayed || action instanceof Damage ||
-               action instanceof Frozen || action instanceof HealthChange || action instanceof HeroHealthChange ||
-               action instanceof HeroPowerUsed || action instanceof Joust || action instanceof Kill ||
-               action instanceof ManaGained || action instanceof ManaUsed || action instanceof TempManaGained ||
-               action instanceof Trigger || action instanceof CardDiscarded;
     }
 
 }

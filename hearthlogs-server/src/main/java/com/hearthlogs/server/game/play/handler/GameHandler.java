@@ -23,7 +23,7 @@ public class GameHandler implements Handler {
         GameEntity after = (GameEntity) activity.getDelta();
 
         if (before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) {
-            System.out.println("---------------------  The Game has started  ----------------------------------");
+            result.addActionLog("---------------------  The Game has started  ----------------------------------");
             context.getCards().stream().filter(c -> Zone.HAND.eq(c.getZone())).filter(c -> context.getStartingCardIds().contains(c.getEntityId())).forEach(c -> {
                 Player player = c.getController().equals(context.getFriendlyPlayer().getController()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
                 if (player == context.getFriendlyPlayer()) {
@@ -31,19 +31,16 @@ public class GameHandler implements Handler {
                 } else {
                     result.addOpposingStartingCard(c);
                 }
-                System.out.println(player.getName() + " has drawn " + c.getName() + " (id=" + c.getEntityId()+ ")");
+                result.addActionLog(player.getName() + " has drawn " + c.getName() + " (id=" + c.getEntityId()+ ")");
             });
-
-
-            System.out.println("--------------------  Mulligan Phase has started  -----------------------------");
+            result.addActionLog("--------------------  Mulligan Phase has started  -----------------------------");
         }
         if (GameEntity.Step.BEGIN_MULLIGAN.eq(before.getStep()) && GameEntity.Step.MAIN_READY.eq(after.getStep())) {
-            System.out.println("--------------------  Mulligan Phase has ended  -------------------------------");
-//            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TURN " + context.getGame().getTurn() + "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            result.addActionLog("--------------------  Mulligan Phase has ended  -------------------------------");
         }
 
         if (GameEntity.Step.MAIN_READY.eq(after.getStep())) {
-            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TURN " + result.getTurnNumber() + "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            result.addActionLog("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TURN " + result.getTurnNumber() + "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             if (result.getTurnNumber() > 1) {
                 result.addTurn();
             }
@@ -92,7 +89,7 @@ public class GameHandler implements Handler {
             context.getFriendlyPlayer().setHeroCard(friendlyHeroCard);
             context.getOpposingPlayer().setHeroCard(opposingHeroCard);
 
-            System.out.println("--------------------------  Game Over  ----------------------------------------");
+            result.addActionLog("--------------------------  Game Over  ----------------------------------------");
         }
 
         return true;

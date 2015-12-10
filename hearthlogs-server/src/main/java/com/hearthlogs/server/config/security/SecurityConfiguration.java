@@ -1,6 +1,5 @@
 package com.hearthlogs.server.config.security;
 
-import com.hearthlogs.server.database.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -29,9 +28,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2RestOperations restTemplate;
 
-    @Autowired
-    private GameService gameService;
-
     private String redirectUrl;
 
     @Bean
@@ -43,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         String LOGIN_URL = "/login";
 
-        HearthLogsAuthenticationFilter hearthLogsAuthenticationFilter = new HearthLogsAuthenticationFilter(LOGIN_URL, restTemplate, gameService);
+        HearthLogsAuthenticationFilter hearthLogsAuthenticationFilter = new HearthLogsAuthenticationFilter(LOGIN_URL, restTemplate);
         hearthLogsAuthenticationFilter.setAuthenticationSuccessHandler(successHandler());
 
         http.addFilterAfter(oAuth2ClientContextFilter, AbstractPreAuthenticatedProcessingFilter.class)

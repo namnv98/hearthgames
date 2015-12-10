@@ -18,8 +18,6 @@
 
 <div class="container">
 
-    <div th:replace="/fragments/beta-fragment::beta"></div>
-
     <div th:replace="/fragments/login-fragment::userLoggedInOnGames"></div>
 
     <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
@@ -47,7 +45,7 @@
             <td><span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}">Seekay</span></td>
             <td><span th:text="${game.duration}"></span></td>
             <td><span th:text="${game.turns}">23</span></td>
-            <td><span th:text="${game.challenge}">Dominated</span></td>
+            <td><span th:if="${game.justAdded}">New</span></td>
         </tr>
         </tbody>
     </table>

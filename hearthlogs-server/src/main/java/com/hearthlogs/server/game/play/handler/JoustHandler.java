@@ -67,12 +67,12 @@ public class JoustHandler implements Handler {
     }
 
     private void addJoustResult(GameResult result, GameContext context, int cost1, int cost2, Card card1, Card card2) {
-//        System.out.println(card1.getName() + " (" + cost1 + ")" + " is jousting : " + card2.getName() + " (" + cost2 + ") ");
+        result.addActionLog(card1.getName() + " (" + cost1 + ")" + " is jousting : " + card2.getName() + " (" + cost2 + ") ");
         boolean winner = cost1 > cost2;
         if (winner) {
-//            System.out.println(card1.getName() + " has won the joust!");
+            result.addActionLog(card1.getName() + " has won the joust!");
         } else {
-//            System.out.println(card1.getName() + " has lost the joust!");
+            result.addActionLog(card1.getName() + " has lost the joust!");
         }
         result.addJoust(context.getFriendlyPlayer(), context.getOpposingPlayer(), card1.getCardid(), card2.getCardid(), card1, winner);
 

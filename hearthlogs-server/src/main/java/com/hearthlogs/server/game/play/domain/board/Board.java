@@ -23,9 +23,12 @@ public class Board implements Action {
     private Hero friendlyHero = new Hero();
     private Hero opposingHero = new Hero();
 
-    private List<Action> actions = new ArrayList<>();
+    private List<String> actions = new ArrayList<>();
 
     public Board(GameResult result, GameContext context) {
+
+        actions.addAll(result.getActionLogs());
+        result.getActionLogs().clear();
 
         Board previousBoard = result.getCurrentTurn().findLastBoard();
         if (previousBoard != null) {
@@ -50,13 +53,13 @@ public class Board implements Action {
         return opposingHero;
     }
 
-    public void addAction(Action action) {
+    public void addAction(String action) {
         actions.add(action);
     }
 
-//    public List<Action> getActions() {
-//        return actions;
-//    }
+    public List<String> getActions() {
+        return actions;
+    }
 
 
     public TurnData getTurnData() {
@@ -196,9 +199,10 @@ public class Board implements Action {
                     minionInPlay.setIcon("deathrattle");
                 }
 
-            } else if (Zone.SECRET.eq(c.getZone()) && Card.Type.SPELL.eq(c.getCardtype())) {
+            } else if (Zone.SECRET.eq(c.getZone())) {
                 CardInSecret cardInSecret = new CardInSecret();
-                cardInSecret.setId(c.getCardid());
+                cardInSecret.setCardClass(c.getCardClass().toLowerCase());
+                cardInSecret.setId(c.getCardDetails().getId());
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInSecret().add(cardInSecret);
                 } else {

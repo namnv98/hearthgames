@@ -24,7 +24,8 @@ public class AttackChangeHandler implements Handler {
         int diffAttack = newAttack - currentAttack;
         String side = context.getSide(before);
         result.addAttackChange(side, before, diffAttack, newAttack);
-        System.out.println(side + " " + before.getName() + " attack is now : " + newAttack);
+
+        result.addActionLog(side + " " + before.getName() + " attack is now : " + newAttack);
 
         return true;
     }

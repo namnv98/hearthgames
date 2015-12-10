@@ -16,7 +16,6 @@ import com.hearthlogs.server.service.GamePlayingService;
 import com.hearthlogs.server.service.RawLogProcessingService;
 import com.hearthlogs.server.util.GameCompressionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,6 +87,8 @@ public class GameController {
                     e.printStackTrace();
                 }
 
+                gamePlayed.setJustAdded(false);
+                gameService.saveGamePlayed(gamePlayed);
 
                 //hack for Thymeleaf plugin - duplicate model properties
                 if (false) {

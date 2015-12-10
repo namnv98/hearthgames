@@ -24,7 +24,7 @@ public class CardCreationHandler implements Handler {
 
                 if (!created.isEnchantment()) {
                     result.addCardCreation(creatorSide, createdSide, beneficiary, creator, created);
-                    System.out.println(creatorSide + " " + creator.getName() + " has created : " + createdSide + " " +  created.getName());
+                    result.addActionLog(creatorSide + " " + creator.getName() + " has created : " + createdSide + " " +  created.getName());
                 }
                 return true;
             }

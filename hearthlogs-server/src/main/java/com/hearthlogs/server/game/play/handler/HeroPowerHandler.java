@@ -19,7 +19,7 @@ public class HeroPowerHandler implements Handler {
         Player player = context.getPlayerForCard(card);
 
         if (Card.Type.HERO_POWER.eq(card.getCardtype())) {
-            System.out.println(player.getName() + " has activated their hero power");
+            result.addActionLog(player.getName() + " has activated their hero power");
             result.addHeroPowerUsed(player, card);
             return true;
         }

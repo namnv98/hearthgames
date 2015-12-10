@@ -21,7 +21,7 @@ public class ArmorChangeHandler implements Handler {
         String side = context.getSide(before);
         result.addArmorChange(side, before, armor);
 
-        System.out.println(side + " " + before.getName() + " armor is now : " + armor);
+        result.addActionLog(side + " " + before.getName() + " armor is now : " + armor);
 
         return true;
     }
