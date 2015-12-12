@@ -9,7 +9,6 @@ import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.service.GameParserService;
 import com.hearthgames.server.service.GamePlayingService;
 import com.hearthgames.server.service.RawLogProcessingService;
-import com.hearthlogs.server.service.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

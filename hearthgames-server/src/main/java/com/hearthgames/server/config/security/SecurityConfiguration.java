@@ -19,7 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ConfigurationProperties("hearthlogs")
+@ConfigurationProperties("hearthgames")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -39,11 +39,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         String LOGIN_URL = "/login";
 
-        HearthLogsAuthenticationFilter hearthLogsAuthenticationFilter = new HearthLogsAuthenticationFilter(LOGIN_URL, restTemplate);
-        hearthLogsAuthenticationFilter.setAuthenticationSuccessHandler(successHandler());
+        HearthGamesAuthenticationFilter hearthGamesAuthenticationFilter = new HearthGamesAuthenticationFilter(LOGIN_URL, restTemplate);
+        hearthGamesAuthenticationFilter.setAuthenticationSuccessHandler(successHandler());
 
         http.addFilterAfter(oAuth2ClientContextFilter, AbstractPreAuthenticatedProcessingFilter.class)
-            .addFilterAfter(hearthLogsAuthenticationFilter, OAuth2ClientContextFilter.class)
+            .addFilterAfter(hearthGamesAuthenticationFilter, OAuth2ClientContextFilter.class)
             .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(LOGIN_URL))
             .and().authorizeRequests()
             .antMatchers("/").permitAll()

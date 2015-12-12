@@ -3,7 +3,6 @@ package com.hearthgames.server.service;
 import com.hearthgames.server.game.log.domain.LogLineData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.handler.*;
-import com.hearthlogs.server.game.parse.handler.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

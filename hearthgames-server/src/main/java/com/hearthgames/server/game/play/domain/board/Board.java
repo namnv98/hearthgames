@@ -7,6 +7,7 @@ import com.hearthgames.server.game.parse.domain.Zone;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.Action;
 import com.hearthgames.server.game.play.domain.Turn;
+import com.hearthgames.server.util.HeroStatsUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -62,8 +63,8 @@ public class Board implements Action {
     }
 
     private void setHeroIds(GameContext context, Hero friendlyHero, Hero opposingHero) {
-        friendlyHero.setId(getHeroId(context.getFriendlyPlayer(), context));
-        opposingHero.setId(getHeroId(context.getOpposingPlayer(), context));
+        friendlyHero.setId(HeroStatsUtil.getHeroId(context.getFriendlyPlayer(), context));
+        opposingHero.setId(HeroStatsUtil.getHeroId(context.getOpposingPlayer(), context));
     }
 
     private void setHeroHealthArmor(GameResult result, GameContext context, Hero friendlyHero, Hero opposingHero) {
@@ -78,10 +79,10 @@ public class Board implements Action {
         Board previousBoard = currentTurn.findLastBoard();
 
         if (result.getCurrentTurn().getTurnNumber() == 0 && previousBoard == null) {
-            friendlyHealth = getCurrentHealth(context.getFriendlyPlayer(), context);
-            opposingHealth = getCurrentHealth(context.getOpposingPlayer(), context);
-            friendlyArmor = getCurrentArmor(context.getFriendlyPlayer(), context);
-            opposingArmor = getCurrentArmor(context.getOpposingPlayer(), context);
+            friendlyHealth = HeroStatsUtil.getCurrentHealth(context.getFriendlyPlayer(), context);
+            opposingHealth = HeroStatsUtil.getCurrentHealth(context.getOpposingPlayer(), context);
+            friendlyArmor = HeroStatsUtil.getCurrentArmor(context.getFriendlyPlayer(), context);
+            opposingArmor = HeroStatsUtil.getCurrentArmor(context.getOpposingPlayer(), context);
         } else {
             if (previousBoard == null) {
                 previousBoard = previousTurn.findLastBoard();
@@ -93,17 +94,17 @@ public class Board implements Action {
         }
 
 
-        if (hasHealthChanged(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
-            friendlyHealth = getHealth(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasHealthChanged(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
+            friendlyHealth = HeroStatsUtil.getHealth(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
         }
-        if (hasArmorChanged(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
-            friendlyArmor = getArmor(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasArmorChanged(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
+            friendlyArmor = HeroStatsUtil.getArmor(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
         }
-        if (hasHealthChanged(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
-            opposingHealth = getHealth(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasHealthChanged(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
+            opposingHealth = HeroStatsUtil.getHealth(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
         }
-        if (hasArmorChanged(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
-            opposingArmor = getArmor(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasArmorChanged(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
+            opposingArmor = HeroStatsUtil.getArmor(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
         }
 
         friendlyHero.setHealth(friendlyHealth);
@@ -115,13 +116,13 @@ public class Board implements Action {
 
     private void setHeroMana(GameResult result, GameContext context, Hero friendlyHero, Hero opposingHero) {
 
-        Integer friendlyManaGained = getManaGained(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
-        Integer friendlyManaUsed = getManaUsed(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
+        Integer friendlyManaGained = HeroStatsUtil.getManaGained(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
+        Integer friendlyManaUsed = HeroStatsUtil.getManaUsed(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
         friendlyHero.setMana(friendlyManaGained-friendlyManaUsed);
         friendlyHero.setManaTotal(friendlyManaGained);
 
-        Integer opposingManaGained = getManaGained(context.getOpposingPlayer(), result.getCurrentTurn(), this);
-        Integer opposingManaUsed = getManaUsed(context.getOpposingPlayer(), result.getCurrentTurn(), this);
+        Integer opposingManaGained = HeroStatsUtil.getManaGained(context.getOpposingPlayer(), result.getCurrentTurn(), this);
+        Integer opposingManaUsed = HeroStatsUtil.getManaUsed(context.getOpposingPlayer(), result.getCurrentTurn(), this);
         opposingHero.setMana(opposingManaGained-opposingManaUsed);
         opposingHero.setManaTotal(opposingManaGained);
     }

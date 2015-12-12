@@ -18,7 +18,7 @@
 
     <div th:replace="/fragments/login-fragment::userLoggedInOnGame"></div>
 
-    <div class="hearthlogs-title">HEARTHGAMES.com</div>
+    <div class="hearthgames-title">HEARTHGAMES.com</div>
 
     <hr/>
 
@@ -282,10 +282,10 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function(){
-        HearthLogs();
+        HearthGames();
     });
 
-    var HearthLogs = function() {
+    var HearthGames = function() {
 
         var gameData = JSON.parse([[${turnInfos}]]);
 

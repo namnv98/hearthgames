@@ -7,14 +7,14 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${java.io.tmpdir}/hearthlogs.log</file>
+        <file>${java.io.tmpdir}/hearthgames.log</file>
         <append>false</append>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %msg%n</Pattern>
         </encoder>
     </appender>
 
-    <logger name="com.hearthlogs" level="INFO" additivity="false">
+    <logger name="com.hearthgames" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>

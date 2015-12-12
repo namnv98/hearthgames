@@ -6,6 +6,7 @@ import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.util.HeroStatsUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,23 +32,23 @@ public class HealthArmorAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
         table.setOpposing(opposing);
         opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
 
-        Integer friendlyHealth = getCurrentHealth(context.getFriendlyPlayer(), context);
-        Integer opposingHealth = getCurrentHealth(context.getOpposingPlayer(), context);
-        Integer friendlyArmor = getCurrentArmor(context.getFriendlyPlayer(), context);
-        Integer opposingArmor = getCurrentArmor(context.getOpposingPlayer(), context);
+        Integer friendlyHealth = HeroStatsUtil.getCurrentHealth(context.getFriendlyPlayer(), context);
+        Integer opposingHealth = HeroStatsUtil.getCurrentHealth(context.getOpposingPlayer(), context);
+        Integer friendlyArmor = HeroStatsUtil.getCurrentArmor(context.getFriendlyPlayer(), context);
+        Integer opposingArmor = HeroStatsUtil.getCurrentArmor(context.getOpposingPlayer(), context);
 
         for (Turn turn: turns) {
-            if (hasHealthChanged(context.getFriendlyPlayer(), turn.getActions())) {
-                friendlyHealth = getHealth(context.getFriendlyPlayer(), turn.getActions());
+            if (HeroStatsUtil.hasHealthChanged(context.getFriendlyPlayer(), turn.getActions())) {
+                friendlyHealth = HeroStatsUtil.getHealth(context.getFriendlyPlayer(), turn.getActions());
             }
-            if (hasArmorChanged(context.getFriendlyPlayer(), turn.getActions())) {
-                friendlyArmor = getArmor(context.getFriendlyPlayer(), turn.getActions());
+            if (HeroStatsUtil.hasArmorChanged(context.getFriendlyPlayer(), turn.getActions())) {
+                friendlyArmor = HeroStatsUtil.getArmor(context.getFriendlyPlayer(), turn.getActions());
             }
-            if (hasHealthChanged(context.getOpposingPlayer(), turn.getActions())) {
-                opposingHealth = getHealth(context.getOpposingPlayer(), turn.getActions());
+            if (HeroStatsUtil.hasHealthChanged(context.getOpposingPlayer(), turn.getActions())) {
+                opposingHealth = HeroStatsUtil.getHealth(context.getOpposingPlayer(), turn.getActions());
             }
-            if (hasArmorChanged(context.getOpposingPlayer(), turn.getActions())) {
-                opposingArmor = getArmor(context.getOpposingPlayer(), turn.getActions());
+            if (HeroStatsUtil.hasArmorChanged(context.getOpposingPlayer(), turn.getActions())) {
+                opposingArmor = HeroStatsUtil.getArmor(context.getOpposingPlayer(), turn.getActions());
             }
 
             GenericColumn col = new GenericColumn(""+friendlyHealth);

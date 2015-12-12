@@ -3,10 +3,10 @@ spring:
     favicon:
       enabled: false
   application:
-    name: HearthLogs Server
+    name: HearthGames Server
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/hearthlogs
+    url: jdbc:postgresql://localhost:5432/hearthgames
     username: hl
     password: fuckmi69
 security:
@@ -16,17 +16,17 @@ security:
       client-secret: PTywt4SWSv63EAKGhCyHumVc9dVuXQcw
       access-token-uri: https://us.battle.net/oauth/token
       user-authorization-uri: https://us.battle.net/oauth/authorize
-      pre-established-redirect-uri: https://hearthlogs.com/login
+      pre-established-redirect-uri: https://hearthgames.com/login
       use-current-uri: false
 multipart.maxFileSize: 100MB
 multipart.maxRequestSize: 100MB
-hearthlogs.redirect-url: http://hearthlogs.com/
+hearthgames.redirect-url: http://hearthgames.com/
 ---
 spring.profiles: dev
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/hearthlogs
+    url: jdbc:postgresql://localhost:5433/hearthgames
     username: hl
     password: fuckmi69
 #spring.jpa.hibernate.ddl-auto: create
@@ -41,4 +41,4 @@ server.ssl.key-store: classpath:keystore.p12
 server.ssl.key-store-password: 4me2know
 server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
-hearthlogs.redirect-url: https://localhost:8443/
+hearthgames.redirect-url: https://localhost:8443/
