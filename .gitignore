@@ -1,4 +1,4 @@
 .idea/
-hearthlogs-server/target/
+hearthgames-server/target/
 hearthlogs-client/target/
 *.iml
