@@ -1,8 +1,8 @@
 package com.hearthlogs.server;
 
-import com.hearthgames.server.HearthGamesServerApplication;
-import com.hearthgames.server.game.parse.domain.CardDetails;
-import com.hearthgames.server.service.CardService;
+import com.hearthlogs.utils.UtilsApplication;
+import com.hearthlogs.utils.hearthpwn.CardDetails;
+import com.hearthlogs.utils.hearthpwn.CardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = HearthGamesServerApplication.class)
+@SpringApplicationConfiguration(classes = UtilsApplication.class)
 public class ImageManipulationTest {
 
     @Autowired
