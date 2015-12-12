@@ -30,10 +30,6 @@ public class ManaSaved implements Action, Serializable {
         this.card = card;
     }
 
-    @Override
-    public int getType() {
-        return 19;
-    }
 }
 
 

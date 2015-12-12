@@ -7,15 +7,15 @@ import java.io.Serializable;
 
 public class CardCreation implements Action, Serializable {
 
-    private String creatorSide;
-    private String createdSide;
+    private Player creatorController;
+    private Player createdController;
     private Player beneficiary;
     private Card creator;
     private Card created;
 
-    public CardCreation(String creatorSide, String createdSide, Player beneficiary, Card creator, Card created) {
-        this.creatorSide = creatorSide;
-        this.createdSide = createdSide;
+    public CardCreation(Player creatorController, Player createdController, Player beneficiary, Card creator, Card created) {
+        this.creatorController = creatorController;
+        this.createdController = createdController;
         this.beneficiary = beneficiary;
         this.creator = creator;
         this.created = created;
@@ -45,24 +45,24 @@ public class CardCreation implements Action, Serializable {
         this.created = created;
     }
 
-    public String getCreatorSide() {
-        return creatorSide;
+    public Player getCreatorController() {
+        return creatorController;
     }
 
-    public void setCreatorSide(String creatorSide) {
-        this.creatorSide = creatorSide;
+    public void setCreatorController(Player creatorController) {
+        this.creatorController = creatorController;
     }
 
-    public String getCreatedSide() {
-        return createdSide;
+    public Player getCreatedController() {
+        return createdController;
     }
 
-    public void setCreatedSide(String createdSide) {
-        this.createdSide = createdSide;
+    public void setCreatedController(Player createdController) {
+        this.createdController = createdController;
     }
 
     @Override
-    public int getType() {
-        return 5;
+    public String toString() {
+        return creatorController.getName() + " " + creator.getName() + " has created : " + createdController.getName() + " " +  created.getName() + " ( " + beneficiary.getName() + " has benefited )";
     }
 }

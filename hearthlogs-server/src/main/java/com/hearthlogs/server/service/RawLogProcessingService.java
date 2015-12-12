@@ -2,7 +2,7 @@ package com.hearthlogs.server.service;
 
 import com.hearthlogs.server.game.log.domain.FilteredLineData;
 import com.hearthlogs.server.game.log.domain.LogLineData;
-import com.hearthlogs.server.game.log.domain.RawMatchData;
+import com.hearthlogs.server.game.log.domain.RawGameData;
 import com.hearthlogs.server.game.log.filter.AssetLineFilter;
 import com.hearthlogs.server.game.log.filter.BobLineFilter;
 import com.hearthlogs.server.game.log.filter.PowerLineFilter;
@@ -40,13 +40,13 @@ public class RawLogProcessingService {
         this.assetLineFilter = assetLineFilter;
     }
 
-    public List<RawMatchData> processLogFile(List<String> lines) {
+    public List<RawGameData> processLogFile(List<String> lines) {
 
-        List<RawMatchData> rawMatchDatas = new ArrayList<>();
+        List<RawGameData> rawGameDatas = new ArrayList<>();
 
-        boolean matchComplete = false;
-        List<LogLineData> currentMatch = null;
-        List<String> currentRawMatch = null;
+        boolean gameComplete = false;
+        List<LogLineData> currentGame = null;
+        List<String> currentRawGame = null;
         Integer rank = null;
         for (String rawLine: lines) {
 
@@ -65,40 +65,40 @@ public class RawLogProcessingService {
                 String line = filteredLineData.getLine();
 
                 if (line.startsWith(CREATE_GAME)) {
-                    matchComplete = false;
+                    gameComplete = false;
                     rank = null;
-                    currentMatch = new ArrayList<>();
-                    currentRawMatch = new ArrayList<>();
+                    currentGame = new ArrayList<>();
+                    currentRawGame = new ArrayList<>();
                     LogLineData data = new LogLineData(timestamp, line);
-                    currentMatch.add(data);
-                    currentRawMatch.add(rawLine);
-                } else if (currentMatch != null && line.startsWith(GAME_STATE_COMPLETE)) {
+                    currentGame.add(data);
+                    currentRawGame.add(rawLine);
+                } else if (currentGame != null && line.startsWith(GAME_STATE_COMPLETE)) {
                     LogLineData data = new LogLineData(timestamp, line);
-                    currentMatch.add(data);
-                    currentRawMatch.add(rawLine);
-                    matchComplete = true;
-                } else if (currentMatch != null && matchComplete && line.startsWith(MEDAL_RANKED)) {
+                    currentGame.add(data);
+                    currentRawGame.add(rawLine);
+                    gameComplete = true;
+                } else if (currentGame != null && gameComplete && line.startsWith(MEDAL_RANKED)) {
                     int rankFound = getRank(line);
                     if (rank == null || rankFound < rank) {
                         rank = rankFound;
                     }
-                    currentRawMatch.add(rawLine);
-                } else if (currentMatch != null && matchComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
-                    currentRawMatch.add(rawLine);
-                    RawMatchData rawMatchData = new RawMatchData();
-                    rawMatchData.setLines(currentMatch);
-                    rawMatchData.setRawLines(currentRawMatch);
-                    rawMatchData.setRank(rank);
-                    rawMatchDatas.add(rawMatchData);
-                } else if (currentMatch != null && filteredLineData.isLoggable()) {
+                    currentRawGame.add(rawLine);
+                } else if (currentGame != null && gameComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
+                    currentRawGame.add(rawLine);
+                    RawGameData rawGameData = new RawGameData();
+                    rawGameData.setLines(currentGame);
+                    rawGameData.setRawLines(currentRawGame);
+                    rawGameData.setRank(rank);
+                    rawGameDatas.add(rawGameData);
+                } else if (currentGame != null && filteredLineData.isLoggable()) {
                     LogLineData data = new LogLineData(timestamp, line);
-                    currentMatch.add(data);
-                    currentRawMatch.add(rawLine);
+                    currentGame.add(data);
+                    currentRawGame.add(rawLine);
                 }
             }
         }
 
-        return rawMatchDatas;
+        return rawGameDatas;
     }
 
     private FilteredLineData filterLine(String line) {

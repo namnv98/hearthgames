@@ -7,7 +7,7 @@ import com.hearthlogs.server.database.service.GameService;
 import com.hearthlogs.server.game.analysis.domain.TurnInfo;
 import com.hearthlogs.server.game.analysis.domain.VersusInfo;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
-import com.hearthlogs.server.game.log.domain.RawMatchData;
+import com.hearthlogs.server.game.log.domain.RawGameData;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.service.GameAnalysisService;
@@ -47,7 +47,7 @@ public class GameController {
     @RequestMapping(value = "/game/{gameId}")
     public ModelAndView getGame(@PathVariable Long gameId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("game2");
+        modelAndView.setViewName("game");
 
         GamePlayed gamePlayed = gameService.getById(gameId);
         if (gamePlayed != null) {
@@ -56,11 +56,11 @@ public class GameController {
             String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
             String[] lines = logfile.split(splitStr);
 
-            List<RawMatchData> rawMatchDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
-            if (rawMatchDatas != null && rawMatchDatas.size() == 1) {
-                RawMatchData rawMatchData = rawMatchDatas.get(0);
-                GameContext context = gameParserService.parseLines(rawMatchData.getLines());
-                GameResult result = gamePlayingService.processGame(context, rawMatchData.getRank());
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
+            if (rawGameDatas != null && rawGameDatas.size() == 1) {
+                RawGameData rawGameData = rawGameDatas.get(0);
+                GameContext context = gameParserService.parseLines(rawGameData.getLines());
+                GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
                 GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
                 VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);

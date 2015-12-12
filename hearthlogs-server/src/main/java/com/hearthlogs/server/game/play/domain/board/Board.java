@@ -11,6 +11,7 @@ import com.hearthlogs.server.game.play.domain.Turn;
 import static com.hearthlogs.server.util.HeroStatsUtil.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Board implements Action {
@@ -23,12 +24,9 @@ public class Board implements Action {
     private Hero friendlyHero = new Hero();
     private Hero opposingHero = new Hero();
 
-    private List<String> actions = new ArrayList<>();
+    private List<Action> actions = new ArrayList<>();
 
     public Board(GameResult result, GameContext context) {
-
-        actions.addAll(result.getActionLogs());
-        result.getActionLogs().clear();
 
         Board previousBoard = result.getCurrentTurn().findLastBoard();
         if (previousBoard != null) {
@@ -53,22 +51,16 @@ public class Board implements Action {
         return opposingHero;
     }
 
-    public void addAction(String action) {
+    public void addAction(Action action) {
         actions.add(action);
     }
 
-    public List<String> getActions() {
+    public List<Action> getActions() {
         return actions;
     }
 
-
     public TurnData getTurnData() {
         return turnData;
-    }
-
-    @Override
-    public int getType() {
-        return 4;
     }
 
     private void setHeroIds(GameContext context, Hero friendlyHero, Hero opposingHero) {
@@ -87,14 +79,14 @@ public class Board implements Action {
         Turn previousTurn = result.getTurnBefore(currentTurn);
         Board previousBoard = currentTurn.findLastBoard();
 
-        if (result.getCurrentTurn().getTurnNumber() == 1 && previousBoard == null) {
+        if (result.getCurrentTurn().getTurnNumber() == 0 && previousBoard == null) {
             friendlyHealth = getCurrentHealth(context.getFriendlyPlayer(), context);
             opposingHealth = getCurrentHealth(context.getOpposingPlayer(), context);
             friendlyArmor = getCurrentArmor(context.getFriendlyPlayer(), context);
             opposingArmor = getCurrentArmor(context.getOpposingPlayer(), context);
         } else {
             if (previousBoard == null) {
-                previousBoard = previousTurn.findLastBoard();;
+                previousBoard = previousTurn.findLastBoard();
             }
             friendlyHealth = previousBoard.getFriendlyHero().getHealth();
             friendlyArmor = previousBoard.getFriendlyHero().getArmor();
@@ -168,6 +160,7 @@ public class Board implements Action {
                 } else {
                     opposingHero.getCardsInHand().add(cardInHand);
                 }
+                cardInHand.setPosition(Integer.parseInt(c.getZonePosition()));
             } else if (Zone.PLAY.eq(c.getZone()) && Card.Type.MINION.eq(c.getCardtype())) {
                 MinionInPlay minionInPlay = new MinionInPlay();
                 minionInPlay.setId(c.getCardid());
@@ -198,7 +191,7 @@ public class Board implements Action {
                 } else if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("Deathrattle")) {
                     minionInPlay.setIcon("deathrattle");
                 }
-
+                minionInPlay.setPosition(Integer.parseInt(c.getZonePosition()));
             } else if (Zone.SECRET.eq(c.getZone())) {
                 CardInSecret cardInSecret = new CardInSecret();
                 cardInSecret.setCardClass(c.getCardClass().toLowerCase());
@@ -208,6 +201,7 @@ public class Board implements Action {
                 } else {
                     opposingHero.getCardsInSecret().add(cardInSecret);
                 }
+                cardInSecret.setPosition(Integer.parseInt(c.getZonePosition()));
             } else if (Zone.PLAY.eq(c.getZone()) && Card.Type.WEAPON.eq(c.getCardtype())) {
                 Weapon weapon = new Weapon();
                 weapon.setId(c.getCardid());
@@ -223,7 +217,21 @@ public class Board implements Action {
                 }
             }
         }
+        CardZonePositionCompartor compartor = new CardZonePositionCompartor();
+        friendlyHero.getCardsInHand().sort(compartor);
+        friendlyHero.getCardsInSecret().sort(compartor);
+        friendlyHero.getMinionsInPlay().sort(compartor);
+        opposingHero.getCardsInHand().sort(compartor);
+        opposingHero.getCardsInSecret().sort(compartor);
+        opposingHero.getMinionsInPlay().sort(compartor);
+    }
 
+    private static class CardZonePositionCompartor implements Comparator<CardIn> {
+
+        @Override
+        public int compare(CardIn o1, CardIn o2) {
+            return o1.getPosition() - o2.getPosition();
+        }
     }
 
 }

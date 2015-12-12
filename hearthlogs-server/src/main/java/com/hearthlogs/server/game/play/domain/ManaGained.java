@@ -18,8 +18,4 @@ public class ManaGained implements Action, Serializable {
         this.manaGained = manaGained;
     }
 
-    @Override
-    public int getType() {
-        return 17;
-    }
 }

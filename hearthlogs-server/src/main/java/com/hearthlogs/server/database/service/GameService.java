@@ -5,7 +5,7 @@ import com.hearthlogs.server.database.domain.GamePlayed;
 import com.hearthlogs.server.database.domain.RawMatchError;
 import com.hearthlogs.server.database.repository.GamePlayedRepository;
 import com.hearthlogs.server.database.repository.RawMatchErrorRepository;
-import com.hearthlogs.server.game.log.domain.RawMatchData;
+import com.hearthlogs.server.game.log.domain.RawGameData;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
 import com.hearthlogs.server.game.play.GameResult;
@@ -27,7 +27,7 @@ public class GameService {
     @Autowired
     private RawMatchErrorRepository rawMatchErrorRepository;
 
-    public GamePlayed createGamePlayed(RawMatchData rawMatchData, GameContext context, GameResult result, UserInfo userInfo) {
+    public GamePlayed createGamePlayed(RawGameData rawGameData, GameContext context, GameResult result, UserInfo userInfo) {
 
         GamePlayed gamePlayed = new GamePlayed();
         gamePlayed.setJustAdded(true);
@@ -35,15 +35,15 @@ public class GameService {
             gamePlayed.setBattletag(userInfo.getBattletag());
             gamePlayed.setBattletagId(userInfo.getId());
         }
-        gamePlayed.setRawGame(GameCompressionUtils.compress(linesToString(rawMatchData.getRawLines())));
-        LocalDateTime startTime = rawMatchData.getLines().get(0).getDateTime();
+        gamePlayed.setRawGame(GameCompressionUtils.compress(linesToString(rawGameData.getRawLines())));
+        LocalDateTime startTime = rawGameData.getLines().get(0).getDateTime();
         LocalDateTime now = LocalDateTime.now();
         gamePlayed.setStartTime(startTime == null ? now : startTime);
-        LocalDateTime endTime = rawMatchData.getLines().get(rawMatchData.getLines().size()-1).getDateTime();
+        LocalDateTime endTime = rawGameData.getLines().get(rawGameData.getLines().size()-1).getDateTime();
         gamePlayed.setEndTime(endTime == null ? now : endTime);
         gamePlayed.setFriendlyGameAccountId(context.getFriendlyPlayer().getGameAccountIdLo());
         gamePlayed.setOpposingGameAccountId(context.getOpposingPlayer().getGameAccountIdLo());
-        gamePlayed.setRank(rawMatchData.getRank());
+        gamePlayed.setRank(rawGameData.getRank());
         gamePlayed.setFriendlyName(context.getFriendlyPlayer().getName());
         gamePlayed.setFriendlyClass(context.getFriendlyPlayer().getPlayerClass());
         gamePlayed.setOpposingName(context.getOpposingPlayer().getName());
@@ -91,9 +91,9 @@ public class GameService {
         return false;
     }
 
-    public void saveRawMatchError(RawMatchData rawMatchData) {
+    public void saveRawMatchError(RawGameData rawGameData) {
         RawMatchError rawMatchError = new RawMatchError();
-        rawMatchError.setRawGame(GameCompressionUtils.compress(linesToString(rawMatchData.getRawLines())));
+        rawMatchError.setRawGame(GameCompressionUtils.compress(linesToString(rawGameData.getRawLines())));
         rawMatchErrorRepository.save(rawMatchError);
     }
 

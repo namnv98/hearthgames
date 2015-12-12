@@ -8,22 +8,22 @@ import java.io.Serializable;
 
 public class CardDrawn implements Action, Serializable {
 
-    private Player beneficiary;
+    private Player drawer;
     private Card card;
     private Entity trigger;
 
-    public CardDrawn(Player beneficiary, Card card, Entity trigger) {
-        this.beneficiary = beneficiary;
+    public CardDrawn(Player drawer, Card card, Entity trigger) {
+        this.drawer = drawer;
         this.card = card;
         this.trigger = trigger;
     }
 
-    public Player getBeneficiary() {
-        return beneficiary;
+    public Player getDrawer() {
+        return drawer;
     }
 
-    public void setBeneficiary(Player beneficiary) {
-        this.beneficiary = beneficiary;
+    public void setDrawer(Player drawer) {
+        this.drawer = drawer;
     }
 
     public Card getCard() {
@@ -43,7 +43,7 @@ public class CardDrawn implements Action, Serializable {
     }
 
     @Override
-    public int getType() {
-        return 6;
+    public String toString() {
+        return drawer.getName() + " has drawn " + card.getName();
     }
 }

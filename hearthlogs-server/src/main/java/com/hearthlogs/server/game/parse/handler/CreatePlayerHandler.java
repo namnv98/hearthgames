@@ -21,7 +21,6 @@ public class CreatePlayerHandler extends AbstractHandler {
 
     @Override
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         if (context.isCreatePlayer() && line.startsWith(PLAYER)) { // we found the 2nd player
             context.endCreatePlayer(logLineData.getDateTime());

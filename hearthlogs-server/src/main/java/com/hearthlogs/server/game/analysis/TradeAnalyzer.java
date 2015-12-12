@@ -36,19 +36,19 @@ public class TradeAnalyzer implements Analyzer<GenericTable> {
                 if (action instanceof Kill) {
                     Kill kill = (Kill) action;
                     if (kill.isFavorableTrade()) {
-                        if ("FRIENDLY".equals(kill.getKillerSide())) {
+                        if (context.isFriendly(kill.getKillerController())) {
                             friendlyFavorableTrades++;
                         } else {
                             opposingFavorableTrades++;
                         }
                     } else if (kill.isEvenTrade()) {
-                        if ("FRIENDLY".equals(kill.getKillerSide())) {
+                        if (context.isFriendly(kill.getKillerController())) {
                             friendlyEvenTrades++;
                         } else {
                             opposingEvenTrades++;
                         }
                     } else {
-                        if ("FRIENDLY".equals(kill.getKillerSide())) {
+                        if (context.isFriendly(kill.getKillerController())) {
                             friendlyPoorTrades++;
                         } else {
                             opposingPoorTrades++;

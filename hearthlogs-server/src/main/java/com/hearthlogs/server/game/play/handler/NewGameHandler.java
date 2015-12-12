@@ -12,7 +12,7 @@ public class NewGameHandler implements Handler {
 
     @Override
     public boolean handle(GameResult result, GameContext context, Activity activity) {
-        result.setTurnNumber(1);
+        result.setTurnNumber(0);
         result.addTurn();
         return true;
     }

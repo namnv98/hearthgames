@@ -1,17 +1,18 @@
 package com.hearthlogs.server.game.play.domain;
 
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 
 import java.io.Serializable;
 
 public class HeroHealthChange implements Action, Serializable {
 
-    private String side;
+    private Player cardController;
     private Card card;
     private int health;
 
-    public HeroHealthChange(String side, Card card, int health) {
-        this.side = side;
+    public HeroHealthChange(Player cardController, Card card, int health) {
+        this.cardController = cardController;
         this.card = card;
         this.health = health;
     }
@@ -32,16 +33,16 @@ public class HeroHealthChange implements Action, Serializable {
         this.health = health;
     }
 
-    public String getSide() {
-        return side;
+    public Player getCardController() {
+        return cardController;
     }
 
-    public void setSide(String side) {
-        this.side = side;
+    public void setCardController(Player cardController) {
+        this.cardController = cardController;
     }
 
     @Override
-    public int getType() {
-        return 13;
+    public String toString() {
+        return cardController.getName() + " " + card.getName() + " hero health is now : " + health;
     }
 }

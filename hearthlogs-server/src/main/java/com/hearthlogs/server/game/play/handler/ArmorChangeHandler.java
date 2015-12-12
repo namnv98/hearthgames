@@ -3,6 +3,7 @@ package com.hearthlogs.server.game.play.handler;
 import com.hearthlogs.server.game.parse.domain.Activity;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.play.GameResult;
 
 public class ArmorChangeHandler implements Handler {
@@ -18,10 +19,8 @@ public class ArmorChangeHandler implements Handler {
         Card after = context.getAfter(activity);
 
         int armor = Integer.parseInt(after.getArmor());
-        String side = context.getSide(before);
-        result.addArmorChange(side, before, armor);
-
-        result.addActionLog(side + " " + before.getName() + " armor is now : " + armor);
+        Player player = context.getPlayer(before);
+        result.addArmorChange(player, before, armor);
 
         return true;
     }

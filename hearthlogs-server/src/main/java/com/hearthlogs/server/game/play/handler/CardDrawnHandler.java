@@ -25,26 +25,17 @@ public class CardDrawnHandler implements Handler {
                 }
             }
             result.addCardDrawn(player, before, activity.getParent().getDelta());
-            if (activity.getParent() != null && (activity.getParent().isTrigger() || activity.getParent().isPower())) {
-                Entity entity = activity.getParent().getDelta();
-                if (entity instanceof Card) {
-                    result.addActionLog(player.getName() + " has drawn " + before.getName() + ", id="+before.getEntityId());
-                } else if (entity instanceof Player) {
-                    result.addActionLog(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
-                }
-                return true;
-            }
         } else {
             if (player == context.getFriendlyPlayer()) {
                 if (context.getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
                     result.addFriendlyStartingCard(before);
-                    result.addActionLog(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
+                    result.addLoggingAction(player.getName() + " has drawn " +  before.getName());
                     return true;
                 }
             } else {
                 if (context.getStartingCardIds().contains(before.getEntityId())) {
                     result.addOpposingStartingCard(before);
-                    result.addActionLog(player.getName() + " has drawn " +  before.getName() + ", id="+before.getEntityId());
+                    result.addLoggingAction(player.getName() + " has drawn " +  before.getName());
                     return true;
                 }
             }

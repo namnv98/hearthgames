@@ -20,7 +20,6 @@ public class CreateCardHandler extends AbstractHandler {
 
     @Override
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         if (context.isCreateCard() && line.startsWith(CREATE_CARD)) { // we found back to back cards to add
             Map<String, String> data = getKeyValueData(line, cardPattern);

@@ -18,8 +18,4 @@ public class NumOptions implements Action, Serializable {
         this.number = number;
     }
 
-    @Override
-    public int getType() {
-        return 21;
-    }
 }

@@ -31,7 +31,6 @@ public class UpdateCardHandler extends AbstractHandler {
     @Override
     @SuppressWarnings("unchecked")
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         if (context.isUpdateCard() && line.startsWith(TAG)) { // are we updating an existing card's data
             Map<String, String> data = getKeyValueData(line, tagPattern);

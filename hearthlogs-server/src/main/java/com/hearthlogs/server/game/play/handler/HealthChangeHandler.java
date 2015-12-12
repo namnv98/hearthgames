@@ -3,6 +3,7 @@ package com.hearthlogs.server.game.play.handler;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Activity;
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.parse.domain.Zone;
 import com.hearthlogs.server.game.play.GameResult;
 
@@ -21,10 +22,9 @@ public class HealthChangeHandler implements Handler {
         int currentHealth = Integer.parseInt(before.getHealth() == null ? before.getCardDetailsHealth() : before.getHealth());
 
         int diffHealth = newHealth - currentHealth;
-        String side = context.getSide(before);
-        result.addHealthChange(side, before, diffHealth, newHealth);
+        Player player = context.getPlayer(before);
+        result.addHealthChange(player, before, diffHealth, newHealth);
 
-        result.addActionLog(side + " " + before.getName() + " health is now : " + newHealth);
         return true;
     }
 }

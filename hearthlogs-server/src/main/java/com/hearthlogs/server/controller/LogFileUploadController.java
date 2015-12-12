@@ -5,7 +5,7 @@ import com.hearthlogs.server.database.domain.GamePlayed;
 import com.hearthlogs.server.database.service.GameService;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
-import com.hearthlogs.server.game.log.domain.RawMatchData;
+import com.hearthlogs.server.game.log.domain.RawGameData;
 import com.hearthlogs.server.service.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -51,19 +51,19 @@ public class LogFileUploadController {
                 String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
                 String[] lines = logfile.split(splitStr);
 
-                List<RawMatchData> rawMatchDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
+                List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
 
-                for (RawMatchData rawMatchData : rawMatchDatas) {
+                for (RawGameData rawGameData : rawGameDatas) {
                     try {
-                        GameContext context = gameParserService.parseLines(rawMatchData.getLines());
-                        GameResult result = gamePlayingService.processGame(context, rawMatchData.getRank());
+                        GameContext context = gameParserService.parseLines(rawGameData.getLines());
+                        GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
                         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                         UserInfo userInfo = null;
                         if (principal != null && principal instanceof UserInfo) {
                             userInfo = (UserInfo) principal;
                         }
-                        GamePlayed gamePlayed = gameService.createGamePlayed(rawMatchData, context, result, userInfo);
+                        GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, userInfo);
                         if (!gameService.hasGameBeenPlayed(gamePlayed)) {
                             gameService.saveGamePlayed(gamePlayed);
                         }
@@ -71,7 +71,7 @@ public class LogFileUploadController {
 
                     } catch (Exception e) {
                         logger.error(ExceptionUtils.getStackTrace(e));
-                        gameService.saveRawMatchError(rawMatchData);
+                        gameService.saveRawMatchError(rawGameData);
                     }
                 }
 

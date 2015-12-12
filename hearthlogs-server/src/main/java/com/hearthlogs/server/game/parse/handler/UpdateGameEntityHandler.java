@@ -21,7 +21,6 @@ public class UpdateGameEntityHandler extends AbstractHandler {
 
     @Override
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         Map<String, String> data = getKeyValueData(line, tagPattern);
         if (data.get(STATE) != null && data.get(STATE).equals(COMPLETE)) {  // TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE

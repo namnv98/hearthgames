@@ -23,19 +23,19 @@ public class PlayerHandler implements Handler {
 
         if (after.getNumOptions() != null) {
 //            result.addNumOptions(Integer.parseInt(after.getNumOptions()));
-//            result.addActionLog(result.getCurrentTurn().getWhoseTurn().getName() + " has " + after.getNumOptions() + " possible moves to make.");
+//            result.addLoggingAction(result.getCurrentTurn().getWhoseTurn().getName() + " has " + after.getNumOptions() + " possible moves to make.");
         }
 
         if (after.getPlaystate() != null && (Player.PlayState.QUIT.eq(after.getPlaystate()) || Player.PlayState.CONCEDED.eq(after.getPlaystate()))) {
-            result.addActionLog(before.getName() + " has quit.");
+            result.addLoggingAction(before.getName() + " has quit.");
             result.setQuitter(before);
         }
         if (after.getPlaystate() != null && Player.PlayState.WON.eq(after.getPlaystate())) {
-            result.addActionLog(before.getName() + " has won.");
+            result.addLoggingAction(before.getName() + " has won.");
             result.setWinner(before);
         }
         if (after.getPlaystate() != null && Player.PlayState.LOST.eq(after.getPlaystate())) {
-            result.addActionLog(before.getName() + " has lost.");
+            result.addLoggingAction(before.getName() + " has lost.");
             result.setLoser(before);
         }
         if (TRUE_OR_ONE.equals(before.getFirstPlayer())) {

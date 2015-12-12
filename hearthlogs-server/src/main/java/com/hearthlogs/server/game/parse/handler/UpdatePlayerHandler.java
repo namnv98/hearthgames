@@ -26,7 +26,6 @@ public class UpdatePlayerHandler extends AbstractHandler {
 
     @Override
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         String playerName = getPlayerName(line);
         String entityStr = getEntityStr(line);

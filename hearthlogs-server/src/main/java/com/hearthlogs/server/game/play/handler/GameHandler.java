@@ -3,12 +3,7 @@ package com.hearthlogs.server.game.play.handler;
 import com.hearthlogs.server.game.parse.domain.*;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
-import com.hearthlogs.server.game.play.domain.Turn;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class GameHandler implements Handler {
@@ -23,7 +18,7 @@ public class GameHandler implements Handler {
         GameEntity after = (GameEntity) activity.getDelta();
 
         if (before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) {
-            result.addActionLog("---------------------  The Game has started  ----------------------------------");
+            result.addLoggingAction("The Game has started");
             context.getCards().stream().filter(c -> Zone.HAND.eq(c.getZone())).filter(c -> context.getStartingCardIds().contains(c.getEntityId())).forEach(c -> {
                 Player player = c.getController().equals(context.getFriendlyPlayer().getController()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
                 if (player == context.getFriendlyPlayer()) {
@@ -31,16 +26,19 @@ public class GameHandler implements Handler {
                 } else {
                     result.addOpposingStartingCard(c);
                 }
-                result.addActionLog(player.getName() + " has drawn " + c.getName() + " (id=" + c.getEntityId()+ ")");
+                result.addLoggingAction(player.getName() + " has drawn " + c.getName());
             });
-            result.addActionLog("--------------------  Mulligan Phase has started  -----------------------------");
+            result.addLoggingAction("Mulligan Phase has started");
         }
         if (GameEntity.Step.BEGIN_MULLIGAN.eq(before.getStep()) && GameEntity.Step.MAIN_READY.eq(after.getStep())) {
-            result.addActionLog("--------------------  Mulligan Phase has ended  -------------------------------");
+            result.addLoggingAction("Mulligan Phase has ended");
+            result.addEndofTurn();
+            result.setTurnNumber(1);
+            result.addTurn();
         }
 
         if (GameEntity.Step.MAIN_READY.eq(after.getStep())) {
-            result.addActionLog("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TURN " + result.getTurnNumber() + "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            result.addLoggingAction("Turn " + result.getTurnNumber());
             if (result.getTurnNumber() > 1) {
                 result.addTurn();
             }
@@ -89,7 +87,7 @@ public class GameHandler implements Handler {
             context.getFriendlyPlayer().setHeroCard(friendlyHeroCard);
             context.getOpposingPlayer().setHeroCard(opposingHeroCard);
 
-            result.addActionLog("--------------------------  Game Over  ----------------------------------------");
+            result.addLoggingAction("Game Over");
         }
 
         return true;

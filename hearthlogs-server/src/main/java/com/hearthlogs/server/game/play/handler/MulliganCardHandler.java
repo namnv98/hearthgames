@@ -24,7 +24,7 @@ public class MulliganCardHandler implements Handler {
         } else {
             result.mulliganOpposingCard(before);
         }
-        result.addActionLog(player.getName() + " has mulliganed " + before.getName());
+        result.addLoggingAction(player.getName() + " has mulliganed " + before.getName());
         return true;
     }
 }

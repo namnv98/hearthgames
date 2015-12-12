@@ -1,17 +1,18 @@
 package com.hearthlogs.server.game.play.domain;
 
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 
 import java.io.Serializable;
 
 public class Frozen implements Action, Serializable {
 
-    private String side;
+    private Player cardController;
     private Card card;
     private boolean frozen;
 
-    public Frozen(String side, Card card, boolean frozen) {
-        this.side = side;
+    public Frozen(Player cardController, Card card, boolean frozen) {
+        this.cardController = cardController;
         this.card = card;
         this.frozen = frozen;
     }
@@ -32,16 +33,16 @@ public class Frozen implements Action, Serializable {
         this.frozen = frozen;
     }
 
-    public String getSide() {
-        return side;
+    public Player getCardController() {
+        return cardController;
     }
 
-    public void setSide(String side) {
-        this.side = side;
+    public void setCardController(Player cardController) {
+        this.cardController = cardController;
     }
 
     @Override
-    public int getType() {
-        return 11;
+    public String toString() {
+        return cardController.getName() + " " + card.getName() + " has been frozen";
     }
 }

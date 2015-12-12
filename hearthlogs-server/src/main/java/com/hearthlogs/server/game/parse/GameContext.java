@@ -1,6 +1,5 @@
 package com.hearthlogs.server.game.parse;
 
-import com.hearthlogs.server.game.log.domain.LogLineData;
 import com.hearthlogs.server.game.parse.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +40,6 @@ public class GameContext {
     private boolean updateCard;
     private boolean gameUpdating;
     private boolean updatePlayer;
-
-    private LogLineData currentLine;
 
     private int currentIndentLevel;
     private int previousIndentLevel;
@@ -203,22 +200,6 @@ public class GameContext {
         this.updatePlayer = updatePlayer;
     }
 
-    public int getCurrentIndentLevel() {
-        return currentIndentLevel;
-    }
-
-    public void setCurrentIndentLevel(int currentIndentLevel) {
-        this.currentIndentLevel = currentIndentLevel;
-    }
-
-    public int getPreviousIndentLevel() {
-        return previousIndentLevel;
-    }
-
-    public void setPreviousIndentLevel(int previousIndentLevel) {
-        this.previousIndentLevel = previousIndentLevel;
-    }
-
     public void setIndentLevel(String line) {
         this.previousIndentLevel = currentIndentLevel;
         this.currentIndentLevel = getIndentLevel(line);
@@ -238,10 +219,6 @@ public class GameContext {
 
     public boolean hasIndentationDecreased() {
         return currentIndentLevel < previousIndentLevel;
-    }
-
-    public boolean hasIndentationIncreased() {
-        return currentIndentLevel > previousIndentLevel;
     }
 
     public void populateEntity(Entity entity, Map<String, String> data) {
@@ -553,19 +530,6 @@ public class GameContext {
         return startingCardIds;
     }
 
-    public boolean isMatchValid() {
-        // We found a match that was played against the computer.  This is not acceptable.
-        return !"0".equals(getOpposingPlayer().getGameAccountIdLo());
-    }
-
-    public LogLineData getCurrentLine() {
-        return currentLine;
-    }
-
-    public void setCurrentLine(LogLineData currentLine) {
-        this.currentLine = currentLine;
-    }
-
     public Player getPlayerForCard(Card card) {
         return card.getController().equals(getFriendlyPlayer().getController()) ? getFriendlyPlayer() : getOpposingPlayer();
     }
@@ -582,8 +546,8 @@ public class GameContext {
         return player == getFriendlyPlayer();
     }
 
-    public String getSide(Card card) {
-        return Objects.equals(card.getController(), getFriendlyPlayer().getController()) ? "FRIENDLY" : "OPPOSING";
+    public Player getPlayer(Card card) {
+        return Objects.equals(card.getController(), getFriendlyPlayer().getController()) ? getFriendlyPlayer() : getOpposingPlayer();
     }
 
 }

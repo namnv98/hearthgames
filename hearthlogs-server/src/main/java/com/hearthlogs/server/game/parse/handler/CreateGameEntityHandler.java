@@ -19,7 +19,6 @@ public class CreateGameEntityHandler extends AbstractHandler {
 
     @Override
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         if (context.isCreateGameEntity() && line.startsWith(TAG)) { // are we populating match data?
             Map<String, String> data = getKeyValueData(line, tagPattern);

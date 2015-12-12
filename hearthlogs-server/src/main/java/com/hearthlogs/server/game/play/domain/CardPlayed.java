@@ -10,13 +10,13 @@ public class CardPlayed implements Action, Serializable {
 
     private Zone fromZone;
     private Zone toZone;
-    private Player beneficiary;
+    private Player player;
     private Card card;
 
-    public CardPlayed(Zone fromZone, Zone toZone, Player beneficiary, Card card) {
+    public CardPlayed(Zone fromZone, Zone toZone, Player player, Card card) {
         this.fromZone = fromZone;
         this.toZone = toZone;
-        this.beneficiary = beneficiary;
+        this.player = player;
         this.card = card;
     }
 
@@ -28,12 +28,12 @@ public class CardPlayed implements Action, Serializable {
         this.card = card;
     }
 
-    public Player getBeneficiary() {
-        return beneficiary;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setBeneficiary(Player beneficiary) {
-        this.beneficiary = beneficiary;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public Zone getFromZone() {
@@ -53,7 +53,22 @@ public class CardPlayed implements Action, Serializable {
     }
 
     @Override
-    public int getType() {
-        return 7;
+    public String toString() {
+        if (Zone.HAND == fromZone && Zone.PLAY == toZone && card.isMinion()) {
+            return player.getName() + " has played a minion from HAND : " + card.getName();
+        } else if (Zone.HAND == fromZone && Zone.SECRET == toZone && card.isSpell()) {
+            return player.getName() + " has played a secret from HAND : " + card.getName();
+        } else if (Zone.DECK == fromZone && Zone.PLAY == toZone && card.isMinion()) {
+            return player.getName() + " has played a minion from DECK : " + card.getName();
+        } else if (Zone.DECK == fromZone && Zone.SECRET == toZone && card.isSpell()) {
+            return player.getName() + " has played a secret from DECK : " + card.getName();
+        } else if (Zone.GRAVEYARD == fromZone && Zone.PLAY == toZone && card.isMinion()) {
+            return player.getName() + " has played a minion from GRAVEYARD : " + card.getName();
+        } else if (Zone.PLAY == fromZone && Zone.PLAY == toZone && card.isMinion()) {
+            return player.getName() + " has gained a minion : " + card.getName();
+        } else if (Zone.HAND == fromZone && Zone.PLAY == toZone && card.isSpell()) {
+            return player.getName() + " has cast a spell : " + card.getName();
+        }
+        return "";
     }
 }

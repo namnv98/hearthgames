@@ -1,18 +1,19 @@
 package com.hearthlogs.server.game.play.domain;
 
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 
 import java.io.Serializable;
 
 public class HealthChange implements Action, Serializable {
 
-    private String side;
+    private Player cardController;
     private Card card;
     private int amount; // amount increased or decreased
     private int newHealth;
 
-    public HealthChange(String side, Card card, int amount, int newHealth) {
-        this.side = side;
+    public HealthChange(Player cardController, Card card, int amount, int newHealth) {
+        this.cardController = cardController;
         this.card = card;
         this.amount = amount;
         this.newHealth = newHealth;
@@ -34,12 +35,12 @@ public class HealthChange implements Action, Serializable {
         this.amount = amount;
     }
 
-    public String getSide() {
-        return side;
+    public Player getCardController() {
+        return cardController;
     }
 
-    public void setSide(String side) {
-        this.side = side;
+    public void setCardController(Player cardController) {
+        this.cardController = cardController;
     }
 
     public int getNewHealth() {
@@ -51,7 +52,8 @@ public class HealthChange implements Action, Serializable {
     }
 
     @Override
-    public int getType() {
-        return 12;
+    public String toString() {
+
+        return cardController.getName() + " " + card.getName() + " health is now : " + newHealth;
     }
 }

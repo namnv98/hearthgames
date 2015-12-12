@@ -7,20 +7,20 @@ import java.io.Serializable;
 
 public class HeroPowerUsed implements Action, Serializable {
 
-    private Player player;
+    private Player cardController;
     private Card card;
 
-    public HeroPowerUsed(Player player, Card card) {
-        this.player = player;
+    public HeroPowerUsed(Player cardController, Card card) {
+        this.cardController = cardController;
         this.card = card;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player getCardController() {
+        return cardController;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setCardController(Player cardController) {
+        this.cardController = cardController;
     }
 
     public Card getCard() {
@@ -32,7 +32,8 @@ public class HeroPowerUsed implements Action, Serializable {
     }
 
     @Override
-    public int getType() {
-        return 14;
+    public String toString() {
+        return cardController.getName() + " has activated their hero power : " + card.getCardDetails().getName();
+
     }
 }

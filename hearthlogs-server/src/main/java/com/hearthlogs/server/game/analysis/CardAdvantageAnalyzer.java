@@ -5,7 +5,6 @@ import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericRow;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Card;
-import com.hearthlogs.server.game.parse.domain.CardWrapper;
 import com.hearthlogs.server.game.play.GameResult;
 import com.hearthlogs.server.game.play.domain.board.Board;
 import com.hearthlogs.server.game.play.domain.Turn;

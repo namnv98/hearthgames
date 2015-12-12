@@ -1,6 +1,6 @@
 package com.hearthlogs.server.game.play.domain.board;
 
-public class CardInHand {
+public class CardInHand extends CardIn {
 
     private String id;
     private int cost;

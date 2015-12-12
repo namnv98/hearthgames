@@ -20,7 +20,6 @@ public class CreateActionHandler extends AbstractHandler {
 
     @Override
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         if (context.isCreateAction() && line.startsWith(ACTION_START) && context.hasIndentationDecreased()) {
             // some actions don't have an ACTION_END so if we find another ACTION_START that is a lower indentation level then end the previous domain

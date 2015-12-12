@@ -8,18 +8,18 @@ import java.io.Serializable;
 public class Kill implements Action, Serializable {
 
     private String kind;
-    private String killerSide;
-    private String killedSide;
+    private Player killerController;
+    private Player killedController;
     private Player beneficiary;
     private Card killer;
     private Card killed;
     private boolean favorableTrade;
     private boolean evenTrade;
 
-    public Kill(String kind, String killerSide, String killedSide, Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
+    public Kill(String kind, Player killerController, Player killedController, Player beneficiary, Card killer, Card killed, boolean favorableTrade, boolean evenTrade) {
         this.kind = kind;
-        this.killerSide = killerSide;
-        this.killedSide = killedSide;
+        this.killerController = killerController;
+        this.killedController = killedController;
         this.beneficiary = beneficiary;
         this.killer = killer;
         this.killed = killed;
@@ -75,24 +75,38 @@ public class Kill implements Action, Serializable {
         this.kind = kind;
     }
 
-    public String getKillerSide() {
-        return killerSide;
+    public Player getKillerController() {
+        return killerController;
     }
 
-    public void setKillerSide(String killerSide) {
-        this.killerSide = killerSide;
+    public void setKillerController(Player killerController) {
+        this.killerController = killerController;
     }
 
-    public String getKilledSide() {
-        return killedSide;
+    public Player getKilledController() {
+        return killedController;
     }
 
-    public void setKilledSide(String killedSide) {
-        this.killedSide = killedSide;
+    public void setKilledController(Player killedController) {
+        this.killedController = killedController;
     }
 
     @Override
-    public int getType() {
-        return 16;
+    public String toString() {
+        String msg = getMessage(favorableTrade, evenTrade, beneficiary == killerController);
+        return killerController.getName() + " " + killer.getName() + " has " + kind + " " + killedController.getName() + " " + killed.getName() + msg;
+    }
+
+    private String getMessage(boolean favorableTrade, boolean evenTrade, boolean killerFriendly) {
+        String msg;
+        String favoring = killerFriendly ? killerController.getName() : killedController.getName();
+        if (favorableTrade) {
+            msg = " (favorable) " + favoring;
+        } else if (evenTrade) {
+            msg = " (even) " + favoring;
+        } else {
+            msg = " (poor) " + favoring;
+        }
+        return msg;
     }
 }

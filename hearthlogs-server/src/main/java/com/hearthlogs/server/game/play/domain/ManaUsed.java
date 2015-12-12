@@ -30,8 +30,4 @@ public class ManaUsed implements Action, Serializable {
         this.entity = entity;
     }
 
-    @Override
-    public int getType() {
-        return 20;
-    }
 }

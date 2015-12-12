@@ -1,20 +1,21 @@
 package com.hearthlogs.server.game.play.domain;
 
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 
 import java.io.Serializable;
 
 public class Damage implements Action, Serializable {
 
-    private String damagerSide;
-    private String damagedSide;
+    private Player damagerController;
+    private Player damagedController;
     private Card damager;
     private Card damaged;
     private int amount;
 
-    public Damage(String damagerSide, String damagedSide, Card damager, Card damaged, int amount) {
-        this.damagerSide = damagerSide;
-        this.damagedSide = damagedSide;
+    public Damage(Player damagerController, Player damagedController, Card damager, Card damaged, int amount) {
+        this.damagerController = damagerController;
+        this.damagedController = damagedController;
         this.damager = damager;
         this.damaged = damaged;
         this.amount = amount;
@@ -44,24 +45,25 @@ public class Damage implements Action, Serializable {
         this.amount = amount;
     }
 
-    public String getDamagerSide() {
-        return damagerSide;
+    public Player getDamagerController() {
+        return damagerController;
     }
 
-    public void setDamagerSide(String damagerSide) {
-        this.damagerSide = damagerSide;
+    public void setDamagerController(Player damagerController) {
+        this.damagerController = damagerController;
     }
 
-    public String getDamagedSide() {
-        return damagedSide;
+    public Player getDamagedController() {
+        return damagedController;
     }
 
-    public void setDamagedSide(String damagedSide) {
-        this.damagedSide = damagedSide;
+    public void setDamagedController(Player damagedController) {
+        this.damagedController = damagedController;
     }
 
     @Override
-    public int getType() {
-        return 8;
+    public String toString() {
+        String damagerStr = damager != null ? damagerController.getName() + " " + damager.getName() : "";
+        return damagerStr + " has done " + amount + " damage to " + damagedController.getName() + " " + damaged.getName();
     }
 }

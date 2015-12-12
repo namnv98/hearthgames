@@ -9,16 +9,16 @@ public class Joust implements Action, Serializable {
 
     private Player friendly;
     private Player opposing;
-    private String friendlyCardId;
-    private String oppsosingCardId;
+    private Card friendlyJouster;
+    private Card oppsosingJouster;
     private Card card;
     private boolean winner;
 
-    public Joust(Player friendly, Player opposing, String friendlyCardId, String oppsosingCardId, Card card, boolean winner) {
+    public Joust(Player friendly, Player opposing, Card friendlyJouster, Card oppsosingJouster, Card card, boolean winner) {
         this.friendly = friendly;
         this.opposing = opposing;
-        this.friendlyCardId = friendlyCardId;
-        this.oppsosingCardId = oppsosingCardId;
+        this.friendlyJouster = friendlyJouster;
+        this.oppsosingJouster = oppsosingJouster;
         this.card = card;
         this.winner = winner;
     }
@@ -39,20 +39,20 @@ public class Joust implements Action, Serializable {
         this.opposing = opposing;
     }
 
-    public String getFriendlyCardId() {
-        return friendlyCardId;
+    public Card getFriendlyJouster() {
+        return friendlyJouster;
     }
 
-    public void setFriendlyCardId(String friendlyCardId) {
-        this.friendlyCardId = friendlyCardId;
+    public void setFriendlyJouster(Card friendlyJouster) {
+        this.friendlyJouster = friendlyJouster;
     }
 
-    public String getOppsosingCardId() {
-        return oppsosingCardId;
+    public Card getOppsosingJouster() {
+        return oppsosingJouster;
     }
 
-    public void setOppsosingCardId(String oppsosingCardId) {
-        this.oppsosingCardId = oppsosingCardId;
+    public void setOppsosingJouster(Card oppsosingJouster) {
+        this.oppsosingJouster = oppsosingJouster;
     }
 
     public Card getCard() {
@@ -72,7 +72,7 @@ public class Joust implements Action, Serializable {
     }
 
     @Override
-    public int getType() {
-        return 15;
+    public String toString() {
+        return friendlyJouster.getName() + " is jousting : " + oppsosingJouster.getName() + (winner ? friendlyJouster.getName() + " has won the joust!" : friendlyJouster.getName() + " has lost the joust!");
     }
 }

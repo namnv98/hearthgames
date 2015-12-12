@@ -3,6 +3,7 @@ package com.hearthlogs.server.game.play.handler;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Activity;
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.play.GameResult;
 
 public class FrozenHandler implements Handler {
@@ -17,10 +18,8 @@ public class FrozenHandler implements Handler {
         Card after = context.getAfter(activity);
 
         boolean frozen = TRUE_OR_ONE.equals(after.getFrozen());
-        String side = context.getSide(before);
-        result.addFrozen(side, before, frozen);
-
-        result.addActionLog(side + " " + before.getName() + " has been frozen");
+        Player player = context.getPlayer(before);
+        result.addFrozen(player, before, frozen);
 
         return true;
     }

@@ -19,16 +19,20 @@ public class Turn implements Serializable {
     private int tempManaUsed; // this is the amount that was JUST used and should be zero'd out after read
 
     private List<Action> actions = new ArrayList<>();
+    private List<Action> actionsSinceLastBoard = new ArrayList<>();
 
     public List<Action> getActions() {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
-
     public void addAction(Action action) {
+        if (action instanceof Board) {
+            Board board = (Board) action;
+            actionsSinceLastBoard.forEach(board::addAction);
+            actionsSinceLastBoard.clear();
+        } else {
+            this.actionsSinceLastBoard.add(action);
+        }
         this.actions.add(action);
     }
 

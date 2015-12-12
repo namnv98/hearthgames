@@ -3,6 +3,7 @@ package com.hearthlogs.server.game.play.handler;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.parse.domain.Activity;
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
 import com.hearthlogs.server.game.parse.domain.Zone;
 import com.hearthlogs.server.game.play.GameResult;
 
@@ -22,10 +23,8 @@ public class AttackChangeHandler implements Handler {
         int currentAttack = Integer.parseInt(before.getAtk() == null ? before.getCardDetailsAttack() : before.getAtk());
 
         int diffAttack = newAttack - currentAttack;
-        String side = context.getSide(before);
-        result.addAttackChange(side, before, diffAttack, newAttack);
-
-        result.addActionLog(side + " " + before.getName() + " attack is now : " + newAttack);
+        Player player = context.getPlayer(before);
+        result.addAttackChange(player, before, diffAttack, newAttack);
 
         return true;
     }

@@ -542,7 +542,7 @@ public class Card extends Entity implements Serializable {
     }
 
     public String getName() {
-        return cardDetails != null ? cardDetails.getName() : " a card ";
+        return cardDetails != null ? cardDetails.getName() : "a card ";
     }
 
     public String getText() {
@@ -562,18 +562,27 @@ public class Card extends Entity implements Serializable {
     }
 
     public boolean isSpell() {
-        return Type.SPELL.eq(this.getCardtype());
+        return Type.SPELL.eq(this.getCardtype()) || (this.getCardDetails() != null && "spell".equalsIgnoreCase(this.getCardDetails().getType()));
     }
 
     public boolean isMinion() {
-        return Type.MINION.eq(this.getCardtype());
+        return Type.MINION.eq(this.getCardtype()) || (this.getCardDetails() != null && "minion".equalsIgnoreCase(this.getCardDetails().getType()));
     }
 
     public boolean isWeapon() {
-        return Type.WEAPON.eq(this.getCardtype());
+        return Type.WEAPON.eq(this.getCardtype()) || (this.getCardDetails() != null && "weapon".equalsIgnoreCase(this.getCardDetails().getType()));
     }
 
     public boolean isEnchantment() {
-        return Type.ENCHANTMENT.eq(this.getCardtype());
+        return Type.ENCHANTMENT.eq(this.getCardtype()) || (this.getCardDetails() != null && "enchantment".equalsIgnoreCase(this.getCardDetails().getType()));
     }
+
+    public static boolean isMinion(Card before, Card after) {
+        return Card.Type.MINION.eq(before.getCardtype()) || Card.Type.MINION.eq(after.getCardtype());
+    }
+
+    public static boolean isSpell(Card before, Card after) {
+        return Card.Type.SPELL.eq(before.getCardtype()) || Card.Type.MINION.eq(after.getCardtype());
+    }
+
 }

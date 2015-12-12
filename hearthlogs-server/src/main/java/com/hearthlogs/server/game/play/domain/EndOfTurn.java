@@ -1,8 +1,18 @@
 package com.hearthlogs.server.game.play.domain;
 
 public class EndOfTurn implements Action {
-    @Override
-    public int getType() {
-        return 10;
+
+    String msg;
+
+    public EndOfTurn() {
+        msg = "eot";
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

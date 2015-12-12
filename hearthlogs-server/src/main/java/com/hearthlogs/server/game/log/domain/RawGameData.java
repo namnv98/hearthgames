@@ -2,7 +2,7 @@ package com.hearthlogs.server.game.log.domain;
 
 import java.util.List;
 
-public class RawMatchData {
+public class RawGameData {
 
     private List<String> rawLines;
     private List<LogLineData> lines;

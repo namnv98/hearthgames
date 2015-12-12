@@ -1,9 +1,12 @@
 package com.hearthlogs.server.game.play.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.play.domain.json.AttachedSerializer;
 
 import java.io.Serializable;
 
+@JsonSerialize(using = AttachedSerializer.class)
 public class Attached implements Action, Serializable {
 
     private Card card;
@@ -28,10 +31,5 @@ public class Attached implements Action, Serializable {
 
     public void setAttachedTo(Card attachedTo) {
         this.attachedTo = attachedTo;
-    }
-
-    @Override
-    public int getType() {
-        return 2;
     }
 }

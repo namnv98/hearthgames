@@ -1,6 +1,6 @@
 package com.hearthlogs.server.game.play.domain.board;
 
-public class MinionInPlay {
+public class MinionInPlay extends CardIn {
 
     private String id;
     private boolean frozen;

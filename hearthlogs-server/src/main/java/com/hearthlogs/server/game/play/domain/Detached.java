@@ -30,9 +30,5 @@ public class Detached implements Action, Serializable {
         this.detachedFrom = detachedFrom;
     }
 
-    @Override
-    public int getType() {
-        return 9;
-    }
 }
 

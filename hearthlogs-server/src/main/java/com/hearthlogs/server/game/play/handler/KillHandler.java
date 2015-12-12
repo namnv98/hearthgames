@@ -1,10 +1,7 @@
 package com.hearthlogs.server.game.play.handler;
 
-import com.hearthlogs.server.game.parse.domain.Activity;
-import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.*;
 import com.hearthlogs.server.game.parse.GameContext;
-import com.hearthlogs.server.game.parse.domain.CardDetails;
-import com.hearthlogs.server.game.parse.domain.Zone;
 import com.hearthlogs.server.game.play.GameResult;
 
 public class KillHandler implements Handler {
@@ -24,8 +21,6 @@ public class KillHandler implements Handler {
         if (Zone.PLAY.eq(before.getZone()) && Zone.GRAVEYARD.eq(after.getZone()) && Card.Type.MINION.eq(before.getCardtype())) {
             Card card = (Card) context.getEntityById(before.getLastAffectedBy());
             if (card != null) {
-                CardDetails cardDetails = card.getCardDetails();
-
                 boolean favorableTrade = false;
                 boolean evenTrade = false;
 
@@ -68,13 +63,10 @@ public class KillHandler implements Handler {
                         }
                     }
                 }
-                String killerSide = context.getSide(card);
-                String killedSide = context.getSide(before);
-                result.addKill("killed", killerSide, killedSide, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), card, before, favorableTrade, evenTrade);
+                Player killerController = context.getPlayer(card);
+                Player killedController = context.getPlayer(before);
+                result.addKill("killed", killerController, killedController, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), card, before, favorableTrade, evenTrade);
 
-                String msg = getMessage(favorableTrade, evenTrade, killerFriendly);
-
-                result.addActionLog(killerSide + " " + cardDetails.getName() + " has killed " + killedSide + " " + before.getName() + msg);
                 return true;
             }
         }
@@ -117,12 +109,10 @@ public class KillHandler implements Handler {
                                     }
                                 }
                             }
-                            String killerSide = context.getSide(parentCard);
-                            String killedSide = context.getSide(card);
-                            result.addKill("destroyed", killerSide, killedSide, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
+                            Player killerController = context.getPlayer(parentCard);
+                            Player killedController = context.getPlayer(card);
+                            result.addKill("destroyed", killerController, killedController, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
 
-                            String msg = getMessage(favorableTrade, evenTrade, killerFriendly);
-                            result.addActionLog(killerSide + " " + parentCardDetails.getName() + " has destroyed " + killedSide + " " + cardDetails.getName() + msg);
                             return true;
                         }
                     }
@@ -132,18 +122,5 @@ public class KillHandler implements Handler {
             }
         }
         return false;
-    }
-
-    private String getMessage(boolean favorableTrade, boolean evenTrade, boolean killerFriendly) {
-        String msg;
-        String favoring = killerFriendly ? " friendly" : " opposing";
-        if (favorableTrade) {
-            msg = " (favorable)" + favoring;
-        } else if (evenTrade) {
-            msg = " (even)" + favoring;
-        } else {
-            msg = " (poor)" + favoring;
-        }
-        return msg;
     }
 }

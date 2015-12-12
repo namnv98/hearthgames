@@ -1,17 +1,21 @@
 package com.hearthlogs.server.game.play.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthlogs.server.game.parse.domain.Card;
+import com.hearthlogs.server.game.parse.domain.Player;
+import com.hearthlogs.server.game.play.domain.json.ArmorChangeSerializer;
 
 import java.io.Serializable;
 
+@JsonSerialize(using = ArmorChangeSerializer.class)
 public class ArmorChange implements Action, Serializable {
 
-    private String side;
+    private Player player;
     private Card card;
     private int armor;
 
-    public ArmorChange(String side, Card card, int armor) {
-        this.side = side;
+    public ArmorChange(Player player, Card card, int armor) {
+        this.player = player;
         this.card = card;
         this.armor = armor;
     }
@@ -32,16 +36,16 @@ public class ArmorChange implements Action, Serializable {
         this.armor = armor;
     }
 
-    public String getSide() {
-        return side;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setSide(String side) {
-        this.side = side;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     @Override
-    public int getType() {
-        return 1;
+    public String toString() {
+        return player.getName() + " " + card.getName() + " armor is now : " + armor;
     }
 }

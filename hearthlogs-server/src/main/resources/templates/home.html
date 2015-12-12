@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>HearthLogs.com - Upload a Hearhtstone Log File</title>
+    <title>HearthGames.com - Upload a Hearhtstone Log File</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
@@ -30,7 +30,7 @@
     <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
-    <div class="hearthlogs-title">HEARTHLOGS.com<span> A Hearthstone Log Analyzer</span></div>
+    <div class="hearthlogs-title">HEARTHGAMES.com</div>
     <div class="content">
         <h3 class="panel-title">SELECT A HEARTHSTONE LOG FILE TO UPLOAD</h3>
         <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">

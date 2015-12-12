@@ -8,7 +8,7 @@ import com.hearthlogs.server.game.analysis.domain.*;
 import com.hearthlogs.server.game.analysis.domain.generic.GenericTable;
 import com.hearthlogs.server.game.parse.GameContext;
 import com.hearthlogs.server.game.play.GameResult;
-import com.hearthlogs.server.game.log.domain.RawMatchData;
+import com.hearthlogs.server.game.log.domain.RawGameData;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,13 +48,13 @@ public class GameParserServiceTest {
         List<String> lines = FileUtils.readLines(new File("c:\\games\\game9-4huntergames"));
 
         String accountId = "";
-        List<RawMatchData> rawMatchDatas = rawLogProcessingService.processLogFile(lines);
-        for (RawMatchData rawMatchData: rawMatchDatas) {
+        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines);
+        for (RawGameData rawGameData : rawGameDatas) {
 
-            GameContext context = gameParserService.parseLines(rawMatchData.getLines());
+            GameContext context = gameParserService.parseLines(rawGameData.getLines());
             accountId = context.getFriendlyPlayer().getGameAccountIdLo();
 
-            GameResult result = gamePlayingService.processGame(context, rawMatchData.getRank());
+            GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
             GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
             VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
@@ -65,7 +65,7 @@ public class GameParserServiceTest {
             List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
             List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
-            GamePlayed gamePlayed = gameService.createGamePlayed(rawMatchData, context, result, null);
+            GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
             System.out.println();
 
         }

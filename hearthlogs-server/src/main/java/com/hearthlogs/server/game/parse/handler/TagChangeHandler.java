@@ -18,7 +18,6 @@ public class TagChangeHandler extends AbstractHandler {
 
     @Override
     public boolean handle(GameContext context, LogLineData logLineData) {
-        context.setCurrentLine(logLineData);
         String line = logLineData.getTrimmedLine();
         String entityStr = parseEntityStr(line);
         Map<String, String> data = getKeyValueData(line, tagPattern);

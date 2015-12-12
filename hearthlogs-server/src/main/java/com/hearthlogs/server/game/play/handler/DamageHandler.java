@@ -31,33 +31,17 @@ public class DamageHandler implements Handler {
         int damage = Integer.parseInt(after.getPredamage());
         if (before == attacker) {
             if (defender == null) {
-                String damagerSide = context.getSide(attacker);
-                String damagedSide = context.getSide(before);
-
-                result.addDamage(damagerSide, damagedSide, attacker, before, damage);
-                result.addActionLog(damagerSide + " " + attacker.getName() + " has done " + damage + " damage to " + damagedSide + before.getName());
+                result.addDamage(context.getPlayer(attacker), context.getPlayer(before), attacker, before, damage);
                 return true;
             } else {
-                String damagerSide = context.getSide(defender);
-                String damagedSide = context.getSide(before);
-
-                result.addDamage(damagerSide, damagedSide, defender, before, damage);
-                result.addActionLog(damagerSide + " " + defender.getName() + " has done " + damage + " damage to " + damagedSide + " " + before.getName());
+                result.addDamage(context.getPlayer(defender), context.getPlayer(before), defender, before, damage);
                 return true;
             }
         } else if (before == defender) {
-            String damagerSide = context.getSide(attacker);
-            String damagedSide = context.getSide(before);
-
-            result.addDamage(damagerSide, damagedSide, attacker, before, damage);
-            result.addActionLog((attacker != null ? damagerSide + " " + attacker.getName() : "") + " has done " + damage + " damage to " + damagedSide + " " + before.getName());
+            result.addDamage(context.getPlayer(attacker), context.getPlayer(before), attacker, before, damage);
             return true;
         } else {
-            String damagerSide = context.getSide(attacker);
-            String damagedSide = context.getSide(before);
-
-            result.addDamage(damagerSide, damagedSide, attacker, before, damage);
-            result.addActionLog((attacker != null ? damagerSide + " " + attacker.getName() : "") + " has done " + damage + " damage to " + damagedSide + " " + before.getName());
+            result.addDamage(context.getPlayer(attacker), context.getPlayer(before), attacker, before, damage);
             return true;
         }
     }

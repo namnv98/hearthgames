@@ -6,17 +6,17 @@ import com.hearthlogs.server.game.parse.domain.Zone;
 
 public class CardDiscarded implements Action {
 
-    private String causeSide;
-    private String cardSide;
+    private Player causeController;
+    private Player cardController;
     private Zone fromZone;
     private Zone toZone;
     private Player player;
     private Card card;
     private Card cause;
 
-    public CardDiscarded(String causeSide, String cardSide, Zone fromZone, Zone toZone, Player player, Card card, Card cause) {
-        this.causeSide = causeSide;
-        this.cardSide = cardSide;
+    public CardDiscarded(Player causeController, Player cardController, Zone fromZone, Zone toZone, Player player, Card card, Card cause) {
+        this.causeController = causeController;
+        this.cardController = cardController;
         this.fromZone = fromZone;
         this.toZone = toZone;
         this.player = player;
@@ -60,20 +60,20 @@ public class CardDiscarded implements Action {
         return cause;
     }
 
-    public String getCauseSide() {
-        return causeSide;
+    public Player getCauseController() {
+        return causeController;
     }
 
-    public void setCauseSide(String causeSide) {
-        this.causeSide = causeSide;
+    public void setCauseController(Player causeController) {
+        this.causeController = causeController;
     }
 
-    public String getCardSide() {
-        return cardSide;
+    public Player getCardController() {
+        return cardController;
     }
 
-    public void setCardSide(String cardSide) {
-        this.cardSide = cardSide;
+    public void setCardController(Player cardController) {
+        this.cardController = cardController;
     }
 
     public void setCause(Card cause) {
@@ -81,7 +81,7 @@ public class CardDiscarded implements Action {
     }
 
     @Override
-    public int getType() {
-        return 25;
+    public String toString() {
+        return cause.getName() + " has caused " + player.getName() + " to discard " + card.getName();
     }
 }
