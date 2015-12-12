@@ -1,0 +1,44 @@
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  application:
+    name: HearthLogs Server
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/hearthlogs
+    username: hl
+    password: fuckmi69
+security:
+  oauth2:
+    client:
+      client-id: 4q8t6js62qp7m8unpjjfn8phph5xhemt
+      client-secret: PTywt4SWSv63EAKGhCyHumVc9dVuXQcw
+      access-token-uri: https://us.battle.net/oauth/token
+      user-authorization-uri: https://us.battle.net/oauth/authorize
+      pre-established-redirect-uri: https://hearthlogs.com/login
+      use-current-uri: false
+multipart.maxFileSize: 100MB
+multipart.maxRequestSize: 100MB
+hearthlogs.redirect-url: http://hearthlogs.com/
+---
+spring.profiles: dev
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/hearthlogs
+    username: hl
+    password: fuckmi69
+#spring.jpa.hibernate.ddl-auto: create
+security:
+  oauth2:
+    client:
+      client-id: h79cq4trvze7f7xuypzzy37jd4hqtevu
+      client-secret: kNjgD9sCZV6RR8QSxukP8cCYJGszgyFd
+      pre-established-redirect-uri: https://localhost:8443/login
+server.port: 8443
+server.ssl.key-store: classpath:keystore.p12
+server.ssl.key-store-password: 4me2know
+server.ssl.keyStoreType: PKCS12
+server.ssl.keyAlias: tomcat
+hearthlogs.redirect-url: https://localhost:8443/
