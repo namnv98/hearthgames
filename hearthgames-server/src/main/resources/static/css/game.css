@@ -1,8 +1,8 @@
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th { padding: 6px; }
+
 .tooltipster-default { border-radius: 0; border: 0 none; background: none; color: #fff; }
 
-.info-heading { color: #fff; font-weight: bold; }
-
-.hearthgames-title { text-align: center; }
+.tab-pane > div { margin-top: 30px; }
 
 .versus { font-size: 25px; font-weight: bold; }
 .versus-info { text-align: center; margin-top: 5px; }
@@ -56,9 +56,19 @@
 #game-board-content { position: relative; }
 #next { margin: 0 5px; display: inline-block; cursor: pointer; }
 #previous { margin: 0 5px; display: inline-block; cursor: pointer; }
-#turn-status { position: relative; top: 10px; left: 10px; }
+#turn-status { position: absolute; top: -115px; right: 0; font-size: 25px; font-weight: bold; text-shadow: 2px 2px 2px #000; }
+#game-board-content { margin-top: 135px; }
+#whose-turn { position: absolute; top: 217px; right:0; width: 80px; text-align: center; font-size: 15px; font-weight: bold; text-shadow: 2px 2px 2px #000;}
+#whose-turn .green { color: #26C805;}
+#whose-turn .yellow { color: #E1D002; }
 
-#game-board { position: relative; background-image: url(http://images.hearthgames.com/misc/game-board-bg.png); width: 1024px; height: 512px; margin: 150px auto; }
+.next-prev-buttons { text-align: right; }
+.next-prev-buttons div { display: inline-block; }
+.next-prev-buttons .text { font-size: 18px; margin: 0 10px; }
+.next-prev-buttons .next { background-image: url(../images/next.png); background-size: 15px 15px; width: 15px; height: 15px; cursor: pointer; }
+.next-prev-buttons .prev { background-image: url(../images/prev.png); background-size: 15px 15px; width: 15px; height: 15px; cursor: pointer; }
+
+#game-board { position: relative; background-image: url(http://images.hearthgames.com/misc/game-board-bg.png); width: 1024px; height: 512px; }
 
 #friendly-hero { position: absolute; bottom: -86px; left: 421px; width: 170px; height: 180px;  }
 #opposing-hero { position: absolute; top: -122px; left: 421px; width: 170px; height: 180px;  }

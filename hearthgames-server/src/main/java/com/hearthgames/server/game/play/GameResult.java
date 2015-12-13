@@ -43,12 +43,16 @@ public class GameResult {
 
     public void addFriendlyStartingCard(Card card) {
         friendlyStartingCards.add(card);
-        friendlyDeckCards.add(card);
+        if (!Card.THE_COIN.equals(card.getCardid())) {
+            friendlyDeckCards.add(card);
+        }
     }
 
     public void addOpposingStartingCard(Card card) {
         opposingStartingCards.add(card);
-        opposingDeckCards.add(card);
+        if (!Card.THE_COIN.equals(card.getCardid())) {
+            opposingDeckCards.add(card);
+        }
     }
 
     public void mulliganFriendlyCard(Card card) {

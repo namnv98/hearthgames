@@ -12,37 +12,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:class="${#strings.toLowerCase(friendlyClass)}">
-            <td th:each="column,iterStat : ${object.friendly.columns}">
-
-                <div  th:if="${type == 1}" th:class="${iterStat.first}? '' : ${columnDataClass}" th:text="${column.data}"></div>
-
-                <span th:if="${type == 2}" th:text="${column.data}"></span>
-
-                <div  th:if="${type == 3}" th:class="${iterStat.first}? '' : ${columnDataClass}">
-                    <div th:if="${column.extraData != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
-                        <div th:text="${column.extraData}"></div>
-                    </div>
-                    <div th:class="${iterStat.first}? ${#strings.toLowerCase(friendlyClass)} : 'health-bg'" class="health-bg">
-                        <div th:text="${column.data}"></div>
-                    </div>
-                </div>
-
-                <div th:if="${type == 4 and iterStat.first}" th:text="${column.data}" th:class="${#strings.toLowerCase(friendlyClass)}"></div>
-                <div th:if="${type == 4 and !iterStat.first}" th:class="${#strings.toLowerCase(column.data)}+${columnDataClass}"></div>
-
-                <span th:if="${type == 5 and iterStat.count == 1}" th:class="${#strings.toLowerCase(friendlyClass)}" th:text="${column.data}"></span>
-                <div  th:if="${type == 5 and iterStat.count gt 1 and card.cardDetails != null}" th:each="card : ${column.datas}" th:class="thumb">
-                    <div th:class="'tt tt-'+${card.cardid}+' '+${card.cardid}"></div>
-                </div>
-                <a th:if="${type == 5 and iterStat.count gt 1 and iterStat.count lt 4 and card.cardDetails == null}" th:each="card : ${column.datas}">
-                    <div class="cardback"></div>
-                </a>
-
-                <span th:if="${type == 6}" th:text="${column.data}"></span>
-
-            </td>
-        </tr>
         <tr th:class="${#strings.toLowerCase(opposingClass)}">
             <td th:each="column,iterStat : ${object.opposing.columns}">
 
@@ -63,6 +32,37 @@
                 <div th:if="${type == 4 and !iterStat.first}" th:class="${#strings.toLowerCase(column.data)}+${columnDataClass}"></div>
 
                 <span th:if="${type == 5 and iterStat.count == 1}" th:class="${#strings.toLowerCase(opposingClass)}" th:text="${column.data}"></span>
+                <div  th:if="${type == 5 and iterStat.count gt 1 and card.cardDetails != null}" th:each="card : ${column.datas}" th:class="thumb">
+                    <div th:class="'tt tt-'+${card.cardid}+' '+${card.cardid}"></div>
+                </div>
+                <a th:if="${type == 5 and iterStat.count gt 1 and iterStat.count lt 4 and card.cardDetails == null}" th:each="card : ${column.datas}">
+                    <div class="cardback"></div>
+                </a>
+
+                <span th:if="${type == 6}" th:text="${column.data}"></span>
+
+            </td>
+        </tr>
+        <tr th:class="${#strings.toLowerCase(friendlyClass)}">
+            <td th:each="column,iterStat : ${object.friendly.columns}">
+
+                <div  th:if="${type == 1}" th:class="${iterStat.first}? '' : ${columnDataClass}" th:text="${column.data}"></div>
+
+                <span th:if="${type == 2}" th:text="${column.data}"></span>
+
+                <div  th:if="${type == 3}" th:class="${iterStat.first}? '' : ${columnDataClass}">
+                    <div th:if="${column.extraData != null}" th:class="${iterStat.first}? '' : 'armor-bg'" class="armor-bg">
+                        <div th:text="${column.extraData}"></div>
+                    </div>
+                    <div th:class="${iterStat.first}? ${#strings.toLowerCase(friendlyClass)} : 'health-bg'" class="health-bg">
+                        <div th:text="${column.data}"></div>
+                    </div>
+                </div>
+
+                <div th:if="${type == 4 and iterStat.first}" th:text="${column.data}" th:class="${#strings.toLowerCase(friendlyClass)}"></div>
+                <div th:if="${type == 4 and !iterStat.first}" th:class="${#strings.toLowerCase(column.data)}+${columnDataClass}"></div>
+
+                <span th:if="${type == 5 and iterStat.count == 1}" th:class="${#strings.toLowerCase(friendlyClass)}" th:text="${column.data}"></span>
                 <div  th:if="${type == 5 and iterStat.count gt 1 and card.cardDetails != null}" th:each="card : ${column.datas}" th:class="thumb">
                     <div th:class="'tt tt-'+${card.cardid}+' '+${card.cardid}"></div>
                 </div>

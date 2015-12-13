@@ -44,7 +44,7 @@ public class GameController {
     @Autowired
     private GameAnalysisService gameAnalysisService;
 
-    @RequestMapping(value = "/game/{gameId}")
+    @RequestMapping(value = {"/game/{gameId}", "/mygame/{gameId}"})
     public ModelAndView getGame(@PathVariable Long gameId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("game");

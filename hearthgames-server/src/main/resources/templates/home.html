@@ -7,21 +7,8 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
     <link href="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/css/fileinput.min.css" th:href="@{/webjars/bootstrap-fileinput/4.2.7/css/fileinput.min.css}" rel="stylesheet" media="screen" />
-
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-    <script src="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/js/fileinput.min.js" th:src="@{/webjars/bootstrap-fileinput/4.2.7/js/fileinput.min.js}"></script>
-
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
-    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet" media="screen"/>
 
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#upload").fileinput();
-        });
-    </script>
-
-    <script th:replace="/fragments/login-fragment::uploadNotAllowed">
-    </script>
 </head>
 <body>
 
@@ -30,8 +17,11 @@
     <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
-    <div class="hearthgames-title">HEARTHGAMES.com</div>
-    <div class="content">
+    <div class="home-title-container">
+        <div class="hearthgames-title">HEARTHGAMES.com</div>
+    </div>
+
+    <div class="home-content">
         <div class="panel-title">Select a Hearthstone log file to upload</div>
         <div>
             <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
@@ -42,6 +32,14 @@
     </div>
 
 </div>
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/js/fileinput.min.js" th:src="@{/webjars/bootstrap-fileinput/4.2.7/js/fileinput.min.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#upload").fileinput();
+    });
+</script>
 
 </body>
 </html>

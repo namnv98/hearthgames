@@ -47,7 +47,7 @@ public class GameHandler implements Handler {
             } else if (TRUE_OR_ONE.equals(context.getOpposingPlayer().getCurrentPlayer())) {
                 result.getCurrentTurn().setWhoseTurn(context.getOpposingPlayer());
             }
-
+            result.getCurrentTurn().getWhoseTurn().setNumOptions(null); // this needs resetting at the start of a turn.
             result.getCurrentTurn().setStartDateTime(activity.getDateTime());
         } else if (GameEntity.Step.MAIN_NEXT.eq(after.getStep()) || GameEntity.Step.FINAL_GAMEOVER.eq(after.getStep())) {
             result.getCurrentTurn().setEndDateTime(activity.getDateTime());

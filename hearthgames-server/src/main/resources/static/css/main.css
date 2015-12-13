@@ -2,12 +2,22 @@
 
 body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; opacity: .97; }
 
+.container { width: 1024px; padding: 0; }
+
 .anonymous { height: 30px; width: 180px; position: absolute; padding:5px; text-align: center; top: 10px; right: 10px; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
 .user-logged-in { height: 50px; width: 180px; position: absolute; padding:5px; text-align: center; top: 10px; right: 10px; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
 .user-logged-in-on-game { height: 70px; width: 180px; position: absolute; padding:5px; text-align: center; top: 10px; right: 10px; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
 
+.loginbnet { color: #fff; padding-left: 5px; }
+.ttip { width: 286px; height: 395px; }
+
+.home-title-container { margin: 80px 0 20px 0; }
+.home-content { width: 800px; margin: auto; }
 .hearthgames-title { font-size: 80px; text-align: center; text-shadow: 2px 2px 4px #000; }
-.hearthgames-title span { font-size: 17px; color: #5d5d5d; text-shadow: 2px 2px 4px #000; }
+.hearthgames-title a:link { text-decoration: none; color: #fff; }
+.hearthgames-title a:visited { text-decoration: none; color: #fff; }
+.hearthgames-title a:hover { text-decoration: none; color: #fff; }
+.hearthgames-title a:active { text-decoration: underline; color: #fff; }
 
 .druid { color: #FF7D0A; }
 .druid-bg { background-color: #FF7D0A; }

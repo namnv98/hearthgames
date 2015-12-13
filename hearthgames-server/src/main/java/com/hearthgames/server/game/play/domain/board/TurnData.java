@@ -4,6 +4,8 @@ public class TurnData {
 
     private int turn;
     private int board;
+    private String who;
+    private String status;
 
     public int getTurn() {
         return turn;
@@ -19,5 +21,21 @@ public class TurnData {
 
     public void setBoard(int board) {
         this.board = board;
+    }
+
+    public String getWho() {
+        return who;
+    }
+
+    public void setWho(String who) {
+        this.who = who;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

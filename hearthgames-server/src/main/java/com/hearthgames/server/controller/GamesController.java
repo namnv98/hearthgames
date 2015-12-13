@@ -29,7 +29,7 @@ public class GamesController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/games")
+    @RequestMapping(value = "/mygames")
     public ModelAndView listGames() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("games");

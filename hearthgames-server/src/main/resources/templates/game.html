@@ -18,9 +18,7 @@
 
     <div th:replace="/fragments/login-fragment::userLoggedInOnGame"></div>
 
-    <div class="hearthgames-title">HEARTHGAMES.com</div>
-
-    <hr/>
+    <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
 
     <ul class="nav nav-tabs">
         <li><a data-toggle="tab" href="#menu1">Overview</a></li>
@@ -35,7 +33,6 @@
 
     <div class="tab-content">
         <div id="menu1" class="tab-pane">
-            <h4>Overview</h4>
             <div class="versus-info">
                 <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span>
                 <span class="versus">VS</span>
@@ -53,39 +50,27 @@
             </div>
         </div>
         <div id="menu2" class="tab-pane">
-            <h4 class="info-heading">Card Summary</h4>
             <div th:include="/fragments/table-fragment::tablefrag (${cardInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'card-info','','',5)"></div>
         </div>
         <div id="menu3" class="tab-pane">
-            <h4 class="info-heading">Health/Armor by Turn</h4>
             <div th:include="/fragments/table-fragment::tablefrag (${healthArmorInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'health-info','turn','health-armor',3)"></div>
         </div>
         <div id="menu4" class="tab-pane">
-            <h4 class="info-heading">Mana Summary</h4>
             <div th:include="/fragments/table-fragment::tablefrag (${manaInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'mana-info','','',2)"></div>
         </div>
         <div id="menu5" class="tab-pane">
-            <h4 class="info-heading">Trades</h4>
             <div th:include="/fragments/table-fragment::tablefrag (${tradeInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'trade-info','','',6)"></div>
         </div>
         <div id="menu6" class="tab-pane">
-            <h4 class="info-heading">Card Advantage</h4>
             <div th:include="/fragments/table-fragment::tablefrag (${cardAdvantageInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'card-advantage-info','turn','cadvantage-info',1)"></div>
         </div>
         <div id="menu7" class="tab-pane">
-            <h4 class="info-heading">Board Control</h4>
             <div th:include="/fragments/table-fragment::tablefrag (${boardControlInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'board-control-info','turn','-bg bcontrol-info',4)"></div>
         </div>
         <div id="menu8" class="tab-pane active">
-            <div id="next">Next</div>
-            <div id="previous">Previous</div>
             <div id="game-board-content"></div>
         </div>
-
     </div>
-
-
-
 </div>
 
 <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
@@ -97,7 +82,23 @@
 
     <div id="turn-status">
         {{#with turnData}}
-        <span>Turn {{turn}} ( {{board}} )</span>
+            {{#if turn}}
+                <span>Turn {{turn}}, Board {{board}}</span>
+            {{else}}
+                <span>Mulligan, Board {{board}}</span>
+            {{/if}}
+        {{/with}}
+        <div class="next-prev-buttons">
+            <div class="prev prev-turn"></div><div class="text">Turn</div><div class="next next-turn"></div>
+        </div>
+        <div class="next-prev-buttons">
+            <div class="prev prev-board"></div><div class="text">Board</div><div class="next next-board"></div>
+        </div>
+    </div>
+
+    <div id="whose-turn">
+        {{#with turnData}}
+            <span class="{{status}}">{{who}}</span>
         {{/with}}
     </div>
 
@@ -154,7 +155,7 @@
         <div id="friendly-play">
             {{#each minionsInPlay}}
             <div class="tt minion tt-{{id}}">
-                <div class="{{id}}"></div>
+                <div class="card {{id}}"></div>
                 <div class="attack">
                     <div class="amount">{{attack}}</div>
                 </div>
@@ -242,7 +243,7 @@
         <div id="opposing-play">
             {{#each minionsInPlay}}
             <div class="tt minion tt-{{id}}">
-                <div class="{{id}}"></div>
+                <div class="card {{id}}"></div>
                 <div class="attack">
                     <div class="amount">{{attack}}</div>
                 </div>
@@ -314,8 +315,11 @@
                             break;
                         }
                     }
-                    continueTooltip();
-                    origin.tooltipster('content', '<div class="' + className + '" style="width: 286px; height: 395px;"></div>');
+                    if (className != 'cardback') {
+                        continueTooltip();
+                        origin.tooltipster('content', '<div class="' + className + ' ttip"></div>');
+                    }
+
                 }
             });
             $(this).tooltipster('show');
@@ -344,10 +348,7 @@
                 }
 
             }
-
-
         };
-
 
         var previousBoard = function() {
             boardCount--;
@@ -364,11 +365,46 @@
             var html = template(board);
             $('#game-board-content').html(html);
         };
+
+        var nextTurn = function() {
+            turnCount++;
+            if (turnCount >= gameData.length) {
+                turnCount--;
+                return;
+            } else {
+                boardCount = 0;
+            }
+            var board = gameData[turnCount].boards[boardCount];
+            var html = template(board);
+            $('#game-board-content').html(html);
+        };
+
+        var previousTurn = function() {
+            turnCount--;
+            if (turnCount < 0) {
+                turnCount = 0;
+            }
+            boardCount = 0;
+            var board = gameData[turnCount].boards[boardCount];
+            var html = template(board);
+            $('#game-board-content').html(html);
+        };
+
+        $('#game-board-content').on('click', '.next-turn', function(){
+            nextTurn();
+        });
+        $('#game-board-content').on('click', '.prev-turn', function(){
+            previousTurn();
+        });
+        $('#game-board-content').on('click', '.next-board', function(){
+            nextBoard();
+        });
+        $('#game-board-content').on('click', '.prev-board', function(){
+            previousBoard();
+        });
+
+
         nextBoard();
-
-        $('#next').click(nextBoard);
-        $('#previous').click(previousBoard);
-
     };
 
     /*]]>*/

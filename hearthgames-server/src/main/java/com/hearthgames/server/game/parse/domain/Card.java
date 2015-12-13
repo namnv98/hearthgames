@@ -105,7 +105,7 @@ public class Card extends Entity implements Serializable {
     }
 
     public String getCardid() {
-        return cardid;
+        return cardDetails != null ? cardDetails.getId() : cardid;
     }
 
     public void setCardid(String cardid) {

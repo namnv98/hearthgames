@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>HearthGames.com - Game Result</title>
+    <title>HearthGames.com - Games</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
@@ -19,11 +19,8 @@
 
     <div th:replace="/fragments/login-fragment::userLoggedInOnGames"></div>
 
-    <div class="hearthgames-title">HEARTHGAMES.com</div>
+    <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
 
-    <hr/>
-
-    <h1>Games Played</h1>
     <table class="table table-bordered">
         <thead>
         <tr>

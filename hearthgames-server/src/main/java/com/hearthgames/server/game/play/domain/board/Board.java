@@ -34,6 +34,18 @@ public class Board implements Action {
             turnData.setBoard(1);
         }
         turnData.setTurn(result.getCurrentTurn().getTurnNumber());
+        if (result.getCurrentTurn().getWhoseTurn() != null) {
+            turnData.setWho(context.getFriendlyPlayer() == result.getCurrentTurn().getWhoseTurn() ? "Your Turn" : "Enemy Turn");
+            if (result.getCurrentTurn().getWhoseTurn().getNumOptions() != null) {
+                int numOptions = Integer.parseInt(result.getCurrentTurn().getWhoseTurn().getNumOptions());
+                turnData.setStatus(numOptions > 1 ? "yellow" : "green");
+            } else {
+                turnData.setStatus("yellow");
+            }
+        } else {
+            turnData.setWho("Mulligan");
+            turnData.setStatus("yellow");
+        }
 
         setHeroIds(context, friendlyHero, opposingHero);
         setHeroHealthArmor(result, context, friendlyHero, opposingHero);
