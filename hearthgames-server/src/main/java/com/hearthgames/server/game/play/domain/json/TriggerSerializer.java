@@ -10,6 +10,21 @@ import java.io.IOException;
 public class TriggerSerializer extends JsonSerializer<Trigger> {
     @Override
     public void serialize(Trigger value, JsonGenerator g, SerializerProvider serializers) throws IOException {
+        g.writeStartObject();
 
+        g.writeFieldName("type");
+        g.writeString("trigger");
+
+        g.writeFieldName("card");
+        g.writeStartObject();
+            g.writeFieldName("name");
+            g.writeString(value.getCard().getName());
+            g.writeFieldName("id");
+            g.writeString(value.getCard().getCardDetails().getId());
+            g.writeFieldName("rarity");
+            g.writeString(value.getCard().getCardDetails().getRarity());
+        g.writeEndObject();
+
+        g.writeEndObject();
     }
 }

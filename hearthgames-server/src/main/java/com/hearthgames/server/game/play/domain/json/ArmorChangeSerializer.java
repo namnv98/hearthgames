@@ -36,6 +36,7 @@ public class ArmorChangeSerializer extends JsonSerializer<ArmorChange> {
 
         g.writeFieldName("armor");
         g.writeNumber(value.getArmor());
+
         g.writeEndObject();
     }
 }

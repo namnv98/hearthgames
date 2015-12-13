@@ -10,6 +10,35 @@ import java.io.IOException;
 public class CardPlayedSerializer extends JsonSerializer<CardPlayed> {
     @Override
     public void serialize(CardPlayed value, JsonGenerator g, SerializerProvider serializers) throws IOException {
+        g.writeStartObject();
 
+        g.writeFieldName("type");
+        g.writeString("cardPlayed");
+
+        g.writeFieldName("from");
+        g.writeString(value.getFromZone().name());
+
+        g.writeFieldName("to");
+        g.writeString(value.getToZone().name());
+
+        g.writeFieldName("card");
+        g.writeStartObject();
+            g.writeFieldName("name");
+            g.writeString(value.getCard().getName());
+            g.writeFieldName("id");
+            g.writeString(value.getCard().getCardDetails().getId());
+            g.writeFieldName("rarity");
+            g.writeString(value.getCard().getCardDetails().getRarity());
+        g.writeEndObject();
+
+        g.writeFieldName("player");
+        g.writeStartObject();
+            g.writeFieldName("name");
+            g.writeString(value.getPlayer().getName());
+            g.writeFieldName("playerClass");
+            g.writeString(value.getPlayer().getPlayerClass().toLowerCase());
+        g.writeEndObject();
+
+        g.writeEndObject();
     }
 }

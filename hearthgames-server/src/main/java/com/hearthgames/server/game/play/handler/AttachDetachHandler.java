@@ -23,7 +23,6 @@ public class AttachDetachHandler implements Handler {
             if (entity instanceof Card) {
                 Card detachFrom = (Card) entity;
                 result.addDetached(before, detachFrom);
-//                System.out.println("Detached card : " + before.getName() + " from " + detachFrom.getName());
                 return true;
             }
         } else {
@@ -31,9 +30,7 @@ public class AttachDetachHandler implements Handler {
             if (entity instanceof Card) {
                 Card attachTo = (Card) entity;
                 result.addAttached(before, attachTo);
-//                System.out.println("Attach card : " + before.getName() + " to " + attachTo.getName() + " : " + before.getText());
                 return true;
-
             }
         }
         return false;

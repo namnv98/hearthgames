@@ -10,6 +10,14 @@ import java.io.IOException;
 public class ManaGainedSerializer extends JsonSerializer<ManaGained> {
     @Override
     public void serialize(ManaGained value, JsonGenerator g, SerializerProvider serializers) throws IOException {
+        g.writeStartObject();
 
+        g.writeFieldName("type");
+        g.writeString("manaGained");
+
+        g.writeFieldName("amount");
+        g.writeNumber(value.getManaGained());
+
+        g.writeEndObject();
     }
 }

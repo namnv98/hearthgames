@@ -1,10 +1,13 @@
 package com.hearthgames.server.game.play.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
+import com.hearthgames.server.game.play.domain.json.DamageSerializer;
 
 import java.io.Serializable;
 
+@JsonSerialize(using = DamageSerializer.class)
 public class Damage implements Action, Serializable {
 
     private Player damagerController;

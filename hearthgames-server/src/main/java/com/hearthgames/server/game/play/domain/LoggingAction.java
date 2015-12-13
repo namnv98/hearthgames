@@ -1,6 +1,12 @@
 package com.hearthgames.server.game.play.domain;
 
-public class LoggingAction implements Action {
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hearthgames.server.game.play.domain.json.LoggingActionSerializer;
+
+import java.io.Serializable;
+
+@JsonSerialize(using = LoggingActionSerializer.class)
+public class LoggingAction implements Action, Serializable {
 
     private String msg;
 

@@ -72,7 +72,5 @@ public class GameParserServiceTest {
         }
         List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(accountId);
         System.out.println();
-
-        System.out.println();
     }
 }

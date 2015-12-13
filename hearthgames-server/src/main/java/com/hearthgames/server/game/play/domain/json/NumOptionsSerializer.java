@@ -4,20 +4,20 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.hearthgames.server.game.play.domain.ManaLost;
+import com.hearthgames.server.game.play.domain.NumOptions;
 
 import java.io.IOException;
 
-public class ManaLostSerializer extends JsonSerializer<ManaLost> {
+public class NumOptionsSerializer extends JsonSerializer<NumOptions> {
     @Override
-    public void serialize(ManaLost value, JsonGenerator g, SerializerProvider serializers) throws IOException, JsonProcessingException {
+    public void serialize(NumOptions value, JsonGenerator g, SerializerProvider serializers) throws IOException, JsonProcessingException {
         g.writeStartObject();
 
         g.writeFieldName("type");
-        g.writeString("manaLost");
+        g.writeString("numOptions");
 
-        g.writeFieldName("amount");
-        g.writeNumber(value.getManaLost());
+        g.writeFieldName("number");
+        g.writeNumber(value.getNumber());
 
         g.writeEndObject();
     }

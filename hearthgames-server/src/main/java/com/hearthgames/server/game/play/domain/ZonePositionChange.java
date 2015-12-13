@@ -1,12 +1,15 @@
 package com.hearthgames.server.game.play.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Zone;
+import com.hearthgames.server.game.play.domain.json.ZonePositionChangeSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonSerialize(using = ZonePositionChangeSerializer.class)
 public class ZonePositionChange implements Action, Serializable {
 
     private Card card;

@@ -1,9 +1,12 @@
 package com.hearthgames.server.game.play.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthgames.server.game.parse.domain.Card;
+import com.hearthgames.server.game.play.domain.json.DetachedSerializer;
 
 import java.io.Serializable;
 
+@JsonSerialize(using = DetachedSerializer.class)
 public class Detached implements Action, Serializable {
 
     private Card card;

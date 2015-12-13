@@ -1,9 +1,12 @@
 package com.hearthgames.server.game.play.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthgames.server.game.parse.domain.Entity;
+import com.hearthgames.server.game.play.domain.json.ManaUsedSerializer;
 
 import java.io.Serializable;
 
+@JsonSerialize(using = ManaUsedSerializer.class)
 public class ManaUsed implements Action, Serializable {
 
     private Entity entity;

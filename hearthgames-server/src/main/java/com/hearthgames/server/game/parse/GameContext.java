@@ -314,9 +314,7 @@ public class GameContext {
         String zone = card.getZone();
         if (!isGameUpdating()) {
             startingCardIds.add(card.getEntityId());
-//            System.out.println("Adding " + card.getCardid() + " to starting cards (id=" + card.getEntityId()+ ")");
             if (!StringUtils.isEmpty(card.getCardid()) && !friendlyPlayer.getTeamId().equals(card.getController()) && !card.getCardtype().startsWith("HERO")) {
-//                System.out.println("Found a known card that doesnt belong to friendly player...swapping players");
                 Player swap = friendlyPlayer;
                 friendlyPlayer = opposingPlayer;
                 opposingPlayer = swap;
@@ -507,20 +505,8 @@ public class GameContext {
             currentActivity = getActivityStack().peek();
         }
         if (currentActivity == null) {
-//            StringBuilder sb = new StringBuilder();
-//            for (int i=0; i < getActivityStack().size(); i++) {
-//                sb.append("    ");
-//            }
-//            System.out.println(currentLine.getLine());
-//            System.out.println(sb.toString()+activity);
             getActivities().add(activity);
         } else {
-//            StringBuilder sb = new StringBuilder();
-//            for (int i=0; i < getActivityStack().size(); i++) {
-//                sb.append("    ");
-//            }
-//            System.out.println(currentLine.getLine());
-//            System.out.println(sb.toString()+activity);
             currentActivity.addChildGameEvent(activity);
         }
 

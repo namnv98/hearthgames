@@ -1,10 +1,12 @@
 package com.hearthgames.server.game.play.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
+import com.hearthgames.server.game.play.domain.json.CardCreationSerializer;
 
 import java.io.Serializable;
-
+@JsonSerialize(using = CardCreationSerializer.class)
 public class CardCreation implements Action, Serializable {
 
     private Player creatorController;

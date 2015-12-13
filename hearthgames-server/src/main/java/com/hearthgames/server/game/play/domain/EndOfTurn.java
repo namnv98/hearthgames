@@ -1,6 +1,12 @@
 package com.hearthgames.server.game.play.domain;
 
-public class EndOfTurn implements Action {
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hearthgames.server.game.play.domain.json.EndofTurnSerializer;
+
+import java.io.Serializable;
+
+@JsonSerialize(using = EndofTurnSerializer.class)
+public class EndOfTurn implements Action, Serializable {
 
     String msg;
 

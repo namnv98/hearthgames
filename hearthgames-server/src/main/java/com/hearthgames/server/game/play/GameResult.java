@@ -297,8 +297,8 @@ public class GameResult {
         addActionLog(attackChange.toString());
     }
 
-    public void addJoust(Player friendly, Player opposing, Card friendlyJouster, Card oppsosingJouster, Card card, boolean winner) {
-        Joust joust = new Joust(friendly, opposing, friendlyJouster, oppsosingJouster, card, winner);
+    public void addJoust(Player friendly, Player opposing, Card friendlyJouster, Card opposingJouster, Card card, boolean winner) {
+        Joust joust = new Joust(friendly, opposing, friendlyJouster, opposingJouster, card, winner);
         this.currentTurn.addAction(joust);
         addActionLog(joust.toString());
     }

@@ -25,7 +25,7 @@ public class AttackChangeSerializer extends JsonSerializer<AttackChange> {
             g.writeString(value.getCard().getCardDetails().getRarity());
         g.writeEndObject();
 
-        g.writeFieldName("player");
+        g.writeFieldName("cardController");
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getCardController().getName());
@@ -38,6 +38,7 @@ public class AttackChangeSerializer extends JsonSerializer<AttackChange> {
 
         g.writeFieldName("attack");
         g.writeNumber(value.getNewAttack());
+
         g.writeEndObject();
     }
 }

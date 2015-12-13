@@ -12,6 +12,9 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
     public void serialize(CardCreation value, JsonGenerator g, SerializerProvider serializers) throws IOException {
         g.writeStartObject();
 
+        g.writeFieldName("type");
+        g.writeString("cardCreation");
+
         g.writeFieldName("creator");
         g.writeStartObject();
             g.writeFieldName("name");
@@ -32,7 +35,7 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
             g.writeString(value.getCreated().getCardDetails().getRarity());
         g.writeEndObject();
 
-        g.writeFieldName("creatorPlayer");
+        g.writeFieldName("creatorController");
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getCreatorController().getName());
@@ -40,7 +43,7 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
             g.writeString(value.getCreatorController().getPlayerClass().toLowerCase());
         g.writeEndObject();
 
-        g.writeFieldName("createdPlayer");
+        g.writeFieldName("createdController");
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getCreatedController().getName());
