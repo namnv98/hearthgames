@@ -4,7 +4,7 @@
     <title>HearthGames.com - Where do I find my log files?</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" />
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
 
@@ -14,18 +14,6 @@
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
     <link href="../static/css/where.css" th:href="@{/css/where.css}" rel="stylesheet" media="screen"/>
 
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#android-instruction1').popover({content: function() { return $('#android-instruction1_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-            $('#android-instruction2').popover({content: function() { return $('#android-instruction2_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-            $('#android-instruction3').popover({content: function() { return $('#android-instruction3_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-            $('#android-instruction4').popover({content: function() { return $('#android-instruction4_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-            $('#android-instruction5').popover({content: function() { return $('#android-instruction5_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-            $('#android-instruction6').popover({content: function() { return $('#android-instruction6_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-            $('#android-instruction7').popover({content: function() { return $('#android-instruction7_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-            $('#android-instruction8').popover({content: function() { return $('#android-instruction8_popover_content_wrapper').html(); }, html: true, trigger: 'hover'});
-        });
-    </script>
 </head>
 <body>
 
@@ -73,56 +61,26 @@ ScreenPrinting=false
             </div>
 
             <div class="bs-callout bs-callout-where">
-                <h4><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> Windows Log File Locations:</h4>
+                <h4><img src="http://images.hearthgames.com/misc/windows.png"/> Windows Log File Locations:</h4>
                 <p>No timestamps / No file size limit:  <code>C:\Program Files (x86)\Hearthstone\Hearthstone_Data\output_log.txt</code></p>
                 <p>Timestamps / 5MB file size limit: <code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs\hearthstone_2015_11_24_12_53_07.log</code></p>
-                <h4><img th:src="@{images/windows.png}" src="../static/images/windows.png"/> Windows log.config Location: </h4>
+                <h4><img src="http://images.hearthgames.com/misc/windows.png"/> Windows log.config Location: </h4>
                 <p><code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\</code></p>
             </div>
 
             <div class="bs-callout bs-callout-where">
-                <h4><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> Mac Log File Locations:</h4>
+                <h4><img src="http://images.hearthgames.com/misc/mac.png"/> Mac Log File Locations:</h4>
                 <p>No timestamps / No file size limit:  <code>~/Library/Logs/Unity/Player.log</code></p>
                 <p>Timestamps / 5MB file size limit: <code>~/Library/Preferences/Blizzard/Hearthstone/Logs/hearthstone_2015_11_24_12_53_07.log</code></p>
-                <h4><img th:src="@{images/mac.png}" src="../static/images/mac.png"/> Mac log.config Location: </h4>
+                <h4><img src="http://images.hearthgames.com/misc/mac.png"/> Mac log.config Location: </h4>
                 <p><code>~/Library/Preferences/Blizzard/Hearthstone/</code></p>
             </div>
 
             <div class="bs-callout bs-callout-where">
-                <h4><img th:src="@{images/android.png}" src="../static/images/android.png"/> Android Instructions</h4>
-                <p><code>log.config</code> location: <code>Android/data/com.blizzard.wtcg.hearthstone/files</code></p>
-
-                <p>Get an App like File Manager (File Transfer) by Cheetah Mobile and follow these instructions:</p>
-                <ul>
-                    <li>Open the app, go into "Device" <button class="btn btn-xs btn-primary" id="android-instruction1">step 1</button></li>
-                    <li>Navigate to Android/data/com.blizzard.wtcg.hearthstone/files and create the log.config file by click the top right corner and choosing "Create" <button class="btn btn-xs btn-primary" id="android-instruction2">step 2</button></li>
-                    <li>With the log.config created <button class="btn btn-xs btn-primary" id="android-instruction3">step 3</button> edit it <button class="btn btn-xs btn-primary" id="android-instruction4">step 4</button> with the Text Editor <button class="btn btn-xs btn-primary" id="android-instruction5">step 5</button> and enter the lines as above <button class="btn btn-xs btn-primary" id="android-instruction6">step 6</button></li>
-                    <li>After you have played a game you can select the log file and click "Share" <button class="btn btn-xs btn-primary" id="android-instruction7">step 7</button> and choose a method of transferring it off your device <button class="btn btn-xs btn-primary" id="android-instruction8">step 8</button> </li>
-                </ul>
-                <div id="android-instruction1_popover_content_wrapper" style="display: none">
-                    <img height="356" width="200" th:src="@{/images/android-instruction1.png}" src="../static/images/android-instruction1.png" />
-                </div>
-                <div id="android-instruction2_popover_content_wrapper" style="display: none">
-                    <img th:src="@{/images/android-instruction2.png}" src="../static/images/android-instruction2.png" />
-                </div>
-                <div id="android-instruction3_popover_content_wrapper" style="display: none">
-                    <img th:src="@{/images/android-instruction3.png}" src="../static/images/android-instruction3.png" />
-                </div>
-                <div id="android-instruction4_popover_content_wrapper" style="display: none">
-                    <img th:src="@{/images/android-instruction4.png}" src="../static/images/android-instruction4.png" />
-                </div>
-                <div id="android-instruction5_popover_content_wrapper" style="display: none">
-                    <img th:src="@{/images/android-instruction5.png}" src="../static/images/android-instruction5.png" />
-                </div>
-                <div id="android-instruction6_popover_content_wrapper" style="display: none">
-                    <img th:src="@{/images/android-instruction6.png}" src="../static/images/android-instruction6.png" />
-                </div>
-                <div id="android-instruction7_popover_content_wrapper" style="display: none">
-                    <img th:src="@{/images/android-instruction7.png}" src="../static/images/android-instruction7.png" />
-                </div>
-                <div id="android-instruction8_popover_content_wrapper" style="display: none">
-                    <img th:src="@{/images/android-instruction8.png}" src="../static/images/android-instruction8.png" />
-                </div>
+                <h4><img src="http://images.hearthgames.com/misc/android.png"/> Android Log File Location:</h4>
+                <p>Timestamps / 5MB file size limit: <code>Android/data/com.blizzard.wtcg.hearthstone/files/Logs/hearthstone_2015_11_24_12_53_07.log</code></p>
+                <h4><img src="http://images.hearthgames.com/misc/android.png"/> Android log.config Location: </h4>
+                <p><code>Android/data/com.blizzard.wtcg.hearthstone/files</code></p>
             </div>
         </div>
     </div>

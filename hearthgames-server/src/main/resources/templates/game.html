@@ -146,7 +146,7 @@
         </div>
         <div id="friendly-hand">
             {{#each cardsInHand}}
-            <div class="card">
+            <div class="thumb">
                 <div class="tt tt-{{id}} {{id}}"></div>
             </div>
             {{/each}}
@@ -154,7 +154,7 @@
         <div id="friendly-play">
             {{#each minionsInPlay}}
             <div class="tt minion tt-{{id}}">
-                <div class="card {{id}}"></div>
+                <div class="{{id}}"></div>
                 <div class="attack">
                     <div class="amount">{{attack}}</div>
                 </div>
@@ -234,7 +234,7 @@
         </div>
         <div id="opposing-hand">
             {{#each cardsInHand}}
-            <div class="card">
+            <div class="thumb">
                 <div class="tt tt-{{id}} {{id}}"></div>
             </div>
             {{/each}}
@@ -242,7 +242,7 @@
         <div id="opposing-play">
             {{#each minionsInPlay}}
             <div class="tt minion tt-{{id}}">
-                <div class="card {{id}}"></div>
+                <div class="{{id}}"></div>
                 <div class="attack">
                     <div class="amount">{{attack}}</div>
                 </div>

@@ -12,8 +12,8 @@ spring:
 security:
   oauth2:
     client:
-      client-id: 4q8t6js62qp7m8unpjjfn8phph5xhemt
-      client-secret: PTywt4SWSv63EAKGhCyHumVc9dVuXQcw
+      client-id: 67a2qaet3tenu4xa3jrdhrbegr3ncthv
+      client-secret: KX48ftbpuTEPjrXxZQuzPhfv4rP7yKak
       access-token-uri: https://us.battle.net/oauth/token
       user-authorization-uri: https://us.battle.net/oauth/authorize
       pre-established-redirect-uri: https://hearthgames.com/login
@@ -33,8 +33,8 @@ spring:
 security:
   oauth2:
     client:
-      client-id: h79cq4trvze7f7xuypzzy37jd4hqtevu
-      client-secret: kNjgD9sCZV6RR8QSxukP8cCYJGszgyFd
+      client-id: kawuekf38hed2qdn9e3wsevkzdbam8a9
+      client-secret: SZKWwBYwtjMhgHP9qWmeAuq73seF3QRT
       pre-established-redirect-uri: https://localhost:8443/login
 server.port: 8443
 server.ssl.key-store: classpath:keystore.p12
