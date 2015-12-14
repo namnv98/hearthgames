@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>HearthGames.com - Games</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -30,18 +31,21 @@
             <th>Winner</th>
             <th>Duration</th>
             <th># Turns</th>
-            <th>Challenge</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="game: ${gamesPlayed}">
-            <td><a th:href="@{'/game/'+${game.id}}" href="game.html">View</a></td>
+            <td sec:authorize="hasRole('ROLE_ANONYMOUS')">
+                <a th:href="@{'/game/'+${game.id}}" href="game.html">View</a>
+            </td>
+            <td sec:authorize="hasRole('ROLE_USER')">
+                <a th:href="@{'/mygame/'+${game.id}}" href="game.html">View</a>
+            </td>
             <td><span th:class="${#strings.toLowerCase(game.friendlyClass)}" th:text="${game.friendlyName}">Seekay</span></td>
             <td><span th:class="${#strings.toLowerCase(game.opposingClass)}" th:text="${game.opposingName}">Some Opponent</span></td>
             <td><span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}">Seekay</span></td>
             <td><span th:text="${game.duration}"></span></td>
             <td><span th:text="${game.turns}">23</span></td>
-            <td><span th:if="${game.justAdded}">New</span></td>
         </tr>
         </tbody>
     </table>

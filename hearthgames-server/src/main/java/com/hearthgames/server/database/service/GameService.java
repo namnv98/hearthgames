@@ -77,6 +77,10 @@ public class GameService {
         return gamePlayedRepository.findByFriendlyGameAccountId(id);
     }
 
+    public Iterable<GamePlayed> getGamesPlayed() {
+        return gamePlayedRepository.findAll();
+    }
+
     public GamePlayed getById(Long id) {
         return gamePlayedRepository.findOne(id);
     }

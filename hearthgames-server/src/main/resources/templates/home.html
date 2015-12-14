@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>HearthGames.com - Upload a Hearhtstone Log File</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -29,7 +30,21 @@
             </form>
         </div>
         <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
+
+        <td sec:authorize="hasRole('ROLE_ANONYMOUS')">
+            <div class="go-to-games-played">
+                <span>You can find games that have been uploaded here : </span> <a href="games.html" th:href="@{/games}">Games!</a>
+            </div>
+        </td>
+        <td sec:authorize="hasRole('ROLE_USER')">
+            <div class="go-to-games-played">
+                <span>You can find the games that you have uploaded here : </span> <a href="games.html" th:href="@{/mygames}">My Games!</a>
+            </div>
+        </td>
+
+
     </div>
+
 
 </div>
 
