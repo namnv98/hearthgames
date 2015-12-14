@@ -43,7 +43,7 @@ public class PlayerHandler implements Handler {
         }
 
         if (after.getResources() != null) {
-            result.addManaGained(Integer.parseInt(after.getResources()));
+            result.addManaGained(result.getCurrentTurn().getWhoseTurn(), Integer.parseInt(after.getResources()));
         } else if (after.getResourcesUsed() != null && !"0".equals(after.getResourcesUsed()) && before == result.getCurrentTurn().getWhoseTurn()) {
             Entity usedOn = activity.getParent().getDelta();
 
@@ -52,7 +52,7 @@ public class PlayerHandler implements Handler {
                 manaUsed += result.getCurrentTurn().getTempManaUsed();
                 result.getCurrentTurn().setTempManaUsed(0);
             }
-            result.addManaUsed(usedOn, manaUsed);
+            result.addManaUsed(result.getCurrentTurn().getWhoseTurn(), usedOn, manaUsed);
 
             if (activity.getParent().getDelta() instanceof Card) {
                 Card cardUsedOn = (Card) usedOn;
@@ -68,7 +68,7 @@ public class PlayerHandler implements Handler {
             }
         } else if ((before.getTempResources() == null || before.getTempResources().equals("0")) && after.getTempResources() != null) {
             Card fromCard = (Card) activity.getParent().getDelta();
-            result.addTempManaGained(fromCard, Integer.parseInt(after.getTempResources()));
+            result.addTempManaGained(result.getCurrentTurn().getWhoseTurn(), fromCard, Integer.parseInt(after.getTempResources()));
         } else if (before.getTempResources() != null && after.getTempResources() != null) {
             int tempManaUsed = Integer.parseInt(before.getTempResources()) - Integer.parseInt(after.getTempResources());
             result.getCurrentTurn().setTempManaUsed(tempManaUsed);

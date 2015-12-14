@@ -22,7 +22,15 @@ public class TriggerSerializer extends JsonSerializer<Trigger> {
             g.writeFieldName("id");
             g.writeString(value.getCard().getCardDetails().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCard().getCardDetails().getRarity());
+            g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
+        g.writeEndObject();
+
+        g.writeFieldName("cardController");
+        g.writeStartObject();
+            g.writeFieldName("name");
+            g.writeString(value.getCardController().getName());
+            g.writeFieldName("playerClass");
+            g.writeString(value.getCardController().getPlayerClass().toLowerCase());
         g.writeEndObject();
 
         g.writeEndObject();

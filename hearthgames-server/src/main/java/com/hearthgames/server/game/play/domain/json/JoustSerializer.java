@@ -22,7 +22,7 @@ public class JoustSerializer extends JsonSerializer<Joust> {
             g.writeFieldName("id");
             g.writeString(value.getFriendlyJouster().getCardDetails().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getFriendlyJouster().getCardDetails().getRarity());
+            g.writeString(value.getFriendlyJouster().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("opposingJouster");
@@ -32,7 +32,7 @@ public class JoustSerializer extends JsonSerializer<Joust> {
             g.writeFieldName("id");
             g.writeString(value.getOpposingJouster().getCardDetails().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getOpposingJouster().getCardDetails().getRarity());
+            g.writeString(value.getOpposingJouster().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("friendly");

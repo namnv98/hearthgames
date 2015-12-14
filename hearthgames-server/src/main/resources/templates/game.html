@@ -4,7 +4,7 @@
     <title>HearthGames.com - Game Result</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
+    <link rel="shortcut icon" href="http://images.hearthgames.com/misc/favicon.ico" />
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
     <link href="http://cdn.jsdelivr.net/jquery.tooltipster/3.3.0/css/tooltipster.css" rel="stylesheet" type="text/css"  />
@@ -35,7 +35,7 @@
         <div id="menu1" class="tab-pane">
             <div class="versus-info">
                 <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span>
-                <span class="versus">VS</span>
+                <span class="versus"> VS </span>
                 <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span>
             </div>
             <div class="versus-info">
@@ -69,6 +69,7 @@
         </div>
         <div id="menu8" class="tab-pane active">
             <div id="game-board-content"></div>
+            <div id="game-board-actions"></div>
         </div>
     </div>
 </div>
@@ -280,6 +281,174 @@
     </div>
 </script>
 
+<script id="armor-change-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{player.playerClass}}">{{player.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span> armor is now : </span>
+        <div class="armor-bg"><div>{{armor}}</div></div>
+    </div>
+</script>
+
+<script id="attack-change-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span> attack is now : </span>
+        <span>{{attack}}</span>
+    </div>
+</script>
+
+<script id="card-creation-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{creatorController.playerClass}}">{{creatorController.name}}</span>
+        <span class="{{creator.rarity}} tt tt-{{creator.id}}">{{creator.name}}</span>
+        <span> has created </span>
+        <span class="{{created.rarity}} tt tt-{{created.id}}">{{created.name}}</span>
+        <span> (</span>
+        <span class="{{beneficiary.playerClass}}">{{beneficiary.name}}</span>
+        <span> has benefited)</span>
+    </div>
+</script>
+
+<script id="card-discarded-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{causeController.playerClass}}">{{causeController.name}}</span>
+        <span class="{{cause.rarity}} tt tt-{{cause.id}}">{{cause.name}}</span>
+        <span> has caused </span>
+        <span class="{{player.playerClass}}">{{player.name}}</span>
+        <span> to discard </span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+    </div>
+</script>
+
+<script id="card-drawn-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{drawer.playerClass}}">{{drawer.name}}</span> <span> has drawn </span> <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+    </div>
+</script>
+
+<script id="damage-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{damagerController.playerClass}}">{{damagerController.name}}</span>
+        <span class="{{damager.rarity}} tt tt-{{damager.id}}">{{damager.name}}</span>
+        <span> has done </span>
+        <span>{{amount}}</span>
+        <span> damage to </span>
+        <span class="{{damagedController.playerClass}}">{{damagedController.name}}</span>
+        <span class="{{damaged.rarity}} tt tt-{{damaged.id}}">{{damaged.name}}</span>
+    </div>
+</script>
+
+<script id="frozen-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span> has been frozen</span>
+    </div>
+</script>
+
+<script id="health-change-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span> health is now : </span>
+        <span>{{health}}</span>
+    </div>
+</script>
+
+<script id="hero-health-change-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span> hero health is now : </span>
+        <div class="health-bg" style="display: inline-block;"><div>{{health}}</div></div>
+    </div>
+</script>
+
+<script id="hero-power-used-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
+        <span> has activated their hero power : </span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+    </div>
+</script>
+
+<script id="joust-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{friendly.playerClass}}">{{friendly.name}}</span>
+        <span class="{{friendlyJouster.rarity}} tt tt-{{friendlyJouster.id}}">{{friendlyJouster.name}}</span>
+        <span> is jousting </span>
+        <span class="{{opposing.playerClass}}">{{opposing.name}}</span>
+        <span class="{{opposingJouster.rarity}} tt tt-{{friendlyJouster.id}}">{{opposingJouster.name}}</span>
+        <span class="{{friendly.playerClass}}"> {{friendly.name}}</span>
+        <span class="{{friendlyJouster.rarity}} tt tt-{{friendlyJouster.id}}">{{friendlyJouster.name}}</span>
+        {{#if winner}}
+            <span> has won the Joust!</span>
+        {{else}}
+            <span> has lost the Joust!</span>
+        {{/if}}
+    </div>
+</script>
+
+<script id="kill-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{killerController.playerClass}}">{{killerController.name}}</span>
+        <span class="{{killer.rarity}} tt tt-{{killer.id}}">{{killer.name}}</span>
+        <span> has {{kind}} </span>
+        <span class="{{killedController.playerClass}}">{{killedController.name}}</span>
+        <span class="{{killed.rarity}} tt tt-{{killed.id}}">{{killed.name}}</span>
+    </div>
+</script>
+
+<script id="log-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>{{msg}}</div>
+</script>
+
+<script id="mana-gained-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{player.playerClass}}">{{player.name}}</span>
+        <span> has gained {{amount}} mana</span>
+    </div>
+</script>
+
+<script id="mana-used-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{player.playerClass}}">{{player.name}}</span>
+        <span> has used {{amount}} mana</span>
+    </div>
+</script>
+
+<script id="temp-mana-gained-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{player.playerClass}}">{{player.name}}</span>
+        <span> has temporarily gained {{amount}} mana from </span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+    </div>
+</script>
+
+<script id="trigger-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span> has triggered its ability </span>
+    </div>
+</script>
+
+<script id="card-played-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{player.playerClass}}">{{player.name}}</span>
+        {{#if playType1}}<span> has played a minion from HAND : </span>{{/if}}
+        {{#if playType2}}<span> has played a secret from HAND : </span>{{/if}}
+        {{#if playType3}}<span> has played a minion from DECK : </span>{{/if}}
+        {{#if playType4}}<span> has played a secret from HAND : </span>{{/if}}
+        {{#if playType5}}<span> has played a minion from GRAVEYARD : </span>{{/if}}
+        {{#if playType6}}<span> has gained a minion : </span>{{/if}}
+        {{#if playType7}}<span> has cast a spell : </span>{{/if}}
+        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+    </div>
+</script>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function(){
@@ -290,11 +459,26 @@
 
         var gameData = JSON.parse([[${turnInfos}]]);
 
-        console.log(gameData);
-        console.log(gameData.length);
+        var boardTemplate = Handlebars.compile($("#game-board-template").html());
 
-        var source = $("#game-board-template").html();
-        var template = Handlebars.compile(source);
+        var armorChangeTemplate = Handlebars.compile($('#armor-change-template').html());
+        var attackChangeTemplate = Handlebars.compile($('#attack-change-template').html());
+        var cardDrawnTemplate = Handlebars.compile($('#card-drawn-template').html());
+        var cardCreationTemplate = Handlebars.compile($('#card-creation-template').html());
+        var cardDiscardedTemplate = Handlebars.compile($('#card-discarded-template').html());
+        var cardPlayedTemplate = Handlebars.compile($('#card-played-template').html());
+        var damageTemplate = Handlebars.compile($('#damage-template').html());
+        var frozenTemplate = Handlebars.compile($('#frozen-template').html());
+        var healthChangeTemplate = Handlebars.compile($('#health-change-template').html());
+        var heroHealthChangeTemplate = Handlebars.compile($('#hero-health-change-template').html());
+        var heroPowerUsedTemplate = Handlebars.compile($('#hero-power-used-template').html());
+        var joustTemplate = Handlebars.compile($('#joust-template').html());
+        var killTemplate = Handlebars.compile($('#kill-template').html());
+        var logTemplate = Handlebars.compile($('#log-template').html());
+        var manaGainedTemplate = Handlebars.compile($('#mana-gained-template').html());
+        var manaUsedTemplate = Handlebars.compile($('#mana-used-template').html());
+        var tempManaGainedTemplate = Handlebars.compile($('#temp-mana-gained-template').html());
+        var triggerTemplate = Handlebars.compile($('#trigger-template').html());
 
         var turnCount = 0;
         var boardCount = -1;
@@ -325,6 +509,35 @@
             $(this).tooltipster('show');
         });
 
+        var updateBoardActions = function(actions) {
+
+            var gba = $('#game-board-actions');
+            gba.html('');
+            for (var i=0; i < actions.length; i++) {
+                var action = actions[i];
+
+                if (action.type == 'log') gba.append(logTemplate(action));
+                if (action.type == 'armorChange') gba.append(armorChangeTemplate(action));
+                if (action.type == 'attackChange') gba.append(attackChangeTemplate(action));
+                if (action.type == 'cardDrawn') gba.append(cardDrawnTemplate(action));
+                if (action.type == 'cardCreation') gba.append(cardCreationTemplate(action));
+                if (action.type == 'cardDiscarded') gba.append(cardDiscardedTemplate(action));
+                if (action.type == 'cardPlayed') gba.append(cardPlayedTemplate(action));
+                if (action.type == 'damage') gba.append(damageTemplate(action));
+                if (action.type == 'endOfTurn') gba.append(logTemplate(action));
+                if (action.type == 'frozen') gba.append(frozenTemplate(action));
+                if (action.type == 'healthChange') gba.append(healthChangeTemplate(action));
+                if (action.type == 'heroHealthChange') gba.append(heroHealthChangeTemplate(action));
+                if (action.type == 'heroPowerUsed') gba.append(heroPowerUsedTemplate(action));
+                if (action.type == 'joust') gba.append(joustTemplate(action));
+                if (action.type == 'kill') gba.append(killTemplate(action));
+                if (action.type == 'manaGained') gba.append(manaGainedTemplate(action));
+                if (action.type == 'manaUsed') gba.append(manaUsedTemplate(action));
+                if (action.type == 'tempManaGained') gba.append(tempManaGainedTemplate(action));
+                if (action.type == 'trigger') gba.append(triggerTemplate(action));
+            }
+        };
+
         var nextBoard = function() {
 
             boardCount++;
@@ -339,15 +552,10 @@
                 }
             }
             var board = gameData[turnCount].boards[boardCount];
-            var html = template(board);
+            var html = boardTemplate(board);
             $('#game-board-content').html(html);
 
-            for (var i=0; i < board.actions.length; i++) {
-                if (board.actions[i].type == 'armorChange') {
-                    console.log("%o", board.actions[i]);
-                }
-
-            }
+            updateBoardActions(board.actions);
         };
 
         var previousBoard = function() {
@@ -362,8 +570,11 @@
                 }
             }
             var board = gameData[turnCount].boards[boardCount];
-            var html = template(board);
+            var html = boardTemplate(board);
             $('#game-board-content').html(html);
+
+            updateBoardActions(board.actions);
+
         };
 
         var nextTurn = function() {
@@ -375,8 +586,11 @@
                 boardCount = 0;
             }
             var board = gameData[turnCount].boards[boardCount];
-            var html = template(board);
+            var html = boardTemplate(board);
             $('#game-board-content').html(html);
+
+            updateBoardActions(board.actions);
+
         };
 
         var previousTurn = function() {
@@ -386,8 +600,10 @@
             }
             boardCount = 0;
             var board = gameData[turnCount].boards[boardCount];
-            var html = template(board);
+            var html = boardTemplate(board);
             $('#game-board-content').html(html);
+
+            updateBoardActions(board.actions);
         };
 
         $('#game-board-content').on('click', '.next-turn', function(){

@@ -3,6 +3,7 @@ package com.hearthgames.server.game.play.handler;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.*;
 import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.domain.CardDrawn;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,6 +19,15 @@ public class GameHandler implements Handler {
         GameEntity after = (GameEntity) activity.getDelta();
 
         if (before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) {
+            Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
+            Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
+            CardDetails friendlyCardDetails = friendlyHeroCard.getCardDetails();
+            CardDetails opposingCardDetails = opposingHeroCard.getCardDetails();
+            context.getFriendlyPlayer().setPlayerClass(friendlyCardDetails.getPlayerClass());
+            context.getOpposingPlayer().setPlayerClass(opposingCardDetails.getPlayerClass());
+            context.getFriendlyPlayer().setHeroCard(friendlyHeroCard);
+            context.getOpposingPlayer().setHeroCard(opposingHeroCard);
+
             result.addLoggingAction("The Game has started");
             context.getCards().stream().filter(c -> Zone.HAND.eq(c.getZone())).filter(c -> context.getStartingCardIds().contains(c.getEntityId())).forEach(c -> {
                 Player player = c.getController().equals(context.getFriendlyPlayer().getController()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
@@ -26,7 +36,7 @@ public class GameHandler implements Handler {
                 } else {
                     result.addOpposingStartingCard(c);
                 }
-                result.addLoggingAction(player.getName() + " has drawn " + c.getName());
+                result.addCardDrawn(player, c, player);
             });
             result.addLoggingAction("Mulligan Phase has started");
         }
@@ -38,10 +48,10 @@ public class GameHandler implements Handler {
         }
 
         if (GameEntity.Step.MAIN_READY.eq(after.getStep())) {
-            result.addLoggingAction("Turn " + result.getTurnNumber());
             if (result.getTurnNumber() > 1) {
                 result.addTurn();
             }
+            result.addLoggingAction("Turn " + result.getTurnNumber());
             if (TRUE_OR_ONE.equals(context.getFriendlyPlayer().getCurrentPlayer())) {
                 result.getCurrentTurn().setWhoseTurn(context.getFriendlyPlayer());
             } else if (TRUE_OR_ONE.equals(context.getOpposingPlayer().getCurrentPlayer())) {
@@ -58,7 +68,7 @@ public class GameHandler implements Handler {
             // After 10 of one players turns the game automatically gives you 10 mana without recording it in the log.
             // I check here if the mana gained was still 0 after the MAIN_READY finishes, if so we set it to 10.
             if (result.getCurrentTurn().getManaGained() == 0) {
-                result.addManaGained(10);
+                result.addManaGained(result.getCurrentTurn().getWhoseTurn(), 10);
             }
         }
 
@@ -68,25 +78,13 @@ public class GameHandler implements Handler {
         }
 
         if (GameEntity.State.COMPLETE.eq(after.getState())) {
-            Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
-            Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
-
-            CardDetails friendlyCardDetails = friendlyHeroCard.getCardDetails();
-            CardDetails opposingCardDetails = opposingHeroCard.getCardDetails();
-
             if (result.getWinner() == context.getFriendlyPlayer()) {
-                result.setWinnerClass(friendlyCardDetails.getPlayerClass());
-                result.setLoserClass(opposingCardDetails.getPlayerClass());
+                result.setWinnerClass(context.getFriendlyPlayer().getPlayerClass());
+                result.setLoserClass(context.getOpposingPlayer().getPlayerClass());
             } else {
-                result.setWinnerClass(opposingCardDetails.getPlayerClass());
-                result.setLoserClass(friendlyCardDetails.getPlayerClass());
+                result.setWinnerClass(context.getOpposingPlayer().getPlayerClass());
+                result.setLoserClass(context.getFriendlyPlayer().getPlayerClass());
             }
-
-            context.getFriendlyPlayer().setPlayerClass(friendlyCardDetails.getPlayerClass());
-            context.getOpposingPlayer().setPlayerClass(opposingCardDetails.getPlayerClass());
-            context.getFriendlyPlayer().setHeroCard(friendlyHeroCard);
-            context.getOpposingPlayer().setHeroCard(opposingHeroCard);
-
             result.addLoggingAction("Game Over");
         }
 

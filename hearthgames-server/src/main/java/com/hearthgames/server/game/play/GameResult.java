@@ -247,12 +247,12 @@ public class GameResult {
         addActionLog(cardDiscarded.toString());
     }
 
-    public void addManaGained(int mana) {
-        this.currentTurn.addAction(new ManaGained(mana));
+    public void addManaGained(Player player, int mana) {
+        this.currentTurn.addAction(new ManaGained(player, mana));
     }
 
-    public void addManaUsed(Entity entity, int mana) {
-        this.currentTurn.addAction(new ManaUsed(entity, mana));
+    public void addManaUsed(Player player, Entity entity, int mana) {
+        this.currentTurn.addAction(new ManaUsed(player, entity, mana));
     }
 
     public void addManaSaved(Card card, int mana) {
@@ -263,8 +263,8 @@ public class GameResult {
         this.currentTurn.addAction(new ManaLost(card, mana));
     }
 
-    public void addTempManaGained(Card card, int mana) {
-        this.currentTurn.addAction(new TempManaGained(card, mana));
+    public void addTempManaGained(Player player, Card card, int mana) {
+        this.currentTurn.addAction(new TempManaGained(player, card, mana));
     }
 
     public void addFrozen(Player player, Card card, boolean frozen) {
@@ -281,8 +281,8 @@ public class GameResult {
         this.currentTurn.addAction(new Detached(card, detachedFrom));
     }
 
-    public void addTrigger(Card card) {
-        this.currentTurn.addAction(new Trigger(card));
+    public void addTrigger(Player cardController, Card card) {
+        this.currentTurn.addAction(new Trigger(cardController, card));
     }
 
     public void addHealthChange(Player player, Card card, int amount, int newHealth) {
@@ -340,6 +340,9 @@ public class GameResult {
             lastActionProcessed = lastAction;
             if (lastAction instanceof CardPlayed || lastAction instanceof CardDrawn || lastAction instanceof Kill ||
                 lastAction instanceof Damage || lastAction instanceof Frozen || lastAction instanceof CardDiscarded) {
+                if (lastAction instanceof CardDrawn && this.getCurrentTurn().getTurnNumber() == 0) {
+                    return false; // we don't want to update the board state during the mulligan phase
+                }
                 if (lastAction instanceof Damage) {
                     Damage damage = (Damage) lastAction;
                     if (Card.Type.HERO.eq(damage.getDamaged().getCardtype())) {

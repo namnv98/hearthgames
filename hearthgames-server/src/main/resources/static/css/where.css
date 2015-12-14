@@ -1,6 +1,19 @@
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+
+    .bs-callout { padding: 13px; margin: 13px 0; border-left-width: 3px; border-radius: 2px; }
+
+}
+
+@media only screen and (min-device-width: 1025px) {
+
+    .bs-callout { padding: 20px; margin: 20px 0; border-left-width: 5px; border-radius: 3px; }
+
+}
+
+
 .panel { color: #fff; border-color: #000; background-color: #2D2D2D; }
 
-.bs-callout { padding: 20px; margin: 20px 0; border: 1px solid #1B809E; border-left-width: 5px; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; border-radius: 3px; }
+.bs-callout { border: 1px solid #1B809E; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; }
 
 .bs-callout-info { border-left-color: #449D44; }
 .bs-callout-info h4 { color: #449D44; }

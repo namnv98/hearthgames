@@ -11,7 +11,7 @@ public class EndOfTurn implements Action, Serializable {
     String msg;
 
     public EndOfTurn() {
-        msg = "eot";
+        msg = "End of Turn";
     }
 
     public String getMsg() {

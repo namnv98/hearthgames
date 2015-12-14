@@ -22,7 +22,7 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
             g.writeFieldName("id");
             g.writeString(value.getCreator().getCardDetails().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCreator().getCardDetails().getRarity());
+            g.writeString(value.getCreator().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("created");
@@ -30,9 +30,9 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
             g.writeFieldName("name");
             g.writeString(value.getCreated().getName());
             g.writeFieldName("id");
-            g.writeString(value.getCreated().getCardDetails().getId());
+            g.writeString(value.getCreated().getCardDetails() != null ? value.getCreated().getCardDetails().getId() : "cardback");
             g.writeFieldName("rarity");
-            g.writeString(value.getCreated().getCardDetails().getRarity());
+            g.writeString(value.getCreated().getCardDetails() != null ? value.getCreated().getCardDetails().getRarity().toLowerCase() : "none");
         g.writeEndObject();
 
         g.writeFieldName("creatorController");

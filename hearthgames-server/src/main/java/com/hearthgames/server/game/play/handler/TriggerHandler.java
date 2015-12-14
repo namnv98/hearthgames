@@ -3,6 +3,7 @@ package com.hearthgames.server.game.play.handler;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
+import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.GameResult;
 
 public class TriggerHandler implements Handler {
@@ -14,7 +15,9 @@ public class TriggerHandler implements Handler {
 
     @Override
     public boolean handle(GameResult result, GameContext context, Activity activity) {
-        result.addTrigger(context.getBefore(activity));
+        Card card = context.getBefore(activity);
+        Player cardController = card.getController().equals(context.getFriendlyPlayer().getController()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
+        result.addTrigger(cardController, card);
         return true;
     }
 }

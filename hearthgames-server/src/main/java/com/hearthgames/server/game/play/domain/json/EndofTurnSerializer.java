@@ -16,6 +16,9 @@ public class EndofTurnSerializer extends JsonSerializer<EndOfTurn> {
         g.writeFieldName("type");
         g.writeString("endOfTurn");
 
+        g.writeFieldName("msg");
+        g.writeString(value.getMsg());
+
         g.writeEndObject();
     }
 }

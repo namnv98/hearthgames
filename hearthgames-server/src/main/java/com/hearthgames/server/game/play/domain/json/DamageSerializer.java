@@ -23,7 +23,7 @@ public class DamageSerializer extends JsonSerializer<Damage> {
             g.writeFieldName("id");
             g.writeString(value.getDamager().getCardDetails().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getDamager().getCardDetails().getRarity());
+            g.writeString(value.getDamager().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("damaged");
@@ -33,7 +33,7 @@ public class DamageSerializer extends JsonSerializer<Damage> {
             g.writeFieldName("id");
             g.writeString(value.getDamaged().getCardDetails().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getDamaged().getCardDetails().getRarity());
+            g.writeString(value.getDamaged().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("damagerController");
