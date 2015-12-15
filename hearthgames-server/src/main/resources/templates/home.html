@@ -31,16 +31,20 @@
         </div>
         <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
 
-        <td sec:authorize="hasRole('ROLE_ANONYMOUS')">
+        <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
             <div class="go-to-games-played">
                 <span>You can find games that have been uploaded here : </span> <a href="games.html" th:href="@{/games}">Games!</a>
             </div>
-        </td>
-        <td sec:authorize="hasRole('ROLE_USER')">
+        </div>
+        <div sec:authorize="hasRole('ROLE_USER')">
             <div class="go-to-games-played">
                 <span>You can find the games that you have uploaded here : </span> <a href="games.html" th:href="@{/mygames}">My Games!</a>
             </div>
-        </td>
+        </div>
+
+        <div class="download-client">
+            <span>Don't feel like uploading your games manually? Download the <a href="http://hearthgames.com/hearthgames-client.jar">Official Hearth Games Client Uploader</a>.</span>
+        </div>
 
 
     </div>

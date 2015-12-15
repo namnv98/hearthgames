@@ -1,4 +1,4 @@
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+@media only screen and (max-height: 720px) {
     .container { width: 683px; }
 
     .anonymous { height: 20px; width: 120px; padding:5px; top: 10px; right: 10px; }
@@ -15,7 +15,7 @@
 
 }
 
-@media only screen and (min-device-width: 1025px) {
+@media only screen and (min-height: 721px) {
     .container { width: 1024px; }
 
     .anonymous { height: 30px; width: 180px; padding:5px; top: 10px; right: 10px; }
@@ -44,6 +44,7 @@ body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; 
 .loginbnet { color: #fff; }
 
 .go-to-games-played { margin-top: 50px; }
+.download-client { margin-top: 20px; }
 .hearthgames-title { text-align: center; }
 .hearthgames-title a:link { text-decoration: none; color: #fff; }
 .hearthgames-title a:visited { text-decoration: none; color: #fff; }

@@ -1,4 +1,4 @@
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+@media only screen and (max-height: 720px) {
 
     .hearthgames-title { font-size: 27px; }
 
@@ -140,7 +140,7 @@
 }
 
 
-@media only screen and (min-device-width: 1025px) {
+@media only screen and (min-height: 721px) {
 
     .hearthgames-title { font-size: 40px; }
 
