@@ -49,7 +49,7 @@ public class GameParserServiceTest {
         List<String> lines = FileUtils.readLines(new File("c:\\games\\game9-4huntergames"));
 
         String accountId = "";
-        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines);
+        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines, false);
         for (RawGameData rawGameData : rawGameDatas) {
 
             GameContext context = gameParserService.parseLines(rawGameData.getLines());

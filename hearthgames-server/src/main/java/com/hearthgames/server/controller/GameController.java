@@ -56,7 +56,7 @@ public class GameController {
             String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
             String[] lines = logfile.split(splitStr);
 
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), false);
             if (rawGameDatas != null && rawGameDatas.size() == 1) {
                 RawGameData rawGameData = rawGameDatas.get(0);
                 GameContext context = gameParserService.parseLines(rawGameData.getLines());

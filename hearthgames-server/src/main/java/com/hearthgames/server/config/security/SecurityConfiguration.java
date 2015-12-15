@@ -52,6 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .logoutSuccessUrl("/")
             .permitAll();
+        http.csrf().disable();
     }
 
     public void setRedirectUrl(String redirectUrl) {

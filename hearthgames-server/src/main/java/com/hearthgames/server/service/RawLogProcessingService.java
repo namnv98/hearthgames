@@ -40,7 +40,7 @@ public class RawLogProcessingService {
         this.assetLineFilter = assetLineFilter;
     }
 
-    public List<RawGameData> processLogFile(List<String> lines) {
+    public List<RawGameData> processLogFile(List<String> lines, boolean prefiltered) {
 
         List<RawGameData> rawGameDatas = new ArrayList<>();
 
@@ -51,12 +51,14 @@ public class RawLogProcessingService {
         for (String rawLine: lines) {
 
             String timestamp = "";
-            String lineWithoutTimestamp = "";
-            FilteredLineData filteredLineData = null;
+            String lineWithoutTimestamp;
+            FilteredLineData filteredLineData;
             if (rawLine.contains(": [")) {
                 timestamp = rawLine.substring(0, rawLine.indexOf(": ["));
                 lineWithoutTimestamp = rawLine.substring(rawLine.indexOf("["));
                 filteredLineData = filterLine(lineWithoutTimestamp);
+            } else if (prefiltered) {
+                filteredLineData = new FilteredLineData(rawLine, true);
             } else {
                 filteredLineData = filterLine(rawLine); // For games that don't have timestamps
             }
@@ -83,13 +85,16 @@ public class RawLogProcessingService {
                         rank = rankFound;
                     }
                     currentRawGame.add(rawLine);
-                } else if (currentGame != null && gameComplete && line.startsWith(REGISTER_FRIEND_CHALLENGE)) {
+                } else if (currentGame != null && gameComplete && (line.startsWith(REGISTER_FRIEND_CHALLENGE) || prefiltered)) {
                     currentRawGame.add(rawLine);
                     RawGameData rawGameData = new RawGameData();
                     rawGameData.setLines(currentGame);
                     rawGameData.setRawLines(currentRawGame);
                     rawGameData.setRank(rank);
                     rawGameDatas.add(rawGameData);
+                    if (prefiltered) {
+                        return rawGameDatas;
+                    }
                 } else if (currentGame != null && filteredLineData.isLoggable()) {
                     LogLineData data = new LogLineData(timestamp, line);
                     currentGame.add(data);
