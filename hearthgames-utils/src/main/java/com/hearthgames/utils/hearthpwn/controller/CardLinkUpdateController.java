@@ -1,7 +1,7 @@
-package com.hearthlogs.utils.hearthpwn.controller;
+package com.hearthgames.utils.hearthpwn.controller;
 
-import com.hearthlogs.utils.hearthpwn.CardLink;
-import com.hearthlogs.utils.hearthpwn.CardParser;
+import com.hearthgames.utils.hearthpwn.CardLink;
+import com.hearthgames.utils.hearthpwn.CardParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

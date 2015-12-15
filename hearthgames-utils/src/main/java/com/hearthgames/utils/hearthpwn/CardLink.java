@@ -1,4 +1,4 @@
-package com.hearthlogs.utils.hearthpwn;
+package com.hearthgames.utils.hearthpwn;
 
 public class CardLink {
 

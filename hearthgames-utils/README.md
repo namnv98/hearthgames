@@ -1,1 +1,1 @@
-# hearthlogs
+# hearthgames

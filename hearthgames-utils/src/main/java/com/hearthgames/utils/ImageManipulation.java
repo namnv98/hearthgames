@@ -1,4 +1,4 @@
-package com.hearthlogs.utils;
+package com.hearthgames.utils;
 
 import net.coobird.thumbnailator.filters.Watermark;
 import net.coobird.thumbnailator.geometry.Positions;

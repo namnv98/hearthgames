@@ -1,4 +1,4 @@
-package com.hearthlogs.utils.hearthpwn;
+package com.hearthgames.utils.hearthpwn;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FileUtils;
