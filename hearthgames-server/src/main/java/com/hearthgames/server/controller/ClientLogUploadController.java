@@ -138,7 +138,7 @@ public class ClientLogUploadController {
 
     public static LocalDateTime getDateTimeFromTimestamp(long timestamp) {
         if (timestamp == 0) return null;
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), TimeZone
                 .getDefault().toZoneId());
     }
 }
