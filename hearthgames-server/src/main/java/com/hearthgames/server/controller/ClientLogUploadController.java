@@ -115,7 +115,11 @@ public class ClientLogUploadController {
                 GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
                 gamePlayed.setStartTime(getDateTimeFromTimestamp(request.getStartTime()));
                 gamePlayed.setEndTime(getDateTimeFromTimestamp(request.getEndTime()));
-                gamePlayed.setRank(request.getRank() != null ? Integer.parseInt(request.getRank()) : null);
+                try {
+                    gamePlayed.setRank(Integer.parseInt(request.getRank()));
+                } catch (NumberFormatException e) {
+                    gamePlayed.setRank(null);
+                }
 
                 if (!gameService.hasGameBeenPlayed(gamePlayed)) {
                     gameService.saveGamePlayed(gamePlayed);
