@@ -1,8 +1,8 @@
-package com.hearthlogs.utils.hearthpwn.controller;
+package com.hearthgames.utils.hearthpwn.controller;
 
-import com.hearthlogs.utils.hearthpwn.CardDetails;
-import com.hearthlogs.utils.hearthpwn.CardParser;
-import com.hearthlogs.utils.hearthpwn.CardService;
+import com.hearthgames.utils.hearthpwn.CardDetails;
+import com.hearthgames.utils.hearthpwn.CardParser;
+import com.hearthgames.utils.hearthpwn.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -40,10 +40,10 @@ public class ThumbsController {
         List<String> detailsCss = new ArrayList<>();
         Collection<CardDetails> cardDetails  = new ArrayList<>();
         for (CardDetails cd: cardService.getCardDetails()) {
-            String css = "." + cd.getId() + " { background-image: url(\"http://images.hearthlogs.com/" + cd.getId() +".png\"); }";
+            String css = "." + cd.getId() + " { background-image: url(\"http://images.hearthgames.com/" + cd.getId() +".png\"); }";
             detailsCss.add(css);
             if (cd.getId().startsWith("HERO")) {
-                css = "." + cd.getId() + "_large { background-image: url(\"http://images.hearthlogs.com/" + cd.getId() +"_large.png\"); }";
+                css = "." + cd.getId() + "_large { background-image: url(\"http://images.hearthgames.com/" + cd.getId() +"_large.png\"); }";
                 detailsCss.add(css);
             }
         }

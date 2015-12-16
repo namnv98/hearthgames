@@ -1,4 +1,4 @@
-package com.hearthlogs.utils.hearthpwn;
+package com.hearthgames.utils.hearthpwn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

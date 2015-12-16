@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.hearthlogs</groupId>
-	<artifactId>hearthlogs-utils</artifactId>
+	<groupId>com.hearthgames</groupId>
+	<artifactId>hearthgames-utils</artifactId>
 	<version>0.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>hearthlogs-utils</name>
-	<description>HearthLogs Utils</description>
+	<name>hearthgames-utils</name>
+	<description>HearthGames Utils</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -28,6 +28,7 @@
         <bootstrap.fileinput.version>4.2.7</bootstrap.fileinput.version>
         <jquery.version>2.1.4</jquery.version>
         <jsoup.version>1.8.3</jsoup.version>
+        <start-class>com.hearthgames.utils.UtilsApplication</start-class>
     </properties>
     <dependencies>
 

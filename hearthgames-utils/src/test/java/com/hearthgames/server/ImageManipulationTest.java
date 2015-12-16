@@ -1,8 +1,8 @@
-package com.hearthlogs.server;
+package com.hearthgames.server;
 
-import com.hearthlogs.utils.UtilsApplication;
-import com.hearthlogs.utils.hearthpwn.CardDetails;
-import com.hearthlogs.utils.hearthpwn.CardService;
+import com.hearthgames.utils.UtilsApplication;
+import com.hearthgames.utils.hearthpwn.CardDetails;
+import com.hearthgames.utils.hearthpwn.CardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,7 @@ public class ImageManipulationTest {
                 File file = new File("c:\\images\\download\\"+heroPower.getId()+".png");
                 if (file.exists()) {
 //                    FileUtils.copyFile(file, new File("c:\\images\\heropowers\\"+heroPower.getId()+".png"));
-                    System.out.println(".heropower ."+heroPower.getId() + " { background-image: url(\"http://images.hearthlogs.com/hp/"+heroPower.getId() +".png\"); }");
+                    System.out.println(".heropower ."+heroPower.getId() + " { background-image: url(\"http://images.hearthgames.com/hp/"+heroPower.getId() +".png\"); }");
                 }
 //                else {
 //                    System.out.println(heroPower.getId()+" does not exist");
@@ -106,7 +106,7 @@ public class ImageManipulationTest {
                 File file = new File("c:\\images\\download\\"+weapon.getId()+".png");
                 if (file.exists()) {
 //                    FileUtils.copyFile(file, new File("c:\\images\\weapons\\"+weapon.getId()+".png"));
-                    System.out.println(".weapon ."+weapon.getId() + " { background-image: url(\"http://images.hearthlogs.com/w/"+weapon.getId() +".png\"); }");
+                    System.out.println(".weapon ."+weapon.getId() + " { background-image: url(\"http://images.hearthgames.com/w/"+weapon.getId() +".png\"); }");
                 }
 //                else {
 //                    System.out.println(heroPower.getId()+" does not exist");

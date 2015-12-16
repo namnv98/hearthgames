@@ -1,7 +1,7 @@
-package com.hearthlogs.utils;
+package com.hearthgames.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hearthlogs.utils.hearthpwn.CardSets;
+import com.hearthgames.utils.hearthpwn.CardSets;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
