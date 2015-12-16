@@ -89,6 +89,8 @@ public class GameController {
                     e.printStackTrace();
                 }
 
+                modelAndView.addObject("gameId", gameId);
+
                 gamePlayed.setJustAdded(false);
                 gameService.saveGamePlayed(gamePlayed);
 
