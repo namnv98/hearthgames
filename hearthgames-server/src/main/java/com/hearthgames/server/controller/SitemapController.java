@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class SitemapController {
 
-    @RequestMapping(value = "/sitemap")
+    @RequestMapping(value = "/hgsitemap")
     public String sitemap() {
         return "sitemap";
     }
