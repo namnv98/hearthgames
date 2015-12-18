@@ -6,11 +6,27 @@
         <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>http://hearthgames.com/where</loc>
+        <loc>http://hearthgames.com/upload</loc>
         <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>http://hearthgames.com/games</loc>
+        <loc>http://hearthgames.com/rankedgames</loc>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://hearthgames.com/casualgames</loc>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://hearthgames.com/download</loc>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://hearthgames.com/sitemap</loc>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://hearthgames.com/where</loc>
         <changefreq>daily</changefreq>
     </url>
 </urlset>
