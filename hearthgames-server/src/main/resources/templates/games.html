@@ -26,27 +26,28 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th></th>
             <th>Friendly</th>
             <th>Opponent</th>
             <th>Winner</th>
-            <th>Duration</th>
             <th># Turns</th>
+            <th th:if="${gamesType.ranked || gamesType.account}">Rank</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="game: ${gamesPlayed}">
+            <td><span th:class="${#strings.toLowerCase(game.friendlyClass)}" th:text="${game.friendlyName}">Seekay</span></td>
+            <td><span th:class="${#strings.toLowerCase(game.opposingClass)}" th:text="${game.opposingName}">Some Opponent</span></td>
+            <td><span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}">Seekay</span></td>
+            <td><span th:text="${game.turns}">23</span></td>
+            <th th:if="${gamesType.ranked || gamesType.account}" th:text="${game.rank}"></th>
             <td sec:authorize="hasRole('ROLE_ANONYMOUS')">
                 <a th:href="@{'/game/'+${game.id}}" href="game.html">View</a>
             </td>
             <td sec:authorize="hasRole('ROLE_USER')">
-                <a th:href="@{'/mygame/'+${game.id}}" href="game.html">View</a>
+                <a th:if="${gamesType.ranked}"  th:href="@{'/game/'+${game.id}}" href="game.html">View</a>
+                <a th:if="${gamesType.account}"  th:href="@{'/mygame/'+${game.id}}" href="game.html">View</a>
             </td>
-            <td><span th:class="${#strings.toLowerCase(game.friendlyClass)}" th:text="${game.friendlyName}">Seekay</span></td>
-            <td><span th:class="${#strings.toLowerCase(game.opposingClass)}" th:text="${game.opposingName}">Some Opponent</span></td>
-            <td><span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}">Seekay</span></td>
-            <td><span th:text="${game.duration}"></span></td>
-            <td><span th:text="${game.turns}">23</span></td>
         </tr>
         </tbody>
     </table>

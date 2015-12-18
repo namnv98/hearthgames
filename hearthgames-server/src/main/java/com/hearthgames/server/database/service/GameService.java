@@ -78,11 +78,11 @@ public class GameService {
     }
 
     public Iterable<GamePlayed> getCasualGamesPlayed() {
-        return gamePlayedRepository.findAll();
+        return gamePlayedRepository.findAllByRankIsNull();
     }
 
     public Iterable<GamePlayed> getRankedGamesPlayed() {
-        return gamePlayedRepository.findAll();
+        return gamePlayedRepository.findAllByRankNotNull();
     }
 
     public GamePlayed getById(Long id) {

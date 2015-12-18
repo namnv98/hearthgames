@@ -15,4 +15,8 @@ public interface GamePlayedRepository extends PagingAndSortingRepository<GamePla
 
     GamePlayed findFirstByBattletag(String battletag);
 
+    List<GamePlayed> findAllByRankNotNull();
+
+    List<GamePlayed> findAllByRankIsNull();
+
 }

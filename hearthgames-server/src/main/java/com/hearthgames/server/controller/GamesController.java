@@ -25,6 +25,7 @@ public class GamesController {
 
         List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(gameAccountId);
 
+        modelAndView.addObject("gamesType", new GamesType(false, false, true));
         modelAndView.addObject("gamesPlayed", gamesPlayed);
         return modelAndView;
     }
@@ -38,6 +39,7 @@ public class GamesController {
         String gameAccountId = gameService.getGameAccountId(userInfo.getBattletag());
         List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(gameAccountId);
 
+        modelAndView.addObject("gamesType", new GamesType(false, false, true));
         modelAndView.addObject("gamesPlayed", gamesPlayed);
         return modelAndView;
     }
@@ -49,6 +51,7 @@ public class GamesController {
 
         Iterable<GamePlayed> gamesPlayed = gameService.getCasualGamesPlayed();
 
+        modelAndView.addObject("gamesType", new GamesType(true, false, false));
         modelAndView.addObject("gamesPlayed", gamesPlayed);
         return modelAndView;
     }
@@ -60,8 +63,46 @@ public class GamesController {
 
         Iterable<GamePlayed> gamesPlayed = gameService.getRankedGamesPlayed();
 
+        modelAndView.addObject("gamesType", new GamesType(false, true, false));
         modelAndView.addObject("gamesPlayed", gamesPlayed);
         return modelAndView;
     }
 
+
+    public static class GamesType {
+
+        private boolean casual;
+        private boolean ranked;
+        private boolean account;
+
+        public GamesType(boolean casual, boolean ranked, boolean account) {
+            this.casual = casual;
+            this.ranked = ranked;
+            this.account = account;
+        }
+
+        public boolean isCasual() {
+            return casual;
+        }
+
+        public void setCasual(boolean casual) {
+            this.casual = casual;
+        }
+
+        public boolean isRanked() {
+            return ranked;
+        }
+
+        public void setRanked(boolean ranked) {
+            this.ranked = ranked;
+        }
+
+        public boolean isAccount() {
+            return account;
+        }
+
+        public void setAccount(boolean account) {
+            this.account = account;
+        }
+    }
 }

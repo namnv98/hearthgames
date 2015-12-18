@@ -41,12 +41,10 @@ public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> 
             if (board != null) {
                 int weapon = board.getFriendlyHero().getWeapon() != null ? 1 : 0;
                 int friendlyCards = board.getFriendlyHero().getCardsInHand().size() + board.getFriendlyHero().getMinionsInPlay().size()
-                        + weapon + board.getFriendlyHero().getCardsInSecret().size() -
-                        (hasTheCoin(board.getFriendlyHero().getCardsInHand()) ? 1 : 0);
+                        + weapon + board.getFriendlyHero().getCardsInSecret().size();
                 weapon = board.getOpposingHero().getWeapon() != null ? 1 : 0;
                 int opposingCards = board.getOpposingHero().getCardsInHand().size() + board.getOpposingHero().getMinionsInPlay().size()
-                        + weapon + board.getOpposingHero().getCardsInSecret().size() -
-                        (hasTheCoin(board.getOpposingHero().getCardsInHand()) ? 1 : 0);
+                        + weapon + board.getOpposingHero().getCardsInSecret().size();
 
                 if (friendlyCards - opposingCards > 0) {
                     int cardAdvantage = friendlyCards - opposingCards;
@@ -68,14 +66,5 @@ public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> 
     private void addFriendlyOpposingColumns(String friendlyData, String opposingData, GenericRow friendly, GenericRow opposing) {
         friendly.addColumn(new GenericColumn(friendlyData));
         opposing.addColumn(new GenericColumn(opposingData));
-    }
-
-    private boolean hasTheCoin(List<CardInHand> cards) {
-        for (CardInHand cardInHand: cards) {
-            if (Card.THE_COIN.equals(cardInHand.getId())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

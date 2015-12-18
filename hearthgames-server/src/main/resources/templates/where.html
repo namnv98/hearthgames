@@ -31,27 +31,27 @@
         <div class="panel-body hearthgames-where">
             <p>First thing you have to do is enable logging before you can find any log files. Download <a href="../static/log.config" th:href="@{/log.config}">log.config</a> and put it in the directory specified below: </p>
             <ul class="nav nav-tabs">
-                <li th:class="${windows ? 'active' : ''}"><a data-toggle="tab" href="#windows-config"><img src="http://images.hearthgames.com/misc/windows.png"/> Windows</a></li>
-                <li th:class="${mac ? 'active' : ''}"><a data-toggle="tab" href="#mac-config"><img src="http://images.hearthgames.com/misc/mac.png"/> Mac</a></li>
-                <li th:class="${android ? 'active' : ''}"><a data-toggle="tab" href="#android-config"><img src="http://images.hearthgames.com/misc/android.png"/> Android</a></li>
+                <li th:class="${userAgent.windows ? 'active' : ''}"><a data-toggle="tab" href="#windows-config"><img src="http://images.hearthgames.com/misc/windows.png"/> Windows</a></li>
+                <li th:class="${userAgent.mac ? 'active' : ''}"><a data-toggle="tab" href="#mac-config"><img src="http://images.hearthgames.com/misc/mac.png"/> Mac</a></li>
+                <li th:class="${userAgent.android ? 'active' : ''}"><a data-toggle="tab" href="#android-config"><img src="http://images.hearthgames.com/misc/android.png"/> Android</a></li>
             </ul>
 
             <div class="tab-content">
-                <div id="windows-config" class="tab-pane" th:class="${windows ? 'active' : ''}+' tab-pane'">
+                <div id="windows-config" class="tab-pane" th:class="${userAgent.windows ? 'active' : ''}+' tab-pane'">
                     <div class="bs-callout bs-callout-where">
-                        <div><code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\</code></div>
+                        <div><span class="file-location">C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\</span></div>
                     </div>
                 </div>
 
-                <div id="mac-config" class="tab-pane" th:class="${mac ? 'active' : ''}+' tab-pane'">
+                <div id="mac-config" class="tab-pane" th:class="${userAgent.mac ? 'active' : ''}+' tab-pane'">
                     <div class="bs-callout bs-callout-where">
-                        <div><code>~/Library/Preferences/Blizzard/Hearthstone/</code></div>
+                        <div><span class="file-location">~/Library/Preferences/Blizzard/Hearthstone/</span></div>
                     </div>
                 </div>
 
-                <div id="android-config" class="tab-pane" th:class="${android ? 'active' : ''}+' tab-pane'">
+                <div id="android-config" class="tab-pane" th:class="${userAgent.android ? 'active' : ''}+' tab-pane'">
                     <div class="bs-callout bs-callout-where tab-pane">
-                        <div><code>Android/data/com.blizzard.wtcg.hearthstone/files</code></div>
+                        <div><span class="file-location">>Android/data/com.blizzard.wtcg.hearthstone/files</span></div>
                     </div>
                 </div>
             </div>
@@ -66,34 +66,34 @@
         <div class="panel-body hearthgames-where">
             <p></p>
             <ul class="nav nav-tabs">
-                <li th:class="${windows ? 'active' : ''}"><a data-toggle="tab" href="#windows"><img src="http://images.hearthgames.com/misc/windows.png"/> Windows</a></li>
-                <li th:class="${mac ? 'active' : ''}"><a data-toggle="tab" href="#mac"><img src="http://images.hearthgames.com/misc/mac.png"/> Mac</a></li>
-                <li th:class="${android ? 'active' : ''}"><a data-toggle="tab" href="#android"><img src="http://images.hearthgames.com/misc/android.png"/> Android</a></li>
+                <li th:class="${userAgent.windows ? 'active' : ''}"><a data-toggle="tab" href="#windows"><img src="http://images.hearthgames.com/misc/windows.png"/> Windows</a></li>
+                <li th:class="${userAgent.mac ? 'active' : ''}"><a data-toggle="tab" href="#mac"><img src="http://images.hearthgames.com/misc/mac.png"/> Mac</a></li>
+                <li th:class="${userAgent.android ? 'active' : ''}"><a data-toggle="tab" href="#android"><img src="http://images.hearthgames.com/misc/android.png"/> Android</a></li>
             </ul>
 
             <div class="tab-content">
-                <div id="windows" class="tab-pane active" th:class="${windows ? 'active' : ''}+' tab-pane'">
+                <div id="windows" class="tab-pane active" th:class="${userAgent.windows ? 'active' : ''}+' tab-pane'">
                     <div class="bs-callout bs-callout-where">
                         <ul>
-                            <li>Timestamps / 5MB file size limit: <code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs\hearthstone_2015_11_24_12_53_07.log</code></li>
-                            <li>No Timestamps / No file size limit:  <code>C:\Program Files (x86)\Hearthstone\Hearthstone_Data\output_log.txt</code></li>
+                            <li>Timestamps / 5MB file size limit: <span class="file-location">C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs\hearthstone_2015_11_24_12_53_07.log</span></li>
+                            <li>No Timestamps / No file size limit:  <span class="file-location">C:\Program Files (x86)\Hearthstone\Hearthstone_Data\output_log.txt</span></li>
                         </ul>
                     </div>
                 </div>
 
-                <div id="mac" class="tab-pane" th:class="${mac ? 'active' : ''}+' tab-pane'">
+                <div id="mac" class="tab-pane" th:class="${userAgent.mac ? 'active' : ''}+' tab-pane'">
                     <div class="bs-callout bs-callout-where">
                         <ul>
-                            <li>Timestamps / 5MB file size limit: <code>~/Library/Preferences/Blizzard/Hearthstone/Logs/hearthstone_2015_11_24_12_53_07.log</code></li>
-                            <li>No Timestamps / No file size limit:  <code>~/Library/Logs/Unity/Player.log</code></li>
+                            <li>Timestamps / 5MB file size limit: <span class="file-location">~/Library/Preferences/Blizzard/Hearthstone/Logs/hearthstone_2015_11_24_12_53_07.log</span></li>
+                            <li>No Timestamps / No file size limit:  <span class="file-location">~/Library/Logs/Unity/Player.log</span></li>
                         </ul>
                     </div>
                 </div>
 
-                <div id="android" class="tab-pane" th:class="${android ? 'active' : ''}+' tab-pane'">
+                <div id="android" class="tab-pane" th:class="${userAgent.android ? 'active' : ''}+' tab-pane'">
                     <div class="bs-callout bs-callout-where tab-pane">
                         <ul>
-                            <li>Timestamps / 5MB file size limit: <code>Android/data/com.blizzard.wtcg.hearthstone/files/Logs/hearthstone_2015_11_24_12_53_07.log</code></li>
+                            <li>Timestamps / 5MB file size limit: <span class="file-location">Android/data/com.blizzard.wtcg.hearthstone/files/Logs/hearthstone_2015_11_24_12_53_07.log</span></li>
                             <li>No Timestamps : Currently not available.</li>
                         </ul>
                     </div>

@@ -17,25 +17,54 @@ public class WhereController {
         String userAgent = request.getHeader("User-Agent");
         if (userAgent != null) {
             if (userAgent.toLowerCase().contains("windows")) {
-                modelAndView.addObject("windows", true);
-                modelAndView.addObject("mac", false);
-                modelAndView.addObject("android", false);
+                modelAndView.addObject("userAgent", new UserAgent(true, false, false));
             } else if (userAgent.toLowerCase().contains("mac")) {
-                modelAndView.addObject("mac", true);
-                modelAndView.addObject("windows", false);
-                modelAndView.addObject("android", false);
+                modelAndView.addObject("userAgent", new UserAgent(false, true, false));
             } else if (userAgent.toLowerCase().contains("android")) {
-                modelAndView.addObject("android", true);
-                modelAndView.addObject("windows", false);
-                modelAndView.addObject("mac", false);
+                modelAndView.addObject("userAgent", new UserAgent(false, false, true));
             }
         } else {
-            modelAndView.addObject("windows", true);
-            modelAndView.addObject("mac", false);
-            modelAndView.addObject("android", false);
+            modelAndView.addObject("userAgent", new UserAgent(true, false, false));
         }
 
         return modelAndView;
+    }
+
+    public static class UserAgent {
+
+        private boolean windows;
+        private boolean mac;
+        private boolean android;
+
+        public UserAgent(boolean windows, boolean mac, boolean android) {
+            this.windows = windows;
+            this.mac = mac;
+            this.android = android;
+        }
+
+        public boolean isWindows() {
+            return windows;
+        }
+
+        public void setWindows(boolean windows) {
+            this.windows = windows;
+        }
+
+        public boolean isMac() {
+            return mac;
+        }
+
+        public void setMac(boolean mac) {
+            this.mac = mac;
+        }
+
+        public boolean isAndroid() {
+            return android;
+        }
+
+        public void setAndroid(boolean android) {
+            this.android = android;
+        }
     }
 
 }
