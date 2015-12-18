@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>HearthGames.com - Error</title>
+    <title>HearthGames.com - Error Page</title>
     <meta name="description" content="HearthGames.com encountered some kind of error. Sorry."/>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -15,9 +15,13 @@
 
 <div class="container">
 
-    <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    <div class="title-container">
+        <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    </div>
 
     <h1>Oops...some kind of error happened...how embarassing!  I've logged the error and will try and get it fixed ASAP.</h1>
+
+    <div th:replace="/fragments/footer-fragment::footer"></div>
 
 </div>
 

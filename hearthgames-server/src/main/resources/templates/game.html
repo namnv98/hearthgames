@@ -19,7 +19,7 @@
 
     <div th:replace="/fragments/login-fragment::userLoggedInOnGame"></div>
 
-    <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    <div class="game-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
 
     <ul class="nav nav-tabs">
         <li><a data-toggle="tab" href="#menu1">Overview</a></li>
@@ -73,6 +73,8 @@
             <div id="game-board-actions"></div>
         </div>
     </div>
+
+    <div th:replace="/fragments/footer-fragment::footer"></div>
 </div>
 
 <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
@@ -95,6 +97,13 @@
         </div>
         <div class="next-prev-buttons">
             <div class="prev prev-board"></div><div class="text">Board</div><div class="next next-board"></div>
+        </div>
+        <div id="autoplay-content">
+            <span class="autoplay">AutoPlay : </span>
+            <span class="autoplay-toggle">{{#if autoplay}}<span class="on">ON</span>{{else}}<span class="off">OFF</span>{{/if}}</span>
+        </div>
+        <div id="autoplay-duration-content">
+            <span class="minus-duration">-</span> <span class="autoplay-duration">{{duration}}</span> <span class="plus-duration">+</span>
         </div>
     </div>
 
@@ -331,13 +340,20 @@
 
 <script id="damage-template" type="text/x-handlebars-template" th:inline="javascript">
     <div>
-        <span class="{{damagerController.playerClass}}">{{damagerController.name}}</span>
-        <span class="{{damager.rarity}} tt tt-{{damager.id}}">{{damager.name}}</span>
-        <span> has done </span>
-        <span>{{amount}}</span>
-        <span> damage to </span>
-        <span class="{{damagedController.playerClass}}">{{damagedController.name}}</span>
-        <span class="{{damaged.rarity}} tt tt-{{damaged.id}}">{{damaged.name}}</span>
+        {{#if weapon}}
+            <span class="{{damagedController.playerClass}}">{{damagedController.name}}</span>
+            <span> weapon has lost </span>
+            <span class="{{damaged.rarity}} tt tt-{{damaged.id}}">{{damaged.name}}</span>
+        <span> durability</span>
+        {{else}}
+            <span class="{{damagerController.playerClass}}">{{damagerController.name}}</span>
+            <span class="{{damager.rarity}} tt tt-{{damager.id}}">{{damager.name}}</span>
+            <span> has done </span>
+            <span>{{amount}}</span>
+            <span> damage to </span>
+            <span class="{{damagedController.playerClass}}">{{damagedController.name}}</span>
+            <span class="{{damaged.rarity}} tt tt-{{damaged.id}}">{{damaged.name}}</span>
+        {{/if}}
     </div>
 </script>
 
@@ -539,6 +555,9 @@
             }
         };
 
+        var autoplay = false;
+        var duration = 2000;
+
         var nextBoard = function() {
 
             boardCount++;
@@ -553,6 +572,8 @@
                 }
             }
             var board = gameData[turnCount].boards[boardCount];
+            board.autoplay = autoplay;
+            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
             $('#game-board-content').html(html);
 
@@ -571,6 +592,8 @@
                 }
             }
             var board = gameData[turnCount].boards[boardCount];
+            board.autoplay = autoplay;
+            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
             $('#game-board-content').html(html);
 
@@ -587,6 +610,8 @@
                 boardCount = 0;
             }
             var board = gameData[turnCount].boards[boardCount];
+            board.autoplay = autoplay;
+            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
             $('#game-board-content').html(html);
 
@@ -601,23 +626,55 @@
             }
             boardCount = 0;
             var board = gameData[turnCount].boards[boardCount];
+            board.autoplay = autoplay;
+            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
             $('#game-board-content').html(html);
 
             updateBoardActions(board.actions);
         };
 
-        $('#game-board-content').on('click', '.next-turn', function(){
-            nextTurn();
+        var boardContent = $('#game-board-content');
+
+        boardContent.on('click', '.next-turn', function(){ nextTurn(); });
+        boardContent.on('click', '.prev-turn', function(){ previousTurn(); });
+        boardContent.on('click', '.next-board', function(){ nextBoard(); });
+        boardContent.on('click', '.prev-board', function(){ previousBoard(); });
+
+        var myInterval;
+        boardContent.on('click', '.on', function() {
+            autoplay = false;
+            $('.autoplay-toggle').html('<span class="off">OFF</span>');
+            clearInterval(myInterval);
         });
-        $('#game-board-content').on('click', '.prev-turn', function(){
-            previousTurn();
+
+        boardContent.on('click', '.off', function() {
+            autoplay = true;
+            $('.autoplay-toggle').html('<span class="on">ON</span>');
+            myInterval = setInterval(nextBoard, duration);
         });
-        $('#game-board-content').on('click', '.next-board', function(){
-            nextBoard();
+
+        boardContent.on('click', '.plus-duration', function() {
+            if (autoplay) {
+                clearInterval(myInterval);
+            }
+            duration += 1000;
+            if (duration > 10000) duration = 10000;
+            $('.autoplay-duration').html((duration / 1000) + "secs");
+            if (autoplay) {
+                myInterval = setInterval(nextBoard, duration);
+            }
         });
-        $('#game-board-content').on('click', '.prev-board', function(){
-            previousBoard();
+        boardContent.on('click', '.minus-duration', function() {
+            if (autoplay) {
+                clearInterval(myInterval);
+            }
+            duration -= 1000;
+            if (duration < 1000) duration = 1000;
+            $('.autoplay-duration').html((duration / 1000) + "secs");
+            if (autoplay) {
+                myInterval = setInterval(nextBoard, duration);
+            }
         });
 
 

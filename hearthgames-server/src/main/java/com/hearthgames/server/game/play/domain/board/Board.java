@@ -47,6 +47,13 @@ public class Board implements Action {
             turnData.setStatus("yellow");
         }
 
+        if (friendlyHero.getWeapon() != null) {
+            friendlyHero.setAttack(friendlyHero.getWeapon().getAttack());
+        }
+        if (opposingHero.getWeapon() != null) {
+            opposingHero.setAttack(opposingHero.getWeapon().getAttack());
+        }
+
         setHeroIds(context, friendlyHero, opposingHero);
         setHeroHealthArmor(result, context, friendlyHero, opposingHero);
         setHeroMana(result, context, friendlyHero, opposingHero);

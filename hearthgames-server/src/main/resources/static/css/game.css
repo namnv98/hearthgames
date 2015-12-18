@@ -1,6 +1,6 @@
 @media only screen and (max-height: 720px) {
 
-    .hearthgames-title { font-size: 27px; }
+    .game-title { font-size: 27px; }
 
     .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th { padding: 6px; }
 
@@ -54,6 +54,9 @@
     #next { margin: 0 5px; }
     #previous { margin: 0 5px; }
     #turn-status { top: -77px; right: 0; font-size: 18px; text-shadow: 2px 2px 2px #000; }
+    .autoplay { font-size: 9px; }
+    .autoplay-toggle { font-size: 9px; }
+    .autoplay-duration { font-size: 7px; }
     #game-board-content { margin-top: 86px; }
     #game-board-actions { height: 87px; margin-top: 67px; padding: 7px; font-size: 9px; }
     #whose-turn { top: 145px; right:0; width: 53px; font-size: 10px; text-shadow: 2px 2px 2px #000;}
@@ -142,7 +145,7 @@
 
 @media only screen and (min-height: 721px) {
 
-    .hearthgames-title { font-size: 40px; }
+    .game-title { font-size: 40px; }
 
     .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th { padding: 6px; }
 
@@ -196,6 +199,9 @@
     #next { margin: 0 5px; }
     #previous { margin: 0 5px; }
     #turn-status { top: -115px; right: 0; font-size: 25px; text-shadow: 2px 2px 2px #000; }
+    .autoplay { font-size: 14px; }
+    .autoplay-toggle { font-size: 14px; }
+    .autoplay-duration { font-size: 14px; }
     #game-board-content { margin-top: 135px; }
     #game-board-actions { height: 130px; margin-top: 100px; padding: 10px; font-size: 14px; }
     #whose-turn { top: 217px; right:0; width: 80px; font-size: 15px; text-shadow: 2px 2px 2px #000;}
@@ -279,6 +285,12 @@
     .weapon .durability .amount { right: 1px; bottom: 1px; width: 24px; height: 25px; }
 }
 
+.game-title { text-align: center; }
+.game-title a:link { text-decoration: none; color: #D5D4D4; }
+.game-title a:visited { text-decoration: none; color: #D5D4D4; }
+.game-title a:hover { text-decoration: none; color: #D5D4D4; }
+.game-title a:active { text-decoration: none; color: #D5D4D4; }
+
 .tooltipster-default { border-radius: 0; border: 0 none; background: none; color: #fff; }
 
 .versus { font-weight: bold; }
@@ -320,7 +332,16 @@
 #game-board-actions { overflow-y: scroll; border: 1px solid #000; background-color: #222; }
 #next { display: inline-block; cursor: pointer; }
 #previous { display: inline-block; cursor: pointer; }
-#turn-status { position: absolute; font-weight: bold; }
+#turn-status { position: absolute; font-weight: bold; z-index: 20; }
+#autoplay-content { text-align: right; }
+#autoplay-duration-content { text-align: right; }
+.plus-duration { cursor: pointer; }
+.minus-duration { cursor: pointer; }
+.autoplay-toggle { cursor: pointer; }
+.autoplay-toggle .on { color: #008000; }
+.autoplay-toggle .off { color: #ff0000; }
+.autoplay { text-align: right; }
+
 #whose-turn { position: absolute; text-align: center; font-weight: bold; }
 #whose-turn .green { color: #26C805;}
 #whose-turn .yellow { color: #E1D002; }
@@ -382,9 +403,9 @@
 .minion .deathrattle { background-image: url(http://images.hearthgames.com/misc/deathrattle.png); position: absolute; z-index: 4; }
 
 #friendly-mana { position: absolute; background-image: url(http://images.hearthgames.com/misc/mana-count.png); }
-#friendly-mana .amount { text-align: center; }
+#friendly-mana .amount { text-align: center; font-weight: bold; }
 #opposing-mana { position: absolute; background-image: url(http://images.hearthgames.com/misc/mana-count.png); }
-#opposing-mana .amount { text-align: center; }
+#opposing-mana .amount { text-align: center; font-weight: bold; }
 
 
 #friendly-hero-power { position: absolute; }

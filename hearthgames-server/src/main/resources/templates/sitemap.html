@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthGames.com - Download Game Client Uploader</title>
+    <meta name="description" content="HearthGames.com Game Client Uploader monitors the Hearthstone log file and detects when a ranked or casual game and uploads it to this website.  Download the client from this page."/>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="shortcut icon" href="http://images.hearthgames.com/misc/favicon.ico" />
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
+    <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
+
+    <div class="title-container">
+        <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    </div>
+
+    <div class="content">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Site Map</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li><a href="home.html" th:href="@{/}">Home</a> - The Homepage of HearthGames.com.</li>
+                    <li><a href="upload.html" th:href="@{/upload}">Upload</a> - Manually upload your Hearthstone Log files from this page.</li>
+                    <li><a href="download.html" th:href="@{/download}">Download</a> - Download the Official Hearth Games Client Uploader. It sure beats manually uploading.</li>
+                    <li><a href="games.html" th:href="@{/casualgames}">Casual Games</a> - View and Search Casual Games. You will usually find people experimenting with interesting decks here.</li>
+                    <li><a href="games.html" th:href="@{/rankedgames}">Ranked Games</a> - View and Search Ranked Games. You will find the competitive games here.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="/fragments/footer-fragment::siteMapFooter"></div>
+</div>
+
+</body>
+</html>

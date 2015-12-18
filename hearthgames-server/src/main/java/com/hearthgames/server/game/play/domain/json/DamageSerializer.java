@@ -36,6 +36,11 @@ public class DamageSerializer extends JsonSerializer<Damage> {
             g.writeString(value.getDamaged().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 
+        if (value.getDamaged().isWeapon()) {
+            g.writeFieldName("weapon");
+            g.writeBoolean(true);
+        }
+
         g.writeFieldName("damagerController");
         g.writeStartObject();
             g.writeFieldName("name");

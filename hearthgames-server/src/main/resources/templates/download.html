@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthGames.com - Download Game Client Uploader</title>
+    <meta name="description" content="HearthGames.com - Hearth Games Official Client Uploader monitors the Hearthstone log file and detects when a ranked or casual game and uploads it to this website.  Download the client from this page."/>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="shortcut icon" href="http://images.hearthgames.com/misc/favicon.ico" />
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
+    <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
+
+    <div class="title-container">
+        <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    </div>
+
+    <div class="content">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Official Hearth Games Client Uploader</h3>
+            </div>
+            <div class="panel-body">
+                <p>
+                    The Uploader is a Java program that runs on your computer.  It reads the Hearthstone log file as it is being written and uploads games as they finish.
+                    Currently only Casual and Ranked Play mode games are tracked.  In the future Arena and Tavern Brawl will be supported.
+                </p>
+                <p>
+                    If you don't have the Java Runtime you can download it <a href="https://www.java.com/en/download/">here</a>.
+                </p>
+
+                <div class="download-client">
+                    <span>Download the <a href="http://download.hearthgames.com/hearthgames-client.jar">Official Hearth Games Client Uploader</a> (10.5 MB)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="/fragments/footer-fragment::footer"></div>
+</div>
+
+</body>
+</html>

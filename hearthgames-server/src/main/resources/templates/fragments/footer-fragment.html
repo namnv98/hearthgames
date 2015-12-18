@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="footer" class="footer">
+    <span><a href="../home.html" th:href="@{/}">Home</a></span>
+    <span>|</span>
+    <span class="report-issue">Having problems? Report an <a href="https://github.com/emilic/hearthgamesclient/issues">issue</a>.</span>
+    <span>|</span>
+    <span class="sitemap">Can't find some thing check the <a href="../sitemap.html" th:href="@{/sitemap}">Site Map</a></span>
+</div>
+
+<div th:fragment="homeFooter" class="footer">
+    <span class="report-issue">Having problems? Report an <a href="https://github.com/emilic/hearthgamesclient/issues">issue</a>.</span>
+    <span>|</span>
+    <span class="sitemap">Can't find some thing check the <a href="../sitemap.html" th:href="@{/sitemap}">Site Map</a></span>
+</div>
+
+<div th:fragment="siteMapFooter" class="footer">
+    <span><a href="../home.html" th:href="@{/}">Home</a></span>
+    <span>|</span>
+    <span class="report-issue">Having problems? Report an <a href="https://github.com/emilic/hearthgamesclient/issues">issue</a>.</span>
+</div>
+
+</body>
+</html>

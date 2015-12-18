@@ -9,10 +9,6 @@
     <link rel="shortcut icon" th:href="@{/favicon.ico}" />
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
     <link href="../static/css/where.css" th:href="@{/css/where.css}" rel="stylesheet" media="screen"/>
 
@@ -24,71 +20,100 @@
     <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
-    <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    <div class="title-container">
+        <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">ENABLE LOGGING</h3>
+        </div>
+        <div class="panel-body hearthgames-where">
+            <p>First thing you have to do is enable logging before you can find any log files. Download <a href="../static/log.config" th:href="@{/log.config}">log.config</a> and put it in the directory specified below: </p>
+            <ul class="nav nav-tabs">
+                <li th:class="${windows ? 'active' : ''}"><a data-toggle="tab" href="#windows-config"><img src="http://images.hearthgames.com/misc/windows.png"/> Windows</a></li>
+                <li th:class="${mac ? 'active' : ''}"><a data-toggle="tab" href="#mac-config"><img src="http://images.hearthgames.com/misc/mac.png"/> Mac</a></li>
+                <li th:class="${android ? 'active' : ''}"><a data-toggle="tab" href="#android-config"><img src="http://images.hearthgames.com/misc/android.png"/> Android</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="windows-config" class="tab-pane" th:class="${windows ? 'active' : ''}+' tab-pane'">
+                    <div class="bs-callout bs-callout-where">
+                        <div><code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\</code></div>
+                    </div>
+                </div>
+
+                <div id="mac-config" class="tab-pane" th:class="${mac ? 'active' : ''}+' tab-pane'">
+                    <div class="bs-callout bs-callout-where">
+                        <div><code>~/Library/Preferences/Blizzard/Hearthstone/</code></div>
+                    </div>
+                </div>
+
+                <div id="android-config" class="tab-pane" th:class="${android ? 'active' : ''}+' tab-pane'">
+                    <div class="bs-callout bs-callout-where tab-pane">
+                        <div><code>Android/data/com.blizzard.wtcg.hearthstone/files</code></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">WHERE DO I FIND MY LOG FILES?</h3>
         </div>
+
         <div class="panel-body hearthgames-where">
-            <p>Before you can actually get any log files you need to enable logging. See below for the Windows/Mac/Android instructions of where specifically to find the <code>log.config</code> location.</p>
-            <p>You will need to create the <code>log.config</code> file with the contents below. Please note that you will need to exit Hearthstone and restart it for the logging to happen.</p>
-            <pre>
-[Power]
-LogLevel=1
-FilePrinting=false
-ConsolePrinting=true
-ScreenPrinting=false
-[Asset]
-LogLevel=1
-FilePrinting=false
-ConsolePrinting=true
-ScreenPrinting=false
-[Bob]
-LogLevel=1
-FilePrinting=false
-ConsolePrinting=true
-ScreenPrinting=false
-            </pre>
-            <p>There are 2 kinds of log files. One that does not contain timestamped log entries and one that does.
-                The first log file <code>output_log.txt</code> (Windows) / <code>Player.log</code> (Mac) does not contain timestamps.
-                On the other hand there is the <code>hearthstone_2015_11_24_12_53_07.log</code> file that contains timestamps.  This will give you more detailed information about your
-                game such as how long that game took and the duration of each turn.
-            </p>
+            <p></p>
+            <ul class="nav nav-tabs">
+                <li th:class="${windows ? 'active' : ''}"><a data-toggle="tab" href="#windows"><img src="http://images.hearthgames.com/misc/windows.png"/> Windows</a></li>
+                <li th:class="${mac ? 'active' : ''}"><a data-toggle="tab" href="#mac"><img src="http://images.hearthgames.com/misc/mac.png"/> Mac</a></li>
+                <li th:class="${android ? 'active' : ''}"><a data-toggle="tab" href="#android"><img src="http://images.hearthgames.com/misc/android.png"/> Android</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="windows" class="tab-pane active" th:class="${windows ? 'active' : ''}+' tab-pane'">
+                    <div class="bs-callout bs-callout-where">
+                        <ul>
+                            <li>Timestamps / 5MB file size limit: <code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs\hearthstone_2015_11_24_12_53_07.log</code></li>
+                            <li>No Timestamps / No file size limit:  <code>C:\Program Files (x86)\Hearthstone\Hearthstone_Data\output_log.txt</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="mac" class="tab-pane" th:class="${mac ? 'active' : ''}+' tab-pane'">
+                    <div class="bs-callout bs-callout-where">
+                        <ul>
+                            <li>Timestamps / 5MB file size limit: <code>~/Library/Preferences/Blizzard/Hearthstone/Logs/hearthstone_2015_11_24_12_53_07.log</code></li>
+                            <li>No Timestamps / No file size limit:  <code>~/Library/Logs/Unity/Player.log</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="android" class="tab-pane" th:class="${android ? 'active' : ''}+' tab-pane'">
+                    <div class="bs-callout bs-callout-where tab-pane">
+                        <ul>
+                            <li>Timestamps / 5MB file size limit: <code>Android/data/com.blizzard.wtcg.hearthstone/files/Logs/hearthstone_2015_11_24_12_53_07.log</code></li>
+                            <li>No Timestamps : Currently not available.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="bs-callout bs-callout-warning">
                 <h4>Warning</h4>
-                <p>If you choose to upload log files that have timestamps be warned that Hearthstone keeps only 5 log files at a time in that directory and the file size is limited to 5MB.
-                    Unfortunately you can probably only get 2-3 games recorded in there before Hearthstone stops logging and just truncates the file.  If you exit Hearthstone it will start
-                    a new log file, keeping a maximum of 5 around. If you want this kind of log file you will need to exit hearthstone every couple games and copy the file.</p>
-                <p>The other log file does not seem to have a file size limitation that I know of.  This is the log file most of the other deck/log trackers use.</p>
-            </div>
-
-            <div class="bs-callout bs-callout-where">
-                <h4><img src="http://images.hearthgames.com/misc/windows.png"/> Windows Log File Locations:</h4>
-                <p>No timestamps / No file size limit:  <code>C:\Program Files (x86)\Hearthstone\Hearthstone_Data\output_log.txt</code></p>
-                <p>Timestamps / 5MB file size limit: <code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\Logs\hearthstone_2015_11_24_12_53_07.log</code></p>
-                <h4><img src="http://images.hearthgames.com/misc/windows.png"/> Windows log.config Location: </h4>
-                <p><code>C:\Users\yourusername\AppData\Local\Blizzard\Hearthstone\</code></p>
-            </div>
-
-            <div class="bs-callout bs-callout-where">
-                <h4><img src="http://images.hearthgames.com/misc/mac.png"/> Mac Log File Locations:</h4>
-                <p>No timestamps / No file size limit:  <code>~/Library/Logs/Unity/Player.log</code></p>
-                <p>Timestamps / 5MB file size limit: <code>~/Library/Preferences/Blizzard/Hearthstone/Logs/hearthstone_2015_11_24_12_53_07.log</code></p>
-                <h4><img src="http://images.hearthgames.com/misc/mac.png"/> Mac log.config Location: </h4>
-                <p><code>~/Library/Preferences/Blizzard/Hearthstone/</code></p>
-            </div>
-
-            <div class="bs-callout bs-callout-where">
-                <h4><img src="http://images.hearthgames.com/misc/android.png"/> Android Log File Location:</h4>
-                <p>Timestamps / 5MB file size limit: <code>Android/data/com.blizzard.wtcg.hearthstone/files/Logs/hearthstone_2015_11_24_12_53_07.log</code></p>
-                <h4><img src="http://images.hearthgames.com/misc/android.png"/> Android log.config Location: </h4>
-                <p><code>Android/data/com.blizzard.wtcg.hearthstone/files</code></p>
+                <p>Timestamped log files are limited in size by Hearthstone to 5MB, which is equivalent to about 2 games worth of data.  After 5MB logging is truncated.
+                   You will have to restart Hearthstone to create a new log file.</p>
             </div>
         </div>
+
     </div>
 
+    <div th:replace="/fragments/footer-fragment::footer"></div>
 </div>
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

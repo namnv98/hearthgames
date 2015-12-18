@@ -42,16 +42,26 @@ public class GamesController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/games")
-    public ModelAndView listAllGames() {
+    @RequestMapping(value = "/casualgames")
+    public ModelAndView listCasualGames() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("games");
 
-        Iterable<GamePlayed> gamesPlayed = gameService.getGamesPlayed();
+        Iterable<GamePlayed> gamesPlayed = gameService.getCasualGamesPlayed();
 
         modelAndView.addObject("gamesPlayed", gamesPlayed);
         return modelAndView;
     }
 
+    @RequestMapping(value = "/rankedgames")
+    public ModelAndView listRankedGames() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("games");
+
+        Iterable<GamePlayed> gamesPlayed = gameService.getRankedGamesPlayed();
+
+        modelAndView.addObject("gamesPlayed", gamesPlayed);
+        return modelAndView;
+    }
 
 }

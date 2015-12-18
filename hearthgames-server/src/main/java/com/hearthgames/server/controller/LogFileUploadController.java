@@ -41,7 +41,7 @@ public class LogFileUploadController {
     @Autowired
     private GameService gameService;
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/webUpload", method = RequestMethod.POST)
     public ModelAndView upload(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
         String viewName = null;

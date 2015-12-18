@@ -18,7 +18,7 @@ public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
         GenericRow header = new GenericRow();
         header.addColumn(new GenericColumn(""));
         header.addColumn(new GenericColumn("Starting Hand"));
-        header.addColumn(new GenericColumn("Mulliganed Cards"));
+        header.addColumn(new GenericColumn("Mulliganed"));
         header.addColumn(new GenericColumn("Cards In Deck"));
         table.setHeader(header);
 
