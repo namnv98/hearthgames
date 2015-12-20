@@ -9,8 +9,12 @@ import com.hearthgames.server.database.domain.RawMatchError;
 import com.hearthgames.server.database.repository.RawMatchErrorRepository;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.solr.SolrService;
 import com.hearthgames.server.util.GameCompressionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +25,16 @@ import java.util.stream.Collectors;
 @Service
 public class GameService {
 
+    private static final Logger logger = LoggerFactory.getLogger(GameService.class);
+
     @Autowired
     private GamePlayedRepository gamePlayedRepository;
 
     @Autowired
     private RawMatchErrorRepository rawMatchErrorRepository;
+
+    @Autowired
+    private SolrService solrService;
 
     public GamePlayed createGamePlayed(RawGameData rawGameData, GameContext context, GameResult result, UserInfo userInfo) {
 
@@ -52,16 +61,16 @@ public class GameService {
         gamePlayed.setWinnerClass(result.getWinnerClass());
         gamePlayed.setTurns(result.getTurns().size());
 
-        String friendlyStartingCards = StringUtils.join(result.getFriendlyStartingCards().stream().filter(card -> card.getCardid() != null).map(Card::getCardid).collect(Collectors.toList()),",");
-        String friendlyMulliganCards = StringUtils.join(result.getFriendlyMulliganedCards().stream().filter(card -> card.getCardid() != null).map(Card::getCardid).collect(Collectors.toList()),",");
-        String friendlyDeckCards = StringUtils.join(result.getFriendlyDeckCards().stream().filter(card -> card.getCardid() != null).map(Card::getCardid).collect(Collectors.toList()),",");
+        String friendlyStartingCards = StringUtils.join(result.getFriendlyStartingCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
+        String friendlyMulliganCards = StringUtils.join(result.getFriendlyMulliganedCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
+        String friendlyDeckCards = StringUtils.join(result.getFriendlyDeckCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
         gamePlayed.setFriendlyStartingCards(friendlyStartingCards);
         gamePlayed.setFriendlyMulliganCards(friendlyMulliganCards);
         gamePlayed.setFriendlyDeckCards(friendlyDeckCards);
 
-        String opposingStartingCards = StringUtils.join(result.getOpposingStartingCards().stream().filter(card -> card.getCardid() != null).map(Card::getCardid).collect(Collectors.toList()),",");
-        String opposingMulliganCards = StringUtils.join(result.getOpposingMulliganedCards().stream().filter(card -> card.getCardid() != null).map(Card::getCardid).collect(Collectors.toList()),",");
-        String opposingDeckCards = StringUtils.join(result.getOpposingDeckCards().stream().filter(card -> card.getCardid() != null).map(Card::getCardid).collect(Collectors.toList()),",");
+        String opposingStartingCards = StringUtils.join(result.getOpposingStartingCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
+        String opposingMulliganCards = StringUtils.join(result.getOpposingMulliganedCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
+        String opposingDeckCards = StringUtils.join(result.getOpposingDeckCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
         gamePlayed.setOpposingStartingCards(opposingStartingCards);
         gamePlayed.setOpposingMulliganCards(opposingMulliganCards);
         gamePlayed.setOpposingDeckCards(opposingDeckCards);
@@ -69,8 +78,15 @@ public class GameService {
         return gamePlayed;
     }
 
-    public void saveGamePlayed(GamePlayed gamePlayed) {
+    public void saveGamePlayed(GamePlayed gamePlayed, GameContext context, GameResult result, boolean index) {
         gamePlayedRepository.save(gamePlayed);
+        if (index) {
+            try {
+                solrService.indexGame(gamePlayed, context, result);
+            } catch (Exception e) {
+                logger.error(ExceptionUtils.getStackTrace(e));
+            }
+        }
     }
 
     public List<GamePlayed> getGamesPlayed(String id) {

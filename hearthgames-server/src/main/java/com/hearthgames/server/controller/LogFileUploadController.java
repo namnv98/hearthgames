@@ -67,7 +67,7 @@ public class LogFileUploadController {
                         }
                         GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, userInfo);
                         if (!gameService.hasGameBeenPlayed(gamePlayed)) {
-                            gameService.saveGamePlayed(gamePlayed);
+                            gameService.saveGamePlayed(gamePlayed, context, result, true);
                         }
                         viewName = "redirect:/account/"+gamePlayed.getFriendlyGameAccountId()+"/games";
 

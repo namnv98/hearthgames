@@ -10,9 +10,12 @@ import java.time.LocalDateTime;
 public class GamePlayed {
 
     @Id
-    @Column(name = "game_id")
+    @Column(name = "game_played_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private GamePlayed opponentGamePlayed;
 
     private Long battletagId;
     private String battletag;
@@ -59,6 +62,14 @@ public class GamePlayed {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public GamePlayed getOpponentGamePlayed() {
+        return opponentGamePlayed;
+    }
+
+    public void setOpponentGamePlayed(GamePlayed opponentGamePlayed) {
+        this.opponentGamePlayed = opponentGamePlayed;
     }
 
     public Long getBattletagId() {

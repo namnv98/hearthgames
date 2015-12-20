@@ -92,7 +92,7 @@ public class GameController {
                 modelAndView.addObject("gameId", gameId);
 
                 gamePlayed.setJustAdded(false);
-                gameService.saveGamePlayed(gamePlayed);
+                gameService.saveGamePlayed(gamePlayed, context, result, false);
 
                 //hack for Thymeleaf plugin - duplicate model properties
                 if (false) {

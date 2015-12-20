@@ -122,7 +122,7 @@ public class ClientLogUploadController {
                 }
 
                 if (!gameService.hasGameBeenPlayed(gamePlayed)) {
-                    gameService.saveGamePlayed(gamePlayed);
+                    gameService.saveGamePlayed(gamePlayed, context, result, true);
 
                     RecordGameResponse response = new RecordGameResponse();
                     response.setUrl("http://hearthgames.com/game/"+gamePlayed.getId());
