@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -62,7 +63,7 @@ public class ClientLogUploadController {
         private static final long serialVersionUID = 1;
 
         private byte[] data;
-        private String rank;
+        private Integer rank;
         private long startTime;
         private long endTime;
 
@@ -74,11 +75,11 @@ public class ClientLogUploadController {
             this.data = data;
         }
 
-        public String getRank() {
+        public Integer getRank() {
             return rank;
         }
 
-        public void setRank(String rank) {
+        public void setRank(Integer rank) {
             this.rank = rank;
         }
 
@@ -107,7 +108,9 @@ public class ClientLogUploadController {
 
         List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), true);
 
-        for (RawGameData rawGameData : rawGameDatas) {
+        if (!CollectionUtils.isEmpty(rawGameDatas)) {
+            RawGameData rawGameData = rawGameDatas.get(0);
+
             try {
                 GameContext context = gameParserService.parseLines(rawGameData.getLines());
                 GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
@@ -115,25 +118,23 @@ public class ClientLogUploadController {
                 GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
                 gamePlayed.setStartTime(getDateTimeFromTimestamp(request.getStartTime()));
                 gamePlayed.setEndTime(getDateTimeFromTimestamp(request.getEndTime()));
-                try {
-                    gamePlayed.setRank(Integer.parseInt(request.getRank()));
-                } catch (NumberFormatException e) {
-                    gamePlayed.setRank(null);
-                }
+                gamePlayed.setRank(request.getRank());
 
-                if (!gameService.hasGameBeenPlayed(gamePlayed)) {
+                GamePlayed sameGame = gameService.findSameGame(gamePlayed);
+                if (sameGame == null) {
                     gameService.saveGamePlayed(gamePlayed, context, result, true);
-
-                    RecordGameResponse response = new RecordGameResponse();
-                    response.setUrl("http://hearthgames.com/game/"+gamePlayed.getId());
-                    return new ResponseEntity<>(response, HttpStatus.OK);
                 }
+                Long gameId = sameGame != null ? sameGame.getId() : gamePlayed.getId();
+                RecordGameResponse response = new RecordGameResponse();
+                response.setUrl("http://hearthgames.com/game/"+gameId);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                gameService.saveRawGameError(rawGameData, getDateTimeFromTimestamp(request.getStartTime()), getDateTimeFromTimestamp(request.getEndTime()));
             }
         }
-        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public static LocalDateTime getDateTimeFromTimestamp(long timestamp) {

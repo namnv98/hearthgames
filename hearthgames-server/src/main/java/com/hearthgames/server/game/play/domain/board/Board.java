@@ -213,7 +213,7 @@ public class Board implements Action {
             } else if (Zone.SECRET.eq(c.getZone())) {
                 CardInSecret cardInSecret = new CardInSecret();
                 cardInSecret.setCardClass(c.getCardClass().toLowerCase());
-                cardInSecret.setId(c.getCardDetails().getId());
+                cardInSecret.setId(c.getCardDetails() != null ? c.getCardDetails().getId() : "");
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInSecret().add(cardInSecret);
                 } else {

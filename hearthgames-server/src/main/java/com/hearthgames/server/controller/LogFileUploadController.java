@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,14 +67,16 @@ public class LogFileUploadController {
                             userInfo = (UserInfo) principal;
                         }
                         GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, userInfo);
-                        if (!gameService.hasGameBeenPlayed(gamePlayed)) {
+                        GamePlayed sameGame = gameService.findSameGame(gamePlayed);
+                        if (sameGame == null) {
                             gameService.saveGamePlayed(gamePlayed, context, result, true);
                         }
                         viewName = "redirect:/account/"+gamePlayed.getFriendlyGameAccountId()+"/games";
 
                     } catch (Exception e) {
                         logger.error(ExceptionUtils.getStackTrace(e));
-                        gameService.saveRawMatchError(rawGameData);
+                        LocalDateTime now = LocalDateTime.now();
+                        gameService.saveRawGameError(rawGameData, now, now);
                     }
                 }
 

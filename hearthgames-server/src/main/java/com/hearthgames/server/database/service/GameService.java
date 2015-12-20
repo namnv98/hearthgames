@@ -5,7 +5,7 @@ import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.config.security.UserInfo;
 import com.hearthgames.server.database.domain.GamePlayed;
-import com.hearthgames.server.database.domain.RawMatchError;
+import com.hearthgames.server.database.domain.RawGameError;
 import com.hearthgames.server.database.repository.RawMatchErrorRepository;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
@@ -105,20 +105,23 @@ public class GameService {
         return gamePlayedRepository.findOne(id);
     }
 
-    public boolean hasGameBeenPlayed(GamePlayed gamePlayed) {
+    public GamePlayed findSameGame(GamePlayed gamePlayed) {
         List<GamePlayed> gamesPlayed = gamePlayedRepository.findByFriendlyGameAccountIdAndOpposingGameAccountId(gamePlayed.getFriendlyGameAccountId(), gamePlayed.getOpposingGameAccountId());
         for (GamePlayed game: gamesPlayed) {
             if (game.isSameGame(gamePlayed)) {
-                return true;
+                return game;
             }
         }
-        return false;
+        return null;
     }
 
-    public void saveRawMatchError(RawGameData rawGameData) {
-        RawMatchError rawMatchError = new RawMatchError();
-        rawMatchError.setRawGame(GameCompressionUtils.compress(linesToString(rawGameData.getRawLines())));
-        rawMatchErrorRepository.save(rawMatchError);
+    public void saveRawGameError(RawGameData rawGameData, LocalDateTime startTime, LocalDateTime endTime) {
+        RawGameError rawGameError = new RawGameError();
+        rawGameError.setRawGame(GameCompressionUtils.compress(linesToString(rawGameData.getRawLines())));
+        rawGameError.setRank(rawGameData.getRank());
+        rawGameError.setStartTime(startTime);
+        rawGameError.setEndTime(endTime);
+        rawMatchErrorRepository.save(rawGameError);
     }
 
     public String getGameAccountId(String battletag) {
