@@ -17,6 +17,8 @@
 
 <div class="container">
 
+    <div th:replace="/fragments/beta-fragment::beta"></div>
+
     <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
@@ -33,7 +35,7 @@
 
             <div class="panel-body">
                 <div>
-                    <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/upload}">
+                    <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/webUpload}">
                         <input id="upload" name="file" type="file" class="file" data-show-preview="false" />
                     </form>
                 </div>

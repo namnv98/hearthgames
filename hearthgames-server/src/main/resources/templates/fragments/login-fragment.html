@@ -6,7 +6,7 @@
 <body>
 
 <div th:fragment="userNotLoggedIn" sec:authorize="hasRole('ROLE_ANONYMOUS')" class="anonymous">
-    <a th:href="@{/login}"><img src="http://images.hearthgames.com/misc/bnet.png" /><span class="loginbnet">Login with Battle.net</span></a>
+    <a th:href="@{/login}"><img src="http://images.hearthgames.com/misc/bnet.png" /><span class="loginbnet">Log in with Battle.net</span></a>
 </div>
 
 <div th:fragment="userLoggedIn" sec:authorize="hasRole('ROLE_USER')" class="user-logged-in">

@@ -1,9 +1,12 @@
 @media only screen and (max-height: 720px) {
+
+    body { font-size: 12px; }
+
     .container { width: 683px; }
 
-    .anonymous { height: 30px; width: 180px; padding:5px; top: 10px; right: 10px; }
-    .user-logged-in { height: 3px; width: 120px; padding:5px; top: 10px; right: 10px; }
-    .user-logged-in-on-game { height: 47px; width: 120px; padding:5px; top: 10px; right: 10px; }
+    .anonymous { padding:5px; top: 10px; right: 10px; }
+    .user-logged-in { padding:5px; top: 10px; right: 10px; }
+    .user-logged-in-on-game { padding:5px; top: 10px; right: 10px; }
 
     .loginbnet { padding-left: 5px; }
     .ttip { width: 191px; height: 263px; background-size: 191px 263px; }
@@ -16,11 +19,14 @@
 }
 
 @media only screen and (min-height: 721px) {
+
+    body { font-size: 14px; }
+
     .container { width: 1024px; }
 
-    .anonymous { height: 30px; width: 180px; padding:5px; top: 10px; right: 10px; }
-    .user-logged-in { height: 50px; width: 180px; padding:5px; top: 10px; right: 10px; }
-    .user-logged-in-on-game { height: 70px; width: 180px; padding:5px; top: 10px; right: 10px; }
+    .anonymous { padding: 10px; top: 10px; right: 10px; }
+    .user-logged-in { padding: 10px; top: 10px; right: 10px; }
+    .user-logged-in-on-game { padding: 10px; top: 10px; right: 10px; }
 
     .loginbnet { padding-left: 5px; }
     .ttip { width: 286px; height: 395px; }
@@ -46,6 +52,12 @@ body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; 
 .download-uploader { position: absolute; top: 206px; left: 0; }
 .footer { width: 100%; text-align: center; }
 .footer > span { margin: 0 5px; }
+
+.beta { position: fixed; top: 0; left: 0; width: 100px; height: 115px; background-image: url(http://images.hearthgames.com/misc/beta.png) }
+
+.faq-question { font-weight: bold; margin-bottom: 5px; }
+.faq-answer { margin-bottom: 10px; }
+.submit-question { margin-top: 25px; }
 
 .container { padding: 0; }
 

@@ -23,19 +23,33 @@
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
     <div class="title-container">
-        <div class="hearthgames-title">HEARTHGAMES.com</div>
+        <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
     </div>
 
     <div class="content">
 
-        <div class="home-menu">
-            <div class="upload-log-file"><a href="upload.html" th:href="@{/upload}">UPLOAD LOG</a></div>
-            <div class="ranked-games"><a href="games.html" th:href="@{/rankedgames}">RANKED GAMES</a></div>
-            <div class="casual-games"><a href="games.html" th:href="@{/casualgames}">CASUAL GAMES</a></div>
-            <div class="download-uploader"><a href="download.html" th:href="@{/download}">DOWNLOAD UPLOADER</a></div>
+        <div class="faq-question">
+            <span>Q: Why would I want to Login with Battle.net?</span>
+        </div>
+        <div class="faq-answer">
+            <span>A: HearthGames.com leverages Battle.net APIs to enchance your experience on this website.  We use your Battletag to associate games you upload, which allows us to personalize your view of games.
+                <br/>See <a href="https://dev.battle.net/docs/read/log_in_with_bnet">https://dev.battle.net/docs/read/log_in_with_bnet</a> for more details.
+            </span>
+        </div>
+        <div class="faq-question">
+            <span>Q: I want to see Arena, Tavern Brawl and Adventure mode games?</span>
+        </div>
+        <div class="faq-answer">
+            <span>A: This is coming "soon". We are focused on Casual and Ranked mode games at the moment.
+            </span>
         </div>
 
-        <div th:replace="/fragments/footer-fragment::homeFooter"></div>
+
+        <div class="submit-question">
+            <span>Want to submit a question?  Email us at <a href="mailto:hearthgames@gmail.com?Subject=Question" target="_top">hearthgames@gmail.com</a></span>
+        </div>
+
+        <div th:replace="/fragments/footer-fragment::faqfooter"></div>
 
     </div>
 
