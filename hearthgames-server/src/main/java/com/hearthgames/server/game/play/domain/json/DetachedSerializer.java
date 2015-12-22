@@ -25,15 +25,20 @@ public class DetachedSerializer extends JsonSerializer<Detached> {
             g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 
-        g.writeFieldName("detachedFrom");
-        g.writeStartObject();
+        // as an example we can emperor thaurasian can reduce the mana cost of cards we never know about so we need to guard against not know what the enchantment was detached from
+        if (value.getDetachedFrom() != null && value.getDetachedFrom().getCardDetails() != null) {
+            g.writeFieldName("detachedFrom");
+            g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getDetachedFrom().getName());
             g.writeFieldName("id");
             g.writeString(value.getDetachedFrom().getCardDetails().getId());
             g.writeFieldName("rarity");
             g.writeString(value.getDetachedFrom().getCardDetails().getRarity().toLowerCase());
-        g.writeEndObject();
+            g.writeEndObject();
+        } else {
+            System.out.println();
+        }
 
         g.writeEndObject();
     }
