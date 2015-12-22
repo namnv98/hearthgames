@@ -20,7 +20,7 @@ security:
       use-current-uri: false
 multipart.maxFileSize: 100MB
 multipart.maxRequestSize: 100MB
-hearthgames.redirect-url: http://hearthgames.com/
+hearthgames.redirect-url: http://hearthgames.com/dashboard
 ---
 spring.profiles: dev
 spring:
@@ -41,4 +41,4 @@ server.ssl.key-store: classpath:keystore.p12
 server.ssl.key-store-password: 4me2know
 server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
-hearthgames.redirect-url: https://localhost:8443/
+hearthgames.redirect-url: https://localhost:8443/dashboard

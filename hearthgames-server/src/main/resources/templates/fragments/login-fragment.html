@@ -7,22 +7,17 @@
 
 <div th:fragment="userNotLoggedIn" sec:authorize="hasRole('ROLE_ANONYMOUS')" class="anonymous">
     <a th:href="@{/login}"><img src="http://images.hearthgames.com/misc/bnet.png" /><span class="loginbnet">Log in with Battle.net</span></a>
+    <div><a th:href="@{/upload}">Upload Log</a> </div>
+    <div><a th:href="@{/rankedgames}">Ranked Games</a> </div>
+    <div><a th:href="@{/casualgames}">Casual Games</a> </div>
 </div>
 
 <div th:fragment="userLoggedIn" sec:authorize="hasRole('ROLE_USER')" class="user-logged-in">
     <span sec:authentication="principal.battletag"></span> <a th:href="@{/logout}">(Logout)</a>
-    <div><a th:href="@{/mygames}">My Games</a> </div>
-</div>
-
-<div th:fragment="userLoggedInOnGames" sec:authorize="hasRole('ROLE_USER')" class="user-logged-in">
-    <span sec:authentication="principal.battletag"></span> <a th:href="@{/logout}">(Logout)</a>
-    <div><a th:href="@{/}">Upload Log</a> </div>
-</div>
-
-<div th:fragment="userLoggedInOnGame" sec:authorize="hasRole('ROLE_USER')" class="user-logged-in-on-game">
-    <span sec:authentication="principal.battletag"></span> <a th:href="@{/logout}">(Logout)</a>
-    <div><a th:href="@{/mygames}">My Games</a> </div>
-    <div><a th:href="@{/}">Upload Log</a> </div>
+    <div><a th:href="@{/dashboard}">My Dashboard</a> </div>
+    <div><a th:href="@{/upload}">Upload Log</a> </div>
+    <div><a th:href="@{/rankedgames}">Ranked Games</a> </div>
+    <div><a th:href="@{/casualgames}">Casual Games</a> </div>
 </div>
 
 

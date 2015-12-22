@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>HearthGames.com - Games</title>
     <meta name="description" content="Check out some of the Top Rated Games. Search for games that match criteria such as Deck Archetype, High Win Rate and many more. Rate other peoples games and leave comments."/>
@@ -10,7 +9,6 @@
 
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
-    <link href="../static/css/game.css" th:href="@{/css/game.css}" rel="stylesheet" media="screen"/>
 
 </head>
 <body>
@@ -26,6 +24,28 @@
         <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
     </div>
 
+    <div class="content">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">My Profile</h3>
+            </div>
+            <div class="panel-body">
+
+                <p th:if="${updated}" class="account-updated">Profile Updated Successfully!</p>
+                <div>
+                    <form id="account-form" method="POST" action="dashboard.html" th:action="@{/dashboard/update}">
+                        <label for="gameAccountId">Game Account ID: </label>
+                        <input id="gameAccountId" name="gameAccountId" type="text" th:value="${account.gameAccountId != null ? account.gameAccountId : ''}"/>
+
+                        <input type="submit" th:value="Update"/>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -33,7 +53,7 @@
             <th>Opponent</th>
             <th>Winner</th>
             <th># Turns</th>
-            <th th:if="${gamesType.ranked || gamesType.account}">Rank</th>
+            <th>Rank</th>
             <th></th>
         </tr>
         </thead>
@@ -43,21 +63,26 @@
             <td><span th:class="${#strings.toLowerCase(game.opposingClass)}" th:text="${game.opposingName}">Some Opponent</span></td>
             <td><span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}">Seekay</span></td>
             <td><span th:text="${game.turns}">23</span></td>
-            <th th:if="${gamesType.ranked || gamesType.account}" th:text="${game.rank}"></th>
-            <td sec:authorize="hasRole('ROLE_ANONYMOUS')">
-                <a th:href="@{'/game/'+${game.id}}" href="game.html">View</a>
-            </td>
-            <td sec:authorize="hasRole('ROLE_USER')">
-                <a th:if="${gamesType.ranked}"  th:href="@{'/game/'+${game.id}}" href="game.html">View</a>
-                <a th:if="${gamesType.account}"  th:href="@{'/mygame/'+${game.id}}" href="game.html">View</a>
-            </td>
+            <th th:text="${game.rank}"></th>
+            <td><a th:href="@{'/mygame/'+${game.id}}" href="game.html">View</a></td>
         </tr>
         </tbody>
     </table>
 
+
+
+
     <div th:replace="/fragments/footer-fragment::footer"></div>
 
 </div>
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script type="text/javascript" th:if="${updated}">
+    $(document).ready(function(){
+        setTimeout(function() {
+            $(".bg-success").hide();
+        }, 2000)
+    });
+</script>
 
 </body>
 </html>

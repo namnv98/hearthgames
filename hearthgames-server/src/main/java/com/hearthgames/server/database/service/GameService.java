@@ -1,5 +1,7 @@
 package com.hearthgames.server.database.service;
 
+import com.hearthgames.server.database.domain.Account;
+import com.hearthgames.server.database.repository.AccountRepository;
 import com.hearthgames.server.database.repository.GamePlayedRepository;
 import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.domain.Card;
@@ -32,6 +34,9 @@ public class GameService {
 
     @Autowired
     private RawMatchErrorRepository rawMatchErrorRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Autowired
     private SolrService solrService;
@@ -125,8 +130,32 @@ public class GameService {
     }
 
     public String getGameAccountId(String battletag) {
-        GamePlayed gamePlayed = gamePlayedRepository.findFirstByBattletag(battletag);
-        return gamePlayed != null ? gamePlayed.getFriendlyGameAccountId() : null;
+        Account account = accountRepository.findFirstByBattletag(battletag);
+        return account != null ? account.getGameAccountId() : null;
+    }
+
+    public Account createAccount(UserInfo userInfo) {
+        Account account = new Account();
+        account.setBattletag(userInfo.getBattletag());
+        account.setBattletagId(userInfo.getId());
+        return accountRepository.save(account);
+    }
+
+    public void updateGameAccountId(String battletag, String gameAccountId) {
+        Account account = accountRepository.findFirstByBattletag(battletag);
+        if (account != null) {
+            account.setGameAccountId(gameAccountId);
+            accountRepository.save(account);
+        }
+    }
+
+    public boolean doesAccountExist(String battletag) {
+        Account account = accountRepository.findFirstByBattletag(battletag);
+        return account != null;
+    }
+
+    public Account getAccount(String battletag) {
+        return accountRepository.findFirstByBattletag(battletag);
     }
 
     private String linesToString(List<String> lines) {

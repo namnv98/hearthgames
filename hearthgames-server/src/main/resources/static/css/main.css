@@ -11,11 +11,11 @@
     .loginbnet { padding-left: 5px; }
     .ttip { width: 191px; height: 263px; background-size: 191px 263px; }
 
-    .title-container { margin: 53px 0 3px 0; }
+    .title-container { margin: 53px 0 10px 0; }
     .content { width: 533px; margin: auto; }
     .hearthgames-title { font-size: 53px; text-shadow: 2px 2px 4px #000; }
 
-    .footer { margin-top: 13px; }
+    .footer { margin: 13px 0 23px 0; }
 }
 
 @media only screen and (min-height: 721px) {
@@ -31,18 +31,21 @@
     .loginbnet { padding-left: 5px; }
     .ttip { width: 286px; height: 395px; }
 
-    .title-container { margin: 80px 0 5px 0; }
+    .title-container { margin: 80px 0 15px 0; }
     .content { width: 800px; margin: auto; }
     .hearthgames-title { font-size: 80px; text-shadow: 2px 2px 4px #000; }
 
-    .footer { margin-top: 20px; }
+    .footer { margin: 20px 0 30px 0; }
 }
 
 
 @font-face { font-family: siteFont; src: url(../fonts/siteFont.woff); }
 
 body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; opacity: .97; }
-.panel { color: #fff; border-color: #000; background-color: #2D2D2D; }
+body input { color: #000; }
+.panel { border-color: #000; background-color: #2D2D2D; }
+.panel-heading { color: #fff; }
+.panel span { color: #fff; }
 .home-menu { position:relative; width: 360px; height: 260px; background-image: url(http://images.hearthgames.com/misc/menu.png); margin: auto; font-size: 16px;  }
 .home-menu > div { width: 360px; text-align: center; cursor: pointer; }
 .home-menu a:link, .home-menu a:visited, .home-menu a:hover, .home-menu a:active { color: #513C1F; font-weight: bold; }
@@ -52,11 +55,13 @@ body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; 
 .download-uploader { position: absolute; top: 206px; left: 0; }
 .footer { width: 100%; text-align: center; }
 .footer > span { margin: 0 5px; }
+.account-form input { color: #000; }
+.account-updated { color: #0FAF03; }
 
 .beta { position: fixed; top: 0; left: 0; width: 100px; height: 115px; background-image: url(http://images.hearthgames.com/misc/beta.png) }
 
 .faq-question { font-weight: bold; margin-bottom: 5px; }
-.faq-answer { margin-bottom: 10px; }
+.faq-answer { margin-bottom: 25px; }
 .submit-question { margin-top: 25px; }
 
 .container { padding: 0; }

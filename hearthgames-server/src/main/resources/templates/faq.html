@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>HearthGames.com - Game Anaylsis, Game Replays, Game Statistics</title>
-    <meta name="description" content="HearthGames.com provides analysis, replays and statistics of your Hearthstone games.  Upload Hearthstone log files and start diving into the details of your games now."/>
+    <title>HearthGames.com - Frequently Asked Questions</title>
+    <meta name="description" content="HearthGames.com provides answers to some frequently asked questions."/>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -28,29 +28,40 @@
 
     <div class="content">
 
-        <div class="faq-question">
-            <span>Q: Why would I want to Login with Battle.net?</span>
-        </div>
-        <div class="faq-answer">
-            <span>A: HearthGames.com leverages Battle.net APIs to enchance your experience on this website.  We use your Battletag to associate games you upload, which allows us to personalize your view of games.
-                <br/>See <a href="https://dev.battle.net/docs/read/log_in_with_bnet">https://dev.battle.net/docs/read/log_in_with_bnet</a> for more details.
-            </span>
-        </div>
-        <div class="faq-question">
-            <span>Q: I want to see Arena, Tavern Brawl and Adventure mode games?</span>
-        </div>
-        <div class="faq-answer">
-            <span>A: This is coming "soon". We are focused on Casual and Ranked mode games at the moment.
-            </span>
-        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Frequently Asked Questions</h3>
+            </div>
+            <div class="panel-body">
 
+                <div class="faq-question">
+                    <span>Q: Why would I want to Login with Battle.net?</span>
+                </div>
+                <div class="faq-answer">
+                    <span>A: HearthGames.com leverages Battle.net APIs to enchance your experience on this website.  We use your Battletag to associate games you upload, which allows us to personalize your view of games.
+                    <br/>See <a href="https://dev.battle.net/docs/read/log_in_with_bnet">https://dev.battle.net/docs/read/log_in_with_bnet</a> for more details.</span>
+                </div>
+                <div class="faq-question">
+                    <span>Q: I want to see Arena, Tavern Brawl and Adventure mode games?</span>
+                </div>
+                <div class="faq-answer">
+                    <span>A: This is coming "soon". We are focused on Casual and Ranked mode games at the moment. </span>
+                </div>
+                <div class="faq-question">
+                    <span>Q: When I try to login it takes me to the US Battle.net login but I'm not in that region. Will other regions be supported?</span>
+                </div>
+                <div class="faq-answer">
+                    <span>A: We plan to support other regions depending on interest. It takes resources to develop a multi-lingual website. </span>
+                </div>
 
-        <div class="submit-question">
-            <span>Want to submit a question?  Email us at <a href="mailto:hearthgames@gmail.com?Subject=Question" target="_top">hearthgames@gmail.com</a></span>
+                <div class="submit-question">
+                    <span>Want to submit a question?  Email us at <a href="mailto:hearthgamesdotcom@gmail.com?Subject=Submit%20a%20Question" target="_blank">hearthgamesdotcom@gmail.com</a></span>
+                </div>
+
+            </div>
         </div>
 
         <div th:replace="/fragments/footer-fragment::faqfooter"></div>
-
     </div>
 
 </div>

@@ -13,8 +13,6 @@ public interface GamePlayedRepository extends PagingAndSortingRepository<GamePla
 
     List<GamePlayed> findByFriendlyGameAccountId(String friendlyGameAccountId);
 
-    GamePlayed findFirstByBattletag(String battletag);
-
     List<GamePlayed> findAllByRankNotNull();
 
     List<GamePlayed> findAllByRankIsNull();
