@@ -45,7 +45,6 @@ body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; 
 body input { color: #000; }
 .panel { border-color: #000; background-color: #2D2D2D; }
 .panel-heading { color: #fff; }
-.panel span { color: #fff; }
 .home-menu { position:relative; width: 360px; height: 260px; background-image: url(http://images.hearthgames.com/misc/menu.png); margin: auto; font-size: 16px;  }
 .home-menu > div { width: 360px; text-align: center; cursor: pointer; }
 .home-menu a:link, .home-menu a:visited, .home-menu a:hover, .home-menu a:active { color: #513C1F; font-weight: bold; }
