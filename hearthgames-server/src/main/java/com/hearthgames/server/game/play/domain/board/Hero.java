@@ -7,6 +7,7 @@ public class Hero {
 
     private String id;
     private Integer health;
+    private boolean damaged;
     private Integer armor;
     private Integer attack;
     private Integer mana;
@@ -34,6 +35,14 @@ public class Hero {
 
     public void setHealth(Integer health) {
         this.health = health;
+    }
+
+    public boolean isDamaged() {
+        return damaged;
+    }
+
+    public void setDamaged(boolean damaged) {
+        this.damaged = damaged;
     }
 
     public Integer getArmor() {

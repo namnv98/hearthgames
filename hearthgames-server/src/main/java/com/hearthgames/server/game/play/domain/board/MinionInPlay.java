@@ -9,7 +9,9 @@ public class MinionInPlay extends CardIn {
     private boolean legendary;
     private String icon; // i.e. Inspire, Trigger, Deathrattle, etc...
     private int attack;
+    private boolean attackBuffed;
     private int health;
+    private boolean healthBuffed;
     private boolean damaged;
     private boolean exhausted;
 
@@ -91,5 +93,21 @@ public class MinionInPlay extends CardIn {
 
     public void setExhausted(boolean exhausted) {
         this.exhausted = exhausted;
+    }
+
+    public boolean isAttackBuffed() {
+        return attackBuffed;
+    }
+
+    public void setAttackBuffed(boolean attackBuffed) {
+        this.attackBuffed = attackBuffed;
+    }
+
+    public boolean isHealthBuffed() {
+        return healthBuffed;
+    }
+
+    public void setHealthBuffed(boolean healthBuffed) {
+        this.healthBuffed = healthBuffed;
     }
 }

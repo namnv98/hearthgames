@@ -120,7 +120,7 @@
         {{#with friendlyHero}}
         <div id="friendly-hero" class="{{id}}_h">
             <div class="hero-health-bg">
-                <div class="hero-health-amount">{{health}}</div>
+                <div class="{{#if damaged}}damaged{{/if}} hero-health-amount">{{health}}</div>
             </div>
             {{#if armor}}
             <div class="hero-armor-bg">
@@ -171,10 +171,10 @@
             <div class="tt minion tt-{{id}}">
                 <div class="card {{id}}"></div>
                 <div class="attack">
-                    <div class="amount">{{attack}}</div>
+                    <div class="amount {{#if attackBuffed}} buffed {{/if}}">{{attack}}</div>
                 </div>
                 <div class="health">
-                    <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
+                    <div class="amount {{#if damaged}} damaged {{else if healthBuffed}} buffed {{/if}}">{{health}}</div>
                 </div>
                 {{#if frozen}}
                 <div class="frozen"></div>
@@ -208,7 +208,7 @@
         {{#with opposingHero}}
         <div id="opposing-hero" class="{{id}}_h">
             <div class="hero-health-bg">
-                <div class="hero-health-amount">{{health}}</div>
+                <div class="{{#if damaged}}damaged{{/if}} hero-health-amount">{{health}}</div>
             </div>
             {{#if armor}}
             <div class="hero-armor-bg">
@@ -259,10 +259,10 @@
             <div class="tt minion tt-{{id}}">
                 <div class="card {{id}}"></div>
                 <div class="attack">
-                    <div class="amount">{{attack}}</div>
+                    <div class="amount {{#if attackBuffed}} buffed {{/if}}">{{attack}}</div>
                 </div>
                 <div class="health">
-                    <div class="amount {{#if damaged}} damaged {{/if}}">{{health}}</div>
+                    <div class="amount {{#if damaged}} damaged {{else if healthBuffed}} buffed {{/if}}">{{health}}</div>
                 </div>
                 {{#if frozen}}
                 <div class="frozen"></div>
@@ -300,6 +300,16 @@
         <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
         <span> armor is now : </span>
         <div class="armor-bg"><div>{{armor}}</div></div>
+    </div>
+</script>
+
+<script id="attack-template" type="text/x-handlebars-template" th:inline="javascript">
+    <div>
+        <span class="{{attackerController.playerClass}}">{{attackerController.name}}</span>
+        <span class="{{attacker.rarity}} tt tt-{{attacker.id}}">{{attacker.name}}</span>
+        <span> has attacked </span>
+        <span class="{{defenderController.playerClass}}">{{defenderController.name}}</span>
+        <span class="{{defender.rarity}} tt tt-{{defender.id}}">{{defender.name}}</span>
     </div>
 </script>
 
@@ -499,6 +509,7 @@
         var manaUsedTemplate = Handlebars.compile($('#mana-used-template').html());
         var tempManaGainedTemplate = Handlebars.compile($('#temp-mana-gained-template').html());
         var triggerTemplate = Handlebars.compile($('#trigger-template').html());
+        var attackTemplate = Handlebars.compile($('#attack-template').html());
 
         var turnCount = 0;
         var boardCount = -1;
@@ -555,6 +566,7 @@
                 if (action.type == 'manaUsed') gba.append(manaUsedTemplate(action));
                 if (action.type == 'tempManaGained') gba.append(tempManaGainedTemplate(action));
                 if (action.type == 'trigger') gba.append(triggerTemplate(action));
+                if (action.type == 'attack') gba.append(attackTemplate(action));
             }
         };
 

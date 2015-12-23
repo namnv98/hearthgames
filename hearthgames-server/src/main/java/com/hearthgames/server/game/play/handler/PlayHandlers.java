@@ -8,6 +8,7 @@ public class PlayHandlers {
     private List<Handler> handlers = new ArrayList<>();
 
     public PlayHandlers() {
+        handlers.add(new AttackHandler());
         handlers.add(new ArmorChangeHandler());
         handlers.add(new AttachDetachHandler());
         handlers.add(new AttackChangeHandler());

@@ -55,11 +55,17 @@ public class HealthArmorAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
             if (friendlyArmor != null && friendlyArmor != 0) {
                 col.setExtraData(""+friendlyArmor);
             }
+            if (friendlyHealth != null && friendlyHealth < 30) {
+                col.setExtraData2("damaged");
+            }
             friendly.addColumn(col);
 
             col = new GenericColumn(""+opposingHealth);
             if (opposingArmor != null && opposingArmor != 0) {
                 col.setExtraData(""+opposingArmor);
+            }
+            if (opposingHealth != null && opposingHealth < 30) {
+                col.setExtraData2("damaged");
             }
             opposing.addColumn(col);
         }

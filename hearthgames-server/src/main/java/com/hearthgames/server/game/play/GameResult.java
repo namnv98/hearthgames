@@ -303,6 +303,12 @@ public class GameResult {
         addActionLog(joust.toString());
     }
 
+    public void addAttack(Card attacker, Card defender, Player attackerController, Player defenderController) {
+        Attack attack = new Attack(attacker, defender, attackerController, defenderController);
+        this.currentTurn.addAction(attack);
+        addActionLog(attack.toString());
+    }
+
     public void addZonePositionChange(Card card, Zone zone, int position) {
         int size = this.getCurrentTurn().getActions().size();
         Action lastAction = size > 0 ? this.getCurrentTurn().getActions().get(size-1) : null;

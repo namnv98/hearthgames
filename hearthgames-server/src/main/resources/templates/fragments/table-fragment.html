@@ -24,7 +24,7 @@
                         <div th:text="${column.extraData}"></div>
                     </div>
                     <div th:class="${iterStat.first}? ${#strings.toLowerCase(opposingClass)} : 'health-bg'" class="health-bg">
-                        <div th:text="${column.data}"></div>
+                        <div th:class="${column.extraData2}" th:text="${column.data}"></div>
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
                         <div th:text="${column.extraData}"></div>
                     </div>
                     <div th:class="${iterStat.first}? ${#strings.toLowerCase(friendlyClass)} : 'health-bg'" class="health-bg">
-                        <div th:text="${column.data}"></div>
+                        <div th:class="${column.extraData2}" th:text="${column.data}"></div>
                     </div>
                 </div>
 

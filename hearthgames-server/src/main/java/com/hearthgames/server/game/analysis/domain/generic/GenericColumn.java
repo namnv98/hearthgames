@@ -6,6 +6,7 @@ public class GenericColumn<T> {
 
     private String data;
     private String extraData;
+    private String extraData2;
 
     private Collection<T> datas;
 
@@ -27,6 +28,14 @@ public class GenericColumn<T> {
 
     public void setExtraData(String extraData) {
         this.extraData = extraData;
+    }
+
+    public String getExtraData2() {
+        return extraData2;
+    }
+
+    public void setExtraData2(String extraData2) {
+        this.extraData2 = extraData2;
     }
 
     public String getData() {

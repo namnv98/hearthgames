@@ -316,6 +316,7 @@
 
 .health-bg { position:relative; background-image: url(http://images.hearthgames.com/misc/health.png); text-align: center;}
 .health-bg > div { position: absolute; text-align: center; font-weight: bold; }
+.health-bg .damaged { color: red; }
 
 .armor-bg { position:relative; background-image: url(http://images.hearthgames.com/misc/armor.png); text-align: center; display: inline-block; color: #fff; }
 .armor-bg > div { position: absolute; text-align: center; font-weight: bold; }
@@ -359,6 +360,7 @@
 .hero-attack-bg { position: absolute; background-image: url(http://images.hearthgames.com/misc/hero-attack-bg.png); }
 .hero-attack-amount { position: absolute; font-weight: bold; text-align: center; color: #fff; }
 .hero-health-bg { position: absolute; background-image: url(http://images.hearthgames.com/misc/hero-health-bg.png); }
+.hero-health-bg .damaged { color: red; }
 .hero-health-amount { position: absolute; font-weight: bold; text-align: center; color: #fff; }
 .hero-armor-bg { position: absolute; background-image: url(http://images.hearthgames.com/misc/hero-armor-bg.png);}
 .hero-armor-amount { position: absolute; font-weight: bold; text-align: center; color: #fff; }
@@ -389,10 +391,12 @@
 
 .minion { display: inline-block; position: relative; }
 .minion .attack { background-image: url(http://images.hearthgames.com/misc/minion-attack.png); position: absolute; z-index: 2; color: #fff;}
+.minion .attack .buffed { color: #26C805; }
 .minion .attack .amount { position: absolute; text-align: center;  font-weight: bold;}
 .minion .health { background-image: url(http://images.hearthgames.com/misc/minion-health.png); position: absolute; z-index: 2; color: #fff; }
 .minion .health .amount { position: absolute; text-align: center; font-weight: bold; }
 .minion .health .damaged { color: red; }
+.minion .health .buffed { color: #26C805; }
 .minion .legendary { background-image: url(http://images.hearthgames.com/misc/minion-legendary.png); position: absolute; z-index: 2; }
 .minion .taunting { background-image: url(http://images.hearthgames.com/misc/minion-taunting.png); position: absolute; z-index: 1; }
 .minion .shielded { background-image: url(http://images.hearthgames.com/misc/minion-shielded.png); position: absolute; z-index: 3; }

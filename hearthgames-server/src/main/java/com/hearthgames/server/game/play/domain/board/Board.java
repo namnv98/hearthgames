@@ -47,18 +47,18 @@ public class Board implements Action {
             turnData.setStatus("yellow");
         }
 
+        setHeroIds(context, friendlyHero, opposingHero);
+        setHeroHealthArmor(result, context, friendlyHero, opposingHero);
+        setHeroMana(result, context, friendlyHero, opposingHero);
+        setHeroPowerStatus(context, friendlyHero, opposingHero);
+        setHeroCards(context, friendlyHero, opposingHero);
+
         if (friendlyHero.getWeapon() != null) {
             friendlyHero.setAttack(friendlyHero.getWeapon().getAttack());
         }
         if (opposingHero.getWeapon() != null) {
             opposingHero.setAttack(opposingHero.getWeapon().getAttack());
         }
-
-        setHeroIds(context, friendlyHero, opposingHero);
-        setHeroHealthArmor(result, context, friendlyHero, opposingHero);
-        setHeroMana(result, context, friendlyHero, opposingHero);
-        setHeroPowerStatus(context, friendlyHero, opposingHero);
-        setHeroCards(context, friendlyHero, opposingHero);
     }
 
     public Hero getFriendlyHero() {
@@ -127,9 +127,11 @@ public class Board implements Action {
         }
 
         friendlyHero.setHealth(friendlyHealth);
+        friendlyHero.setDamaged(friendlyHealth < 30);
         friendlyHero.setArmor(friendlyArmor);
 
         opposingHero.setHealth(opposingHealth);
+        opposingHero.setDamaged(opposingHealth < 30);
         opposingHero.setArmor(opposingArmor);
     }
 
@@ -183,6 +185,10 @@ public class Board implements Action {
                 MinionInPlay minionInPlay = new MinionInPlay();
                 minionInPlay.setId(c.getCardid());
                 int health = c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0;
+                int definitionHealth = Integer.parseInt(c.getCardDetailsHealth());
+                if (health > definitionHealth) {
+                    minionInPlay.setHealthBuffed(true);
+                }
                 if (c.getDamage() != null) {
                     health = health - Integer.parseInt(c.getDamage());
                     minionInPlay.setDamaged(true);
@@ -190,8 +196,15 @@ public class Board implements Action {
                     health = health - Integer.parseInt(c.getPredamage());
                     minionInPlay.setDamaged(true);
                 }
+
+                int attack = c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0;
+                int definitionAttack = Integer.parseInt(c.getCardDetailsAttack());
+                if (attack > definitionAttack) {
+                    minionInPlay.setAttackBuffed(true);
+                }
+
                 minionInPlay.setHealth(health);
-                minionInPlay.setAttack(c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0);
+                minionInPlay.setAttack(attack);
                 minionInPlay.setFrozen(c.getFrozen() != null && TRUE.equals(c.getFrozen()));
                 minionInPlay.setLegendary(LEGENDARY.equals(c.getCardDetails().getRarity()));
                 minionInPlay.setShielded(TRUE.equals(c.getDivineShield()));
