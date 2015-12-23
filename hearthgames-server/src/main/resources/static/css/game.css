@@ -285,6 +285,9 @@
     .weapon .durability .amount { right: 1px; bottom: 1px; width: 24px; height: 25px; }
 }
 
+#paginator-container { margin: auto; width: 100%; }
+#paginator li a  { background-color: #4C4C4C; color: #fff; }
+
 .game-title { text-align: center; }
 .game-title a:link { text-decoration: none; color: #D5D4D4; }
 .game-title a:visited { text-decoration: none; color: #D5D4D4; }

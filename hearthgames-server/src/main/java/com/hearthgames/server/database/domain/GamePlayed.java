@@ -1,5 +1,7 @@
 package com.hearthgames.server.database.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hearthgames.server.database.domain.json.GamePlayedSerializer;
 import com.hearthgames.server.util.DurationUtils;
 
 import javax.persistence.*;
@@ -7,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
+@JsonSerialize(using = GamePlayedSerializer.class)
 public class GamePlayed {
 
     @Id

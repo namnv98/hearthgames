@@ -18,6 +18,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -94,16 +95,28 @@ public class GameService {
         }
     }
 
+    public Long getGamesPlayedCount(String id) {
+        return gamePlayedRepository.countByFriendlyGameAccountId(id);
+    }
+
     public List<GamePlayed> getGamesPlayed(String id) {
         return gamePlayedRepository.findByFriendlyGameAccountId(id);
     }
 
-    public Iterable<GamePlayed> getCasualGamesPlayed() {
-        return gamePlayedRepository.findAllByRankIsNull();
+    public List<GamePlayed> getCasualGamesPlayed(PageRequest pageRequest) {
+        return gamePlayedRepository.findAllByRankIsNull(pageRequest);
     }
 
-    public Iterable<GamePlayed> getRankedGamesPlayed() {
-        return gamePlayedRepository.findAllByRankNotNull();
+    public Long getCasualGamesPlayedCount() {
+        return gamePlayedRepository.countByRankIsNull();
+    }
+
+    public List<GamePlayed> getRankedGamesPlayed(PageRequest pageRequest) {
+        return gamePlayedRepository.findAllByRankNotNull(pageRequest);
+    }
+
+    public Long getRankedGamesPlayedCount() {
+        return gamePlayedRepository.countByRankNotNull();
     }
 
     public GamePlayed getById(Long id) {

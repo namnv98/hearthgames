@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>HearthGames.com - Games</title>
     <meta name="description" content="Check out some of the Top Rated Games. Search for games that match criteria such as Deck Archetype, High Win Rate and many more. Rate other peoples games and leave comments."/>
@@ -26,6 +25,26 @@
         <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
     </div>
 
+    <div id="games">
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <ul id="paginator" class="pagination-sm"></ul>
+        </div>
+    </div>
+
+    <div th:replace="/fragments/footer-fragment::footer"></div>
+
+</div>
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/handlebarsjs/4.0.2/handlebars.min.js" th:src="@{/webjars/handlebars/4.0.2/handlebars.min.js}"></script>
+<script th:src="@{/webjars/twbs-pagination/1.2.5/jquery.twbsPagination.min.js}"></script>
+
+<script id="games-template" type="text/x-handlebars-template" th:inline="javascript">
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -33,31 +52,50 @@
             <th>Opponent</th>
             <th>Winner</th>
             <th># Turns</th>
-            <th th:if="${gamesType.ranked || gamesType.account}">Rank</th>
+            {{#if ranked}}<th>Rank</th>{{/if}}
             <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="game: ${gamesPlayed}">
-            <td><span th:class="${#strings.toLowerCase(game.friendlyClass)}" th:text="${game.friendlyName}">Seekay</span></td>
-            <td><span th:class="${#strings.toLowerCase(game.opposingClass)}" th:text="${game.opposingName}">Some Opponent</span></td>
-            <td><span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}">Seekay</span></td>
-            <td><span th:text="${game.turns}">23</span></td>
-            <th th:if="${gamesType.ranked || gamesType.account}" th:text="${game.rank}"></th>
-            <td sec:authorize="hasRole('ROLE_ANONYMOUS')">
-                <a th:href="@{'/game/'+${game.id}}" href="game.html">View</a>
-            </td>
-            <td sec:authorize="hasRole('ROLE_USER')">
-                <a th:if="${gamesType.ranked}"  th:href="@{'/game/'+${game.id}}" href="game.html">View</a>
-                <a th:if="${gamesType.account}"  th:href="@{'/mygame/'+${game.id}}" href="game.html">View</a>
-            </td>
+        {{#each games}}
+        <tr>
+            <td><span class="{{friendlyClass}}">{{friendlyName}}</span></td>
+            <td><span class="{{opposingClass}}">{{opposingName}}</span></td>
+            <td><span class="{{winnerClass}}">{{winner}}</span></td>
+            <td><span>{{turns}}</span></td>
+            {{#if rank}}<th>{{rank}}</th>{{/if}}
+            <td><a href="/game/{{id}}">View</a></td>
         </tr>
+        {{/each}}
         </tbody>
     </table>
+</script>
 
-    <div th:replace="/fragments/footer-fragment::footer"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
 
-</div>
+    $(document).ready(function(){
+        var gamesPlayedData = JSON.parse([[${gamesPlayed}]]);
+
+        var template = Handlebars.compile($("#games-template").html());
+        $('#games').html(template(gamesPlayedData));
+
+        var url = gamesPlayedData.ranked ? '/rankedgames/' : '/casualgames/';
+        $('#paginator').twbsPagination({
+            totalPages: gamesPlayedData.pages,
+            onPageClick: function (event, page) {
+                $.ajax({url: url+(page-1), success: function(result){
+                    var template = Handlebars.compile($("#games-template").html());
+                    $('#games').html(template(result));
+                }});
+            }
+        });
+    });
+
+
+    /*]]>*/
+</script>
+
 
 </body>
 </html>
