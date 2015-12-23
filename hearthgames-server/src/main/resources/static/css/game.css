@@ -390,16 +390,16 @@
 #friendly-play { position: absolute; text-align: center; }
 
 .minion { display: inline-block; position: relative; }
-.minion .attack { background-image: url(http://images.hearthgames.com/misc/minion-attack.png); position: absolute; z-index: 2; color: #fff;}
+.minion .attack { background-image: url(http://images.hearthgames.com/misc/minion-attack.png); position: absolute; z-index: 6; color: #fff;}
 .minion .attack .buffed { color: #26C805; }
 .minion .attack .amount { position: absolute; text-align: center;  font-weight: bold;}
-.minion .health { background-image: url(http://images.hearthgames.com/misc/minion-health.png); position: absolute; z-index: 2; color: #fff; }
+.minion .health { background-image: url(http://images.hearthgames.com/misc/minion-health.png); position: absolute; z-index: 6; color: #fff; }
 .minion .health .amount { position: absolute; text-align: center; font-weight: bold; }
 .minion .health .damaged { color: red; }
 .minion .health .buffed { color: #26C805; }
 .minion .legendary { background-image: url(http://images.hearthgames.com/misc/minion-legendary.png); position: absolute; z-index: 2; }
 .minion .taunting { background-image: url(http://images.hearthgames.com/misc/minion-taunting.png); position: absolute; z-index: 1; }
-.minion .shielded { background-image: url(http://images.hearthgames.com/misc/minion-shielded.png); position: absolute; z-index: 3; }
+.minion .shielded { background-image: url(http://images.hearthgames.com/misc/minion-shielded.png); position: absolute; z-index: 5; }
 .minion .frozen { background-image: url(http://images.hearthgames.com/misc/minion-frozen.png); position: absolute; z-index: 3; }
 .minion .exhausted { background-image: url(http://images.hearthgames.com/misc/zzz.png); position: absolute; z-index: 4; }
 .minion .inspire { background-image: url(http://images.hearthgames.com/misc/inspire.png); position: absolute; z-index: 4; }
