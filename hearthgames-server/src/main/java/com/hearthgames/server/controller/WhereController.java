@@ -22,6 +22,8 @@ public class WhereController {
                 modelAndView.addObject("userAgent", new UserAgent(false, true, false));
             } else if (userAgent.toLowerCase().contains("android")) {
                 modelAndView.addObject("userAgent", new UserAgent(false, false, true));
+            } else {
+                modelAndView.addObject("userAgent", new UserAgent(true, false, false));
             }
         } else {
             modelAndView.addObject("userAgent", new UserAgent(true, false, false));

@@ -6,6 +6,7 @@ import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.log.filter.AssetLineFilter;
 import com.hearthgames.server.game.log.filter.BobLineFilter;
 import com.hearthgames.server.game.log.filter.PowerLineFilter;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,9 @@ public class RawLogProcessingService {
                 String line = filteredLineData.getLine();
 
                 if (line.startsWith(CREATE_GAME)) {
+                    if (!CollectionUtils.isEmpty(currentGame)) {
+                        rawGameDatas.add(createRawGameData(currentGame, currentRawGame, rank));
+                    }
                     gameComplete = false;
                     rank = null;
                     currentGame = new ArrayList<>();
@@ -87,14 +91,12 @@ public class RawLogProcessingService {
                     currentRawGame.add(rawLine);
                 } else if (currentGame != null && gameComplete && (line.startsWith(REGISTER_FRIEND_CHALLENGE) || prefiltered)) {
                     currentRawGame.add(rawLine);
-                    RawGameData rawGameData = new RawGameData();
-                    rawGameData.setLines(currentGame);
-                    rawGameData.setRawLines(currentRawGame);
-                    rawGameData.setRank(rank);
-                    rawGameDatas.add(rawGameData);
+                    rawGameDatas.add(createRawGameData(currentGame, currentRawGame, rank));
                     if (prefiltered) {
                         return rawGameDatas;
                     }
+                    currentGame = new ArrayList<>();
+                    currentRawGame = new ArrayList<>();
                 } else if (currentGame != null && filteredLineData.isLoggable()) {
                     LogLineData data = new LogLineData(timestamp, line);
                     currentGame.add(data);
@@ -102,8 +104,19 @@ public class RawLogProcessingService {
                 }
             }
         }
+        if (!CollectionUtils.isEmpty(currentGame)) {
+            rawGameDatas.add(createRawGameData(currentGame, currentRawGame, rank));
+        }
 
         return rawGameDatas;
+    }
+
+    private RawGameData createRawGameData(List<LogLineData> currentGame, List<String> currentRawGame, Integer rank) {
+        RawGameData rawGameData = new RawGameData();
+        rawGameData.setLines(currentGame);
+        rawGameData.setRawLines(currentRawGame);
+        rawGameData.setRank(rank);
+        return rawGameData;
     }
 
     private FilteredLineData filterLine(String line) {

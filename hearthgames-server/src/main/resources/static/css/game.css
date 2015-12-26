@@ -73,7 +73,7 @@
     #opposing-hero { top: -81px; left: 281px; width: 113px; height: 120px; background-size: 113px 120px; }
 
     .hero-attack-bg { bottom: 1px; left: 1px; width: 32px; height: 35px; background-size: 32px 35px; }
-    .hero-attack-amount { bottom: 4px; right: 6px; font-size: 13px; text-shadow: 1px 1px 1px #000; width: 20px;  }
+    .hero-attack-amount { bottom: 4px; right: 2px; font-size: 13px; text-shadow: 1px 1px 1px #000; width: 20px;  }
     .hero-health-bg { bottom: 1px; right: 1px; width: 32px; height: 35px; background-size: 32px 35px; }
     .hero-health-amount { bottom: 4px; right: 6px; font-size: 13px; text-shadow: 1px 1px 1px #000; width: 20px;  }
     .hero-armor-bg { bottom: 35px; right: 4px; width: 27px; height: 29px; background-size: 27px 29px; }
@@ -84,17 +84,17 @@
 
 
     .secret { height: 21px; width: 21px; background-size: 21px 21px; }
-    #friendly-hero .secret0 { top: -5px; right: 45px; }
-    #friendly-hero .secret1 { top: 10px; right: 72px; }
-    #friendly-hero .secret2 { top: 35px; right: 88px; }
+    #friendly-hero .secret0 { top: -7px; right: 42px; }
+    #friendly-hero .secret1 { top: 10px; right: 69px; }
+    #friendly-hero .secret2 { top: 38px; right: 82px; }
     #friendly-hero .secret3 { top: 10px; right: 20px; }
-    #friendly-hero .secret4 { top: 35px; right: 4px; }
+    #friendly-hero .secret4 { top: 38px; right: 4px; }
 
-    #opposing-hero .secret0 { top: -5px; right: 45px; }
-    #opposing-hero .secret1 { top: 10px; right: 72px; }
-    #opposing-hero .secret2 { top: 35px; right: 88px; }
-    #opposing-hero .secret3 { top: 10px; right: 20px; }
-    #opposing-hero .secret4 { top: 35px; right: 4px; }
+    #opposing-hero .secret0 { top:-10px; right: 42px; }
+    #opposing-hero .secret1 { top: 15px; right: 69px; }
+    #opposing-hero .secret2 { top: 57px; right: 82px; }
+    #opposing-hero .secret3 { top: 15px; right: 20px; }
+    #opposing-hero .secret4 { top: 57px; right: 4px; }
 
     .cardback { background-size: 27px 37px; }
     .thumb { width: 27px; height: 37px;  }
@@ -111,12 +111,14 @@
     .minion .health .amount { bottom: 2px; right: -4px; text-shadow: 1px 1px 1px #000; width: 23px; font-size: 12px; }
     .minion .legendary { background-size: 73px 55px; top: -9px; left: 5px; width: 73px; height: 55px; }
     .minion .taunting { background-size: 71px 93px; top: -6px; left: -6px; width: 71px; height: 93px; }
-    .minion .shielded { background-size: 72px 95px; top: -7px; left: -6px; width: 72px; height: 95px; }
-    .minion .frozen { background-size: 89px 100px; top: -12px; left: -15px; width: 89px; height: 100px; }
+    .minion .shielded { background-size: 84px 103px; top: -10px; left: -12px; width: 84px; height: 103px; }
+    .minion .frozen { background-size: 83px 100px; top: -8px; left: -12px; width: 83px; height: 100px; }
     .minion .exhausted { background-size: 15px 17px; top: -6px; right: -3px; width: 15px; height: 17px; }
     .minion .inspire { background-size: 19px 17px; bottom: -4px; left: 21px; width: 19px; height: 17px; }
     .minion .trigger { background-size: 15px 17px; bottom: -4px; left: 24px; width: 15px; height: 17px; }
     .minion .deathrattle { background-size: 22px 17px; bottom: -4px; left: 21px; width: 22px; height: 17px; }
+    .minion .silenced { background-size: 73px 89px; top: -4px; left: -4px; width: 73px; height: 89px; }
+    .minion .poison { background-size: 13px 19px;  bottom: -5px; left: 25px; width: 20px; height: 28px; }
 
     #friendly-mana { bottom: -30px; right: 173px; background-size: 51px 27px; height: 27px; width: 51px; }
     #friendly-mana .amount { margin-top: 7px; height: 14px; width: 51px; text-shadow: 1px 1px 1px #000; font-size: 9px; }
@@ -218,7 +220,7 @@
     #opposing-hero { top: -122px; left: 421px; width: 170px; height: 180px; background-size: 170px 180px;  }
 
     .hero-attack-bg { bottom: 1px; left: 1px; width: 48px; height: 52px; background-size: 48px 52px; }
-    .hero-attack-amount { bottom: 6px; right: 9px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
+    .hero-attack-amount { bottom: 6px; right: 4px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
     .hero-health-bg { bottom: 1px; right: 1px; width: 48px; height: 52px; background-size: 48px 52px; }
     .hero-health-amount { bottom: 6px; right: 9px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
     .hero-armor-bg { bottom: 52px; right: 6px; width: 40px; height: 43px; background-size: 40px 43px; }
@@ -229,17 +231,17 @@
 
 
     .secret { height: 32px; width: 32px; background-size: 32px 32px; }
-    #friendly-hero .secret0 { top: -8px; right: 68px; }
-    #friendly-hero .secret1 { top: 15px; right: 108px; }
-    #friendly-hero .secret2 { top: 53px; right: 132px; }
+    #friendly-hero .secret0 { top:-10px; right: 65px; }
+    #friendly-hero .secret1 { top: 15px; right: 104px; }
+    #friendly-hero .secret2 { top: 57px; right: 123px; }
     #friendly-hero .secret3 { top: 15px; right: 30px; }
-    #friendly-hero .secret4 { top: 53px; right: 6px; }
+    #friendly-hero .secret4 { top: 57px; right: 6px; }
 
-    #opposing-hero .secret0 { top: -8px; right: 68px; }
-    #opposing-hero .secret1 { top: 15px; right: 108px; }
-    #opposing-hero .secret2 { top: 53px; right: 132px; }
+    #opposing-hero .secret0 { top:-10px; right: 65px; }
+    #opposing-hero .secret1 { top: 15px; right: 104px; }
+    #opposing-hero .secret2 { top: 57px; right: 123px; }
     #opposing-hero .secret3 { top: 15px; right: 30px; }
-    #opposing-hero .secret4 { top: 53px; right: 6px; }
+    #opposing-hero .secret4 { top: 57px; right: 6px; }
 
     .cardback { background-size: 40px 55px; }
     .thumb { width: 40px; height: 55px;  }
@@ -256,12 +258,14 @@
     .minion .health .amount { bottom: 2px; right: -5px; text-shadow: 1px 1px 1px #000; width: 35px; font-size: 18px; }
     .minion .legendary { background-size: 110px 83px; top: -13px; left: 7px; width: 110px; height: 83px; }
     .minion .taunting { background-size: 107px 140px; top: -8px; left: -8px; width: 107px; height: 140px; }
-    .minion .shielded { background-size: 108px 142px; top: -10px; left: -9px; width: 108px; height: 142px; }
-    .minion .frozen { background-size: 134px 150px; top: -18px; left: -22px; width: 134px; height: 150px; }
+    .minion .shielded { background-size: 126px 154px; top: -15px; left: -18px; width: 126px; height: 154px; }
+    .minion .frozen { background-size: 125px 149px; top: -12px; left: -18px; width: 125px; height: 149px; }
     .minion .exhausted { background-size: 22px 25px; top: -8px; right: -4px; width: 22px; height: 25px; }
     .minion .inspire { background-size: 28px 25px; bottom: -5px; left: 31px; width: 28px; height: 25px; }
     .minion .trigger { background-size: 22px 25px; bottom: -6px; left: 36px; width: 22px; height: 25px; }
     .minion .deathrattle { background-size: 32px 25px; bottom: -5px; left: 31px; width: 32px; height: 25px; }
+    .minion .silenced { background-size: 110px 133px; top: -6px; left: -6px; width: 110px; height: 133px; }
+    .minion .poison { background-size: 20px 28px;  bottom: -7px; left: 38px; width: 20px; height: 28px; }
 
     #friendly-mana { bottom: -45px; right: 260px; background-size: 77px 41px; height: 41px; width: 77px; }
     #friendly-mana .amount { margin-top: 10px; height: 21px; width: 77px; text-shadow: 1px 1px 1px #000; font-size: 14px; }
@@ -408,6 +412,8 @@
 .minion .inspire { background-image: url(http://images.hearthgames.com/misc/inspire.png); position: absolute; z-index: 4; }
 .minion .trigger { background-image: url(http://images.hearthgames.com/misc/trigger.png); position: absolute; z-index: 4; }
 .minion .deathrattle { background-image: url(http://images.hearthgames.com/misc/deathrattle.png); position: absolute; z-index: 4; }
+.minion .silenced { background-image: url(http://images.hearthgames.com/misc/minion-silenced.png); position: absolute; z-index: 4; }
+.minion .poison { background-image: url(http://images.hearthgames.com/misc/poison.png); position: absolute; z-index: 4; }
 
 #friendly-mana { position: absolute; background-image: url(http://images.hearthgames.com/misc/mana-count.png); }
 #friendly-mana .amount { text-align: center; font-weight: bold; }
