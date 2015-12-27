@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -74,7 +75,7 @@ public class CardParser {
                         List<CardDetails> cardDetailsList = cardService.getCardDetailsByName(name); // there might be multiple cards with the same name so we have to manually check after
                         CardLink cardLink = new CardLink();
                         final String finalText = text;
-                        List<CardDetails> potentialCardDetails = cardDetailsList.stream().filter(cd -> Objects.equals(cd.getText(), finalText)).collect(Collectors.toList());
+                        List<CardDetails> potentialCardDetails = cardDetailsList.stream().filter(cd -> Objects.equals(cd.getTextInPlay(), finalText)).collect(Collectors.toList());
                         if (potentialCardDetails.isEmpty()) {
                             potentialCardDetails = cardDetailsList;
                         }
@@ -119,9 +120,9 @@ public class CardParser {
                         }
                     }
 
-                    if (cardId != null) { // we only want to download cards we don't have
+                    if (cardId == null) { // we only want to download cards we don't have
                         try {
-                            FileUtils.copyURLToFile(new URL(src), new File("C:\\images\\download\\"+ cardId+ ".png"));
+                            FileUtils.copyURLToFile(new URL(src), new File("C:\\images\\download2\\"+ hearthPwnId+ ".png"));
                         } catch (Exception e) {
                             System.out.println("could not download: " + src);
                         }
@@ -136,15 +137,19 @@ public class CardParser {
 
     public void makeThumbnails() throws IOException {
 
-        for (CardLink cardIdLink: cardLinks.getCards()) {
+        Collection<File> files = FileUtils.listFiles(new File("C:\\images\\download\\"), new String[]{"png"}, false);
 
-            try {
-                Thumbnails.of(new File("C:\\images\\download\\"+cardIdLink.getCardId()+".png"))
-                        .size(40, 55)
-                        .toFile(new File("C:\\images\\thumbs\\"+cardIdLink.getCardId()+".png"));
-            } catch (Exception e) {
-                System.out.println(cardIdLink.getCardId() + "," + cardIdLink.getHearthPwnId());
+        for (File file: files) {
+
+            File target = new File("C:\\images\\thumbs2\\"+file.getName());
+            if (!target.exists()) {
+                try {
+                    Thumbnails.of(file).size(170, 234).toFile(target);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
         }
     }
 

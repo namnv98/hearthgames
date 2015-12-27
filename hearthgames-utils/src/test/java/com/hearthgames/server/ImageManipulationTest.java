@@ -26,7 +26,7 @@ public class ImageManipulationTest {
 
         Collection<CardDetails> cards = cardService.getCardDetails();
 
-        List<CardDetails> minions = cards.stream().filter(card -> "Minion".equals(card.getType())).collect(Collectors.toList());
+        List<CardDetails> minions = cards.stream().filter(card -> "MINION".equals(card.getType())).collect(Collectors.toList());
 
         File dir = new File("C:\\images\\minons");
         File[] files = dir.listFiles();
@@ -54,7 +54,7 @@ public class ImageManipulationTest {
 
         Collection<CardDetails> cards = cardService.getCardDetails();
 
-        List<CardDetails> heroPowers = cards.stream().filter(card -> "Hero Power".equals(card.getType())).collect(Collectors.toList());
+        List<CardDetails> heroPowers = cards.stream().filter(card -> "HERO_POWER".equals(card.getType())).collect(Collectors.toList());
 
         File dir = new File("C:\\images\\download");
         File[] files = dir.listFiles();
@@ -88,7 +88,7 @@ public class ImageManipulationTest {
 
         Collection<CardDetails> cards = cardService.getCardDetails();
 
-        List<CardDetails> weapons = cards.stream().filter(card -> "Weapon".equals(card.getType())).collect(Collectors.toList());
+        List<CardDetails> weapons = cards.stream().filter(card -> "WEAPON".equals(card.getType())).collect(Collectors.toList());
 
         File dir = new File("C:\\images\\download");
         File[] files = dir.listFiles();
@@ -102,16 +102,16 @@ public class ImageManipulationTest {
 
         }
         for (CardDetails weapon: weapons) {
-            if (cardFiles.contains(weapon.getId())) {
-                File file = new File("c:\\images\\download\\"+weapon.getId()+".png");
-                if (file.exists()) {
+//            if (cardFiles.contains(weapon.getId())) {
+                File file = new File("c:\\images\\weaponoutput\\"+weapon.getId()+".png");
+                if (!file.exists()) {
 //                    FileUtils.copyFile(file, new File("c:\\images\\weapons\\"+weapon.getId()+".png"));
                     System.out.println(".weapon ."+weapon.getId() + " { background-image: url(\"http://images.hearthgames.com/w/"+weapon.getId() +".png\"); }");
                 }
 //                else {
 //                    System.out.println(heroPower.getId()+" does not exist");
 //                }
-            }
+//            }
         }
         System.out.println();
     }

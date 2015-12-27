@@ -1,7 +1,8 @@
 package com.hearthgames.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hearthgames.utils.hearthpwn.CardSets;
+import com.hearthgames.utils.hearthpwn.CardLinks;
+import com.hearthgames.utils.hearthpwn.CardCollection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -23,7 +24,12 @@ public class UtilsApplication extends SpringBootServletInitializer {
     }
 
     @Bean
-    public CardSets cardSets() throws IOException {
-        return new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardSets.class);
+    public CardCollection cardSets() throws IOException {
+        return new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("AllSets.json"), CardCollection.class);
+    }
+
+    @Bean
+    public CardLinks cardLinks() throws IOException {
+        return new ObjectMapper().readValue(getClass().getClassLoader().getResourceAsStream("HearthPwn.json"), CardLinks.class);
     }
 }

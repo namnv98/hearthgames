@@ -12,21 +12,25 @@ public class CardDetails implements Serializable {
     private String type;
     private String faction;
     private String rarity;
-    private String cost;
-    private String attack;
-    private String health;
+    private int cost;
+    private int attack;
+    private int health;
     private String text;
+    private String textInPlay;
     private String flavor;
     private String artist;
     private Boolean collectible;
-    private String howToGet;
-    private String howToGetGold;
     private List<String> mechanics;
     private String playerClass;
-    private String durability;
+    private int durability;
     private String race;
     private String inPlayText;
     private String elite;
+    private String set;
+    private String howToEarn;
+    private String howToEarnGolden;
+    private List<String> entourage;
+    private PlayRequirements playRequirements;
 
     public String getId() {
         return id;
@@ -72,27 +76,27 @@ public class CardDetails implements Serializable {
         this.rarity = rarity;
     }
 
-    public String getCost() {
+    public int getCost() {
         return cost;
     }
 
-    public void setCost(String cost) {
+    public void setCost(int cost) {
         this.cost = cost;
     }
 
-    public String getAttack() {
+    public int getAttack() {
         return attack;
     }
 
-    public void setAttack(String attack) {
+    public void setAttack(int attack) {
         this.attack = attack;
     }
 
-    public String getHealth() {
+    public int getHealth() {
         return health;
     }
 
-    public void setHealth(String health) {
+    public void setHealth(int health) {
         this.health = health;
     }
 
@@ -102,6 +106,14 @@ public class CardDetails implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getTextInPlay() {
+        return textInPlay;
+    }
+
+    public void setTextInPlay(String textInPlay) {
+        this.textInPlay = textInPlay;
     }
 
     public String getFlavor() {
@@ -128,14 +140,6 @@ public class CardDetails implements Serializable {
         this.collectible = collectible;
     }
 
-    public String getHowToGetGold() {
-        return howToGetGold;
-    }
-
-    public void setHowToGetGold(String howToGetGold) {
-        this.howToGetGold = howToGetGold;
-    }
-
     public List<String> getMechanics() {
         return mechanics;
     }
@@ -152,19 +156,11 @@ public class CardDetails implements Serializable {
         this.playerClass = playerClass;
     }
 
-    public String getHowToGet() {
-        return howToGet;
-    }
-
-    public void setHowToGet(String howToGet) {
-        this.howToGet = howToGet;
-    }
-
-    public String getDurability() {
+    public int getDurability() {
         return durability;
     }
 
-    public void setDurability(String durability) {
+    public void setDurability(int durability) {
         this.durability = durability;
     }
 
@@ -190,5 +186,45 @@ public class CardDetails implements Serializable {
 
     public void setElite(String elite) {
         this.elite = elite;
+    }
+
+    public String getSet() {
+        return set;
+    }
+
+    public void setSet(String set) {
+        this.set = set;
+    }
+
+    public String getHowToEarn() {
+        return howToEarn;
+    }
+
+    public void setHowToEarn(String howToEarn) {
+        this.howToEarn = howToEarn;
+    }
+
+    public String getHowToEarnGolden() {
+        return howToEarnGolden;
+    }
+
+    public void setHowToEarnGolden(String howToEarnGolden) {
+        this.howToEarnGolden = howToEarnGolden;
+    }
+
+    public List<String> getEntourage() {
+        return entourage;
+    }
+
+    public void setEntourage(List<String> entourage) {
+        this.entourage = entourage;
+    }
+
+    public PlayRequirements getPlayRequirements() {
+        return playRequirements;
+    }
+
+    public void setPlayRequirements(PlayRequirements playRequirements) {
+        this.playRequirements = playRequirements;
     }
 }

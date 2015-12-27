@@ -40,22 +40,26 @@ public class ImageManipulation {
 
 
 
-//        File inputDir = new File("c:\\images\\weaponimages");
-//        File[] files = inputDir.listFiles();
-//        if (files != null) {
-//            for (File file1: files) {
-//
-//                File file2 = new File("C:\\images\\weapon-mask.png");
-//                File outputFile = new File("C:\\images\\weaponoutput\\"+file1.getName());
-//
-//                try {
-//                    combineWeaponImages(file1, file2, outputFile);
-//                } catch (Exception e) {
-//                    System.out.println("failed to convert + " + file1.getAbsolutePath());
-//                }
-//
-//            }
-//        }
+        File inputDir = new File("c:\\images\\weaponimages");
+        File[] files = inputDir.listFiles();
+        if (files != null) {
+            for (File file1: files) {
+
+                if (file1.getName().equals("Foam_Sword_D.png") || file1.getName().equals("W17_a019_D.png")) {
+                    File file2 = new File("C:\\images\\assets\\weapon-mask.png");
+                    File outputFile = new File("C:\\images\\weaponoutput\\"+file1.getName());
+
+                    try {
+                        combineWeaponImages(file1, file2, outputFile);
+                    } catch (Exception e) {
+                        System.out.println("failed to convert + " + file1.getAbsolutePath());
+                    }
+
+                }
+
+
+            }
+        }
 
 
 

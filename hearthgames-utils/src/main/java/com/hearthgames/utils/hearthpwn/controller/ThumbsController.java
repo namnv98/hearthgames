@@ -4,7 +4,6 @@ import com.hearthgames.utils.hearthpwn.CardDetails;
 import com.hearthgames.utils.hearthpwn.CardParser;
 import com.hearthgames.utils.hearthpwn.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@PreAuthorize("hasRole('ADMIN')")
 public class ThumbsController {
 
     @Autowired
