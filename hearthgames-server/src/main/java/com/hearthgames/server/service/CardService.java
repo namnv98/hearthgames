@@ -1,7 +1,7 @@
 package com.hearthgames.server.service;
 
 import com.hearthgames.server.game.parse.domain.CardDetails;
-import com.hearthgames.server.game.parse.domain.CardSets;
+import com.hearthgames.server.game.parse.domain.CardCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,63 +11,26 @@ import java.util.stream.Collectors;
 @Component
 public class CardService {
 
-    private Map<String, CardDetails> cards = new HashMap<>();
+    private CardCollection cardCollection;
 
     @Autowired
-    public CardService(CardSets cardSets) {
-
-        for (CardDetails c: cardSets.getBasic()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getBlackrockMountain()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getClassic()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getCurseOfNaxxramas()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getGoblinsVsGnomes()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getMissions()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getPromotion()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getReward()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getTavernBrawl()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getHeroSkins()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getTheGrandTournament()) {
-            cards.put(c.getId(), c);
-        }
-        for (CardDetails c: cardSets.getLeagueOfExplorers()) {
-            cards.put(c.getId(), c);
-        }
+    public CardService(CardCollection cardCollection) {
+        this.cardCollection = cardCollection;
     }
 
     public CardDetails getCardDetails(String id) {
-        return cards.get(id);
+        return cardCollection.get(id);
     }
 
     public String getName(String id) {
-        return cards.get(id).getName();
+        return cardCollection.get(id).getName();
     }
 
     public List<CardDetails> getCardDetailsByName(String name) {
-        return cards.values().stream().filter(cardDetails -> cardDetails.getName().equals(name)).collect(Collectors.toList());
+        return cardCollection.getCards().values().stream().filter(cardDetails -> cardDetails.getName().equals(name)).collect(Collectors.toList());
     }
 
     public Collection<CardDetails> getCardDetails() {
-        return cards.values();
+        return cardCollection.getCards().values();
     }
-
 }

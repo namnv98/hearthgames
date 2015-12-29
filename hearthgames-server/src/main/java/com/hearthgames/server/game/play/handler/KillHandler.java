@@ -40,8 +40,8 @@ public class KillHandler implements Handler {
                                 // if a friendly minion killed an opposing minion and the friendly minion is still alive then its considered a favorable trade
                                 favorableTrade = true;
                             } else if (killerHealth <= 0) {
-                                int killerCost = Integer.parseInt(card.getCardDetailsCost());
-                                int killedCost = Integer.parseInt(before.getCardDetailsCost());
+                                int killerCost = card.getCardDetailsCost();
+                                int killedCost = before.getCardDetailsCost();
                                 if (killerCost < killedCost) {
                                     // if a friendly minion killed an opposing minion and they both died but the cost of the opposing minion is higher its considered a favorable trade
                                     favorableTrade = true;
@@ -50,8 +50,8 @@ public class KillHandler implements Handler {
                                 }
                             }
                         } else if (Card.Type.SPELL.eq(card.getCardtype())) {
-                            int killerCost = Integer.parseInt(card.getCardDetailsCost());
-                            int killedCost = Integer.parseInt(before.getCardDetailsCost());
+                            int killerCost = card.getCardDetailsCost();
+                            int killedCost = before.getCardDetailsCost();
                             if (killerCost < killedCost) {
                                 // if a friendly spell killed an opposing minion and the cost of the opposing minion is higher its considered a favorable trade
                                 favorableTrade = true;
@@ -100,8 +100,8 @@ public class KillHandler implements Handler {
                                     favorableTrade = true;
                                 } else {
                                     // if a friendly card (minion,spell,etc...) destroyed an opposing minion
-                                    int killerCost = Integer.parseInt(parentCard.getCardDetailsCost());
-                                    int killedCost = Integer.parseInt(card.getCardDetailsCost());
+                                    int killerCost = parentCard.getCardDetailsCost();
+                                    int killedCost = card.getCardDetailsCost();
                                     if (killerCost > killedCost) {
                                         favorableTrade = true;
                                     } else if (killerCost == killedCost) {

@@ -20,7 +20,7 @@ public class AttackChangeHandler implements Handler {
         Card after = context.getAfter(activity);
 
         int newAttack = Integer.parseInt(after.getAtk());
-        int currentAttack = Integer.parseInt(before.getAtk() == null ? before.getCardDetailsAttack() : before.getAtk());
+        int currentAttack = before.getAtk() == null ? before.getCardDetailsAttack() : Integer.parseInt(before.getAtk());
 
         int diffAttack = newAttack - currentAttack;
         Player player = context.getPlayer(before);

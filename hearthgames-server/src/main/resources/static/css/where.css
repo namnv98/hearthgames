@@ -4,12 +4,14 @@
 
     .bs-callout { padding: 13px; margin: 13px 0; border-left-width: 3px; border-radius: 2px; }
     .file-location { font-size: 9px; }
+    .container { width: 683px; }
 }
 
 @media only screen and (min-height: 721px) {
 
     .bs-callout { padding: 20px; margin: 20px 0; border-left-width: 5px; border-radius: 3px; }
     .file-location { font-size: 14px; }
+    .container { width: 1024px; }
 }
 
 .bs-callout-info { border-left-color: #449D44; }

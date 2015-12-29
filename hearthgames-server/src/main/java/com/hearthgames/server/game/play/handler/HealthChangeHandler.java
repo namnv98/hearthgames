@@ -19,7 +19,7 @@ public class HealthChangeHandler implements Handler {
         Card after = context.getAfter(activity);
 
         int newHealth = Integer.parseInt(after.getHealth());
-        int currentHealth = Integer.parseInt(before.getHealth() == null ? before.getCardDetailsHealth() : before.getHealth());
+        int currentHealth = before.getHealth() == null ? before.getCardDetailsHealth() : Integer.parseInt(before.getHealth());
 
         int diffHealth = newHealth - currentHealth;
         Player player = context.getPlayer(before);

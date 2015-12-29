@@ -16,6 +16,7 @@
     .hearthgames-title { font-size: 53px; text-shadow: 2px 2px 4px #000; }
 
     .footer { margin: 13px 0 23px 0; }
+    .beta { width: 67px; height: 72px; background-size: 67px 72px; }
 }
 
 @media only screen and (min-height: 721px) {
@@ -36,6 +37,7 @@
     .hearthgames-title { font-size: 80px; text-shadow: 2px 2px 4px #000; }
 
     .footer { margin: 20px 0 30px 0; }
+    .beta { width: 100px; height: 115px; background-size: 100px 115px; }
 }
 
 
@@ -57,7 +59,7 @@ body input { color: #000; }
 .account-form input { color: #000; }
 .account-updated { color: #0FAF03; }
 
-.beta { position: fixed; top: 0; left: 0; width: 100px; height: 115px; background-image: url(http://images.hearthgames.com/misc/beta.png) }
+.beta { position: fixed; top: 0; left: 0; background-image: url(http://images.hearthgames.com/misc/beta.png) }
 
 .faq-question { font-weight: bold; margin-bottom: 5px; }
 .faq-answer { margin-bottom: 25px; }
@@ -110,3 +112,52 @@ table { color: #fff; border-color: #000; background-color: #2D2D2D; }
 .rare { color: #198EFF; }
 .epic { color: #AB48EE; }
 .legendary { color: #F07000; }
+
+.tabs-left > .nav-tabs {
+    border-bottom: 0;
+}
+
+.tab-content > .tab-pane,
+.pill-content > .pill-pane {
+    display: none;
+}
+
+.tab-content > .active,
+.pill-content > .active {
+    display: block;
+}
+
+.tabs-left > .nav-tabs > li {
+    float: none;
+}
+
+.tabs-left > .nav-tabs > li > a {
+    min-width: 74px;
+    margin-right: 0;
+    margin-bottom: 3px;
+}
+
+.tabs-left > .nav-tabs {
+    float: left;
+    margin-right: 19px;
+    border-right: 1px solid #ddd;
+}
+
+.tabs-left > .nav-tabs > li > a {
+    margin-right: -1px;
+    -webkit-border-radius: 4px 0 0 4px;
+    -moz-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+}
+
+.tabs-left > .nav-tabs > li > a:hover,
+.tabs-left > .nav-tabs > li > a:focus {
+    border-color: #eeeeee #dddddd #eeeeee #eeeeee;
+}
+
+.tabs-left > .nav-tabs .active > a,
+.tabs-left > .nav-tabs .active > a:hover,
+.tabs-left > .nav-tabs .active > a:focus {
+    border-color: #ddd transparent #ddd #ddd;
+    *border-right-color: #ffffff;
+}

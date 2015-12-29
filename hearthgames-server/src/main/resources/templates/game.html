@@ -15,69 +15,69 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container-fluid">
 
     <div th:replace="/fragments/beta-fragment::beta"></div>
 
     <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
     <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
-    <div class="game-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    <div class="row">
 
-    <ul class="nav nav-tabs">
-        <li><a data-toggle="tab" href="#menu1">Overview</a></li>
-        <li><a data-toggle="tab" href="#menu2">Card Summary</a></li>
-        <li><a data-toggle="tab" href="#menu3">Health/Armor</a></li>
-        <li><a data-toggle="tab" href="#menu4">Mana Summary</a></li>
-        <li><a data-toggle="tab" href="#menu5">Trades</a></li>
-        <li><a data-toggle="tab" href="#menu6">Card Advantage</a></li>
-        <li><a data-toggle="tab" href="#menu7">Board Control</a></li>
-        <li class="active"><a data-toggle="tab" href="#menu8">Replay</a></li>
-    </ul>
+        <div class="col-xs-1 col-md-1 tabs-left">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#replay">Replay</a></li>
+                <li><a data-toggle="tab" href="#overview">Overview</a></li>
+                <li><a data-toggle="tab" href="#stats">Stats</a></li>
+            </ul>
+        </div>
 
-    <div class="tab-content">
-        <div id="menu1" class="tab-pane">
-            <div class="versus-info">
-                <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span>
-                <span class="versus"> VS </span>
-                <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span>
+        <div class="col-xs-11 col-md-11 tab-content">
+            <div id="replay" class="tab-pane active">
+                <div id="game-board-container">
+                    <div id="game-board-content"></div>
+                </div>
+                <div id="game-board-actions-container">
+                    <div id="game-board-actions"></div>
+                </div>
             </div>
-            <div class="versus-info">
-                <span th:if="${versusInfo.friendlyName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span> has Won! </span>
-                <span th:if="${versusInfo.opposingName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span> has Won :( </span>
+            <div id="overview" class="tab-pane">
+                <div class="versus-info">
+                    <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span>
+                    <span class="versus"> VS </span>
+                    <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span>
+                </div>
+                <div class="versus-info">
+                    <span th:if="${versusInfo.friendlyName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.friendlyClass)}" th:text="${versusInfo.friendlyName}">Seekay</span> has Won! </span>
+                    <span th:if="${versusInfo.opposingName == versusInfo.winner}"> <span th:class="${#strings.toLowerCase(versusInfo.opposingClass)}" th:text="${versusInfo.opposingName}">Opponent</span> has Won :( </span>
+                </div>
+                <div class="versus-info">
+                    <span th:if="${versusInfo.quitter != null}"> <span th:class="${#strings.toLowerCase(versusInfo.quitterClass)}" th:text="${versusInfo.quitter}">Seekay</span> has Quit! </span>
+                </div>
+                <div class="versus-info-duration">
+                    <span>Duration: <span th:text="${versusInfo.duration}"></span></span>
+                </div>
+                <div th:include="/fragments/table-fragment::tablefrag (${cardInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'card-info','','',5)"></div>
             </div>
-            <div class="versus-info">
-                <span th:if="${versusInfo.quitter != null}"> <span th:class="${#strings.toLowerCase(versusInfo.quitterClass)}" th:text="${versusInfo.quitter}">Seekay</span> has Quit! </span>
+            <div id="stats" class="tab-pane">
+                <h3>Health/Armor Summary</h3>
+                <div th:include="/fragments/table-fragment::tablefrag (${healthArmorInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'health-info','turn','health-armor',3)"></div>
+                <h3>Mana Summary</h3>
+                <div th:include="/fragments/table-fragment::tablefrag (${manaInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'mana-info','','',2)"></div>
+                <h3>Trades</h3>
+                <div th:include="/fragments/table-fragment::tablefrag (${tradeInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'trade-info','','',6)"></div>
+                <h3>Card Advantage</h3>
+                <div th:include="/fragments/table-fragment::tablefrag (${cardAdvantageInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'card-advantage-info','turn','cadvantage-info',1)"></div>
+                <h3>Board Control</h3>
+                <div th:include="/fragments/table-fragment::tablefrag (${boardControlInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'board-control-info','turn','-bg bcontrol-info',4)"></div>
             </div>
-            <div class="versus-info-duration">
-                <span>Duration: <span th:text="${versusInfo.duration}"></span></span>
-            </div>
-        </div>
-        <div id="menu2" class="tab-pane">
-            <div th:include="/fragments/table-fragment::tablefrag (${cardInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'card-info','','',5)"></div>
-        </div>
-        <div id="menu3" class="tab-pane">
-            <div th:include="/fragments/table-fragment::tablefrag (${healthArmorInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'health-info','turn','health-armor',3)"></div>
-        </div>
-        <div id="menu4" class="tab-pane">
-            <div th:include="/fragments/table-fragment::tablefrag (${manaInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'mana-info','','',2)"></div>
-        </div>
-        <div id="menu5" class="tab-pane">
-            <div th:include="/fragments/table-fragment::tablefrag (${tradeInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'trade-info','','',6)"></div>
-        </div>
-        <div id="menu6" class="tab-pane">
-            <div th:include="/fragments/table-fragment::tablefrag (${cardAdvantageInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'card-advantage-info','turn','cadvantage-info',1)"></div>
-        </div>
-        <div id="menu7" class="tab-pane">
-            <div th:include="/fragments/table-fragment::tablefrag (${boardControlInfos},${versusInfo.friendlyClass},${versusInfo.opposingClass},'board-control-info','turn','-bg bcontrol-info',4)"></div>
-        </div>
-        <div id="menu8" class="tab-pane active">
-            <div id="game-board-content"></div>
-            <div id="game-board-actions"></div>
         </div>
     </div>
 
-    <div th:replace="/fragments/footer-fragment::footer"></div>
+
+    <div class="footer-container">
+        <div th:replace="/fragments/footer-fragment::footer"></div>
+    </div>
 </div>
 
 <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
@@ -87,36 +87,37 @@
 
 <script id="game-board-template" type="text/x-handlebars-template" th:inline="javascript">
 
-    <div id="turn-status">
-        {{#with turnData}}
-            {{#if turn}}
-                <span>Turn {{turn}}, Board {{board}}</span>
-            {{else}}
-                <span>Mulligan, Board {{board}}</span>
-            {{/if}}
-        {{/with}}
-        <div class="next-prev-buttons">
-            <div class="prev prev-turn"></div><div class="text">Turn</div><div class="next next-turn"></div>
-        </div>
-        <div class="next-prev-buttons">
-            <div class="prev prev-board"></div><div class="text">Board</div><div class="next next-board"></div>
-        </div>
-        <div id="autoplay-content">
-            <span class="autoplay">AutoPlay : </span>
-            <span class="autoplay-toggle">{{#if autoplay}}<span class="on">ON</span>{{else}}<span class="off">OFF</span>{{/if}}</span>
-        </div>
-        <div id="autoplay-duration-content">
-            <span class="minus-duration">-</span> <span class="autoplay-duration">{{duration}}</span> <span class="plus-duration">+</span>
-        </div>
-    </div>
-
-    <div id="whose-turn">
-        {{#with turnData}}
-            <span class="{{status}}">{{who}}</span>
-        {{/with}}
-    </div>
-
     <div id="game-board">
+
+        <div id="turn-status">
+            {{#with turnData}}
+            {{#if turn}}
+            <span>Turn {{turn}}, Board {{board}}</span>
+            {{else}}
+            <span>Mulligan, Board {{board}}</span>
+            {{/if}}
+            {{/with}}
+            <div class="next-prev-buttons">
+                <div class="prev prev-turn"></div><div class="text">Turn</div><div class="next next-turn"></div>
+            </div>
+            <div class="next-prev-buttons">
+                <div class="prev prev-board"></div><div class="text">Board</div><div class="next next-board"></div>
+            </div>
+            <div id="autoplay-content">
+                <span class="autoplay">AutoPlay : </span>
+                <span class="autoplay-toggle">{{#if autoplay}}<span class="on">ON</span>{{else}}<span class="off">OFF</span>{{/if}}</span>
+            </div>
+            <div id="autoplay-duration-content">
+                <span class="minus-duration">-</span> <span class="autoplay-duration">{{duration}}</span> <span class="plus-duration">+</span>
+            </div>
+        </div>
+
+        <div id="whose-turn">
+            {{#with turnData}}
+            <span class="{{status}}">{{who}}</span>
+            {{/with}}
+        </div>
+
         {{#with friendlyHero}}
         <div id="friendly-hero" class="{{id}}_h">
             <div class="hero-health-bg">
@@ -543,7 +544,6 @@
         var updateBoardActions = function(actions) {
 
             var gba = $('#game-board-actions');
-            gba.html('');
             for (var i=0; i < actions.length; i++) {
                 var action = actions[i];
 
@@ -568,6 +568,8 @@
                 if (action.type == 'trigger') gba.append(triggerTemplate(action));
                 if (action.type == 'attack') gba.append(attackTemplate(action));
             }
+            var height = gba[0].scrollHeight;
+            gba.stop().animate({scrollTop: height}, 500);
         };
 
         var autoplay = false;

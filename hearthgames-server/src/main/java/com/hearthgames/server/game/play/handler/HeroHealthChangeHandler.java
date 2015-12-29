@@ -21,7 +21,7 @@ public class HeroHealthChangeHandler implements Handler {
         Card before = context.getBefore(activity);
         Card after = context.getAfter(activity);
 
-        int health = Integer.parseInt(before.getCardDetailsHealth());
+        int health = before.getCardDetailsHealth();
         int damage = Integer.parseInt(after.getDamage());
         int newHealth = health - damage;
 

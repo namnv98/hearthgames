@@ -4,6 +4,8 @@ public class MinionInPlay extends CardIn {
 
     private String id;
     private boolean frozen;
+    private boolean silenced;
+    private boolean stealthed;
     private boolean taunting;
     private boolean shielded;
     private boolean legendary;
@@ -29,6 +31,22 @@ public class MinionInPlay extends CardIn {
 
     public void setFrozen(boolean frozen) {
         this.frozen = frozen;
+    }
+
+    public boolean isSilenced() {
+        return silenced;
+    }
+
+    public void setSilenced(boolean silenced) {
+        this.silenced = silenced;
+    }
+
+    public boolean isStealthed() {
+        return stealthed;
+    }
+
+    public void setStealthed(boolean stealthed) {
+        this.stealthed = stealthed;
     }
 
     public boolean isTaunting() {

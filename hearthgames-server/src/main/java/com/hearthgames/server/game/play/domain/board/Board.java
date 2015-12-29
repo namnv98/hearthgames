@@ -16,7 +16,7 @@ import java.util.List;
 public class Board implements Action {
 
     public static final String TRUE = "1";
-    public static final String LEGENDARY = "Legendary";
+    public static final String LEGENDARY = "LEGENDARY";
 
     private TurnData turnData = new TurnData();
 
@@ -185,7 +185,7 @@ public class Board implements Action {
                 MinionInPlay minionInPlay = new MinionInPlay();
                 minionInPlay.setId(c.getCardid());
                 int health = c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0;
-                int definitionHealth = Integer.parseInt(c.getCardDetailsHealth());
+                int definitionHealth = c.getCardDetailsHealth();
                 if (health > definitionHealth) {
                     minionInPlay.setHealthBuffed(true);
                 }
@@ -198,7 +198,7 @@ public class Board implements Action {
                 }
 
                 int attack = c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0;
-                int definitionAttack = Integer.parseInt(c.getCardDetailsAttack());
+                int definitionAttack = c.getCardDetailsAttack();
                 if (attack > definitionAttack) {
                     minionInPlay.setAttackBuffed(true);
                 }
@@ -206,20 +206,22 @@ public class Board implements Action {
                 minionInPlay.setHealth(health);
                 minionInPlay.setAttack(attack);
                 minionInPlay.setFrozen(c.getFrozen() != null && TRUE.equals(c.getFrozen()));
-                minionInPlay.setLegendary(LEGENDARY.equals(c.getCardDetails().getRarity()));
+                minionInPlay.setLegendary(LEGENDARY.equalsIgnoreCase(c.getCardDetails().getRarity()));
                 minionInPlay.setShielded(TRUE.equals(c.getDivineShield()));
                 minionInPlay.setTaunting(TRUE.equals(c.getTaunt()));
                 minionInPlay.setExhausted(TRUE.equals(c.getExhausted()));
+                minionInPlay.setSilenced(TRUE.equals(c.getSilenced()));
+                minionInPlay.setStealthed(TRUE.equals(c.getStealth()));
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getMinionsInPlay().add(minionInPlay);
                 } else {
                     opposingHero.getMinionsInPlay().add(minionInPlay);
                 }
-                if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("Inspire")) {
+                if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("INSPIRE")) {
                     minionInPlay.setIcon("inspire");
                 } else if (TRUE.equals(c.getTriggerVisual())) {
                     minionInPlay.setIcon("trigger");
-                } else if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("Deathrattle")) {
+                } else if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("DEATHRATTLE")) {
                     minionInPlay.setIcon("deathrattle");
                 }
                 minionInPlay.setPosition(Integer.parseInt(c.getZonePosition()));
@@ -237,7 +239,7 @@ public class Board implements Action {
                 Weapon weapon = new Weapon();
                 weapon.setId(c.getCardid());
                 weapon.setAttack(c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0);
-                int durability = Integer.parseInt(c.getCardDetails().getDurability());
+                int durability = c.getCardDetails().getDurability();
                 int damage = c.getDamage() != null ? Integer.parseInt(c.getDamage()) : 0;
 
                 weapon.setDurability(durability - damage);

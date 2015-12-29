@@ -58,7 +58,7 @@ public class PlayerHandler implements Handler {
                 Card cardUsedOn = (Card) usedOn;
                 CardDetails cardDetails = cardUsedOn.getCardDetails();
                 if (cardDetails != null) {
-                    int cost = Integer.parseInt(cardDetails.getCost());
+                    int cost = cardDetails.getCost();
                     if (manaUsed < cost) {
                         result.addManaSaved(cardUsedOn, cost - manaUsed);
                     } else if (manaUsed > cost){

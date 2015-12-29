@@ -93,6 +93,8 @@ public class Card extends Entity implements Serializable {
     private String predamage;
     private String revealed;
     private String frozen;
+    private String silenced;
+    private String stealth;
 
     private CardDetails cardDetails;
 
@@ -177,7 +179,7 @@ public class Card extends Entity implements Serializable {
     }
 
     public String getRarity() {
-        return rarity;
+        return rarity != null ? rarity : "none";
     }
 
     public void setRarity(String rarity) {
@@ -520,6 +522,22 @@ public class Card extends Entity implements Serializable {
         this.frozen = frozen;
     }
 
+    public String getSilenced() {
+        return silenced;
+    }
+
+    public void setSilenced(String silenced) {
+        this.silenced = silenced;
+    }
+
+    public String getStealth() {
+        return stealth;
+    }
+
+    public void setStealth(String stealth) {
+        this.stealth = stealth;
+    }
+
     public CardDetails getCardDetails() {
         return cardDetails;
     }
@@ -549,16 +567,16 @@ public class Card extends Entity implements Serializable {
         return cardDetails != null ? cardDetails.getText() : "";
     }
 
-    public String getCardDetailsCost() {
-        return cardDetails != null && cardDetails.getCost() != null ? cardDetails.getCost() : "0";
+    public int getCardDetailsCost() {
+        return cardDetails != null ? cardDetails.getCost() : 0;
     }
 
-    public String getCardDetailsHealth() {
-        return cardDetails != null && cardDetails.getHealth() != null ? cardDetails.getHealth() : "0";
+    public int getCardDetailsHealth() {
+        return cardDetails != null ? cardDetails.getHealth() : 0;
     }
 
-    public String getCardDetailsAttack() {
-        return cardDetails != null && cardDetails.getAttack() != null ? cardDetails.getAttack() : "0";
+    public int getCardDetailsAttack() {
+        return cardDetails != null ? cardDetails.getAttack() : 0;
     }
 
     public boolean isSpell() {
