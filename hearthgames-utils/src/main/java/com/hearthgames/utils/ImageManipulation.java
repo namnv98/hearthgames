@@ -1,7 +1,5 @@
 package com.hearthgames.utils;
 
-import net.coobird.thumbnailator.filters.Watermark;
-import net.coobird.thumbnailator.geometry.Positions;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -17,7 +15,7 @@ public class ImageManipulation {
         if (newFile.isDirectory()) {
             File[] files = newFile.listFiles();
             if (files != null && files.length > 0) {
-                for (File file: files) {
+                for (File file : files) {
                     diffFiles(file);
                 }
             }
@@ -37,88 +35,102 @@ public class ImageManipulation {
     public static void main(String[] args) throws Exception {
 
 
+        heropowers();
 
-
-
-        File inputDir = new File("c:\\images\\weaponimages");
-        File[] files = inputDir.listFiles();
-        if (files != null) {
-            for (File file1: files) {
-
-                if (file1.getName().equals("Foam_Sword_D.png") || file1.getName().equals("W17_a019_D.png")) {
-                    File file2 = new File("C:\\images\\assets\\weapon-mask.png");
-                    File outputFile = new File("C:\\images\\weaponoutput\\"+file1.getName());
-
-                    try {
-                        combineWeaponImages(file1, file2, outputFile);
-                    } catch (Exception e) {
-                        System.out.println("failed to convert + " + file1.getAbsolutePath());
-                    }
-
-                }
-
-
-            }
-        }
-
-
-
-
-
-
-//        File inputDir = new File("c:\\images\\temp");
-//        File[] files = inputDir.listFiles();
-//        if (files != null) {
-//            for (File file1: files) {
-//
-//                File file2 = new File("C:\\images\\oval.png");
-//                File outputFile = new File("C:\\images\\output2\\"+file1.getName());
-//
-//                try {
-//                    combineImages(file1, file2, outputFile);
-//                } catch (Exception e) {
-//                    System.out.println("failed to convert + " + file1.getAbsolutePath());
-//                }
-//
-//            }
-//        }
-
-
-//        File inputDir = new File("c:\\images\\heropowers");
-//        File[] files = inputDir.listFiles();
-//        if (files != null) {
-//            for (File file1: files) {
-//
-//                File file2 = new File("C:\\images\\hpmask2.png");
-//                File outputFile = new File("C:\\images\\hpoutput2\\"+file1.getName());
-//
-//                try {
-//                    combineHeroPowerImages(file1, file2, outputFile);
-//                } catch (Exception e) {
-//                    System.out.println("failed to convert + " + file1.getAbsolutePath());
-//                }
-//
-//            }
-//        }
-
-
-//        BufferedImage image = ImageIO.read(new File("c:\\images\\bubble\\DivineShield_Bubble1.png"));
-//        BufferedImage mask = ImageIO.read(new File("c:\\images\\bubble\\DivineShield_Mask2.png"));
-//
-//        Image transpImg = TransformGrayToTransparency(mask);
-//        BufferedImage result = ApplyTransparency(image, transpImg);
-//
-//        ImageIO.write(result, "PNG", new File("c:\\images\\bubble\\output.png"));
 
     }
 
+    private static void weapons() {
+        File inputDir = new File("c:\\images\\weaponimages");
+        File[] files = inputDir.listFiles();
+        if (files != null) {
+            for (File file1 : files) {
+                File file2 = new File("C:\\images\\assets\\weapon-mask.png");
+                File outputFile = new File("C:\\images\\weaponoutput2\\" + file1.getName());
 
-    private static Image TransformGrayToTransparency(BufferedImage image)
-    {
-        ImageFilter filter = new RGBImageFilter()
-        {
-            public final int filterRGB(int x, int y, int rgb)
-            {
+                try {
+                    combineWeaponImages(file1, file2, outputFile);
+                } catch (Exception e) {
+                    System.out.println("failed to convert + " + file1.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+
+    private static void heropowers() {
+        File inputDir = new File("c:\\images\\heropowers");
+        File[] files = inputDir.listFiles();
+        if (files != null) {
+            for (File file1 : files) {
+
+                File file2 = new File("C:\\images\\assets\\hpmask3.png");
+                File outputFile = new File("C:\\images\\hpoutput3\\" + file1.getName());
+
+                try {
+                    combineHeroPowerImages(file1, file2, outputFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("failed to convert + " + file1.getAbsolutePath());
+                }
+
+            }
+        }
+    }
+
+
+    private static void newMinions() {
+        File inputDir = new File("c:\\images\\temp");
+        File[] files = inputDir.listFiles();
+        if (files != null) {
+            for (File file1 : files) {
+
+                File file2 = new File("C:\\images\\oval.png");
+                File outputFile = new File("C:\\images\\output2\\" + file1.getName());
+
+                try {
+                    combineImages(file1, file2, outputFile);
+                } catch (Exception e) {
+                    System.out.println("failed to convert + " + file1.getAbsolutePath());
+                }
+
+            }
+        }
+    }
+
+    private static void existingMinions() {
+        File inputDir = new File("c:\\images\\minons");
+        File[] files = inputDir.listFiles();
+        if (files != null) {
+            for (File file1 : files) {
+
+                File file2 = new File("C:\\images\\assets\\oval2.png");
+                File outputFile = new File("C:\\images\\output2\\" + file1.getName());
+
+                try {
+                    combineExistingMinionImages(file1, file2, outputFile);
+                } catch (Exception e) {
+                    System.out.println("failed to convert + " + file1.getAbsolutePath());
+                }
+
+            }
+        }
+    }
+
+    private static void bubble() throws Exception {
+        BufferedImage image = ImageIO.read(new File("c:\\images\\bubble\\DivineShield_Bubble1.png"));
+        BufferedImage mask = ImageIO.read(new File("c:\\images\\bubble\\DivineShield_Mask2.png"));
+
+        Image transpImg = TransformGrayToTransparency(mask);
+        BufferedImage result = ApplyTransparency(image, transpImg);
+
+        ImageIO.write(result, "PNG", new File("c:\\images\\bubble\\output.png"));
+    }
+
+
+    private static Image TransformGrayToTransparency(BufferedImage image) {
+        ImageFilter filter = new RGBImageFilter() {
+            public final int filterRGB(int x, int y, int rgb) {
                 return (rgb << 8) & 0xFF000000;
             }
         };
@@ -127,8 +139,7 @@ public class ImageManipulation {
         return Toolkit.getDefaultToolkit().createImage(ip);
     }
 
-    private static BufferedImage ApplyTransparency(BufferedImage image, Image mask)
-    {
+    private static BufferedImage ApplyTransparency(BufferedImage image, Image mask) {
         BufferedImage dest = new BufferedImage(
                 image.getWidth(), image.getHeight(),
                 BufferedImage.TYPE_INT_ARGB);
@@ -164,7 +175,7 @@ public class ImageManipulation {
 
         BufferedImage croppedImage = transparentImage.getSubimage(29, 25, 235, 205);
 //
-        BufferedImage finalImage = toBufferedImage(croppedImage.getScaledInstance(100, 87, Image.SCALE_SMOOTH));
+        BufferedImage finalImage = toBufferedImage(croppedImage.getScaledInstance(176, 155, Image.SCALE_SMOOTH));
 
         ImageIO.write(finalImage, "PNG", outputFile);
 
@@ -177,6 +188,11 @@ public class ImageManipulation {
         BufferedImage combined = new BufferedImage(329, 454, BufferedImage.TYPE_INT_ARGB);
 
         BufferedImage resized = toBufferedImage(originalImage.getScaledInstance(329, 454, Image.SCALE_SMOOTH));
+
+//        BufferedImage combined = new BufferedImage(243, 336, BufferedImage.TYPE_INT_ARGB);
+//
+//        BufferedImage resized = toBufferedImage(originalImage.getScaledInstance(243, 336, Image.SCALE_SMOOTH));
+
 
         BufferedImage heropowermask = ImageIO.read(file2);
 
@@ -191,20 +207,51 @@ public class ImageManipulation {
         Image imageWithTransparency = makeColorTransparent(combined);
         BufferedImage transparentImage = imageToBufferedImage(imageWithTransparency);
 
+
+        ImageIO.write(transparentImage, "PNG", new File("C:\\images\\hpoutput3\\1.png"));
+
 //        BufferedImage croppedImage = transparentImage.getSubimage(54, 26, 190, 174);
-        BufferedImage croppedImage = transparentImage.getSubimage(74, 61, 190, 174);
-//
-        BufferedImage finalImage = toBufferedImage(croppedImage.getScaledInstance(95, 87, Image.SCALE_SMOOTH));
+        BufferedImage croppedImage = transparentImage.getSubimage(86, 57, 157, 167);
+//        BufferedImage croppedImage = transparentImage.getSubimage(44, 5, 157, 167);
+//        ImageIO.write(croppedImage, "PNG", new File("C:\\images\\hpoutput3\\2.png"));
 
-        ImageIO.write(finalImage, "PNG", outputFile);
+//        BufferedImage finalImage = toBufferedImage(croppedImage.getScaledInstance(157, 169, Image.SCALE_SMOOTH));
 
+        ImageIO.write(croppedImage, "PNG", outputFile);
+
+    }
+
+
+    public static void combineExistingMinionImages(File file1, File file2, File outputFile) throws IOException {
+
+        BufferedImage originalImage = ImageIO.read(file1);
+
+        BufferedImage combined = new BufferedImage(110, 130, BufferedImage.TYPE_INT_ARGB);
+
+        BufferedImage oval = ImageIO.read(file2);
+
+        // paint both images, preserving the alpha channels
+        Graphics g = combined.getGraphics();
+        g.drawImage(originalImage, 9, 5, null);
+//            g.drawImage(resizeImagePng, 0, 0, null);
+        g.drawImage(oval, 0, 0, null);
+
+//        ImageIO.write(combined, "png", new File(file1.getName()+".combined.png"));
+
+        Image imageWithTransparency = makeColorTransparent(combined);
+        BufferedImage transparentImage = imageToBufferedImage(imageWithTransparency);
+
+
+        BufferedImage croppedImage = transparentImage.getSubimage(6, 4, 94, 123);
+
+        ImageIO.write(croppedImage, "PNG", outputFile);
     }
 
 
     public static void combineImages(File file1, File file2, File outputFile) throws IOException {
 
         BufferedImage originalImage = ImageIO.read(file1);
-        int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+        int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
@@ -239,8 +286,7 @@ public class ImageManipulation {
     }
 
 
-    private static BufferedImage imageToBufferedImage(final Image image)
-    {
+    private static BufferedImage imageToBufferedImage(final Image image) {
         final BufferedImage bufferedImage =
                 new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g2 = bufferedImage.createGraphics();
@@ -249,22 +295,16 @@ public class ImageManipulation {
         return bufferedImage;
     }
 
-    private static Image makeColorTransparent(final BufferedImage im)
-    {
-        final ImageFilter filter = new RGBImageFilter()
-        {
+    private static Image makeColorTransparent(final BufferedImage im) {
+        final ImageFilter filter = new RGBImageFilter() {
             // the color we are looking for (white)... Alpha bits are set to opaque
             public int markerRGB = 0xFFFFFFFF;
 
-            public final int filterRGB(final int x, final int y, final int rgb)
-            {
-                if ((rgb | 0xFF000000) == markerRGB)
-                {
+            public final int filterRGB(final int x, final int y, final int rgb) {
+                if ((rgb | 0xFF000000) == markerRGB) {
                     // Mark the alpha bits as zero - transparent
                     return 0x00FFFFFF & rgb;
-                }
-                else
-                {
+                } else {
                     // nothing to do
                     return rgb;
                 }
@@ -275,7 +315,7 @@ public class ImageManipulation {
         return Toolkit.getDefaultToolkit().createImage(ip);
     }
 
-    private static BufferedImage resizeImage(BufferedImage originalImage, int type){
+    private static BufferedImage resizeImage(BufferedImage originalImage, int type) {
         BufferedImage resizedImage = new BufferedImage(400, 400, type);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(originalImage, 47, 42, 307, 307, null);
@@ -285,10 +325,8 @@ public class ImageManipulation {
     }
 
 
-    public static BufferedImage toBufferedImage(Image img)
-    {
-        if (img instanceof BufferedImage)
-        {
+    public static BufferedImage toBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
             return (BufferedImage) img;
         }
 
