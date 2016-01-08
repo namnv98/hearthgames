@@ -20,8 +20,10 @@ public class CardDiscardedSerializer extends JsonSerializer<CardDiscarded> {
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getCard().getName());
-            g.writeFieldName("id");
+            g.writeFieldName("cardId");
             g.writeString(value.getCard().getCardDetails().getId());
+            g.writeFieldName("id");
+            g.writeString(value.getCard().getId());
             g.writeFieldName("rarity");
             g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
@@ -30,8 +32,10 @@ public class CardDiscardedSerializer extends JsonSerializer<CardDiscarded> {
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getCause().getName());
-            g.writeFieldName("id");
+            g.writeFieldName("cardId");
             g.writeString(value.getCause().getCardDetails().getId());
+            g.writeFieldName("id");
+            g.writeString(value.getCause().getId());
             g.writeFieldName("rarity");
             g.writeString(value.getCause().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.NumberFormat;
 import java.util.IntSummaryStatistics;
-import java.util.Set;
+import java.util.List;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
@@ -82,19 +82,19 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
         return table;
     }
 
-    private long calcFriendlyManaGained(Set<Turn> turns, Player friendly) {
+    private long calcFriendlyManaGained(List<Turn> turns, Player friendly) {
         return getMana(turns, friendly, Turn::getManaGained);
     }
 
-    private long calcFriendlyManaUsed(Set<Turn> turns, Player friendly) {
+    private long calcFriendlyManaUsed(List<Turn> turns, Player friendly) {
         return getMana(turns, friendly, Turn::getManaUsed);
     }
 
-    private long calcFriendlyManaSaved(Set<Turn> turns, Player friendly) {
+    private long calcFriendlyManaSaved(List<Turn> turns, Player friendly) {
         return getMana(turns, friendly, Turn::getManaSaved);
     }
 
-    private long calcFriendlyManaLost(Set<Turn> turns, Player friendly) {
+    private long calcFriendlyManaLost(List<Turn> turns, Player friendly) {
         return getMana(turns, friendly, Turn::getManaLost);
     }
 
@@ -102,23 +102,23 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
         return (float) friendlyManaUsed / (friendlyTotalMana - friendlyManaSaved - friendlyManaNotNeeded);
     }
 
-    private long calcOpposingManaGained(Set<Turn> turns, Player opposing) {
+    private long calcOpposingManaGained(List<Turn> turns, Player opposing) {
         return getMana(turns, opposing, Turn::getManaGained);
     }
 
-    private long calcOpposingManaUsed(Set<Turn> turns, Player opposing) {
+    private long calcOpposingManaUsed(List<Turn> turns, Player opposing) {
         return getMana(turns, opposing, Turn::getManaUsed);
     }
 
-    private long calcOpposingManaSaved(Set<Turn> turns, Player opposing) {
+    private long calcOpposingManaSaved(List<Turn> turns, Player opposing) {
         return getMana(turns, opposing, Turn::getManaSaved);
     }
 
-    private long calcOpposingManaLost(Set<Turn> turns, Player friendly) {
+    private long calcOpposingManaLost(List<Turn> turns, Player friendly) {
         return getMana(turns, friendly, Turn::getManaLost);
     }
 
-    private long getMana(Set<Turn> turns, Player player, ToIntFunction<Turn> turnToIntFunction) {
+    private long getMana(List<Turn> turns, Player player, ToIntFunction<Turn> turnToIntFunction) {
         IntSummaryStatistics stats = turns.stream().filter(t -> t.getWhoseTurn() == player).collect(Collectors.summarizingInt(turnToIntFunction));
         return stats.getSum();
     }

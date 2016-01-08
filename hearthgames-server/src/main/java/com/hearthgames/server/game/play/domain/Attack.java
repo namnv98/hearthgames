@@ -5,8 +5,10 @@ import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.domain.json.AttackSerializer;
 
+import java.io.Serializable;
+
 @JsonSerialize(using = AttackSerializer.class)
-public class Attack implements Action {
+public class Attack implements Action, Serializable {
 
     private Card attacker;
     private Card defender;

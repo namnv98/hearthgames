@@ -1,10 +1,23 @@
 package com.hearthgames.server.game.play.domain.board;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hearthgames.server.game.play.domain.board.json.WeaponSerializer;
+
+@JsonSerialize(using = WeaponSerializer.class)
 public class Weapon {
 
     private String id;
-    private int attack;
-    private int durability;
+    private String cardId;
+    private Integer attack;
+    private Integer durability;
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
 
     public String getId() {
         return id;
@@ -14,19 +27,19 @@ public class Weapon {
         this.id = id;
     }
 
-    public int getAttack() {
+    public Integer getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
+    public void setAttack(Integer attack) {
         this.attack = attack;
     }
 
-    public int getDurability() {
+    public Integer getDurability() {
         return durability;
     }
 
-    public void setDurability(int durability) {
+    public void setDurability(Integer durability) {
         this.durability = durability;
     }
 }

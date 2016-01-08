@@ -15,12 +15,11 @@
 </head>
 <body>
 
+<div th:replace="/fragments/nav-fragment::nav"></div>
+
 <div class="container-fluid">
 
     <div th:replace="/fragments/beta-fragment::beta"></div>
-
-    <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
-    <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
     <div class="row">
 
@@ -34,11 +33,22 @@
 
         <div class="col-xs-11 col-md-11 tab-content">
             <div id="replay" class="tab-pane active">
-                <div id="game-board-container">
-                    <div id="game-board-content"></div>
+                <div id="play-area-container">
+                    <div id="play-area"></div>
                 </div>
-                <div id="game-board-actions-container">
-                    <div id="game-board-actions"></div>
+                <div id="play-area-actions-container">
+                    <div id="play-area-actions"></div>
+                    <div id="game-board-controls">
+                        <div class="control"><div class="fast-backward"></div></div>
+                        <div class="control"><div class="step-backward"></div></div>
+                        <div class="control"><div class="rewind"></div></div>
+                        <div class="control"><div class="pause"></div></div>
+                        <div class="control"><div class="play"></div></div>
+                        <div class="control"><div class="forward"></div></div>
+                        <div class="control"><div class="step-forward"></div></div>
+                        <div class="control"><div class="fast-forward"></div></div>
+                    </div>
+                    <div id="game-board-status"><span class="paused">The game is paused.  Press Play to resume replay.</span></div>
                 </div>
             </div>
             <div id="overview" class="tab-pane">
@@ -88,247 +98,224 @@
 <script id="game-board-template" type="text/x-handlebars-template" th:inline="javascript">
 
     <div id="game-board">
+    </div>
 
-        <div id="turn-status">
-            {{#with turnData}}
-            {{#if turn}}
-            <span>Turn {{turn}}, Board {{board}}</span>
-            {{else}}
-            <span>Mulligan, Board {{board}}</span>
-            {{/if}}
-            {{/with}}
-            <div class="next-prev-buttons">
-                <div class="prev prev-turn"></div><div class="text">Turn</div><div class="next next-turn"></div>
-            </div>
-            <div class="next-prev-buttons">
-                <div class="prev prev-board"></div><div class="text">Board</div><div class="next next-board"></div>
-            </div>
-            <div id="autoplay-content">
-                <span class="autoplay">AutoPlay : </span>
-                <span class="autoplay-toggle">{{#if autoplay}}<span class="on">ON</span>{{else}}<span class="off">OFF</span>{{/if}}</span>
-            </div>
-            <div id="autoplay-duration-content">
-                <span class="minus-duration">-</span> <span class="autoplay-duration">{{duration}}</span> <span class="plus-duration">+</span>
-            </div>
-        </div>
-
-        <div id="whose-turn">
-            {{#with turnData}}
-            <span class="{{status}}">{{who}}</span>
-            {{/with}}
-        </div>
-
-        {{#with friendlyHero}}
-        <div id="friendly-hero" class="{{id}}_h">
-            <div class="hero-health-bg">
-                <div class="{{#if damaged}}damaged{{/if}} hero-health-amount">{{health}}</div>
-            </div>
-            {{#if armor}}
-            <div class="hero-armor-bg">
-                <div class="hero-armor-amount">{{armor}}</div>
-            </div>
-            {{/if}}
-            {{#if attack}}
-            <div class="hero-attack-bg">
-                <div class="hero-attack-amount">{{attack}}</div>
-            </div>
-            {{/if}}
-            {{#each cardsInSecret}}
-            <div class="secret secret{{@index}} {{cardClass}}-secret tt tt-{{id}}"></div>
-            {{/each}}
-        </div>
-        <div id="friendly-hero-power">
-            <div class="heropower">
-                {{#if powerUsed}}
-                <div class="tt tt-{{powerId}} used"></div>
-                {{else}}
-                <div class="tt tt-{{powerId}} {{powerId}}"></div>
-                {{/if}}
-            </div>
-        </div>
-        <div id="friendly-weapon">
-            <div class="weapon">
-                {{#if weapon}}
-                <div class="tt tt-{{weapon.id}} {{weapon.id}}">
-                    <div class="attack">
-                        <div class="amount">{{weapon.attack}}</div>
-                    </div>
-                    <div class="durability">
-                        <div class="amount">{{weapon.durability}}</div>
-                    </div>
-                </div>
-                {{/if}}
-            </div>
-        </div>
-        <div id="friendly-hand">
-            {{#each cardsInHand}}
-            <div class="thumb">
-                <div class="tt tt-{{id}} {{id}}"></div>
-            </div>
-            {{/each}}
-        </div>
-        <div id="friendly-play">
-            {{#each minionsInPlay}}
-            <div class="tt minion tt-{{id}}">
-                <div class="card {{id}}"></div>
-                <div class="attack">
-                    <div class="amount {{#if attackBuffed}} buffed {{/if}}">{{attack}}</div>
-                </div>
-                <div class="health">
-                    <div class="amount {{#if damaged}} damaged {{else if healthBuffed}} buffed {{/if}}">{{health}}</div>
-                </div>
-                {{#if frozen}}
-                <div class="frozen"></div>
-                {{/if}}
-                {{#if shielded}}
-                <div class="shielded"></div>
-                {{/if}}
-                {{#if legendary}}
-                <div class="legendary"></div>
-                {{/if}}
-                {{#if taunting}}
-                <div class="taunting"></div>
-                {{/if}}
-                {{#if exhausted}}
-                <div class="exhausted"></div>
-                {{/if}}
-                {{#if icon}}
-                <div class="{{icon}}"></div>
-                {{/if}}
-            </div>
-            {{/each}}
-        </div>
-        <div id="friendly-mana">
-            <div class="amount">{{mana}} / {{manaTotal}}</div>
-        </div>
-        <div id="friendly-graveyard"></div>
-        <div id="friendly-deck"></div>
-        {{/with}}
-
-
-        {{#with opposingHero}}
-        <div id="opposing-hero" class="{{id}}_h">
-            <div class="hero-health-bg">
-                <div class="{{#if damaged}}damaged{{/if}} hero-health-amount">{{health}}</div>
-            </div>
-            {{#if armor}}
-            <div class="hero-armor-bg">
-                <div class="hero-armor-amount">{{armor}}</div>
-            </div>
-            {{/if}}
-            {{#if attack}}
-            <div class="hero-attack-bg">
-                <div class="hero-attack-amount">{{attack}}</div>
-            </div>
-            {{/if}}
-            {{#each cardsInSecret}}
-            <div class="secret secret{{@index}} {{cardClass}}-secret tt tt-{{id}}"></div>
-            {{/each}}
-        </div>
-        <div id="opposing-hero-power">
-            <div class="heropower">
-                {{#if powerUsed}}
-                <div class="tt tt-{{powerId}} used"></div>
-                {{else}}
-                <div class="tt tt-{{powerId}} {{powerId}}"></div>
-                {{/if}}
-            </div>
-        </div>
-        <div id="opposing-weapon">
-            <div class="weapon">
-                {{#if weapon}}
-                <div class="tt tt-{{weapon.id}} {{weapon.id}}">
-                    <div class="attack">
-                        <div class="amount">{{weapon.attack}}</div>
-                    </div>
-                    <div class="durability">
-                        <div class="amount">{{weapon.durability}}</div>
-                    </div>
-                </div>
-                {{/if}}
-            </div>
-        </div>
-        <div id="opposing-hand">
-            {{#each cardsInHand}}
-            <div class="thumb">
-                <div class="tt tt-{{id}} {{id}}"></div>
-            </div>
-            {{/each}}
-        </div>
-        <div id="opposing-play">
-            {{#each minionsInPlay}}
-            <div class="tt minion tt-{{id}}">
-                <div class="card {{id}}"></div>
-                <div class="attack">
-                    <div class="amount {{#if attackBuffed}} buffed {{/if}}">{{attack}}</div>
-                </div>
-                <div class="health">
-                    <div class="amount {{#if damaged}} damaged {{else if healthBuffed}} buffed {{/if}}">{{health}}</div>
-                </div>
-                {{#if frozen}}
-                <div class="frozen"></div>
-                {{/if}}
-                {{#if shielded}}
-                <div class="shielded"></div>
-                {{/if}}
-                {{#if legendary}}
-                <div class="legendary"></div>
-                {{/if}}
-                {{#if taunting}}
-                <div class="taunting"></div>
-                {{/if}}
-                {{#if exhausted}}
-                <div class="exhausted"></div>
-                {{/if}}
-                {{#if icon}}
-                <div class="{{icon}}"></div>
-                {{/if}}
-            </div>
-            {{/each}}
-        </div>
-        <div id="opposing-mana">
-            <div class="amount">{{mana}} / {{manaTotal}}</div>
-        </div>
-        <div id="opposing-graveyard"></div>
-        <div id="opposing-deck"></div>
+    <div id="whose-turn">
+        {{#with turnData}}
+        <span class="{{status}}">{{who}}</span>
         {{/with}}
     </div>
+
+    {{#with friendlyHero}}
+    <div id="friendly-hero" class="{{cardId}}_h card-{{id}}">
+        <div class="hero-health-bg">
+            <div class="{{#if damaged}}damaged{{/if}} hero-health-amount">{{health}}</div>
+        </div>
+        {{#if armor}}
+        <div class="hero-armor-bg">
+            <div class="hero-armor-amount">{{armor}}</div>
+        </div>
+        {{/if}}
+        {{#if attack}}
+        <div class="hero-attack-bg">
+            <div class="hero-attack-amount">{{attack}}</div>
+        </div>
+        {{/if}}
+        {{#each cardsInSecret}}
+        <div class="secret secret{{@index}} {{cardClass}}-secret tt tt-{{cardId}}"></div>
+        {{/each}}
+    </div>
+    <div id="friendly-hero-power">
+        <div class="heropower">
+            {{#if powerUsed}}
+            <div class="tt tt-{{powerId}} used"></div>
+            {{else}}
+            <div class="tt tt-{{powerId}} {{powerId}}"></div>
+            {{/if}}
+        </div>
+    </div>
+    <div id="friendly-weapon">
+        <div class="weapon">
+            {{#if weapon}}
+            <div class="tt tt-{{weapon.cardId}} {{weapon.cardId}}">
+                <div class="attack">
+                    <div class="amount">{{weapon.attack}}</div>
+                </div>
+                <div class="durability">
+                    <div class="amount">{{weapon.durability}}</div>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <div id="friendly-hand">
+        {{#each cardsInHand}}
+        <div class="thumb">
+            <div class="tt tt-{{cardId}} {{cardId}}"></div>
+        </div>
+        {{/each}}
+    </div>
+    <div id="friendly-play">
+        {{#each minionsInPlay}}
+        <div class="tt minion tt-{{cardId}} card-{{id}}">
+            <div class="card {{cardId}}"></div>
+            <div class="attack">
+                <div class="amount {{#if attackBuffed}} buffed {{/if}}">{{attack}}</div>
+            </div>
+            <div class="health">
+                <div class="amount {{#if damaged}} damaged {{else if healthBuffed}} buffed {{/if}}">{{health}}</div>
+            </div>
+            {{#if frozen}}
+            <div class="frozen"></div>
+            {{/if}}
+            {{#if shielded}}
+            <div class="shielded"></div>
+            {{/if}}
+            {{#if legendary}}
+            <div class="legendary"></div>
+            {{/if}}
+            {{#if taunting}}
+            <div class="taunting"></div>
+            {{/if}}
+            {{#if exhausted}}
+            <div class="exhausted"></div>
+            {{/if}}
+            {{#if icon}}
+            <div class="{{icon}}"></div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+    <div id="friendly-mana">
+        <div class="amount">{{mana}} / {{manaTotal}}</div>
+    </div>
+    <div id="friendly-graveyard"></div>
+    <div id="friendly-deck"></div>
+    {{/with}}
+
+
+    {{#with opposingHero}}
+    <div id="opposing-hero" class="{{cardId}}_h card-{{id}}">
+        <div class="hero-health-bg">
+            <div class="{{#if damaged}}damaged{{/if}} hero-health-amount">{{health}}</div>
+        </div>
+        {{#if armor}}
+        <div class="hero-armor-bg">
+            <div class="hero-armor-amount">{{armor}}</div>
+        </div>
+        {{/if}}
+        {{#if attack}}
+        <div class="hero-attack-bg">
+            <div class="hero-attack-amount">{{attack}}</div>
+        </div>
+        {{/if}}
+        {{#each cardsInSecret}}
+        <div class="secret secret{{@index}} {{cardClass}}-secret tt tt-{{cardId}}"></div>
+        {{/each}}
+    </div>
+    <div id="opposing-hero-power">
+        <div class="heropower">
+            {{#if powerUsed}}
+            <div class="tt tt-{{powerId}} used"></div>
+            {{else}}
+            <div class="tt tt-{{powerId}} {{powerId}}"></div>
+            {{/if}}
+        </div>
+    </div>
+    <div id="opposing-weapon">
+        <div class="weapon">
+            {{#if weapon}}
+            <div class="tt tt-{{weapon.cardId}} {{weapon.cardId}}">
+                <div class="attack">
+                    <div class="amount">{{weapon.attack}}</div>
+                </div>
+                <div class="durability">
+                    <div class="amount">{{weapon.durability}}</div>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <div id="opposing-hand">
+        {{#each cardsInHand}}
+        <div class="thumb">
+            <div class="tt tt-{{cardId}} {{cardId}}"></div>
+        </div>
+        {{/each}}
+    </div>
+    <div id="opposing-play">
+        {{#each minionsInPlay}}
+        <div class="tt minion tt-{{cardId}} card-{{id}}">
+            <div class="card {{cardId}}"></div>
+            <div class="attack">
+                <div class="amount {{#if attackBuffed}} buffed {{/if}}">{{attack}}</div>
+            </div>
+            <div class="health">
+                <div class="amount {{#if damaged}} damaged {{else if healthBuffed}} buffed {{/if}}">{{health}}</div>
+            </div>
+            {{#if frozen}}
+            <div class="frozen"></div>
+            {{/if}}
+            {{#if shielded}}
+            <div class="shielded"></div>
+            {{/if}}
+            {{#if legendary}}
+            <div class="legendary"></div>
+            {{/if}}
+            {{#if taunting}}
+            <div class="taunting"></div>
+            {{/if}}
+            {{#if exhausted}}
+            <div class="exhausted"></div>
+            {{/if}}
+            {{#if icon}}
+            <div class="{{icon}}"></div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+    <div id="opposing-mana">
+        <div class="amount">{{mana}} / {{manaTotal}}</div>
+    </div>
+    <div id="opposing-graveyard"></div>
+    <div id="opposing-deck"></div>
+    {{/with}}
 </script>
 
 <script id="armor-change-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{player.playerClass}}">{{player.name}}</span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
         <span> armor is now : </span>
         <div class="armor-bg"><div>{{armor}}</div></div>
     </div>
 </script>
 
 <script id="attack-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{attackerController.playerClass}}">{{attackerController.name}}</span>
-        <span class="{{attacker.rarity}} tt tt-{{attacker.id}}">{{attacker.name}}</span>
+        <span class="{{attacker.rarity}} tt tt-{{attacker.cardId}}">{{attacker.name}}</span>
         <span> has attacked </span>
         <span class="{{defenderController.playerClass}}">{{defenderController.name}}</span>
-        <span class="{{defender.rarity}} tt tt-{{defender.id}}">{{defender.name}}</span>
+        <span class="{{defender.rarity}} tt tt-{{defender.cardId}}">{{defender.name}}</span>
     </div>
 </script>
 
 <script id="attack-change-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
         <span> attack is now : </span>
         <span>{{attack}}</span>
     </div>
 </script>
 
 <script id="card-creation-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{creatorController.playerClass}}">{{creatorController.name}}</span>
-        <span class="{{creator.rarity}} tt tt-{{creator.id}}">{{creator.name}}</span>
+        <span class="{{creator.rarity}} tt tt-{{creator.cardId}}">{{creator.name}}</span>
         <span> has created </span>
-        <span class="{{created.rarity}} tt tt-{{created.id}}">{{created.name}}</span>
+        <span class="{{created.rarity}} tt tt-{{created.cardId}}">{{created.name}}</span>
         <span> (</span>
         <span class="{{beneficiary.playerClass}}">{{beneficiary.name}}</span>
         <span> has benefited)</span>
@@ -336,84 +323,84 @@
 </script>
 
 <script id="card-discarded-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{causeController.playerClass}}">{{causeController.name}}</span>
-        <span class="{{cause.rarity}} tt tt-{{cause.id}}">{{cause.name}}</span>
+        <span class="{{cause.rarity}} tt tt-{{cause.cardId}}">{{cause.name}}</span>
         <span> has caused </span>
         <span class="{{player.playerClass}}">{{player.name}}</span>
         <span> to discard </span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
     </div>
 </script>
 
 <script id="card-drawn-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
-        <span class="{{drawer.playerClass}}">{{drawer.name}}</span> <span> has drawn </span> <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+    <div class="action-{{turnCount}}-{{boardCount}}">
+        <span class="{{drawer.playerClass}}">{{drawer.name}}</span> <span> has drawn </span> <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
     </div>
 </script>
 
 <script id="damage-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         {{#if weapon}}
             <span class="{{damagedController.playerClass}}">{{damagedController.name}}</span>
             <span> weapon has lost </span>
-            <span class="{{damaged.rarity}} tt tt-{{damaged.id}}">{{damaged.name}}</span>
+            <span class="{{damaged.rarity}} tt tt-{{damaged.cardId}}">{{damaged.name}}</span>
         <span> durability</span>
         {{else}}
             <span class="{{damagerController.playerClass}}">{{damagerController.name}}</span>
-            <span class="{{damager.rarity}} tt tt-{{damager.id}}">{{damager.name}}</span>
+            <span class="{{damager.rarity}} tt tt-{{damager.cardId}}">{{damager.name}}</span>
             <span> has done </span>
             <span>{{amount}}</span>
             <span> damage to </span>
             <span class="{{damagedController.playerClass}}">{{damagedController.name}}</span>
-            <span class="{{damaged.rarity}} tt tt-{{damaged.id}}">{{damaged.name}}</span>
+            <span class="{{damaged.rarity}} tt tt-{{damaged.cardId}}">{{damaged.name}}</span>
         {{/if}}
     </div>
 </script>
 
 <script id="frozen-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
         <span> has been frozen</span>
     </div>
 </script>
 
 <script id="health-change-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
         <span> health is now : </span>
         <span>{{health}}</span>
     </div>
 </script>
 
 <script id="hero-health-change-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
         <span> hero health is now : </span>
         <div class="health-bg" style="display: inline-block;"><div>{{health}}</div></div>
     </div>
 </script>
 
 <script id="hero-power-used-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
         <span> has activated their hero power : </span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
     </div>
 </script>
 
 <script id="joust-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{friendly.playerClass}}">{{friendly.name}}</span>
-        <span class="{{friendlyJouster.rarity}} tt tt-{{friendlyJouster.id}}">{{friendlyJouster.name}}</span>
+        <span class="{{friendlyJouster.rarity}} tt tt-{{friendlyJouster.cardId}}">{{friendlyJouster.name}}</span>
         <span> is jousting </span>
         <span class="{{opposing.playerClass}}">{{opposing.name}}</span>
-        <span class="{{opposingJouster.rarity}} tt tt-{{friendlyJouster.id}}">{{opposingJouster.name}}</span>
+        <span class="{{opposingJouster.rarity}} tt tt-{{friendlyJouster.cardId}}">{{opposingJouster.name}}</span>
         <span class="{{friendly.playerClass}}"> {{friendly.name}}</span>
-        <span class="{{friendlyJouster.rarity}} tt tt-{{friendlyJouster.id}}">{{friendlyJouster.name}}</span>
+        <span class="{{friendlyJouster.rarity}} tt tt-{{friendlyJouster.cardId}}">{{friendlyJouster.name}}</span>
         {{#if winner}}
             <span> has won the Joust!</span>
         {{else}}
@@ -423,51 +410,51 @@
 </script>
 
 <script id="kill-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{killerController.playerClass}}">{{killerController.name}}</span>
-        <span class="{{killer.rarity}} tt tt-{{killer.id}}">{{killer.name}}</span>
+        <span class="{{killer.rarity}} tt tt-{{killer.cardId}}">{{killer.name}}</span>
         <span> has {{kind}} </span>
         <span class="{{killedController.playerClass}}">{{killedController.name}}</span>
-        <span class="{{killed.rarity}} tt tt-{{killed.id}}">{{killed.name}}</span>
+        <span class="{{killed.rarity}} tt tt-{{killed.cardId}}">{{killed.name}}</span>
     </div>
 </script>
 
 <script id="log-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>{{msg}}</div>
+    <div class="action-{{turnCount}}-{{boardCount}} {{#if turn}}turn-log{{/if}}">{{msg}}</div>
 </script>
 
 <script id="mana-gained-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{player.playerClass}}">{{player.name}}</span>
         <span> has gained {{amount}} mana</span>
     </div>
 </script>
 
 <script id="mana-used-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{player.playerClass}}">{{player.name}}</span>
         <span> has used {{amount}} mana</span>
     </div>
 </script>
 
 <script id="temp-mana-gained-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{player.playerClass}}">{{player.name}}</span>
         <span> has temporarily gained {{amount}} mana from </span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
     </div>
 </script>
 
 <script id="trigger-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{cardController.playerClass}}">{{cardController.name}}</span>
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
         <span> has triggered its ability </span>
     </div>
 </script>
 
 <script id="card-played-template" type="text/x-handlebars-template" th:inline="javascript">
-    <div>
+    <div class="action-{{turnCount}}-{{boardCount}}">
         <span class="{{player.playerClass}}">{{player.name}}</span>
         {{#if playType1}}<span> has played a minion from HAND : </span>{{/if}}
         {{#if playType2}}<span> has played a secret from HAND : </span>{{/if}}
@@ -476,7 +463,7 @@
         {{#if playType5}}<span> has played a minion from GRAVEYARD : </span>{{/if}}
         {{#if playType6}}<span> has gained a minion : </span>{{/if}}
         {{#if playType7}}<span> has cast a spell : </span>{{/if}}
-        <span class="{{card.rarity}} tt tt-{{card.id}}">{{card.name}}</span>
+        <span class="{{card.rarity}} tt tt-{{card.cardId}}">{{card.name}}</span>
     </div>
 </script>
 
@@ -512,7 +499,7 @@
         var triggerTemplate = Handlebars.compile($('#trigger-template').html());
         var attackTemplate = Handlebars.compile($('#attack-template').html());
 
-        var turnCount = 0;
+        var turnCount = 1;
         var boardCount = -1;
 
         $('body').on('mouseover mouseenter', '.tt', function(){
@@ -541,13 +528,21 @@
             $(this).tooltipster('show');
         });
 
-        var updateBoardActions = function(actions) {
+        var updateBoardActions = function(actions, turnCount, boardCount, animate) {
 
-            var gba = $('#game-board-actions');
+            var gba = $('#play-area-actions');
             for (var i=0; i < actions.length; i++) {
                 var action = actions[i];
 
-                if (action.type == 'log') gba.append(logTemplate(action));
+                action.turnCount = turnCount;
+                action.boardCount = boardCount;
+
+                if (action.type == 'log') {
+                    if (action.msg.substring(0, 'Turn'.length ) === 'Turn') {
+                        action.turn = true;
+                    }
+                    gba.append(logTemplate(action));
+                }
                 if (action.type == 'armorChange') gba.append(armorChangeTemplate(action));
                 if (action.type == 'attackChange') gba.append(attackChangeTemplate(action));
                 if (action.type == 'cardDrawn') gba.append(cardDrawnTemplate(action));
@@ -555,28 +550,95 @@
                 if (action.type == 'cardDiscarded') gba.append(cardDiscardedTemplate(action));
                 if (action.type == 'cardPlayed') gba.append(cardPlayedTemplate(action));
                 if (action.type == 'damage') gba.append(damageTemplate(action));
-                if (action.type == 'endOfTurn') gba.append(logTemplate(action));
+                if (action.type == 'endOfTurn') {
+                    if (turnCount > 0) gba.append(logTemplate(action));
+                }
                 if (action.type == 'frozen') gba.append(frozenTemplate(action));
                 if (action.type == 'healthChange') gba.append(healthChangeTemplate(action));
                 if (action.type == 'heroHealthChange') gba.append(heroHealthChangeTemplate(action));
                 if (action.type == 'heroPowerUsed') gba.append(heroPowerUsedTemplate(action));
                 if (action.type == 'joust') gba.append(joustTemplate(action));
-                if (action.type == 'kill') gba.append(killTemplate(action));
+                if (action.type == 'kill') { gba.append(killTemplate(action)); }
                 if (action.type == 'manaGained') gba.append(manaGainedTemplate(action));
                 if (action.type == 'manaUsed') gba.append(manaUsedTemplate(action));
                 if (action.type == 'tempManaGained') gba.append(tempManaGainedTemplate(action));
                 if (action.type == 'trigger') gba.append(triggerTemplate(action));
-                if (action.type == 'attack') gba.append(attackTemplate(action));
+                if (action.type == 'attack') {
+                    if (animate) animateAttack(action);
+                    gba.append(attackTemplate(action));
+                }
             }
             var height = gba[0].scrollHeight;
             gba.stop().animate({scrollTop: height}, 500);
         };
 
+        var animateAttack = function(action) {
+            var dst = $('.card-'+action.defender.id);
+            var dstPos = dst.position();
+            var src = $('.card-'+action.attacker.id);
+            var srcPos = src.position();
+
+            var srcParent = src.parent();
+            var srcParentPos = srcParent.position();
+            var dstParent = dst.parent();
+            var dstParentPos = dstParent.position();
+
+            var top = 0, left = 0, leftDiff = 0, topDiff = 0, zIndex = 0;
+            if (srcParent.attr("id") === 'friendly-play') {
+                if (dstParent.attr("id") === 'opposing-play') {
+                    leftDiff = (srcPos.left + srcParentPos.left) - (dstPos.left + dstParentPos.left);
+                    if (leftDiff != 0) { left = -leftDiff; }
+                    topDiff = (srcPos.top + srcParentPos.top) - (dstPos.top + dstParentPos.top);
+                    top = dstPos.top - topDiff + 100;
+                    src.css('z-index', 100).animate({ top: top, left: left}, "slow").animate({ top: 0, left: 0 }, "slow");
+                } else { // opposing hero
+                    leftDiff = (srcPos.left + srcParentPos.left) - dstPos.left;
+                    if (leftDiff != 0) { left = -leftDiff; }
+                    top = -220;
+                    src.css('z-index', 100).animate({ top: top, left: left}, "slow").animate({ top: 0, left: 0 }, "slow");
+                }
+            } else if (srcParent.attr("id") === 'opposing-play') {
+                if (dstParent.attr("id") === 'friendly-play') {
+                    leftDiff = (srcPos.left + srcParentPos.left) - (dstPos.left + dstParentPos.left);
+                    if (leftDiff != 0) { left = -leftDiff; }
+                    topDiff = (srcPos.top + srcParentPos.top) - (dstPos.top + dstParentPos.top);
+                    top = dstPos.top - topDiff - 100;
+                    src.css('z-index', 100).animate({ top: top, left: left}, "slow").animate({ top: 0, left: 0 }, "slow");
+                } else { // friendly hero
+                    leftDiff = (srcPos.left + srcParentPos.left) - dstPos.left;
+                    if (leftDiff != 0) { left = -leftDiff; }
+                    top = 224;
+                    src.css('z-index', 100).animate({ top: top, left: left}, "slow").animate({ top: 0, left: 0 }, "slow");
+                }
+            } else if (src.attr("id") === 'friendly-hero') {
+                if (dst.attr("id") === 'opposing-hero') {
+                    top = 220;
+                    left = dstPos.left;
+                } else { // opposing minion
+                    leftDiff = srcPos.left - dstPos.left;
+                    if (leftDiff != 0) { left = srcPos.left + srcParentPos.left - leftDiff; }
+                    top = 415;
+                }
+                src.css('z-index', 100).animate({ top: top, left: left}, "slow").animate({ top: srcPos.top, left: srcPos.left}, "slow");
+            } else if (src.attr("id") === 'opposing-hero') {
+                if (dst.attr("id") === 'friendly-hero') {
+                    top = 520;
+                    left = dstPos.left;
+                } else { // friendly minion
+                    leftDiff = srcPos.left - dstPos.left;
+                    if (leftDiff != 0) { left = srcPos.left + srcParentPos.left - leftDiff; }
+                    top = 350;
+                }
+                src.css('z-index', 100).animate({ top: top, left: left}, "slow").animate({ top: srcPos.top, left: srcPos.left}, "slow");
+            }
+        };
+
         var autoplay = false;
-        var duration = 2000;
+        var speed = 1500;
+        var direction = 'f';
+        var timer;
 
         var nextBoard = function() {
-
             boardCount++;
             if (boardCount >= gameData[turnCount].boards.length) {
                 turnCount++;
@@ -589,33 +651,43 @@
                 }
             }
             var board = gameData[turnCount].boards[boardCount];
-            board.autoplay = autoplay;
-            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
-            $('#game-board-content').html(html);
+            updateBoardActions(board.actions, turnCount, boardCount, true);
+            setTimeout(function(){
+                $('#play-area').html(html);
+                setTimeoutOnBoard();
+            }, 1000);
+        };
 
-            updateBoardActions(board.actions);
+        var setTimeoutOnBoard = function() {
+            if (autoplay) {
+                if (direction == 'f') {
+                    timer = setTimeout(nextBoard, speed);
+                } else {
+                    timer = setTimeout(previousBoard, speed);
+                }
+            }
         };
 
         var previousBoard = function() {
             boardCount--;
             if (boardCount < 0) {
                 turnCount--;
-                if (turnCount < 0) {
-                    boardCount = 0;
+                if (turnCount < 1) {
                     turnCount = 0;
+                    boardCount = gameData[0].boards.length-1;
                 } else {
                     boardCount = gameData[turnCount].boards.length-1;
                 }
             }
+            removeLogs(turnCount, boardCount);
             var board = gameData[turnCount].boards[boardCount];
-            board.autoplay = autoplay;
-            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
-            $('#game-board-content').html(html);
-
-            updateBoardActions(board.actions);
-
+            updateBoardActions(board.actions, turnCount, boardCount, false);
+            $('#play-area').html(html);
+            if (direction == 'r') {
+                setTimeoutOnBoard();
+            }
         };
 
         var nextTurn = function() {
@@ -624,78 +696,112 @@
                 turnCount--;
                 return;
             } else {
+                var size = gameData[turnCount-1].boards.length-1;
+                for (var i=boardCount+1; i < size; i++) {
+                    updateBoardActions(gameData[turnCount-1].boards[i].actions, turnCount, boardCount, false);
+                }
                 boardCount = 0;
             }
             var board = gameData[turnCount].boards[boardCount];
-            board.autoplay = autoplay;
-            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
-            $('#game-board-content').html(html);
-
-            updateBoardActions(board.actions);
-
+            updateBoardActions(board.actions, turnCount, boardCount, true);
+            setTimeout(function(){
+                $('#play-area').html(html);
+            }, 1000);
         };
 
         var previousTurn = function() {
             turnCount--;
             if (turnCount < 0) {
                 turnCount = 0;
+                boardCount = gameData[0].boards.length-1;
             }
-            boardCount = 0;
+            removeLogs(turnCount, boardCount);
             var board = gameData[turnCount].boards[boardCount];
-            board.autoplay = autoplay;
-            board.duration = (duration / 1000) + "secs";
             var html = boardTemplate(board);
-            $('#game-board-content').html(html);
-
-            updateBoardActions(board.actions);
+            updateBoardActions(board.actions, turnCount, boardCount, false);
+            $('#play-area').html(html);
         };
 
-        var boardContent = $('#game-board-content');
+        var removeLogs = function(turnCount, boardCount) {
+            var current = $('.action-'+turnCount+'-'+boardCount);
+            current.nextAll().remove();
+            current.remove();
+        };
 
-        boardContent.on('click', '.next-turn', function(){ nextTurn(); });
-        boardContent.on('click', '.prev-turn', function(){ previousTurn(); });
-        boardContent.on('click', '.next-board', function(){ nextBoard(); });
-        boardContent.on('click', '.prev-board', function(){ previousBoard(); });
+        var boardControls = $('#game-board-controls');
 
-        var myInterval;
-        boardContent.on('click', '.on', function() {
+        boardControls.on('click', '.fast-forward', function(){
+            if (direction == 'r') {
+                clearTimeout(timer);
+            }
+            direction = 'f';
+            nextTurn();
+        });
+        boardControls.on('click', '.fast-backward', function(){
+            if (direction == 'f') {
+                clearTimeout(timer);
+            }
+            direction = 'r';
+            previousTurn();
+        });
+        boardControls.on('click', '.step-forward', function(){
+            if (direction == 'r') {
+                clearTimeout(timer);
+            }
+            direction = 'f';
+            nextBoard();
+        });
+        boardControls.on('click', '.step-backward', function(){
+            if (direction == 'f') {
+                clearTimeout(timer);
+            }
+            direction = 'r';
+            previousBoard();
+        });
+
+        boardControls.on('click', '.pause', function() {
+            $('#game-board-status').html('<span class="paused">The game is paused.  Press Play to resume replay.</span>');
             autoplay = false;
-            $('.autoplay-toggle').html('<span class="off">OFF</span>');
-            clearInterval(myInterval);
+            clearTimeout(timer);
+            speed = 1500;
         });
 
-        boardContent.on('click', '.off', function() {
+        boardControls.on('click', '.play', function() {
+            $('#game-board-status').html('<span class="playing">The game is now Playing.</span>');
             autoplay = true;
-            $('.autoplay-toggle').html('<span class="on">ON</span>');
-            myInterval = setInterval(nextBoard, duration);
+            speed = 1500;
+            direction = 'f';
+            setTimeoutOnBoard();
         });
 
-        boardContent.on('click', '.plus-duration', function() {
-            if (autoplay) {
-                clearInterval(myInterval);
+        boardControls.on('click', '.forward', function() {
+            $('#game-board-status').html('<span class="fastforwarding">The game is now being fast forwarded.</span>');
+            if (direction == 'r') {
+                clearTimeout(timer);
             }
-            duration += 1000;
-            if (duration > 10000) duration = 10000;
-            $('.autoplay-duration').html((duration / 1000) + "secs");
-            if (autoplay) {
-                myInterval = setInterval(nextBoard, duration);
-            }
+            autoplay = true;
+            speed = 600;
+            direction = 'f';
+            setTimeoutOnBoard();
         });
-        boardContent.on('click', '.minus-duration', function() {
-            if (autoplay) {
-                clearInterval(myInterval);
+
+        boardControls.on('click', '.rewind', function() {
+            $('#game-board-status').html('<span class="rewinding">The game is rewinding.</span>');
+            if (direction == 'f') {
+                clearTimeout(timer);
             }
-            duration -= 1000;
-            if (duration < 1000) duration = 1000;
-            $('.autoplay-duration').html((duration / 1000) + "secs");
-            if (autoplay) {
-                myInterval = setInterval(nextBoard, duration);
-            }
+            autoplay = true;
+            speed = 600;
+            direction = 'r';
+            setTimeoutOnBoard();
         });
 
 
-        nextBoard();
+        var board = gameData[0].boards[0];
+        var html = boardTemplate(board);
+        updateBoardActions(board.actions, 0, 0, false);
+        $('#play-area').html(html);
     };
 
     /*]]>*/

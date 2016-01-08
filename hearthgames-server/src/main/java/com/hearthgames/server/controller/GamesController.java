@@ -45,6 +45,8 @@ public class GamesController {
         int pages = (int) Math.ceil((double) count / 10);
 
         addGamesPlayed(modelAndView, gamesPlayed, false, pages);
+
+        modelAndView.addObject("navpage", "games");
         return modelAndView;
     }
 
@@ -58,6 +60,7 @@ public class GamesController {
         int pages = (int) Math.ceil((double) count / 10);
 
         addGamesPlayed(modelAndView, gamesPlayed, true, pages);
+        modelAndView.addObject("navpage", "games");
         return modelAndView;
     }
 

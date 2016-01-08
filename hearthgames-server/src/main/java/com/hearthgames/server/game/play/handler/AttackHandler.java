@@ -1,28 +1,26 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.parse.GameContext;
-import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.PlayContext;
 
 public class AttackHandler implements Handler {
 
     @Override
-    public boolean supports(GameResult result, GameContext context, Activity activity) {
-        return activity != null && activity.isAttack();
+    public boolean supports(PlayContext playContext) {
+        return playContext.getActivity() != null && playContext.getActivity().isAttack();
     }
 
     @Override
-    public boolean handle(GameResult result, GameContext context, Activity activity) {
+    public boolean handle(PlayContext playContext) {
 
-        Card attacker = (Card) context.getEntityById(activity.getDelta().getEntityId());
-        Card defender = (Card) context.getEntityById(activity.getTarget().getEntityId());
+        Card attacker = (Card) playContext.getContext().getEntityById(playContext.getActivity().getDelta().getEntityId());
+        Card defender = (Card) playContext.getContext().getEntityById(playContext.getActivity().getTarget().getEntityId());
 
-        Player attackerController = attacker.getController().equals(context.getFriendlyPlayer().getController()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
-        Player defenderController = defender.getController().equals(context.getFriendlyPlayer().getController()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
+        Player attackerController = attacker.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
+        Player defenderController = defender.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
 
-        result.addAttack(attacker, defender, attackerController, defenderController);
+        playContext.addAttack(attacker, defender, attackerController, defenderController);
 
         return false;
     }

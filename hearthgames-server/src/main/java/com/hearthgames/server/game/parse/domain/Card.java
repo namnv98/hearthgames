@@ -99,7 +99,7 @@ public class Card extends Entity implements Serializable {
     private CardDetails cardDetails;
 
     public String getId() {
-        return id;
+        return id == null ? entityId : id;
     }
 
     public void setId(String id) {
@@ -600,7 +600,7 @@ public class Card extends Entity implements Serializable {
     }
 
     public static boolean isSpell(Card before, Card after) {
-        return Card.Type.SPELL.eq(before.getCardtype()) || Card.Type.MINION.eq(after.getCardtype());
+        return Card.Type.SPELL.eq(before.getCardtype()) || Card.Type.SPELL.eq(after.getCardtype());
     }
 
 }

@@ -6,7 +6,6 @@
 
     .anonymous { padding:5px; top: 10px; right: 10px; }
     .user-logged-in { padding:5px; top: 10px; right: 10px; }
-    .user-logged-in-on-game { padding:5px; top: 10px; right: 10px; }
 
     .loginbnet { padding-left: 5px; }
     .ttip { width: 191px; height: 263px; background-size: 191px 263px; }
@@ -25,9 +24,8 @@
 
     .container { width: 1024px; }
 
-    .anonymous { padding: 10px; top: 10px; right: 10px; }
-    .user-logged-in { padding: 10px; top: 10px; right: 10px; }
-    .user-logged-in-on-game { padding: 10px; top: 10px; right: 10px; }
+    .anonymous { padding: 5px; top: 10px; right: 10px; }
+    .user-logged-in { padding: 5px; top: 10px; right: 10px; }
 
     .loginbnet { padding-left: 5px; }
     .ttip { width: 286px; height: 395px; }
@@ -59,7 +57,7 @@ body input { color: #000; }
 .account-form input { color: #000; }
 .account-updated { color: #0FAF03; }
 
-.beta { position: fixed; top: 0; left: 0; background-image: url(http://images.hearthgames.com/misc/beta.png) }
+.beta { position: absolute; top: 52px; left: 0; background-image: url(http://images.hearthgames.com/misc/beta.png) }
 
 .faq-question { font-weight: bold; margin-bottom: 5px; }
 .faq-answer { margin-bottom: 25px; }
@@ -69,7 +67,6 @@ body input { color: #000; }
 
 .anonymous { position: absolute; text-align: center; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
 .user-logged-in { position: absolute; text-align: center; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
-.user-logged-in-on-game { position: absolute; text-align: center; background-color: #2D2D2D; border: 1px solid #000; opacity: 0.90; }
 
 .loginbnet { color: #fff; }
 .hearthgames-title { text-align: center; }

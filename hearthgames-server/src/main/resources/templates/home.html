@@ -15,12 +15,11 @@
 </head>
 <body>
 
+<div th:replace="/fragments/nav-fragment::nav"></div>
+
 <div class="container">
 
     <div th:replace="/fragments/beta-fragment::beta"></div>
-
-    <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
-    <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
     <div class="title-container">
         <div class="hearthgames-title">HEARTHGAMES.com</div>
@@ -28,19 +27,37 @@
 
     <div class="content">
 
-        <div class="home-menu">
-            <div class="upload-log-file"><a href="upload.html" th:href="@{/upload}">UPLOAD LOG</a></div>
-            <div class="ranked-games"><a href="games.html" th:href="@{/rankedgames}">RANKED GAMES</a></div>
-            <div class="casual-games"><a href="games.html" th:href="@{/casualgames}">CASUAL GAMES</a></div>
-            <div class="download-uploader"><a href="download.html" th:href="@{/download}">DOWNLOAD UPLOADER</a></div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Select a Hearthstone log file to upload</h3>
+            </div>
+
+            <div class="panel-body">
+                <div>
+                    <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/webUpload}">
+                        <input id="upload" name="file" type="file" class="file" data-show-preview="false" />
+                    </form>
+                </div>
+                <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
+            </div>
+        </div>
+
+        <div class="download-client">
+            <span>As an alternative to manually uploading your files you can Download the <a href="download.html" th:href="@{/download}">Official Hearth Games Client Uploader</a>.</span>
         </div>
 
         <div th:replace="/fragments/footer-fragment::homeFooter"></div>
-
     </div>
 
 </div>
 
 <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/js/fileinput.min.js" th:src="@{/webjars/bootstrap-fileinput/4.2.7/js/fileinput.min.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#upload").fileinput();
+    });
+</script>
 </body>
 </html>

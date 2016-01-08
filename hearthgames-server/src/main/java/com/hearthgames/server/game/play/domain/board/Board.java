@@ -1,5 +1,6 @@
 package com.hearthgames.server.game.play.domain.board;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Player;
@@ -7,12 +8,14 @@ import com.hearthgames.server.game.parse.domain.Zone;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.Action;
 import com.hearthgames.server.game.play.domain.Turn;
+import com.hearthgames.server.game.play.domain.board.json.BoardSerializer;
 import com.hearthgames.server.util.HeroStatsUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@JsonSerialize(using = BoardSerializer.class)
 public class Board implements Action {
 
     public static final String TRUE = "1";
@@ -82,8 +85,12 @@ public class Board implements Action {
     }
 
     private void setHeroIds(GameContext context, Hero friendlyHero, Hero opposingHero) {
-        friendlyHero.setId(HeroStatsUtil.getHeroId(context.getFriendlyPlayer(), context));
-        opposingHero.setId(HeroStatsUtil.getHeroId(context.getOpposingPlayer(), context));
+        Card friendlyHeroCard = HeroStatsUtil.getHeroCard(context.getFriendlyPlayer(), context);
+        Card opposingHeroCard = HeroStatsUtil.getHeroCard(context.getOpposingPlayer(), context);
+        friendlyHero.setCardId(friendlyHeroCard.getCardid());
+        friendlyHero.setId(friendlyHeroCard.getEntityId());
+        opposingHero.setCardId(opposingHeroCard.getCardid());
+        opposingHero.setId(opposingHeroCard.getEntityId());
     }
 
     private void setHeroHealthArmor(GameResult result, GameContext context, Hero friendlyHero, Hero opposingHero) {
@@ -174,7 +181,8 @@ public class Board implements Action {
                 cardInHand.setHealth(c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0);
                 cardInHand.setAttack(c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0);
                 cardInHand.setCost(c.getCost() != null ? Integer.parseInt(c.getCost()) : 0);
-                cardInHand.setId(c.getCardDetails() != null ? c.getCardDetails().getId() : "cardback");
+                cardInHand.setCardId(c.getCardDetails() != null ? c.getCardDetails().getId() : "cardback");
+                cardInHand.setId(c.getEntityId());
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInHand().add(cardInHand);
                 } else {
@@ -183,16 +191,17 @@ public class Board implements Action {
                 cardInHand.setPosition(Integer.parseInt(c.getZonePosition()));
             } else if (Zone.PLAY.eq(c.getZone()) && Card.Type.MINION.eq(c.getCardtype())) {
                 MinionInPlay minionInPlay = new MinionInPlay();
-                minionInPlay.setId(c.getCardid());
+                minionInPlay.setCardId(c.getCardid());
+                minionInPlay.setId(c.getEntityId());
                 int health = c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0;
                 int definitionHealth = c.getCardDetailsHealth();
                 if (health > definitionHealth) {
                     minionInPlay.setHealthBuffed(true);
                 }
-                if (c.getDamage() != null) {
+                if (c.getDamage() != null && Integer.parseInt(c.getDamage()) > 0) {
                     health = health - Integer.parseInt(c.getDamage());
                     minionInPlay.setDamaged(true);
-                } else if (c.getPredamage() != null) {
+                } else if (c.getPredamage() != null && Integer.parseInt(c.getPredamage()) > 0) {
                     health = health - Integer.parseInt(c.getPredamage());
                     minionInPlay.setDamaged(true);
                 }
@@ -228,7 +237,8 @@ public class Board implements Action {
             } else if (Zone.SECRET.eq(c.getZone())) {
                 CardInSecret cardInSecret = new CardInSecret();
                 cardInSecret.setCardClass(c.getCardClass().toLowerCase());
-                cardInSecret.setId(c.getCardDetails() != null ? c.getCardDetails().getId() : "");
+                cardInSecret.setCardId(c.getCardDetails() != null ? c.getCardDetails().getId() : "");
+                cardInSecret.setId(c.getEntityId());
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInSecret().add(cardInSecret);
                 } else {
@@ -237,7 +247,8 @@ public class Board implements Action {
                 cardInSecret.setPosition(Integer.parseInt(c.getZonePosition()));
             } else if (Zone.PLAY.eq(c.getZone()) && Card.Type.WEAPON.eq(c.getCardtype())) {
                 Weapon weapon = new Weapon();
-                weapon.setId(c.getCardid());
+                weapon.setId(c.getEntityId());
+                weapon.setCardId(c.getCardid());
                 weapon.setAttack(c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0);
                 int durability = c.getCardDetails().getDurability();
                 int damage = c.getDamage() != null ? Integer.parseInt(c.getDamage()) : 0;
@@ -266,5 +277,4 @@ public class Board implements Action {
             return o1.getPosition() - o2.getPosition();
         }
     }
-
 }

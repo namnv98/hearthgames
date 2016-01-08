@@ -1,25 +1,23 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.parse.GameContext;
-import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.PlayContext;
 
 public class FrozenHandler implements Handler {
     @Override
-    public boolean supports(GameResult result, GameContext context, Activity activity) {
-        return activity.isTagChange() && (activity.getDelta() instanceof Card) && context.getAfter(activity).getFrozen() != null;
+    public boolean supports(PlayContext playContext) {
+        return playContext.getActivity().isTagChange() && (playContext.getActivity().getDelta() instanceof Card) && playContext.getContext().getAfter(playContext.getActivity()).getFrozen() != null;
     }
 
     @Override
-    public boolean handle(GameResult result, GameContext context, Activity activity) {
-        Card before = context.getBefore(activity);
-        Card after = context.getAfter(activity);
+    public boolean handle(PlayContext playContext) {
+        Card before = playContext.getContext().getBefore(playContext.getActivity());
+        Card after = playContext.getContext().getAfter(playContext.getActivity());
 
         boolean frozen = TRUE_OR_ONE.equals(after.getFrozen());
-        Player player = context.getPlayer(before);
-        result.addFrozen(player, before, frozen);
+        Player player = playContext.getContext().getPlayer(before);
+        playContext.addFrozen(player, before, frozen);
 
         return true;
     }

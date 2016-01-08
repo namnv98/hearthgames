@@ -28,9 +28,11 @@ public class CardPlayedSerializer extends JsonSerializer<CardPlayed> {
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getCard().getName());
-            g.writeFieldName("id");
+            g.writeFieldName("cardId");
             g.writeString(value.getCard().getCardDetails().getId());
-            g.writeFieldName("rarity");
+            g.writeFieldName("id");
+            g.writeString(value.getCard().getId());
+        g.writeFieldName("rarity");
             g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
 

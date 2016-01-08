@@ -20,8 +20,10 @@ public class AttackSerializer extends JsonSerializer<Attack> {
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getAttacker().getName());
-            g.writeFieldName("id");
+            g.writeFieldName("cardId");
             g.writeString(value.getAttacker().getCardDetails().getId());
+            g.writeFieldName("id");
+            g.writeString(value.getAttacker().getId());
             g.writeFieldName("rarity");
             g.writeString(value.getAttacker().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
@@ -38,8 +40,10 @@ public class AttackSerializer extends JsonSerializer<Attack> {
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getDefender().getName());
-            g.writeFieldName("id");
+            g.writeFieldName("cardId");
             g.writeString(value.getDefender().getCardDetails().getId());
+            g.writeFieldName("id");
+            g.writeString(value.getDefender().getId());
             g.writeFieldName("rarity");
             g.writeString(value.getDefender().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();

@@ -1,306 +1,156 @@
-@media only screen and (max-height: 720px) {
+.game-title { font-size: 40px; }
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th { padding: 6px; }
+
+#replay .anonymous { position: absolute; top: 10px; left: 0; padding: 10px; width: 500px; }
+#replay .user-logged-in { position: absolute; top: 10px; left: 0; padding: 10px; width: 500px; }
 
-    .game-title { font-size: 27px; }
+.versus { font-size: 25px; }
+.versus-info { margin-top: 5px; }
+.versus-info span { font-size: 25px; }
+.versus-info-duration { font-size: 18px; }
+
+.health-info {width: auto;}
+.health-info th:first-child { width: 130px; }
+
+.card-info th:first-child { width: 130px; }
+
+.mana-info {width: auto;}
+.mana-info th:first-child { width: 130px;  }
+
+.trade-info {width: auto;}
+.trade-info th:first-child { width: 130px;  }
+
+.board-control-info { width: auto; }
+.board-control-info th:first-child { width: 130px;  }
+.bcontrol-info { width: 25px; height: 25px; }
+
+.card-advantage-info { width: auto; }
+.card-advantage-info th:first-child { width: 130px;  }
+.cadvantage-info { width: 25px; height: 25px; }
+
+.health-armor {margin: auto; width: 25px; }
+
+.health-bg { background-size: 18px 25px; width: 18px; height: 25px; margin-left: 2px; }
+.health-bg > div { bottom: 0; text-shadow: 2px 2px 4px #000; width: 18px; }
+
+.armor-bg { background-size: 22px 25px; width: 22px; height: 25px; font-size: 12px;  }
+.armor-bg > div { bottom: 5px; text-shadow: 1px 1px 1px #000; width: 22px; }
+
+.minion-attack-health-bg { width: 40px; height: 55px; margin: 0 3px; }
+.minion-health-bg { background-size: 20px 20px; bottom: -3px; right: -5px; width: 20px; height: 20px; }
+.minion-health-bg > div { bottom: 1px; font-size: 10px; text-shadow: 2px 2px 2px #000; width: 20px;  }
+
+.minion-attack-bg { background-size: 20px 20px; bottom: -3px; left: -5px; width: 20px; height: 20px; }
+.minion-attack-bg > div { bottom: 1px; font-size: 10px; text-shadow: 2px 2px 2px #000; width: 20px;  }
+
+.turn-info-board1 { width: 86px; }
+.turn-info-board2 { width: 33%; }
+.turn-info-board3 { width: 10%; }
+.turn-info-board4 { width: 10%; }
+.turn-info-board5 { width: auto; }
+
+#next { margin: 0 5px; }
+#previous { margin: 0 5px; }
+.autoplay { font-size: 14px; }
+.autoplay-toggle { font-size: 14px; }
+.autoplay-duration { font-size: 14px; }
+
+
+#play-area { width: 1000px; height: 940px; }
+#play-area-actions { position: absolute; top: 130px; left: 0; font-size: 14px; height: 600px; width: 500px; }
+#play-area-container { width: 1000px; height: 940px; position: absolute; top: 0; left: 0; }
+#replay { width: 1500px; height: 940px; }
+#play-area-actions-container { position: absolute; top: 0; left: 1000px; }
+
+
+.tabs-left { margin-top: 130px; }
+#whose-turn .green { color: #26C805;}
+#whose-turn .yellow { color: #E1D002; }
+
+.control { display: inline-block; }
+.control > div { height: 18px; margin: 10px; cursor: pointer; }
+
+.next-prev-buttons .text { font-size: 18px; margin: 0 10px; }
+.next-prev-buttons .next { background-size: 15px 15px; width: 15px; height: 15px; }
+.next-prev-buttons .prev { background-size: 15px 15px; width: 15px; height: 15px; }
+
+#game-board { background-size: 900px 450px; width: 900px; height: 450px; top: 250px; left: 0; }
+#game-board-controls { padding: 10px 12px 10px 20px; width: 367px; }
+
+#friendly-hand { bottom: 20px; left: 1px; width: 900px; text-align: center; }
+#opposing-hand { top: 0; left: 1px; width: 900px; text-align: center; }
+#friendly-hero { bottom: 139px; left: 362px; width: 170px; height: 180px; background-size: 170px 180px; z-index: 30;}
+#opposing-hero { top: 123px; left: 362px; width: 170px; height: 180px; background-size: 170px 180px; z-index: 30; }
+#friendly-hero-power { bottom: 210px; right: 345px; }
+#opposing-hero-power { top: 190px; right: 345px; }
+#friendly-weapon { bottom: 211px; left: 228px; }
+#opposing-weapon { top: 199px; left: 228px; }
+#opposing-play { width: 805px; height: 120px; top: 324px; left: 34px; }
+#friendly-play { width: 805px; height: 120px; top: 463px; left: 34px; }
+#friendly-deck { width: 46px; height: 100px; background-size: 46px 100px; top: 512px; right: 42px; }
+#opposing-deck { width: 46px; height: 100px; background-size: 46px 100px; top: 330px; right: 42px; }
+#friendly-mana { bottom: 200px; right: 250px; background-size: 77px 41px; height: 41px; width: 77px; }
+#opposing-mana { top: 205px; right: 250px; background-size: 77px 41px; height: 41px; width: 77px; }
+#friendly-mana .amount { margin-top: 10px; height: 21px; width: 77px; text-shadow: 1px 1px 1px #000; font-size: 14px; }
+#opposing-mana .amount { margin-top: 10px; height: 21px; width: 77px; text-shadow: 1px 1px 1px #000; font-size: 14px; }
+#whose-turn { top: 440px; right: 95px; width: 80px; font-size: 12px; text-shadow: 2px 2px 2px #000;}
+
+.hero-attack-bg { bottom: 1px; left: 1px; width: 48px; height: 52px; background-size: 48px 52px; }
+.hero-attack-amount { bottom: 6px; right: 4px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
+.hero-health-bg { bottom: 1px; right: 1px; width: 48px; height: 52px; background-size: 48px 52px; }
+.hero-health-amount { bottom: 6px; right: 9px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
+.hero-armor-bg { bottom: 52px; right: 6px; width: 40px; height: 43px; background-size: 40px 43px; }
+.hero-armor-amount { bottom: 9px; right: 4px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
+
+
+.secret { height: 40px; width: 40px; background-size: 40px 40px; }
+#friendly-hero .secret0 { top:-10px; right: 65px; }
+#friendly-hero .secret1 { top: 15px; right: 104px; }
+#friendly-hero .secret2 { top: 57px; right: 123px; }
+#friendly-hero .secret3 { top: 15px; right: 30px; }
+#friendly-hero .secret4 { top: 57px; right: 6px; }
+
+#opposing-hero .secret0 { top:-10px; right: 65px; }
+#opposing-hero .secret1 { top: 15px; right: 104px; }
+#opposing-hero .secret2 { top: 57px; right: 123px; }
+#opposing-hero .secret3 { top: 15px; right: 30px; }
+#opposing-hero .secret4 { top: 57px; right: 6px; }
+
+.cardback { background-size: 80px 110px; }
+.thumb { width: 80px; height: 110px;  }
+.thumb > div { background-size: 80px 110px; width: 80px; height: 110px; }
+
+.minion { width: 94px; height: 123px; margin-left: 12px; }
+.minion .card { width: 94px; height: 123px; }
+.minion .attack { background-size: 31px 35px; bottom: 5px; left: 4px; width: 31px; height: 35px; }
+.minion .attack .amount { bottom: 2px; left: 0; text-shadow: 1px 1px 1px #000; width: 35px; font-size: 18px; }
+.minion .health { background-size: 24px 35px; bottom: 5px; right: 10px; width: 24px; height: 35px; }
+.minion .health .amount { bottom: 2px; right: -5px; text-shadow: 1px 1px 1px #000; width: 35px; font-size: 18px; }
+.minion .legendary { background-size: 110px 83px; top: -10px; left: 7px; width: 110px; height: 83px; }
+.minion .taunting { background-size: 107px 140px; top: -5px; left: -5px; width: 107px; height: 140px; }
+.minion .shielded { background-size: 126px 154px; top: -13px; left: -16px; width: 126px; height: 154px; }
+.minion .frozen { background-size: 125px 149px; top: -9px; left: -15px; width: 125px; height: 149px; }
+.minion .exhausted { background-size: 22px 25px; top: -8px; right: -4px; width: 22px; height: 25px; }
+.minion .inspire { background-size: 28px 25px; bottom: -7px; left: 36px; width: 28px; height: 25px; }
+.minion .trigger { background-size: 22px 25px; bottom: -8px; left: 38px; width: 22px; height: 25px; }
+.minion .deathrattle { background-size: 32px 25px; bottom: -7px; left: 32px; width: 32px; height: 25px; }
+.minion .silenced { background-size: 110px 133px; top: -3px; left: -9px; width: 110px; height: 133px; }
+.minion .poison { background-size: 20px 28px;  bottom: -8px; left: 39px; width: 20px; height: 28px; }
+
+
+.heropower { width: 126px; height: 134px; }
+.heropower > div { width: 126px; height: 134px; background-size: 126px 134px; }
+
+
+.weapon { width: 141px; height: 124px; }
+.weapon > div { width: 141px; height: 124px; background-size: 141px 124px; }
+.weapon .attack { left: 9px; bottom: 15px; width: 35px; height: 33px; background-size: 35px 33px; text-shadow: 1px 1px 1px #000; font-size: 22px; }
+.weapon .attack .amount { left: 1px; bottom: 0; width: 35px; height: 33px; }
+.weapon .durability { right: 5px; bottom: 16px; width: 34px; height: 35px; background-size: 34px 35px; text-shadow: 1px 1px 1px #000; font-size: 22px; }
+.weapon .durability .amount { right: 1px; bottom: -2px; width: 34px; height: 35px; }
 
-    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th { padding: 6px; }
 
-    .tab-pane > div { margin-top: 20px; }
-
-    .versus { font-size: 17px; }
-    .versus-info { margin-top: 5px; }
-    .versus-info span { font-size: 17px; }
-    .versus-info-duration { font-size: 12px; }
-
-    .health-info {width: auto;}
-    .health-info th:first-child { width: 86px; }
-
-    .card-info th:first-child { width: 86px; }
-
-    .mana-info {width: auto;}
-    .mana-info th:first-child { width: 86px;  }
-
-    .trade-info {width: auto;}
-    .trade-info th:first-child { width: 86px;  }
-
-    .board-control-info { width: auto; }
-    .board-control-info th:first-child { width: 86px;  }
-    .bcontrol-info { width: 17px; height: 17px; }
-
-    .card-advantage-info { width: auto; }
-    .card-advantage-info th:first-child { width: 86px;  }
-    .cadvantage-info { width: 17px; height: 17px; }
-
-    .health-armor {margin: auto; width: 17px; }
-
-    .health-bg { background-size: 12px 17px; width: 12px; height: 17px; margin-left: 2px; }
-    .health-bg > div { bottom: 0; text-shadow: 2px 2px 4px #000; width: 12px; }
-
-    .armor-bg { background-size: 15px 17px; width: 15px; height: 17px; font-size: 10px;  }
-    .armor-bg > div { bottom: 5px; text-shadow: 1px 1px 1px #000; width: 15px; }
-
-    .minion-attack-health-bg { width: 27px; height: 37px; margin: 0 3px; }
-    .minion-health-bg { background-size: 20px 20px; bottom: -3px; right: -5px; width: 13px; height: 13px; }
-    .minion-health-bg > div { bottom: 1px; font-size: 10px; text-shadow: 2px 2px 2px #000; width: 13px;  }
-
-    .minion-attack-bg { background-size: 13px 13px; bottom: -3px; left: -5px; width: 13px; height: 13px; }
-    .minion-attack-bg > div { bottom: 1px; font-size: 10px; text-shadow: 2px 2px 2px #000; width: 13px;  }
-
-    .turn-info-board1 { width: 86px; }
-    .turn-info-board2 { width: 33%; }
-    .turn-info-board3 { width: 10%; }
-    .turn-info-board4 { width: 10%; }
-    .turn-info-board5 { width: auto; }
-
-    #next { margin: 0 5px; }
-    #previous { margin: 0 5px; }
-    #turn-status { top: -77px; right: 0; font-size: 18px; text-shadow: 2px 2px 2px #000; }
-    .autoplay { font-size: 9px; }
-    .autoplay-toggle { font-size: 9px; }
-    .autoplay-duration { font-size: 7px; }
-    #game-board-content { margin-top: 167px; width: 683px; }
-    #game-board-actions { font-size: 10px; height: 467px; width: 267px; }
-    #game-board-container { width: 683px; position: absolute; top: 0; left: 0; }
-    #replay { height: 660px; }
-    #game-board-actions-container { position: absolute; top: 87px; left: 733px; }
-    .tabs-left { margin-top: 87px; }
-
-    #whose-turn { top: 145px; right:0; width: 53px; font-size: 10px; text-shadow: 2px 2px 2px #000;}
-    #whose-turn .green { color: #26C805;}
-    #whose-turn .yellow { color: #E1D002; }
-
-    .next-prev-buttons .text { font-size: 18px; margin: 0 10px; }
-    .next-prev-buttons .next { background-size: 10px 10px; width: 10px; height: 10px; }
-    .next-prev-buttons .prev { background-size: 10px 10px; width: 10px; height: 10px; }
-
-    #game-board { background-size: 683px 341px; width: 683px; height: 341px; }
-
-    #friendly-hero { bottom: -57px; left: 281px; width: 113px; height: 120px; background-size: 113px 120px; }
-    #opposing-hero { top: -81px; left: 281px; width: 113px; height: 120px; background-size: 113px 120px; }
-
-    .hero-attack-bg { bottom: 1px; left: 1px; width: 32px; height: 35px; background-size: 32px 35px; }
-    .hero-attack-amount { bottom: 4px; right: 2px; font-size: 13px; text-shadow: 1px 1px 1px #000; width: 20px;  }
-    .hero-health-bg { bottom: 1px; right: 1px; width: 32px; height: 35px; background-size: 32px 35px; }
-    .hero-health-amount { bottom: 4px; right: 6px; font-size: 13px; text-shadow: 1px 1px 1px #000; width: 20px;  }
-    .hero-armor-bg { bottom: 35px; right: 4px; width: 27px; height: 29px; background-size: 27px 29px; }
-    .hero-armor-amount { bottom: 6px; right: 2px; font-size: 13px; text-shadow: 1px 1px 1px #000; width: 20px;  }
-
-    #friendly-hand { bottom: -133px; left: 1px; width: 100%; text-align: center; }
-    #opposing-hand { top: -161px; left: 1px; width: 100%; text-align: center; }
-
-    #friendly-deck { width: 31px; height: 67px; background-size: 31px 67px; top: 62px; right: -35px; }
-    #opposing-deck { width: 31px; height: 67px; background-size: 31px 67px; top: 207px; right: -35px; }
-
-    .secret { height: 27px; width: 27px; background-size: 27px 27px; }
-    #friendly-hero .secret0 { top: -7px; right: 42px; }
-    #friendly-hero .secret1 { top: 10px; right: 69px; }
-    #friendly-hero .secret2 { top: 38px; right: 82px; }
-    #friendly-hero .secret3 { top: 10px; right: 20px; }
-    #friendly-hero .secret4 { top: 38px; right: 4px; }
-
-    #opposing-hero .secret0 { top:-10px; right: 42px; }
-    #opposing-hero .secret1 { top: 15px; right: 69px; }
-    #opposing-hero .secret2 { top: 57px; right: 82px; }
-    #opposing-hero .secret3 { top: 15px; right: 20px; }
-    #opposing-hero .secret4 { top: 57px; right: 4px; }
-
-    .cardback { background-size: 53px 73px; }
-    .thumb { width: 53px; height: 73px;  }
-    .thumb > div { background-size: 53px 73px; width: 53px; height: 73px; }
-
-    #opposing-play { width: 610px; height: 80px; top: 67px; left: 23px; }
-    #friendly-play { width: 610px; height: 80px; top: 170px; left: 23px; }
-
-    .minion { width: 62px; height: 80px; margin-left: 17px;}
-    .minion .card { width: 62px; height: 80px; background-size: 62px 80px; }
-    .minion .attack { background-size: 21px 23px; bottom: 4px; left: 3px; width: 21px; height: 23px; }
-    .minion .attack .amount { bottom: 2px; left: 0; text-shadow: 1px 1px 1px #000; width: 23px; font-size: 12px; }
-    .minion .health { background-size: 16px 23px; bottom: 4px; right: 7px; width: 16px; height: 23px; }
-    .minion .health .amount { bottom: 2px; right: -4px; text-shadow: 1px 1px 1px #000; width: 23px; font-size: 12px; }
-    .minion .legendary { background-size: 73px 55px; top: -9px; left: 5px; width: 73px; height: 55px; }
-    .minion .taunting { background-size: 71px 93px; top: -6px; left: -6px; width: 71px; height: 93px; }
-    .minion .shielded { background-size: 84px 103px; top: -10px; left: -12px; width: 84px; height: 103px; }
-    .minion .frozen { background-size: 83px 100px; top: -8px; left: -12px; width: 83px; height: 100px; }
-    .minion .exhausted { background-size: 15px 17px; top: -6px; right: -3px; width: 15px; height: 17px; }
-    .minion .inspire { background-size: 19px 17px; bottom: -4px; left: 21px; width: 19px; height: 17px; }
-    .minion .trigger { background-size: 15px 17px; bottom: -4px; left: 24px; width: 15px; height: 17px; }
-    .minion .deathrattle { background-size: 22px 17px; bottom: -4px; left: 21px; width: 22px; height: 17px; }
-    .minion .silenced { background-size: 73px 89px; top: -4px; left: -4px; width: 73px; height: 89px; }
-    .minion .poison { background-size: 13px 19px;  bottom: -5px; left: 25px; width: 20px; height: 28px; }
-
-    #friendly-mana { bottom: -30px; right: 173px; background-size: 51px 27px; height: 27px; width: 51px; }
-    #friendly-mana .amount { margin-top: 7px; height: 14px; width: 51px; text-shadow: 1px 1px 1px #000; font-size: 9px; }
-    #opposing-mana { top: -30px; right: 173px; background-size: 51px 27px; height: 27px; width: 51px; }
-    #opposing-mana .amount { margin-top: 7px; height: 14px; width: 51px; text-shadow: 1px 1px 1px #000; font-size: 9px; }
-
-
-    #friendly-hero-power { bottom: -17px; right: 228px; }
-    #opposing-hero-power { top: -17px; right: 228px; }
-    .heropower { width: 63px; height: 58px; }
-    .heropower > div { width: 63px; height: 58px; background-size: 63px 58px; }
-
-
-    #friendly-weapon { bottom: -17px; left: 220px; }
-    #opposing-weapon { top: -17px; left: 220px; }
-    .weapon { width: 67px; height: 58px; }
-    .weapon > div { width: 67px; height: 58px; background-size: 67px 58px; }
-    .weapon .attack { left: 7px; bottom: -1px; width: 17px; height: 17px; background-size: 17px 17px; text-shadow: 1px 1px 1px #000; font-size: 12px; }
-    .weapon .attack .amount { left: 1px; bottom: 1px; width: 17px; height: 17px; }
-    .weapon .durability { right: 4px; bottom: -1px; width: 16px; height: 17px; background-size: 16px 17px; text-shadow: 1px 1px 1px #000; font-size: 12px; }
-    .weapon .durability .amount { right: 1px; bottom: 1px; width: 16px; height: 17px; }
-
-
-}
-
-
-@media only screen and (min-height: 721px) {
-
-    .game-title { font-size: 40px; }
-
-    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th { padding: 6px; }
-
-    .tab-pane > div { margin-top: 30px; }
-
-    .versus { font-size: 25px; }
-    .versus-info { margin-top: 5px; }
-    .versus-info span { font-size: 25px; }
-    .versus-info-duration { font-size: 18px; }
-
-    .health-info {width: auto;}
-    .health-info th:first-child { width: 130px; }
-
-    .card-info th:first-child { width: 130px; }
-
-    .mana-info {width: auto;}
-    .mana-info th:first-child { width: 130px;  }
-
-    .trade-info {width: auto;}
-    .trade-info th:first-child { width: 130px;  }
-
-    .board-control-info { width: auto; }
-    .board-control-info th:first-child { width: 130px;  }
-    .bcontrol-info { width: 25px; height: 25px; }
-
-    .card-advantage-info { width: auto; }
-    .card-advantage-info th:first-child { width: 130px;  }
-    .cadvantage-info { width: 25px; height: 25px; }
-
-    .health-armor {margin: auto; width: 25px; }
-
-    .health-bg { background-size: 18px 25px; width: 18px; height: 25px; margin-left: 2px; }
-    .health-bg > div { bottom: 0; text-shadow: 2px 2px 4px #000; width: 18px; }
-
-    .armor-bg { background-size: 22px 25px; width: 22px; height: 25px; font-size: 12px;  }
-    .armor-bg > div { bottom: 5px; text-shadow: 1px 1px 1px #000; width: 22px; }
-
-    .minion-attack-health-bg { width: 40px; height: 55px; margin: 0 3px; }
-    .minion-health-bg { background-size: 20px 20px; bottom: -3px; right: -5px; width: 20px; height: 20px; }
-    .minion-health-bg > div { bottom: 1px; font-size: 10px; text-shadow: 2px 2px 2px #000; width: 20px;  }
-
-    .minion-attack-bg { background-size: 20px 20px; bottom: -3px; left: -5px; width: 20px; height: 20px; }
-    .minion-attack-bg > div { bottom: 1px; font-size: 10px; text-shadow: 2px 2px 2px #000; width: 20px;  }
-
-    .turn-info-board1 { width: 86px; }
-    .turn-info-board2 { width: 33%; }
-    .turn-info-board3 { width: 10%; }
-    .turn-info-board4 { width: 10%; }
-    .turn-info-board5 { width: auto; }
-
-    #next { margin: 0 5px; }
-    #previous { margin: 0 5px; }
-    #turn-status { top: -115px; right: 0; font-size: 25px; text-shadow: 2px 2px 2px #000; }
-    .autoplay { font-size: 14px; }
-    .autoplay-toggle { font-size: 14px; }
-    .autoplay-duration { font-size: 14px; }
-    #game-board-content { margin-top: 250px; width: 1024px; }
-    #game-board-actions { font-size: 14px; height: 700px; width: 400px; }
-    #game-board-container { width: 1024px; position: absolute; top: 0; left: 0; }
-    #replay { height: 990px; }
-    #game-board-actions-container { position: absolute; top: 130px; left: 1100px; }
-    .tabs-left { margin-top: 130px; }
-    #whose-turn { top: 217px; right:0; width: 80px; font-size: 15px; text-shadow: 2px 2px 2px #000;}
-    #whose-turn .green { color: #26C805;}
-    #whose-turn .yellow { color: #E1D002; }
-
-    .next-prev-buttons .text { font-size: 18px; margin: 0 10px; }
-    .next-prev-buttons .next { background-size: 15px 15px; width: 15px; height: 15px; }
-    .next-prev-buttons .prev { background-size: 15px 15px; width: 15px; height: 15px; }
-
-    #game-board { background-size: 1024px 512px; width: 1024px; height: 512px; }
-
-    #friendly-hero { bottom: -86px; left: 421px; width: 170px; height: 180px; background-size: 170px 180px; }
-    #opposing-hero { top: -122px; left: 421px; width: 170px; height: 180px; background-size: 170px 180px;  }
-
-    .hero-attack-bg { bottom: 1px; left: 1px; width: 48px; height: 52px; background-size: 48px 52px; }
-    .hero-attack-amount { bottom: 6px; right: 4px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
-    .hero-health-bg { bottom: 1px; right: 1px; width: 48px; height: 52px; background-size: 48px 52px; }
-    .hero-health-amount { bottom: 6px; right: 9px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
-    .hero-armor-bg { bottom: 52px; right: 6px; width: 40px; height: 43px; background-size: 40px 43px; }
-    .hero-armor-amount { bottom: 9px; right: 4px; font-size: 20px; text-shadow: 1px 1px 1px #000; width: 30px;  }
-
-    #friendly-hand { bottom: -200px; left: 1px; width: 100%; text-align: center; }
-    #opposing-hand { top: -242px; left: 1px; width: 100%; text-align: center; }
-
-    #friendly-deck { width: 46px; height: 100px; background-size: 46px 100px; top: 93px; right: -52px; }
-    #opposing-deck { width: 46px; height: 100px; background-size: 46px 100px; top: 310px; right: -52px; }
-
-    .secret { height: 40px; width: 40px; background-size: 40px 40px; }
-    #friendly-hero .secret0 { top:-10px; right: 65px; }
-    #friendly-hero .secret1 { top: 15px; right: 104px; }
-    #friendly-hero .secret2 { top: 57px; right: 123px; }
-    #friendly-hero .secret3 { top: 15px; right: 30px; }
-    #friendly-hero .secret4 { top: 57px; right: 6px; }
-
-    #opposing-hero .secret0 { top:-10px; right: 65px; }
-    #opposing-hero .secret1 { top: 15px; right: 104px; }
-    #opposing-hero .secret2 { top: 57px; right: 123px; }
-    #opposing-hero .secret3 { top: 15px; right: 30px; }
-    #opposing-hero .secret4 { top: 57px; right: 6px; }
-
-    .cardback { background-size: 80px 110px; }
-    .thumb { width: 80px; height: 110px;  }
-    .thumb > div { background-size: 80px 110px; width: 80px; height: 110px; }
-
-    #opposing-play { width: 915px; height: 120px; top: 100px; left: 34px; }
-    #friendly-play { width: 915px; height: 120px; top: 255px; left: 34px; }
-
-    .minion { width: 93px; height: 120px; margin-left: 25px;}
-    .minion .card { width: 93px; height: 120px; }
-    .minion .attack { background-size: 31px 35px; bottom: 5px; left: 4px; width: 31px; height: 35px; }
-    .minion .attack .amount { bottom: 2px; left: 0; text-shadow: 1px 1px 1px #000; width: 35px; font-size: 18px; }
-    .minion .health { background-size: 24px 35px; bottom: 5px; right: 10px; width: 24px; height: 35px; }
-    .minion .health .amount { bottom: 2px; right: -5px; text-shadow: 1px 1px 1px #000; width: 35px; font-size: 18px; }
-    .minion .legendary { background-size: 110px 83px; top: -13px; left: 7px; width: 110px; height: 83px; }
-    .minion .taunting { background-size: 107px 140px; top: -8px; left: -8px; width: 107px; height: 140px; }
-    .minion .shielded { background-size: 126px 154px; top: -15px; left: -18px; width: 126px; height: 154px; }
-    .minion .frozen { background-size: 125px 149px; top: -12px; left: -18px; width: 125px; height: 149px; }
-    .minion .exhausted { background-size: 22px 25px; top: -8px; right: -4px; width: 22px; height: 25px; }
-    .minion .inspire { background-size: 28px 25px; bottom: -5px; left: 31px; width: 28px; height: 25px; }
-    .minion .trigger { background-size: 22px 25px; bottom: -6px; left: 36px; width: 22px; height: 25px; }
-    .minion .deathrattle { background-size: 32px 25px; bottom: -5px; left: 31px; width: 32px; height: 25px; }
-    .minion .silenced { background-size: 110px 133px; top: -6px; left: -6px; width: 110px; height: 133px; }
-    .minion .poison { background-size: 20px 28px;  bottom: -7px; left: 38px; width: 20px; height: 28px; }
-
-    #friendly-mana { bottom: -45px; right: 260px; background-size: 77px 41px; height: 41px; width: 77px; }
-    #friendly-mana .amount { margin-top: 10px; height: 21px; width: 77px; text-shadow: 1px 1px 1px #000; font-size: 14px; }
-    #opposing-mana { top: -45px; right: 260px; background-size: 77px 41px; height: 41px; width: 77px; }
-    #opposing-mana .amount { margin-top: 10px; height: 21px; width: 77px; text-shadow: 1px 1px 1px #000; font-size: 14px; }
-
-
-    #friendly-hero-power { bottom: -26px; right: 342px; }
-    #opposing-hero-power { top: -26px; right: 342px; }
-    .heropower { width: 95px; height: 87px; }
-    .heropower > div { width: 95px; height: 87px; background-size: 95px 87px; }
-
-
-    #friendly-weapon { bottom: -26px; left: 330px; }
-    #opposing-weapon { top: -26px; left: 330px; }
-    .weapon { width: 100px; height: 87px; }
-    .weapon > div { width: 100px; height: 87px; background-size: 100px 87px; }
-    .weapon .attack { left: 11px; bottom: -2px; width: 26px; height: 25px; background-size: 26px 25px; text-shadow: 1px 1px 1px #000; font-size: 18px; }
-    .weapon .attack .amount { left: 1px; bottom: 1px; width: 26px; height: 25px; }
-    .weapon .durability { right: 5px; bottom: -2px; width: 24px; height: 25px; background-size: 24px 25px; text-shadow: 1px 1px 1px #000; font-size: 18px; }
-    .weapon .durability .amount { right: 1px; bottom: 1px; width: 24px; height: 25px; }
-}
 
 #paginator-container { margin: auto; width: 100%; }
 #paginator li a  { background-color: #4C4C4C; color: #fff; }
@@ -313,6 +163,7 @@
 
 .tooltipster-default { border-radius: 0; border: 0 none; background: none; color: #fff; }
 
+.turn-log { border-top: 1px solid #0070DE; border-bottom: 1px solid #0070DE; margin: 8px 0; font-size: 18px; font-weight: bold;}
 .versus { font-weight: bold; }
 .versus-info { text-align: center; }
 .versus-info span { font-weight: bold; }
@@ -349,11 +200,11 @@
 .minion-attack-bg { background-image: url(http://images.hearthgames.com/misc/attack-bg.png); position: absolute; }
 .minion-attack-bg > div { position: absolute; font-weight: bold; text-align: center; color: #fff; }
 
-#game-board-content { position: relative; }
-#game-board-actions { overflow-y: scroll; border: 1px solid #000; background-color: #222; }
+#play-area { position: absolute; }
+#play-area-actions { overflow-y: scroll; border: 1px solid #000; background-color: #222; }
 #next { display: inline-block; cursor: pointer; }
 #previous { display: inline-block; cursor: pointer; }
-#turn-status { position: absolute; font-weight: bold; z-index: 20; }
+#game-board-controls { background: #c1c1c1; border: 1px solid #101010; }
 #autoplay-content { text-align: right; }
 #autoplay-duration-content { text-align: right; }
 .plus-duration { cursor: pointer; }
@@ -372,7 +223,7 @@
 .next-prev-buttons .next { background-image: url(http://images.hearthgames.com/misc/next.png); cursor: pointer; }
 .next-prev-buttons .prev { background-image: url(http://images.hearthgames.com/misc/prev.png); cursor: pointer; }
 
-#game-board { position: relative; background-image: url(http://images.hearthgames.com/misc/game-board-bg.png); }
+#game-board { position: absolute; background-image: url(http://images.hearthgames.com/misc/game-board-bg.png); }
 
 #friendly-hero { position: absolute;  }
 #opposing-hero { position: absolute;  }
@@ -449,6 +300,37 @@
 .weapon .durability { position: absolute; background-image: url(http://images.hearthgames.com/misc/weapon-durability.png); font-weight: bold;  text-align: center;}
 .weapon .durability .amount { position: absolute; }
 
+.playing { color: #26C805; }
+.paused { color: #FFF569; }
+.rewinding { color: #0070DE; }
+.fastforwarding { color: #0070DE; }
+
+.control .fast-backward { background-image: url("http://images.hearthgames.com/i/fast-backward.png"); width: 25px; height: 18px; }
+.control .fast-backward:hover { background-image: url("http://images.hearthgames.com/i/fast-backward-hover.png"); width: 25px; height: 18px; }
+
+.control .fast-forward { background-image: url("http://images.hearthgames.com/i/fast-forward.png"); width: 25px; height: 18px; }
+.control .fast-forward:hover { background-image: url("http://images.hearthgames.com/i/fast-forward-hover.png"); width: 25px; height: 18px; }
+
+.control .forward { background-image: url("http://images.hearthgames.com/i/forward.png"); width: 23px; height: 18px; }
+.control .forward:hover { background-image: url("http://images.hearthgames.com/i/forward-hover.png"); width: 23px; height: 18px; }
+
+.control .pause { background-image: url("http://images.hearthgames.com/i/pause.png"); width: 10px; height: 18px; }
+.control .pause:hover { background-image: url("http://images.hearthgames.com/i/pause-hover.png"); width: 10px; height: 18px; }
+
+.control .play { background-image: url("http://images.hearthgames.com/i/play.png"); width: 16px; height: 18px; }
+.control .play:hover { background-image: url("http://images.hearthgames.com/i/play-hover.png"); width: 16px; height: 18px; }
+
+.control .rewind { background-image: url("http://images.hearthgames.com/i/rewind.png"); width: 23px; height: 18px;  }
+.control .rewind:hover { background-image: url("http://images.hearthgames.com/i/rewind-hover.png"); width: 23px; height: 18px; }
+
+.control .step-backward { background-image: url("http://images.hearthgames.com/i/step-backward.png"); width: 14px; height: 18px; }
+.control .step-backward:hover { background-image: url("http://images.hearthgames.com/i/step-backward-hover.png"); width: 14px; height: 18px; }
+
+.control .step-forward { background-image: url("http://images.hearthgames.com/i/step-forward.png"); width: 14px; height: 18px; }
+.control .step-forward:hover { background-image: url("http://images.hearthgames.com/i/step-forward-hover.png"); width: 14px; height: 18px; }
+
+.control .stop { background-image: url("http://images.hearthgames.com/i/stop.png"); width: 14px; height: 18px; }
+.control .stop:hover { background-image: url("http://images.hearthgames.com/i/stop-hover.png"); width: 14px; height: 18px; }
 
 .weapon .GVG_024 { background-image: url("http://images.hearthgames.com/w/GVG_024.png"); }
 .weapon .EX1_536 { background-image: url("http://images.hearthgames.com/w/EX1_536.png"); }

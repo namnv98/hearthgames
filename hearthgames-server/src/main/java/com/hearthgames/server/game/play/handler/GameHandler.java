@@ -1,91 +1,90 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.*;
-import com.hearthgames.server.game.play.GameResult;
-import com.hearthgames.server.game.play.domain.CardDrawn;
+import com.hearthgames.server.game.play.PlayContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GameHandler implements Handler {
 
     @Override
-    public boolean supports(GameResult result, GameContext context, Activity activity) {
-        return activity.isTagChange() && activity.getDelta() instanceof GameEntity;
+    public boolean supports(PlayContext playContext) {
+        return playContext.getActivity().isTagChange() && playContext.getActivity().getDelta() instanceof GameEntity;
     }
 
-    public boolean handle(GameResult result, GameContext context, Activity activity) {
-        GameEntity before = context.getGameEntity();
-        GameEntity after = (GameEntity) activity.getDelta();
+    public boolean handle(PlayContext playContext) {
+        GameEntity before = playContext.getContext().getGameEntity();
+        GameEntity after = (GameEntity) playContext.getActivity().getDelta();
 
         if (before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) {
-            Card friendlyHeroCard = (Card) context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
-            Card opposingHeroCard = (Card) context.getEntityById(context.getOpposingPlayer().getHeroEntity());
+            Card friendlyHeroCard = (Card) playContext.getContext().getEntityById(playContext.getContext().getFriendlyPlayer().getHeroEntity());
+            Card opposingHeroCard = (Card) playContext.getContext().getEntityById(playContext.getContext().getOpposingPlayer().getHeroEntity());
             CardDetails friendlyCardDetails = friendlyHeroCard.getCardDetails();
             CardDetails opposingCardDetails = opposingHeroCard.getCardDetails();
-            context.getFriendlyPlayer().setPlayerClass(friendlyCardDetails.getPlayerClass());
-            context.getOpposingPlayer().setPlayerClass(opposingCardDetails.getPlayerClass());
-            context.getFriendlyPlayer().setHeroCard(friendlyHeroCard);
-            context.getOpposingPlayer().setHeroCard(opposingHeroCard);
+            playContext.getContext().getFriendlyPlayer().setPlayerClass(friendlyCardDetails.getPlayerClass());
+            playContext.getContext().getOpposingPlayer().setPlayerClass(opposingCardDetails.getPlayerClass());
+            playContext.getContext().getFriendlyPlayer().setHeroCard(friendlyHeroCard);
+            playContext.getContext().getOpposingPlayer().setHeroCard(opposingHeroCard);
 
-            result.addLoggingAction("The Game has started");
-            context.getCards().stream().filter(c -> Zone.HAND.eq(c.getZone())).filter(c -> context.getStartingCardIds().contains(c.getEntityId())).forEach(c -> {
-                Player player = c.getController().equals(context.getFriendlyPlayer().getController()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
-                if (player == context.getFriendlyPlayer()) {
-                    result.addFriendlyStartingCard(c);
+            playContext.addLoggingAction("The Game has started");
+            playContext.getContext().getCards().stream().filter(c -> Zone.HAND.eq(c.getZone())).filter(c -> playContext.getContext().getStartingCardIds().contains(c.getEntityId())).forEach(c -> {
+                Player player = c.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
+                if (player == playContext.getContext().getFriendlyPlayer()) {
+                    playContext.getResult().addFriendlyStartingCard(c);
                 } else {
-                    result.addOpposingStartingCard(c);
+                    playContext.getResult().addOpposingStartingCard(c);
                 }
-                result.addCardDrawn(player, c, player);
+                playContext.addCardDrawn(player, c, player);
             });
-            result.addLoggingAction("Mulligan Phase has started");
+            playContext.addLoggingAction("Mulligan Phase has started");
         }
         if (GameEntity.Step.BEGIN_MULLIGAN.eq(before.getStep()) && GameEntity.Step.MAIN_READY.eq(after.getStep())) {
-            result.addLoggingAction("Mulligan Phase has ended");
-            result.addEndofTurn();
-            result.setTurnNumber(1);
-            result.addTurn();
+            playContext.addLoggingAction("Mulligan Phase has ended");
+            playContext.addEndofTurn();
+            playContext.addFirstBoard();
+            playContext.getResult().setTurnNumber(1);
+            playContext.getResult().addTurn();
         }
 
         if (GameEntity.Step.MAIN_READY.eq(after.getStep())) {
-            if (result.getTurnNumber() > 1) {
-                result.addTurn();
+            if (playContext.getResult().getTurnNumber() > 1) {
+                playContext.getResult().addTurn();
             }
-            result.addLoggingAction("Turn " + result.getTurnNumber());
-            if (TRUE_OR_ONE.equals(context.getFriendlyPlayer().getCurrentPlayer())) {
-                result.getCurrentTurn().setWhoseTurn(context.getFriendlyPlayer());
-            } else if (TRUE_OR_ONE.equals(context.getOpposingPlayer().getCurrentPlayer())) {
-                result.getCurrentTurn().setWhoseTurn(context.getOpposingPlayer());
+            playContext.addLoggingAction("Turn " + playContext.getResult().getTurnNumber());
+            if (TRUE_OR_ONE.equals(playContext.getContext().getFriendlyPlayer().getCurrentPlayer())) {
+                playContext.getResult().getCurrentTurn().setWhoseTurn(playContext.getContext().getFriendlyPlayer());
+            } else if (TRUE_OR_ONE.equals(playContext.getContext().getOpposingPlayer().getCurrentPlayer())) {
+                playContext.getResult().getCurrentTurn().setWhoseTurn(playContext.getContext().getOpposingPlayer());
             }
-            result.getCurrentTurn().getWhoseTurn().setNumOptions(null); // this needs resetting at the start of a turn.
-            result.getCurrentTurn().setStartDateTime(activity.getDateTime());
+            playContext.getResult().getCurrentTurn().getWhoseTurn().setNumOptions(null); // this needs resetting at the start of a turn.
+            playContext.getResult().getCurrentTurn().setStartDateTime(playContext.getActivity().getDateTime());
         } else if (GameEntity.Step.MAIN_NEXT.eq(after.getStep()) || GameEntity.Step.FINAL_GAMEOVER.eq(after.getStep())) {
-            result.getCurrentTurn().setEndDateTime(activity.getDateTime());
+            playContext.getResult().getCurrentTurn().setEndDateTime(playContext.getActivity().getDateTime());
         }
 
         if (GameEntity.Step.MAIN_START.eq(after.getStep())) {
 
             // After 10 of one players turns the game automatically gives you 10 mana without recording it in the log.
             // I check here if the mana gained was still 0 after the MAIN_READY finishes, if so we set it to 10.
-            if (result.getCurrentTurn().getManaGained() == 0) {
-                result.addManaGained(result.getCurrentTurn().getWhoseTurn(), 10);
+            if (playContext.getResult().getCurrentTurn().getManaGained() == 0) {
+                playContext.addManaGained(playContext.getResult().getCurrentTurn().getWhoseTurn(), 10);
             }
         }
 
-        if (after.getTurn() != null && context.getGameEntity().isGameRunning()) {
+        if (after.getTurn() != null && playContext.getContext().getGameEntity().isGameRunning()) {
             int turnNumber = Integer.parseInt(after.getTurn());
-            result.setTurnNumber(turnNumber);
+            playContext.getResult().setTurnNumber(turnNumber);
         }
 
         if (GameEntity.State.COMPLETE.eq(after.getState())) {
-            if (result.getWinner() == context.getFriendlyPlayer()) {
-                result.setWinnerClass(context.getFriendlyPlayer().getPlayerClass());
-                result.setLoserClass(context.getOpposingPlayer().getPlayerClass());
+            if (playContext.getResult().getWinner() == playContext.getContext().getFriendlyPlayer()) {
+                playContext.getResult().setWinnerClass(playContext.getContext().getFriendlyPlayer().getPlayerClass());
+                playContext.getResult().setLoserClass(playContext.getContext().getOpposingPlayer().getPlayerClass());
             } else {
-                result.setWinnerClass(context.getOpposingPlayer().getPlayerClass());
-                result.setLoserClass(context.getFriendlyPlayer().getPlayerClass());
+                playContext.getResult().setWinnerClass(playContext.getContext().getOpposingPlayer().getPlayerClass());
+                playContext.getResult().setLoserClass(playContext.getContext().getFriendlyPlayer().getPlayerClass());
             }
-            result.addLoggingAction("Game Over");
+            playContext.addLoggingAction("Game Over");
         }
 
         return true;

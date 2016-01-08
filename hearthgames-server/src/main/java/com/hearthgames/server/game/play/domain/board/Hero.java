@@ -1,25 +1,38 @@
 package com.hearthgames.server.game.play.domain.board;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hearthgames.server.game.play.domain.board.json.HeroSerializer;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonSerialize(using = HeroSerializer.class)
 public class Hero {
 
+    private String cardId;
     private String id;
     private Integer health;
-    private boolean damaged;
+    private Boolean damaged;
     private Integer armor;
     private Integer attack;
     private Integer mana;
     private Integer manaTotal;
 
     private String powerId;
-    private boolean powerUsed;
+    private Boolean powerUsed;
 
     private List<CardInHand> cardsInHand = new ArrayList<>();
     private List<CardInSecret> cardsInSecret = new ArrayList<>();
     private List<MinionInPlay> minionsInPlay = new ArrayList<>();
     private Weapon weapon;
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
 
     public String getId() {
         return id;
@@ -37,11 +50,11 @@ public class Hero {
         this.health = health;
     }
 
-    public boolean isDamaged() {
+    public Boolean getDamaged() {
         return damaged;
     }
 
-    public void setDamaged(boolean damaged) {
+    public void setDamaged(Boolean damaged) {
         this.damaged = damaged;
     }
 
@@ -85,11 +98,11 @@ public class Hero {
         this.powerId = powerId;
     }
 
-    public boolean isPowerUsed() {
+    public Boolean getPowerUsed() {
         return powerUsed;
     }
 
-    public void setPowerUsed(boolean powerUsed) {
+    public void setPowerUsed(Boolean powerUsed) {
         this.powerUsed = powerUsed;
     }
 

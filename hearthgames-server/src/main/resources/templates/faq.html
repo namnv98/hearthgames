@@ -15,12 +15,11 @@
 </head>
 <body>
 
+<div th:replace="/fragments/nav-fragment::nav"></div>
+
 <div class="container">
 
     <div th:replace="/fragments/beta-fragment::beta"></div>
-
-    <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
-    <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
     <div class="title-container">
         <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
@@ -67,5 +66,6 @@
 </div>
 
 <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 </body>
 </html>

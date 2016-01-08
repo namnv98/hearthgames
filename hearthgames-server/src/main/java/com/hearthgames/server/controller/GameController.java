@@ -1,5 +1,6 @@
 package com.hearthgames.server.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hearthgames.server.database.domain.GamePlayed;
@@ -82,6 +83,7 @@ public class GameController {
                 modelAndView.addObject("cardAdvantageInfos", cardAdvantageInfos);
 
                 ObjectMapper mapper = new ObjectMapper();
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 try {
                     String jsonInString = mapper.writeValueAsString(turnInfos);
                     modelAndView.addObject("turnInfos", jsonInString);

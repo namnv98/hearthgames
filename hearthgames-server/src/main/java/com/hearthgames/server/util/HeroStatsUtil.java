@@ -4,47 +4,47 @@ import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.domain.*;
+import com.hearthgames.server.game.play.domain.board.Board;
 
 import java.util.List;
 
 public class HeroStatsUtil {
 
 
-    public static Integer getHealth(Player player, List<Action> actions, Action stopAction) {
-        return doGetHeroHealth(player, actions, stopAction);
+    public static Integer getHealth(Player player, List<Action> actions, Board boardToStopAt) {
+        return doGetHeroHealth(player, actions, boardToStopAt);
     }
 
     public static Integer getHealth(Player player, List<Action> actions) {
         return doGetHeroHealth(player, actions, null);
     }
 
-    public static Integer getArmor(Player player, List<Action> actions, Action stopAction) {
-        return doGetHeroArmor(player, actions, stopAction);
+    public static Integer getArmor(Player player, List<Action> actions, Board boardToStopAt) {
+        return doGetHeroArmor(player, actions, boardToStopAt);
     }
 
     public static Integer getArmor(Player player, List<Action> actions) {
         return doGetHeroArmor(player, actions, null);
     }
 
-    public static boolean hasHealthChanged(Player player, List<Action> actions, Action stopAction) {
-        return doHasHealthChanged(player, actions, stopAction);
+    public static boolean hasHealthChanged(Player player, List<Action> actions, Board boardToStopAt) {
+        return doHasHealthChanged(player, actions, boardToStopAt);
     }
 
     public static boolean hasHealthChanged(Player player, List<Action> actions) {
         return doHasHealthChanged(player, actions, null);
     }
 
-    public static boolean hasArmorChanged(Player player, List<Action> actions, Action stopAction) {
-        return doHasArmorChanged(player, actions, stopAction);
+    public static boolean hasArmorChanged(Player player, List<Action> actions, Board boardToStopAt) {
+        return doHasArmorChanged(player, actions, boardToStopAt);
     }
 
     public static boolean hasArmorChanged(Player player, List<Action> actions) {
         return doHasArmorChanged(player, actions, null);
     }
 
-    public static String getHeroId(Player player, GameContext context) {
-        Card heroCard = (Card) context.getEntityById(player.getHeroEntity());
-        return heroCard.getCardid();
+    public static Card getHeroCard(Player player, GameContext context) {
+        return (Card) context.getEntityById(player.getHeroEntity());
     }
 
     public static Integer getCurrentHealth(Player player, GameContext context) {

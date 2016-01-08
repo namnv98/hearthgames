@@ -14,12 +14,11 @@
 </head>
 <body>
 
+<div th:replace="/fragments/nav-fragment::nav"></div>
+
 <div class="container">
 
     <div th:replace="/fragments/beta-fragment::beta"></div>
-
-    <div th:replace="/fragments/login-fragment::userLoggedIn"></div>
-    <div th:replace="/fragments/login-fragment::userNotLoggedIn"></div>
 
     <div class="title-container">
         <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>

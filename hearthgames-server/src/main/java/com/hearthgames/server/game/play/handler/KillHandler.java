@@ -1,31 +1,30 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.*;
-import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.PlayContext;
 
 public class KillHandler implements Handler {
 
     public static final String DOOMSAYER = "NEW1_021";
 
     @Override
-    public boolean supports(GameResult result, GameContext context, Activity activity) {
-        return activity.isTagChange() && activity.getDelta() instanceof Card && context.getAfter(activity).getZone() != null;
+    public boolean supports(PlayContext playContext) {
+        return playContext.getActivity().isTagChange() && playContext.getActivity().getDelta() instanceof Card && playContext.getContext().getAfter(playContext.getActivity()).getZone() != null;
     }
 
     @Override
-    public boolean handle(GameResult result, GameContext context, Activity activity) {
-        Card before = context.getBefore(activity);
-        Card after = context.getAfter(activity);
+    public boolean handle(PlayContext playContext) {
+        Card before = playContext.getContext().getBefore(playContext.getActivity());
+        Card after = playContext.getContext().getAfter(playContext.getActivity());
 
         if (Zone.PLAY.eq(before.getZone()) && Zone.GRAVEYARD.eq(after.getZone()) && Card.Type.MINION.eq(before.getCardtype())) {
-            Card card = (Card) context.getEntityById(before.getLastAffectedBy());
+            Card card = (Card) playContext.getContext().getEntityById(before.getLastAffectedBy());
             if (card != null) {
                 boolean favorableTrade = false;
                 boolean evenTrade = false;
 
                 boolean killerFriendly = false;
-                if (card.getController().equals(context.getFriendlyPlayer().getController())) {
+                if (card.getController().equals(playContext.getContext().getFriendlyPlayer().getController())) {
                     killerFriendly = true;
                 }
 
@@ -63,20 +62,20 @@ public class KillHandler implements Handler {
                         }
                     }
                 }
-                Player killerController = context.getPlayer(card);
-                Player killedController = context.getPlayer(before);
-                result.addKill("killed", killerController, killedController, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), card, before, favorableTrade, evenTrade);
+                Player killerController = playContext.getContext().getPlayer(card);
+                Player killedController = playContext.getContext().getPlayer(before);
+                playContext.addKill("killed", killerController, killedController, killerFriendly ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer(), card, before, favorableTrade, evenTrade);
 
                 return true;
             }
         }
 
         if (after.getToBeDestroyed() != null && TRUE_OR_ONE.equals(after.getToBeDestroyed())) {
-            Card card = (Card) context.getEntityById(activity.getEntityId());
+            Card card = (Card) playContext.getContext().getEntityById(playContext.getActivity().getEntityId());
             if (card != null) {
-                Activity parent = activity.getParent();
+                Activity parent = playContext.getActivity().getParent();
                 if (parent != null) {
-                    Card parentCard = (Card) context.getEntityById(parent.getEntityId());
+                    Card parentCard = (Card) playContext.getContext().getEntityById(parent.getEntityId());
                     if (parentCard != null) {
                         CardDetails parentCardDetails = parentCard.getCardDetails();
                         CardDetails cardDetails = card.getCardDetails();
@@ -86,7 +85,7 @@ public class KillHandler implements Handler {
                             boolean evenTrade = false;
 
                             boolean killerFriendly = false;
-                            if (parentCard.getController().equals(context.getFriendlyPlayer().getController())) {
+                            if (parentCard.getController().equals(playContext.getContext().getFriendlyPlayer().getController())) {
                                 killerFriendly = true;
                             }
 
@@ -109,9 +108,9 @@ public class KillHandler implements Handler {
                                     }
                                 }
                             }
-                            Player killerController = context.getPlayer(parentCard);
-                            Player killedController = context.getPlayer(card);
-                            result.addKill("destroyed", killerController, killedController, killerFriendly ? context.getFriendlyPlayer() : context.getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
+                            Player killerController = playContext.getContext().getPlayer(parentCard);
+                            Player killedController = playContext.getContext().getPlayer(card);
+                            playContext.addKill("destroyed", killerController, killedController, killerFriendly ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
 
                             return true;
                         }

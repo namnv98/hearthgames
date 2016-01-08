@@ -1,30 +1,28 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.parse.domain.Activity;
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Zone;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.PlayContext;
 
 public class MulliganCardHandler implements Handler {
 
     @Override
-    public boolean supports(GameResult result, GameContext context, Activity activity) {
-        return (activity.isHideEntity() || activity.isTagChange()) && activity.getDelta() instanceof Card && context.getAfter(activity).getZone() != null && Zone.HAND.eq(context.getBefore(activity).getZone()) && Zone.DECK.eq(context.getAfter(activity).getZone()) && Player.DEALING.equals(context.getPlayerForCard(context.getBefore(activity)).getMulliganState());
+    public boolean supports(PlayContext playContext) {
+        return (playContext.getActivity().isHideEntity() || playContext.getActivity().isTagChange()) && playContext.getActivity().getDelta() instanceof Card && playContext.getContext().getAfter(playContext.getActivity()).getZone() != null && Zone.HAND.eq(playContext.getContext().getBefore(playContext.getActivity()).getZone()) && Zone.DECK.eq(playContext.getContext().getAfter(playContext.getActivity()).getZone()) && Player.DEALING.equals(playContext.getContext().getPlayerForCard(playContext.getContext().getBefore(playContext.getActivity())).getMulliganState());
     }
 
     @Override
-    public boolean handle(GameResult result, GameContext context, Activity activity) {
-        Card before = context.getBefore(activity);
-        Player player = context.getPlayerForCard(before);
+    public boolean handle(PlayContext playContext) {
+        Card before = playContext.getContext().getBefore(playContext.getActivity());
+        Player player = playContext.getContext().getPlayerForCard(before);
 
-        if (context.isFriendly(player)) {
-            result.mulliganFriendlyCard(before);
+        if (playContext.getContext().isFriendly(player)) {
+            playContext.getResult().mulliganFriendlyCard(before);
         } else {
-            result.mulliganOpposingCard(before);
+            playContext.getResult().mulliganOpposingCard(before);
         }
-        result.addLoggingAction(player.getName() + " has mulliganed " + before.getName());
+        playContext.addLoggingAction(player.getName() + " has mulliganed " + before.getName());
         return true;
     }
 }

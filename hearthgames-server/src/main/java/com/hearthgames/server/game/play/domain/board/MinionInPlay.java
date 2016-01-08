@@ -1,21 +1,34 @@
 package com.hearthgames.server.game.play.domain.board;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hearthgames.server.game.play.domain.board.json.MinionInPlaySerializer;
+
+@JsonSerialize(using = MinionInPlaySerializer.class)
 public class MinionInPlay extends CardIn {
 
+    private String cardId;
     private String id;
-    private boolean frozen;
-    private boolean silenced;
-    private boolean stealthed;
-    private boolean taunting;
-    private boolean shielded;
-    private boolean legendary;
+    private Boolean frozen;
+    private Boolean silenced;
+    private Boolean stealthed;
+    private Boolean taunting;
+    private Boolean shielded;
+    private Boolean legendary;
     private String icon; // i.e. Inspire, Trigger, Deathrattle, etc...
-    private int attack;
-    private boolean attackBuffed;
-    private int health;
-    private boolean healthBuffed;
-    private boolean damaged;
-    private boolean exhausted;
+    private Integer attack;
+    private Boolean attackBuffed;
+    private Integer health;
+    private Boolean healthBuffed;
+    private Boolean damaged;
+    private Boolean exhausted;
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
 
     public String getId() {
         return id;
@@ -23,54 +36,6 @@ public class MinionInPlay extends CardIn {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public boolean isFrozen() {
-        return frozen;
-    }
-
-    public void setFrozen(boolean frozen) {
-        this.frozen = frozen;
-    }
-
-    public boolean isSilenced() {
-        return silenced;
-    }
-
-    public void setSilenced(boolean silenced) {
-        this.silenced = silenced;
-    }
-
-    public boolean isStealthed() {
-        return stealthed;
-    }
-
-    public void setStealthed(boolean stealthed) {
-        this.stealthed = stealthed;
-    }
-
-    public boolean isTaunting() {
-        return taunting;
-    }
-
-    public void setTaunting(boolean taunting) {
-        this.taunting = taunting;
-    }
-
-    public boolean isShielded() {
-        return shielded;
-    }
-
-    public void setShielded(boolean shielded) {
-        this.shielded = shielded;
-    }
-
-    public boolean isLegendary() {
-        return legendary;
-    }
-
-    public void setLegendary(boolean legendary) {
-        this.legendary = legendary;
     }
 
     public String getIcon() {
@@ -81,51 +46,99 @@ public class MinionInPlay extends CardIn {
         this.icon = icon;
     }
 
-    public int getAttack() {
+    public Integer getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
+    public void setAttack(Integer attack) {
         this.attack = attack;
     }
 
-    public int getHealth() {
+    public Integer getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(Integer health) {
         this.health = health;
     }
 
-    public boolean isDamaged() {
-        return damaged;
-    }
-
-    public void setDamaged(boolean damaged) {
-        this.damaged = damaged;
-    }
-
-    public boolean isExhausted() {
-        return exhausted;
-    }
-
-    public void setExhausted(boolean exhausted) {
-        this.exhausted = exhausted;
-    }
-
-    public boolean isAttackBuffed() {
-        return attackBuffed;
-    }
-
-    public void setAttackBuffed(boolean attackBuffed) {
+    public void setAttackBuffed(Boolean attackBuffed) {
         this.attackBuffed = attackBuffed;
     }
 
-    public boolean isHealthBuffed() {
+    public Boolean getFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public Boolean getSilenced() {
+        return silenced;
+    }
+
+    public void setSilenced(Boolean silenced) {
+        this.silenced = silenced;
+    }
+
+    public Boolean getStealthed() {
+        return stealthed;
+    }
+
+    public void setStealthed(Boolean stealthed) {
+        this.stealthed = stealthed;
+    }
+
+    public Boolean getTaunting() {
+        return taunting;
+    }
+
+    public void setTaunting(Boolean taunting) {
+        this.taunting = taunting;
+    }
+
+    public Boolean getShielded() {
+        return shielded;
+    }
+
+    public void setShielded(Boolean shielded) {
+        this.shielded = shielded;
+    }
+
+    public Boolean getLegendary() {
+        return legendary;
+    }
+
+    public void setLegendary(Boolean legendary) {
+        this.legendary = legendary;
+    }
+
+    public Boolean getAttackBuffed() {
+        return attackBuffed;
+    }
+
+    public Boolean getHealthBuffed() {
         return healthBuffed;
     }
 
-    public void setHealthBuffed(boolean healthBuffed) {
+    public void setHealthBuffed(Boolean healthBuffed) {
         this.healthBuffed = healthBuffed;
+    }
+
+    public Boolean getDamaged() {
+        return damaged;
+    }
+
+    public void setDamaged(Boolean damaged) {
+        this.damaged = damaged;
+    }
+
+    public Boolean getExhausted() {
+        return exhausted;
+    }
+
+    public void setExhausted(Boolean exhausted) {
+        this.exhausted = exhausted;
     }
 }

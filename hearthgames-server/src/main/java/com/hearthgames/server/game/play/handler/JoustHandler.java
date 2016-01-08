@@ -1,21 +1,20 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.PlayContext;
 
 import java.util.Objects;
 
 public class JoustHandler implements Handler {
 
     @Override
-    public boolean supports(GameResult result, GameContext context, Activity activity) {
-        return activity != null && activity.isJoust();
+    public boolean supports(PlayContext playContext) {
+        return playContext.getActivity() != null && playContext.getActivity().isJoust();
     }
 
     @Override
-    public boolean handle(GameResult result, GameContext context, Activity activity) {
+    public boolean handle(PlayContext playContext) {
         String controller1Id = null;
         String controller2Id = null;
 
@@ -25,7 +24,7 @@ public class JoustHandler implements Handler {
         String cardId1 = null;
         String cardId2 = null;
 
-        for (Activity a: activity.getChildren()) {
+        for (Activity a: playContext.getActivity().getChildren()) {
 
             if (a.isNewCard()) {
                 Card card = (Card) a.getDelta();
@@ -53,22 +52,22 @@ public class JoustHandler implements Handler {
                 cardId1 != null && cardId2 != null) {
             int cost1 = Integer.parseInt(controller1CardCost);
             int cost2 = Integer.parseInt(controller2CardCost);
-            Card card1 = (Card) context.getEntityById(controller1Id);
-            Card card2 = (Card) context.getEntityById(controller2Id);
+            Card card1 = (Card) playContext.getContext().getEntityById(controller1Id);
+            Card card2 = (Card) playContext.getContext().getEntityById(controller2Id);
 
-            if (Objects.equals(context.getFriendlyPlayer().getController(), controller1Id)) {
-                addJoustResult(result, context, cost1, cost2, card1, card2);
+            if (Objects.equals(playContext.getContext().getFriendlyPlayer().getController(), controller1Id)) {
+                addJoustResult(playContext, cost1, cost2, card1, card2);
             } else {
-                addJoustResult(result, context, cost2, cost1, card2, card1);
+                addJoustResult(playContext, cost2, cost1, card2, card1);
             }
             return true;
         }
         return false;
     }
 
-    private void addJoustResult(GameResult result, GameContext context, int cost1, int cost2, Card card1, Card card2) {
+    private void addJoustResult(PlayContext playContext,  int cost1, int cost2, Card card1, Card card2) {
         boolean winner = cost1 > cost2;
-        result.addJoust(context.getFriendlyPlayer(), context.getOpposingPlayer(), card1, card2, card1, winner);
+        playContext.addJoust(playContext.getContext().getFriendlyPlayer(), playContext.getContext().getOpposingPlayer(), card1, card2, card1, winner);
 
     }
 }

@@ -35,6 +35,7 @@ public class DashboardController {
         List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(account.getGameAccountId());
 
         modelAndView.addObject("gamesPlayed", gamesPlayed);
+        modelAndView.addObject("navpage", "dashboard");
 
         return modelAndView;
     }

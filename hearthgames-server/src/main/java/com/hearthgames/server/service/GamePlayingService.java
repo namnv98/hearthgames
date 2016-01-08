@@ -3,7 +3,7 @@ package com.hearthgames.server.service;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.game.play.domain.board.Board;
+import com.hearthgames.server.game.play.PlayContext;
 import com.hearthgames.server.game.play.handler.PlayHandlers;
 import com.hearthgames.server.game.play.handler.Handler;
 import com.hearthgames.server.game.play.GameResult;
@@ -45,46 +45,47 @@ public class GamePlayingService {
             c.setCardDetails(cardService.getCardDetails(c.getCardid()));
         }
 
+        PlayContext playContext = new PlayContext(context, result);
         for (Activity activity: context.getActivities()) {
-            handle(result, context, activity);
+            playContext.setActivity(activity);
+            handle(playContext);
         }
-        result.getCurrentTurn().addAction(new Board(result, context));
+        playContext.addLastBoard();
 
         return result;
     }
 
 
-    public void handle(GameResult result, GameContext context, Activity activity) {
+    public void handle(PlayContext playContext) {
         // Handler the domain first then any child actions. The reason for this is that the domain contains a high level abstraction what is happening
         // For example:
         //    ACTION_START Entity=[name=Haunted Creeper id=75 zone=PLAY zonePos=1 cardId=FP1_002 player=2] BlockType=ATTACK Index=-1 Target=[name=Jaina Proudmoore id=4 zone=PLAY zonePos=0 cardId=HERO_08 player=1]
         // means the Haunted Creeper minion is attacking Jaina Proudmoore
         // The details of the attack are in the child actions
-        doActivity(result, context, activity);
-        doChildActivities(result, context, activity.getChildren());
+        doActivity(playContext);
+        doChildActivities(playContext, playContext.getActivity().getChildren());
+        playContext.addBoard();
     }
 
-    private void doChildActivities(GameResult result, GameContext context, List<Activity> activities) {
+    private void doChildActivities(PlayContext playContext, List<Activity> activities) {
         if (!CollectionUtils.isEmpty(activities)) {
             for (Activity activity : activities) {
-                doActivity(result, context, activity);
-                doChildActivities(result, context, activity.getChildren());
+                playContext.setActivity(activity);
+                doActivity(playContext);
+                doChildActivities(playContext, activity.getChildren());
             }
         }
     }
 
-    private void doActivity(GameResult result, GameContext context, Activity activity) {
-        playActivity(result, context, activity);
-        updateGameActivityData(context, activity);
-        if (result.isUpdateBoardState()) {
-            result.getCurrentTurn().addAction(new Board(result, context));
-        }
+    private void doActivity(PlayContext playContext) {
+        playActivity(playContext);
+        updateGameActivityData(playContext);
     }
 
-    private void playActivity(GameResult result, GameContext context, Activity activity) {
+    private void playActivity(PlayContext playContext) {
         for (Handler handler: playHandlers.getHandlers()) {
-            if (handler.supports(result, context, activity)) {
-                boolean handled = handler.handle(result, context, activity);
+            if (handler.supports(playContext)) {
+                boolean handled = handler.handle(playContext);
                 if (handled) {
                     return;
                 }
@@ -92,11 +93,11 @@ public class GamePlayingService {
         }
     }
 
-    private void updateGameActivityData(GameContext context, Activity activity) {
-        if (activity.isTagChange() || activity.isShowEntity() || activity.isHideEntity()) {
-            copyNonNullProperties(activity.getDelta(), context.getEntityById(activity.getEntityId()));
-            if (activity.isShowEntity()) {
-                Card c = ((Card) activity.getDelta());
+    private void updateGameActivityData(PlayContext playContext) {
+        if (playContext.getActivity().isTagChange() || playContext.getActivity().isShowEntity() || playContext.getActivity().isHideEntity()) {
+            copyNonNullProperties(playContext.getActivity().getDelta(), playContext.getContext().getEntityById(playContext.getActivity().getEntityId()));
+            if (playContext.getActivity().isShowEntity()) {
+                Card c = ((Card) playContext.getActivity().getDelta());
                 c.setCardDetails(cardService.getCardDetails(c.getCardid()));
             }
         }

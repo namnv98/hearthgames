@@ -19,8 +19,10 @@ public class DetachedSerializer extends JsonSerializer<Detached> {
         g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getCard().getName());
-            g.writeFieldName("id");
+            g.writeFieldName("cardId");
             g.writeString(value.getCard().getCardDetails().getId());
+            g.writeFieldName("id");
+            g.writeString(value.getCard().getId());
             g.writeFieldName("rarity");
             g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
         g.writeEndObject();
@@ -31,8 +33,10 @@ public class DetachedSerializer extends JsonSerializer<Detached> {
             g.writeStartObject();
             g.writeFieldName("name");
             g.writeString(value.getDetachedFrom().getName());
-            g.writeFieldName("id");
+            g.writeFieldName("cardId");
             g.writeString(value.getDetachedFrom().getCardDetails().getId());
+            g.writeFieldName("id");
+            g.writeString(value.getDetachedFrom().getId());
             g.writeFieldName("rarity");
             g.writeString(value.getDetachedFrom().getCardDetails().getRarity().toLowerCase());
             g.writeEndObject();

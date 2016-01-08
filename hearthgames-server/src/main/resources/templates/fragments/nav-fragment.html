@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="shortcut icon" href="http://images.hearthgames.com/misc/favicon.ico" />
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="http://cdn.jsdelivr.net/bootstrap.fileinput/4.2.7/css/fileinput.min.css" th:href="@{/webjars/bootstrap-fileinput/4.2.7/css/fileinput.min.css}" rel="stylesheet" media="screen" />
+    <link href="../../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/jquery.tooltipster/3.3.0/js/jquery.tooltipster.min.js" th:src="@{/webjars/tooltipster/3.3.0/js/jquery.tooltipster.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/handlebarsjs/4.0.2/handlebars.min.js" th:src="@{/webjars/handlebars/4.0.2/handlebars.min.js}"></script>
+</head>
+<body>
+
+<nav th:fragment="nav" class="navbar navbar-inverse">
+
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{/}" href="#">HG</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+            <ul class="nav navbar-nav">
+                <li th:classappend="${navpage == 'dashboard'} ? active : ''" sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/dashboard}">My Dashboard</a></li>
+                <li class="dropdown" th:classappend="${navpage == 'games'} ? active : ''">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Games <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a th:href="@{/rankedgames}" href="#">Ranked</a></li>
+                        <li><a th:href="@{/casualgames}" href="#">Casual</a></li>
+                        <li><a th:href="@{/arenagames}" href="#">Arena</a></li>
+                        <li><a th:href="@{/tavernbrawlgames}" href="#">Tavern Brawl</a></li>
+                    </ul>
+                </li>
+                <li th:classappend="${navpage == 'upload'} ? active : ''"><a th:href="@{/upload}" href="#">Upload</a></li>
+                <li th:classappend="${navpage == 'download'} ? active : ''"><a th:href="@{/download}" href="#">Download Client</a></li>
+                <li th:classappend="${navpage == 'faq'} ? active : ''"><a th:href="@{/faq}" href="#">FAQ</a></li>
+                <li th:classappend="${navpage == 'sitemap'} ? active : ''"><a th:href="@{/hgsitemap}" href="#">Site Map</a></li>
+            </ul>
+            <div class="navbar-right">
+                <div sec:authorize="hasRole('ROLE_ANONYMOUS')" class="anonymous">
+                    <a th:href="@{/login}"><img src="http://images.hearthgames.com/misc/bnet.png" /><span class="loginbnet">Log in with Battle.net</span></a>
+                </div>
+                <div sec:authorize="hasRole('ROLE_USER')" class="user-logged-in">
+                    <span sec:authentication="principal.battletag"></span><a th:href="@{/logout}" href="#">(Logout)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</nav>
+
+
+</body>
+</html>

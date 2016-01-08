@@ -2,24 +2,24 @@ package com.hearthgames.server.game.play.domain.board;
 
 public class TurnData {
 
-    private int turn;
-    private int board;
+    private Integer turn;
+    private Integer board;
     private String who;
     private String status;
 
-    public int getTurn() {
+    public Integer getTurn() {
         return turn;
     }
 
-    public void setTurn(int turn) {
+    public void setTurn(Integer turn) {
         this.turn = turn;
     }
 
-    public int getBoard() {
+    public Integer getBoard() {
         return board;
     }
 
-    public void setBoard(int board) {
+    public void setBoard(Integer board) {
         this.board = board;
     }
 
