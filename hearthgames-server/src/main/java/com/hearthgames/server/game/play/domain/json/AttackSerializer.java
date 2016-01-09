@@ -56,6 +56,28 @@ public class AttackSerializer extends JsonSerializer<Attack> {
             g.writeString(value.getDefenderController().getPlayerClass().toLowerCase());
         g.writeEndObject();
 
+        if (value.getOriginalDefender() != null) {
+            g.writeFieldName("originalDefender");
+            g.writeStartObject();
+                g.writeFieldName("name");
+                g.writeString(value.getOriginalDefender().getName());
+                g.writeFieldName("cardId");
+                g.writeString(value.getOriginalDefender().getCardDetails().getId());
+                g.writeFieldName("id");
+                g.writeString(value.getOriginalDefender().getId());
+                g.writeFieldName("rarity");
+                g.writeString(value.getOriginalDefender().getCardDetails().getRarity().toLowerCase());
+            g.writeEndObject();
+
+            g.writeFieldName("originalDefenderController");
+            g.writeStartObject();
+                g.writeFieldName("name");
+                g.writeString(value.getOriginalDefenderController().getName());
+                g.writeFieldName("playerClass");
+                g.writeString(value.getOriginalDefenderController().getPlayerClass().toLowerCase());
+            g.writeEndObject();
+        }
+
         g.writeEndObject();
 
     }

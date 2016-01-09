@@ -43,6 +43,8 @@ public class GameContext {
 
     private int currentIndentLevel;
     private int previousIndentLevel;
+    private String previousLine;
+    private String currentLine;
 
     public void setGameEntity(GameEntity gameEntity) {
         this.gameEntity = gameEntity;
@@ -201,8 +203,10 @@ public class GameContext {
     }
 
     public void setIndentLevel(String line) {
+        this.previousLine = currentLine;
         this.previousIndentLevel = currentIndentLevel;
         this.currentIndentLevel = getIndentLevel(line);
+        this.currentLine = line;
     }
 
     private int getIndentLevel(String line) {
@@ -217,8 +221,8 @@ public class GameContext {
         return count > 0 ? count / 4 : 0;
     }
 
-    public boolean hasIndentationDecreased() {
-        return currentIndentLevel < previousIndentLevel;
+    public boolean isEndAction() {
+        return currentIndentLevel < previousIndentLevel && previousLine != null && !previousLine.trim().startsWith("tag=");
     }
 
     public void populateEntity(Entity entity, Map<String, String> data) {

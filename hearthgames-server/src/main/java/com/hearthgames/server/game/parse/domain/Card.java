@@ -36,7 +36,7 @@ public class Card extends Entity implements Serializable {
         HERO_POWER;
 
         public boolean eq(String type) {
-            return this.toString().equals(type);
+            return this.toString().equalsIgnoreCase(type);
         }
     }
 
@@ -596,11 +596,11 @@ public class Card extends Entity implements Serializable {
     }
 
     public static boolean isMinion(Card before, Card after) {
-        return Card.Type.MINION.eq(before.getCardtype()) || Card.Type.MINION.eq(after.getCardtype());
+        return Card.Type.MINION.eq(before.getCardtype()) || (before.getCardDetails() != null && Type.MINION.eq(before.getCardDetails().getType())) || Card.Type.MINION.eq(after.getCardtype());
     }
 
     public static boolean isSpell(Card before, Card after) {
-        return Card.Type.SPELL.eq(before.getCardtype()) || Card.Type.SPELL.eq(after.getCardtype());
+        return Card.Type.SPELL.eq(before.getCardtype()) || (before.getCardDetails() != null && Type.SPELL.eq(before.getCardDetails().getType())) || Card.Type.SPELL.eq(after.getCardtype());
     }
 
 }

@@ -293,11 +293,22 @@
 
 <script id="attack-template" type="text/x-handlebars-template" th:inline="javascript">
     <div class="action-{{turnCount}}-{{boardCount}}">
+        {{#if originalDefender}}
         <span class="{{attackerController.playerClass}}">{{attackerController.name}}</span>
         <span class="{{attacker.rarity}} tt tt-{{attacker.cardId}}">{{attacker.name}}</span>
         <span> has attacked </span>
         <span class="{{defenderController.playerClass}}">{{defenderController.name}}</span>
         <span class="{{defender.rarity}} tt tt-{{defender.cardId}}">{{defender.name}}</span>
+        {{else}}
+        <span class="{{attackerController.playerClass}}">{{attackerController.name}}</span>
+        <span class="{{attacker.rarity}} tt tt-{{attacker.cardId}}">{{attacker.name}}</span>
+        <span> has attacked </span>
+        <span class="{{originalDefenderController.playerClass}}">{{originalDefenderController.name}}</span>
+        <span class="{{originalDefender.rarity}} tt tt-{{originalDefender.cardId}}">{{originalDefender.name}}</span>
+        <span> but instead attacked </span>
+        <span class="{{originalDefenderController.playerClass}}">{{originalDefenderController.name}}</span>
+        <span class="{{originalDefender.rarity}} tt tt-{{originalDefender.cardId}}">{{originalDefender.name}}</span>
+        {{/if}}
     </div>
 </script>
 

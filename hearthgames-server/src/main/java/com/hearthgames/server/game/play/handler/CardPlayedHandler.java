@@ -20,11 +20,11 @@ public class CardPlayedHandler implements Handler {
 
         if (Zone.HAND.eq(before.getZone()) && Zone.PLAY.eq(after.getZone()) && Card.isMinion(before, after)) {
             playContext.addCardPlayed(Zone.HAND, Zone.PLAY, player, before);
-        } else if (Zone.HAND.eq(before.getZone()) && Zone.SECRET.eq(after.getZone()) && Card.isSpell(before, after)) {
+        } else if (Zone.HAND.eq(before.getZone()) && Zone.SECRET.eq(after.getZone())) {
             playContext.addCardPlayed(Zone.HAND, Zone.SECRET, player, before);
         } else if (Zone.DECK.eq(before.getZone()) && Zone.PLAY.eq(after.getZone()) && Card.isMinion(before, after)) {
             playContext.addCardPlayed(Zone.DECK, Zone.PLAY, player, before);
-        } else if (Zone.DECK.eq(before.getZone()) && Zone.SECRET.eq(after.getZone()) && Card.isSpell(before, after)) {
+        } else if (Zone.DECK.eq(before.getZone()) && Zone.SECRET.eq(after.getZone())) {
             playContext.addCardPlayed(Zone.DECK, Zone.SECRET, player, before);
         } else if (Zone.GRAVEYARD.eq(before.getZone()) && Zone.PLAY.eq(after.getZone()) && Card.isMinion(before, after)) {
             playContext.addCardPlayed(Zone.GRAVEYARD, Zone.PLAY, player, before);

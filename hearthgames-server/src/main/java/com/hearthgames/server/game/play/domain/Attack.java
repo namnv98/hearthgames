@@ -12,8 +12,19 @@ public class Attack implements Action, Serializable {
 
     private Card attacker;
     private Card defender;
+    private Card originalDefender;
     private Player attackerController;
     private Player defenderController;
+    private Player originalDefenderController;
+
+    public Attack(Card attacker, Card defender, Card originalDefender, Player attackerController, Player defenderController, Player originalDefenderController) {
+        this.attacker = attacker;
+        this.defender = defender;
+        this.originalDefender = originalDefender;
+        this.attackerController = attackerController;
+        this.defenderController = defenderController;
+        this.originalDefenderController = originalDefenderController;
+    }
 
     public Attack(Card attacker, Card defender, Player attackerController, Player defenderController) {
         this.attacker = attacker;
@@ -38,6 +49,14 @@ public class Attack implements Action, Serializable {
         this.defender = defender;
     }
 
+    public Card getOriginalDefender() {
+        return originalDefender;
+    }
+
+    public void setOriginalDefender(Card originalDefender) {
+        this.originalDefender = originalDefender;
+    }
+
     public Player getAttackerController() {
         return attackerController;
     }
@@ -54,8 +73,20 @@ public class Attack implements Action, Serializable {
         this.defenderController = defenderController;
     }
 
+    public Player getOriginalDefenderController() {
+        return originalDefenderController;
+    }
+
+    public void setOriginalDefenderController(Player originalDefenderController) {
+        this.originalDefenderController = originalDefenderController;
+    }
+
     @Override
     public String toString() {
-        return attackerController.getName() + " " + attacker.getName() + " is attacking " + defenderController.getName() + " " + defenderController.getName();
+        if (originalDefenderController != null) {
+            String original = attackerController.getName() + " " + attacker.getName() + " is attacking " + originalDefenderController.getName() + " " + originalDefender.getName();
+            return original + " but instead attacked " + defenderController.getName() + " " + defender.getName();
+        }
+        return attackerController.getName() + " " + attacker.getName() + " is attacking " + defenderController.getName() + " " + defender.getName();
     }
 }

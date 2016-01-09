@@ -27,7 +27,6 @@ public class PlayHandlers {
         handlers.add(new NewGameHandler());
         handlers.add(new PlayerHandler());
         handlers.add(new TriggerHandler());
-        handlers.add(new ZonePositionChangeHandler());
     }
 
     public List<Handler> getHandlers() {

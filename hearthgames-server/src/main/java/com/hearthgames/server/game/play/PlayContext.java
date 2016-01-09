@@ -5,8 +5,6 @@ import com.hearthgames.server.game.parse.domain.*;
 import com.hearthgames.server.game.play.domain.*;
 import com.hearthgames.server.game.play.domain.board.*;
 
-import java.util.List;
-
 public class PlayContext {
 
     private GameContext context;
@@ -131,23 +129,12 @@ public class PlayContext {
         addAction(new Attack(attacker, defender, attackerController, defenderController));
     }
 
-    public void addZonePositionChange(Card card, Zone zone, int position) {
-        int size = result.getCurrentTurn().getActions().size();
-        Action lastAction = size > 0 ? result.getCurrentTurn().getActions().get(size-1) : null;
-        ZonePositionChange zonePositionChange = new ZonePositionChange(card, zone, position);
-        if (lastAction instanceof ZonePositionChange) {
-            ((ZonePositionChange) lastAction).addZonePositionChange(zonePositionChange);
-        } else {
-            result.getCurrentTurn().addAction(zonePositionChange);
-        }
+    public void addAttack(Card attacker, Card defender, Card originalDefender, Player attackerController, Player defenderController, Player originalDefenderController) {
+        addAction(new Attack(attacker, defender, originalDefender, attackerController, defenderController, originalDefenderController));
     }
 
     public void addHeroPowerUsed(Player player, Card card) {
         addAction(new HeroPowerUsed(player, card));
-    }
-
-    public void addNumOptions(int number) {
-        addAction(new NumOptions(number));
     }
 
     public void addEndofTurn() {
@@ -161,25 +148,15 @@ public class PlayContext {
 
     private void addAction(Action action) {
 
+        if (action instanceof Attack) {
+            result.getCurrentTurn().addAction(new LoggingAction("Combat!"));
+            result.addActionLog("Combat!");
+            addBoard(result);
+        }
+
         lastAction = action;
         result.getCurrentTurn().addAction(action);
         result.addActionLog(action.toString());
-
-//        if (action instanceof EndOfTurn) {
-//
-//        } else if (action instanceof CardDrawn) {
-//            if (isCardDrawnSet(actions)) actions.add(action); else addBoard(result);
-//        } else if (action instanceof Damage) {
-//            if (isDamageSet(actions)) actions.add(action); else addBoard(result);
-//        } else if (action instanceof Kill) {
-//            if (isKillSet(actions)) actions.add(action); else addBoard(result);
-//        } else if (action instanceof CardPlayed) {
-//            addBoard(result);
-//        } else if (action instanceof AttackChange || action instanceof HealthChange) {
-//            if (isAttackHealthChangeSet(actions)) actions.add(action); else addBoard(result);
-//        } else if (action instanceof Frozen) {
-//            if (isFrozenSet(actions)) actions.add(action); else addBoard(result);
-//        }
     }
 
     public void addFirstBoard() {
@@ -197,54 +174,12 @@ public class PlayContext {
             }
         }
     }
-    
+
+    public Action getLastAction() {
+        return lastAction;
+    }
+
     private void addBoard(GameResult result) {
         result.getCurrentTurn().addAction(new Board(result, context));
     }
-
-    private boolean isCardDrawnSet(List<Action> actions) {
-        for (Action action: actions) {
-            if (!(action instanceof CardDrawn) && !(action instanceof LoggingAction)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isDamageSet(List<Action> actions) {
-        for (Action action: actions) {
-            if (!(action instanceof Damage) && !(action instanceof LoggingAction)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isKillSet(List<Action> actions) {
-        for (Action action: actions) {
-            if (!(action instanceof Kill) && !(action instanceof LoggingAction)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isAttackHealthChangeSet(List<Action> actions) {
-        for (Action action: actions) {
-            if (!(action instanceof AttackChange) && !(action instanceof HealthChange) && !(action instanceof LoggingAction)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isFrozenSet(List<Action> actions) {
-        for (Action action: actions) {
-            if (!(action instanceof Frozen) && !(action instanceof LoggingAction)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 }

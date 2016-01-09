@@ -82,10 +82,10 @@
 #opposing-hand { top: 0; left: 1px; width: 900px; text-align: center; }
 #friendly-hero { bottom: 139px; left: 362px; width: 170px; height: 180px; background-size: 170px 180px; z-index: 30;}
 #opposing-hero { top: 123px; left: 362px; width: 170px; height: 180px; background-size: 170px 180px; z-index: 30; }
-#friendly-hero-power { bottom: 210px; right: 345px; }
-#opposing-hero-power { top: 190px; right: 345px; }
-#friendly-weapon { bottom: 211px; left: 228px; }
-#opposing-weapon { top: 199px; left: 228px; }
+#friendly-hero-power { bottom: 186px; right: 345px; }
+#opposing-hero-power { top: 168px; right: 345px; }
+#friendly-weapon { bottom: 187px; left: 228px; }
+#opposing-weapon { top: 177px; left: 228px; }
 #opposing-play { width: 805px; height: 140px; top: 319px; left: 39px; }
 #friendly-play { width: 805px; height: 140px; top: 463px; left: 39px; }
 #friendly-deck { width: 46px; height: 100px; background-size: 46px 100px; top: 512px; right: 42px; }
