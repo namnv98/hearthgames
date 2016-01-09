@@ -35,7 +35,7 @@ public class ImageManipulation {
     public static void main(String[] args) throws Exception {
 
 
-        heropowers();
+        existingMinions();
 
 
     }
@@ -104,7 +104,7 @@ public class ImageManipulation {
         if (files != null) {
             for (File file1 : files) {
 
-                File file2 = new File("C:\\images\\assets\\oval2.png");
+                File file2 = new File("C:\\images\\assets\\oval3.png");
                 File outputFile = new File("C:\\images\\output2\\" + file1.getName());
 
                 try {
@@ -226,7 +226,7 @@ public class ImageManipulation {
 
         BufferedImage originalImage = ImageIO.read(file1);
 
-        BufferedImage combined = new BufferedImage(110, 130, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage combined = new BufferedImage(110, 140, BufferedImage.TYPE_INT_ARGB);
 
         BufferedImage oval = ImageIO.read(file2);
 
@@ -242,7 +242,7 @@ public class ImageManipulation {
         BufferedImage transparentImage = imageToBufferedImage(imageWithTransparency);
 
 
-        BufferedImage croppedImage = transparentImage.getSubimage(6, 4, 94, 123);
+        BufferedImage croppedImage = transparentImage.getSubimage(0, 0, 105, 140);
 
         ImageIO.write(croppedImage, "PNG", outputFile);
     }
