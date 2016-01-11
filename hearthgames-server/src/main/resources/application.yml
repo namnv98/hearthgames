@@ -29,7 +29,7 @@ spring:
     url: jdbc:postgresql://localhost:5433/hearthgames
     username: hl
     password: fuckmi69
-#spring.jpa.hibernate.ddl-auto: create
+#spring.jpa.hibernate.ddl-auto: update
 security:
   oauth2:
     client:

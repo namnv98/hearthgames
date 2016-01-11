@@ -79,7 +79,7 @@
         var template = Handlebars.compile($("#games-template").html());
         $('#games').html(template(gamesPlayedData));
 
-        var url = gamesPlayedData.ranked ? '/rankedgames/' : '/casualgames/';
+        var url = gamesPlayedData.ranked ? '/games/2/' : '/games/1/';
         $('#paginator').twbsPagination({
             totalPages: gamesPlayedData.pages,
             onPageClick: function (event, page) {

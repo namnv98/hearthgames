@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 public class UpdatePlayerHandler extends AbstractHandler {
 
     private static final Pattern playInfoPattern = Pattern.compile("TAG_CHANGE Entity=(.*?) tag=TIMEOUT value");
+    private static final Pattern playInfoPattern2 = Pattern.compile("TAG_CHANGE Entity=(.*?) tag=PLAYSTATE value=PLAYING");
     private static final Pattern entityPattern = Pattern.compile("TAG_CHANGE Entity=(.*?) tag=");
     private static final Pattern tagPattern = Pattern.compile("tag=(.*?) value=(.*)");
     private static final String GAME_ENTITY = "GameEntity";
@@ -17,6 +18,8 @@ public class UpdatePlayerHandler extends AbstractHandler {
     @Override
     public boolean supports(GameContext context, String line) {
         // We are looking for the following line:
+        // TAG_CHANGE Entity=<Player Name> tag=PLAYSTATE value=PLAYING
+        // OR
         // TAG_CHANGE Entity=<Player Name> tag=TIMEOUT value=75
         // This tells us that additional properties are being populated on players.  It is the first time we see
         // the player's name.  Unfortunately we have to wait till all the tag changes are complete
@@ -62,6 +65,12 @@ public class UpdatePlayerHandler extends AbstractHandler {
         Matcher matcher = playInfoPattern.matcher(line);
         if (matcher.find()) {
             match = matcher.group(1);
+        }
+        if (match == null) {
+            matcher = playInfoPattern2.matcher(line);
+            if (matcher.find()) {
+                match = matcher.group(1);
+            }
         }
         return match;
     }

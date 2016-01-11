@@ -66,6 +66,7 @@ public class GameService {
         gamePlayed.setWinner(result.getWinner().getName());
         gamePlayed.setWinnerClass(result.getWinnerClass());
         gamePlayed.setTurns(result.getTurns().size());
+        gamePlayed.setGameType(rawGameData.getGameType().getType());
 
         String friendlyStartingCards = StringUtils.join(result.getFriendlyStartingCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
         String friendlyMulliganCards = StringUtils.join(result.getFriendlyMulliganedCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
@@ -103,20 +104,12 @@ public class GameService {
         return gamePlayedRepository.findByFriendlyGameAccountId(id);
     }
 
-    public List<GamePlayed> getCasualGamesPlayed(PageRequest pageRequest) {
-        return gamePlayedRepository.findAllByRankIsNull(pageRequest);
+    public List<GamePlayed> getGamesPlayed(PageRequest pageRequest, int gameType) {
+        return gamePlayedRepository.findAllByGameType(pageRequest, gameType);
     }
 
-    public Long getCasualGamesPlayedCount() {
-        return gamePlayedRepository.countByRankIsNull();
-    }
-
-    public List<GamePlayed> getRankedGamesPlayed(PageRequest pageRequest) {
-        return gamePlayedRepository.findAllByRankNotNull(pageRequest);
-    }
-
-    public Long getRankedGamesPlayedCount() {
-        return gamePlayedRepository.countByRankNotNull();
+    public Long getGamesPlayedCount(int gameType) {
+        return gamePlayedRepository.countByGameType(gameType);
     }
 
     public GamePlayed getById(Long id) {

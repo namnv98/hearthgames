@@ -17,12 +17,7 @@ public interface GamePlayedRepository extends PagingAndSortingRepository<GamePla
 
     Long countByFriendlyGameAccountId(String friendlyGameAccountId);
 
-    List<GamePlayed> findAllByRankNotNull(Pageable pageable);
+    List<GamePlayed> findAllByGameType(Pageable pageable, Integer gameType);
 
-    Long countByRankNotNull();
-
-    List<GamePlayed> findAllByRankIsNull(Pageable pageable);
-
-    Long countByRankIsNull();
-
+    Long countByGameType(Integer gameType);
 }

@@ -16,7 +16,8 @@ public class GameHandler implements Handler {
         GameEntity before = playContext.getContext().getGameEntity();
         GameEntity after = (GameEntity) playContext.getActivity().getDelta();
 
-        if (before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) {
+        if ((before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) ||
+            (before.getStep() == null && GameEntity.Step.MAIN_READY.eq(after.getStep()))) {
             Card friendlyHeroCard = (Card) playContext.getContext().getEntityById(playContext.getContext().getFriendlyPlayer().getHeroEntity());
             Card opposingHeroCard = (Card) playContext.getContext().getEntityById(playContext.getContext().getOpposingPlayer().getHeroEntity());
             CardDetails friendlyCardDetails = friendlyHeroCard.getCardDetails();
@@ -36,10 +37,18 @@ public class GameHandler implements Handler {
                 }
                 playContext.addCardDrawn(player, c, player);
             });
-            playContext.addLoggingAction("Mulligan Phase has started");
+            if (GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) {
+                playContext.addLoggingAction("Mulligan Phase has started");
+            }
         }
         if (GameEntity.Step.BEGIN_MULLIGAN.eq(before.getStep()) && GameEntity.Step.MAIN_READY.eq(after.getStep())) {
             playContext.addLoggingAction("Mulligan Phase has ended");
+            playContext.addEndofTurn();
+            playContext.addFirstBoard();
+            playContext.getResult().setTurnNumber(1);
+            playContext.getResult().addTurn();
+        } else if (before.getStep() == null && GameEntity.Step.MAIN_READY.eq(after.getStep())) {
+            // this happens for games with no mulligan phases such as Adventure mode games
             playContext.addEndofTurn();
             playContext.addFirstBoard();
             playContext.getResult().setTurnNumber(1);

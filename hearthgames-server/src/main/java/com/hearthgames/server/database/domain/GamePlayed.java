@@ -34,6 +34,7 @@ public class GamePlayed {
     private Integer rank;
     private Integer turns;
     private String challenge;
+    private Integer gameType;
 
     @Column(nullable = false)
     private String friendlyGameAccountId;
@@ -148,7 +149,7 @@ public class GamePlayed {
     }
 
     public String getFriendlyClass() {
-        return friendlyClass;
+        return friendlyClass == null ? "unknown" : friendlyClass;
     }
 
     public void setFriendlyClass(String friendlyClass) {
@@ -164,7 +165,7 @@ public class GamePlayed {
     }
 
     public String getOpposingClass() {
-        return opposingClass;
+        return opposingClass == null ? "unknown" : opposingClass;
     }
 
     public void setOpposingClass(String opposingClass) {
@@ -180,7 +181,7 @@ public class GamePlayed {
     }
 
     public String getWinnerClass() {
-        return winnerClass;
+        return winnerClass == null ? "unknown" : winnerClass;
     }
 
     public void setWinnerClass(String winnerClass) {
@@ -201,6 +202,14 @@ public class GamePlayed {
 
     public void setChallenge(String challenge) {
         this.challenge = challenge;
+    }
+
+    public Integer getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(Integer gameType) {
+        this.gameType = gameType;
     }
 
     public String getDuration() {

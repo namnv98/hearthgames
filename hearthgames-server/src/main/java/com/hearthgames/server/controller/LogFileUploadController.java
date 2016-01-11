@@ -54,7 +54,7 @@ public class LogFileUploadController {
                 String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
                 String[] lines = logfile.split(splitStr);
 
-                List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), false);
+                List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), -1);
 
                 for (RawGameData rawGameData : rawGameDatas) {
                     try {

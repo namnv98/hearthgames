@@ -10,7 +10,7 @@
     .loginbnet { padding-left: 5px; }
     .ttip { width: 191px; height: 263px; background-size: 191px 263px; }
 
-    .title-container { margin: 53px 0 10px 0; }
+    .title-container { margin: 13px 0 10px 0; }
     .content { width: 533px; margin: auto; }
     .hearthgames-title { font-size: 53px; text-shadow: 2px 2px 4px #000; }
 
@@ -30,7 +30,7 @@
     .loginbnet { padding-left: 5px; }
     .ttip { width: 286px; height: 395px; }
 
-    .title-container { margin: 80px 0 15px 0; }
+    .title-container { margin: 20px 0 15px 0; }
     .content { width: 800px; margin: auto; }
     .hearthgames-title { font-size: 80px; text-shadow: 2px 2px 4px #000; }
 
@@ -75,6 +75,19 @@ body input { color: #000; }
 .hearthgames-title a:hover { text-decoration: none; color: #D5D4D4; }
 .hearthgames-title a:active { text-decoration: none; color: #D5D4D4; }
 
+.game-mode a:link, .game-mode a:visited, .game-mode a:hover, .game-mode a:active { color: #fff; font-weight: bold; outline: 0; }
+.home-upload-panel { margin-top: 20px; }
+.game-modes { text-align: center; }
+.game-mode { width: 200px; height: 150px; display: inline-block; margin: 0 20px; cursor: pointer; }
+.game-mode-header { width: 200px; height: 100px; }
+.game-mode-content { width: 200px; height: 50px; }
+.game-mode .game-mode-content { font-size: 20px; font-weight: bold; }
+.casual-mode .game-mode-header { background-image: url(http://images.hearthgames.com/misc/casual.png); width: 200px; height: 100px; }
+.ranked-mode .game-mode-header { background-image: url(http://images.hearthgames.com/misc/ranked.png); width: 200px; height: 100px; }
+.arena-mode .game-mode-header { background-image: url(http://images.hearthgames.com/misc/arena.png); width: 200px; height: 100px; }
+.adventure-mode .game-mode-header { background-image: url(http://images.hearthgames.com/misc/adventure.png); width: 200px; height: 100px; }
+.tavern-brawl-mode .game-mode-header { background-image: url(http://images.hearthgames.com/misc/tavern-brawl.png); width: 200px; height: 100px; }
+
 .druid { color: #FF7D0A; }
 .druid-bg { background-color: #FF7D0A; }
 
@@ -101,6 +114,10 @@ body input { color: #000; }
 
 .warrior { color: #C79C6E; }
 .warrior-bg { background-color: #C79C6E; }
+
+.unknown { color: #c1c1c1; }
+.unknown-bg { background-color: #c1c1c1; }
+
 
 table { color: #fff; border-color: #000; background-color: #2D2D2D; }
 

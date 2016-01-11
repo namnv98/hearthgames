@@ -27,7 +27,40 @@
 
     <div class="content">
 
-        <div class="panel panel-primary">
+        <div class="row game-modes">
+
+            <div class="game-mode casual-mode">
+                <a th:href="@{/games/1}" href="#"><div class="game-mode-header"></div></a>
+                <div class="game-mode-content"><a th:href="@{/games/1}" href="#">CASUAL</a></div>
+            </div>
+
+            <div class="game-mode ranked-mode">
+                <a th:href="@{/games/2}" href="#"><div class="game-mode-header"></div></a>
+                <div class="game-mode-content"><a th:href="@{/games/2}" href="#">RANKED</a></div>
+            </div>
+
+            <div class="game-mode arena-mode">
+                <a th:href="@{/games/3}" href="#"><div class="game-mode-header"></div></a>
+                <div class="game-mode-content"><a th:href="@{/games/3}" href="#">ARENA</a></div>
+            </div>
+
+        </div>
+
+        <div class="row game-modes">
+
+            <div class="game-mode adventure-mode">
+                <a th:href="@{/games/4}" href="#"><div class="game-mode-header"></div></a>
+                <div class="game-mode-content"><a th:href="@{/games/4}" href="#">SOLO ADVENTURE</a></div>
+            </div>
+
+            <div class="game-mode tavern-brawl-mode">
+                <a th:href="@{/games/5}" href="#"><div class="game-mode-header"></div></a>
+                <div class="game-mode-content"><a th:href="@{/games/5}" href="#">TAVERN BRAWL</a></div>
+            </div>
+
+        </div>
+
+        <div class="home-upload-panel panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Select a Hearthstone log file to upload</h3>
             </div>

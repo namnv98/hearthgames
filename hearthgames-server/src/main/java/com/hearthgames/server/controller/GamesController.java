@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hearthgames.server.database.domain.GamePlayed;
 import com.hearthgames.server.database.service.GameService;
+import com.hearthgames.server.game.log.domain.GameType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -35,55 +36,28 @@ public class GamesController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/casualgames")
-    public ModelAndView listCasualGames() {
+    @RequestMapping(value = "/games/{gameType}")
+    public ModelAndView listGames(@PathVariable int gameType) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("games");
 
-        List<GamePlayed> gamesPlayed = gameService.getCasualGamesPlayed(new PageRequest(0, 10));
-        Long count = gameService.getCasualGamesPlayedCount();
+        List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(new PageRequest(0, 10), gameType);
+        Long count = gameService.getGamesPlayedCount(gameType);
         int pages = (int) Math.ceil((double) count / 10);
 
-        addGamesPlayed(modelAndView, gamesPlayed, false, pages);
+        addGamesPlayed(modelAndView, gamesPlayed, GameType.getGameType(gameType).equals(GameType.RANKED), pages);
 
         modelAndView.addObject("navpage", "games");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/rankedgames")
-    public ModelAndView listRankedGames() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("games");
-
-        List<GamePlayed> gamesPlayed = gameService.getRankedGamesPlayed(new PageRequest(0, 10));
-        Long count = gameService.getRankedGamesPlayedCount();
-        int pages = (int) Math.ceil((double) count / 10);
-
-        addGamesPlayed(modelAndView, gamesPlayed, true, pages);
-        modelAndView.addObject("navpage", "games");
-        return modelAndView;
-    }
-
-
-    @RequestMapping(value = "/casualgames/{page}")
+    @RequestMapping(value = "/games/{gameType}/{page}")
     @ResponseBody
-    public GamesPlayedWrapper moreCasualGames(@PathVariable int page) {
+    public GamesPlayedWrapper moreGames(@PathVariable int gameType, @PathVariable int page) {
 
-        List<GamePlayed> gamesPlayed = gameService.getCasualGamesPlayed(new PageRequest(page, 10));
+        List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(new PageRequest(page, 10), gameType);
         GamesPlayedWrapper wrapper = new GamesPlayedWrapper();
-        wrapper.setRanked(true);
-        wrapper.setGames(gamesPlayed);
-
-        return wrapper;
-    }
-
-    @RequestMapping(value = "/rankedgames/{page}")
-    @ResponseBody
-    public GamesPlayedWrapper moreRankedGames(@PathVariable int page) {
-
-        List<GamePlayed> gamesPlayed = gameService.getRankedGamesPlayed(new PageRequest(page, 10));
-        GamesPlayedWrapper wrapper = new GamesPlayedWrapper();
-        wrapper.setRanked(true);
+        wrapper.setRanked(GameType.getGameType(gameType).equals(GameType.RANKED));
         wrapper.setGames(gamesPlayed);
 
         return wrapper;

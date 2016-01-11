@@ -3,6 +3,7 @@ package com.hearthgames.server.controller;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hearthgames.server.config.security.UserInfo;
 import com.hearthgames.server.database.domain.GamePlayed;
 import com.hearthgames.server.database.service.GameService;
 import com.hearthgames.server.game.analysis.domain.TurnInfo;
@@ -17,6 +18,7 @@ import com.hearthgames.server.service.GamePlayingService;
 import com.hearthgames.server.service.RawLogProcessingService;
 import com.hearthgames.server.util.GameCompressionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,9 +59,7 @@ public class GameController {
             String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
             String[] lines = logfile.split(splitStr);
 
-            boolean isClientUploaded = lines.length > 0 && lines[0].startsWith("CREATE_GAME");
-
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), isClientUploaded);
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), gamePlayed.getGameType());
             if (rawGameDatas != null && rawGameDatas.size() == 1) {
                 RawGameData rawGameData = rawGameDatas.get(0);
                 GameContext context = gameParserService.parseLines(rawGameData.getLines());
@@ -93,8 +93,18 @@ public class GameController {
 
                 modelAndView.addObject("gameId", gameId);
 
-                gamePlayed.setJustAdded(false);
-                gameService.saveGamePlayed(gamePlayed, context, result, false);
+                if (gamePlayed.getGameType() == null) {
+                    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                    UserInfo userInfo = null;
+                    if (principal != null && principal instanceof UserInfo) {
+                        userInfo = (UserInfo) principal;
+                    }
+                    GamePlayed updatedGamePlayed = gameService.createGamePlayed(rawGameData, context, result, userInfo);
+                    gameService.saveGamePlayed(updatedGamePlayed, context, result, false);
+                } else {
+                    gamePlayed.setJustAdded(false);
+                    gameService.saveGamePlayed(gamePlayed, context, result, false);
+                }
 
                 //hack for Thymeleaf plugin - duplicate model properties
                 if (false) {

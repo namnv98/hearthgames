@@ -1,6 +1,7 @@
 package com.hearthgames.server.game.play.handler;
 
 import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.domain.Turn;
 
 public class NewGameHandler implements Handler {
     @Override
@@ -12,6 +13,8 @@ public class NewGameHandler implements Handler {
     public boolean handle(PlayContext playContext) {
         playContext.getResult().setTurnNumber(0);
         playContext.getResult().addTurn();
+        Turn turn = playContext.getResult().getCurrentTurn();
+        turn.setWhoseTurn(TRUE_OR_ONE.equals(playContext.getContext().getFriendlyPlayer().getFirstPlayer()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer());
         return true;
     }
 }

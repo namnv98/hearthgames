@@ -1,7 +1,6 @@
 package com.hearthgames.server.service;
 
 import com.hearthgames.server.HearthGamesServerApplication;
-import com.hearthgames.server.config.security.UserInfo;
 import com.hearthgames.server.database.domain.GamePlayed;
 import com.hearthgames.server.database.domain.RawGameError;
 import com.hearthgames.server.database.repository.GamePlayedRepository;
@@ -19,7 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.*;
@@ -55,28 +53,35 @@ public class GameParserServiceTest {
     @Test
     public void shouldPlayUncompressedGame() throws IOException {
 
-        List<String> lines = FileUtils.readLines(new File("c:\\games\\game9-4huntergames"));
+        List<String> lines = FileUtils.readLines(new File("c:\\games\\output_log.txt"));
 
         String accountId = "";
-        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines, false);
+        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines, -1);
         for (RawGameData rawGameData : rawGameDatas) {
 
-            GameContext context = gameParserService.parseLines(rawGameData.getLines());
-            accountId = context.getFriendlyPlayer().getGameAccountIdLo();
+            try {
+                GameContext context = gameParserService.parseLines(rawGameData.getLines());
+                accountId = context.getFriendlyPlayer().getGameAccountIdLo();
 
-            GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
+                GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
-            GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
-            VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
-            List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context);
-            GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context);
-            GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context);
-            List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
-            List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
-            List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
+                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
+                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
+                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context);
+                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context);
+                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context);
+                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
+                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
+                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
 
-            GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
-            System.out.println();
+                GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+                System.out.println();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println();
+            }
+
 
         }
         List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(accountId);
@@ -95,7 +100,7 @@ public class GameParserServiceTest {
 
             FileUtils.writeStringToFile(new File("c:\\games\\error"+rawGameError.getId()), gameData);
 
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), true);
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), -1);
             try {
                 for (RawGameData rawGameData: rawGameDatas) {
                     GameContext context = gameParserService.parseLines(rawGameData.getLines());

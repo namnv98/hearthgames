@@ -11,7 +11,7 @@ public class LogLineData {
 
     public LogLineData(String timestamp, String line) {
         this.dateTime = !StringUtils.isEmpty(timestamp) ? LocalDateTime.parse(timestamp.replace(" ","T")) : null;
-        this.line = line;
+        this.line = line.replace("[Power] GameState.DebugPrintPower() - ", "");
     }
 
     public LocalDateTime getDateTime() {

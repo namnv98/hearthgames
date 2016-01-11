@@ -216,22 +216,27 @@ public class Board implements Action {
                 minionInPlay.setAttack(attack);
                 minionInPlay.setFrozen(c.getFrozen() != null && TRUE.equals(c.getFrozen()));
                 minionInPlay.setLegendary(LEGENDARY.equalsIgnoreCase(c.getCardDetails().getRarity()));
-                minionInPlay.setShielded(TRUE.equals(c.getDivineShield()));
-                minionInPlay.setTaunting(TRUE.equals(c.getTaunt()));
+                boolean silenced = TRUE.equals(c.getSilenced());
+                if (!silenced) {
+                    minionInPlay.setShielded(TRUE.equals(c.getDivineShield()));
+                    minionInPlay.setTaunting(TRUE.equals(c.getTaunt()));
+                    minionInPlay.setStealthed(TRUE.equals(c.getStealth()));
+                    if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("INSPIRE")) {
+                        minionInPlay.setIcon("inspire");
+                    } else if (TRUE.equals(c.getTriggerVisual())) {
+                        minionInPlay.setIcon("trigger");
+                    } else if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("DEATHRATTLE")) {
+                        minionInPlay.setIcon("deathrattle");
+                    } else if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("POISONOUS")) {
+                        minionInPlay.setIcon("poison");
+                    }
+                }
                 minionInPlay.setExhausted(TRUE.equals(c.getExhausted()));
-                minionInPlay.setSilenced(TRUE.equals(c.getSilenced()));
-                minionInPlay.setStealthed(TRUE.equals(c.getStealth()));
+                minionInPlay.setSilenced(silenced);
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getMinionsInPlay().add(minionInPlay);
                 } else {
                     opposingHero.getMinionsInPlay().add(minionInPlay);
-                }
-                if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("INSPIRE")) {
-                    minionInPlay.setIcon("inspire");
-                } else if (TRUE.equals(c.getTriggerVisual())) {
-                    minionInPlay.setIcon("trigger");
-                } else if (c.getCardDetails().getMechanics() != null && c.getCardDetails().getMechanics().contains("DEATHRATTLE")) {
-                    minionInPlay.setIcon("deathrattle");
                 }
                 minionInPlay.setPosition(Integer.parseInt(c.getZonePosition()));
             } else if (Zone.SECRET.eq(c.getZone())) {

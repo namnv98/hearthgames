@@ -7,6 +7,8 @@ public class RawGameData {
     private List<String> rawLines;
     private List<LogLineData> lines;
     private Integer rank;
+    private GameType gameType;
+
 
     public List<LogLineData> getLines() {
         return lines;
@@ -30,5 +32,13 @@ public class RawGameData {
 
     public void setRawLines(List<String> rawLines) {
         this.rawLines = rawLines;
+    }
+
+    public GameType getGameType() {
+        return gameType == null ? GameType.UNKNOWN : gameType;
+    }
+
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
     }
 }

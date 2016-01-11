@@ -21,6 +21,7 @@ public class MinionInPlay extends CardIn {
     private Boolean healthBuffed;
     private Boolean damaged;
     private Boolean exhausted;
+    private Boolean poisonous;
 
     public String getCardId() {
         return cardId;
@@ -140,5 +141,13 @@ public class MinionInPlay extends CardIn {
 
     public void setExhausted(Boolean exhausted) {
         this.exhausted = exhausted;
+    }
+
+    public Boolean getPoisonous() {
+        return poisonous;
+    }
+
+    public void setPoisonous(Boolean poisonous) {
+        this.poisonous = poisonous;
     }
 }

@@ -29,10 +29,11 @@
                 <li class="dropdown" th:classappend="${navpage == 'games'} ? active : ''">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Games <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a th:href="@{/rankedgames}" href="#">Ranked</a></li>
-                        <li><a th:href="@{/casualgames}" href="#">Casual</a></li>
-                        <li><a th:href="@{/arenagames}" href="#">Arena</a></li>
-                        <li><a th:href="@{/tavernbrawlgames}" href="#">Tavern Brawl</a></li>
+                        <li><a th:href="@{/games/1}" href="#">Casual</a></li>
+                        <li><a th:href="@{/games/2}" href="#">Ranked</a></li>
+                        <li><a th:href="@{/games/3}" href="#">Arena</a></li>
+                        <li><a th:href="@{/games/4}" href="#">Solo Adventures</a></li>
+                        <li><a th:href="@{/games/5}" href="#">Tavern Brawl</a></li>
                     </ul>
                 </li>
                 <li th:classappend="${navpage == 'upload'} ? active : ''"><a th:href="@{/upload}" href="#">Upload</a></li>

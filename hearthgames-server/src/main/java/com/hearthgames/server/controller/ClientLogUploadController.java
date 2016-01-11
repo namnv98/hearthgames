@@ -49,6 +49,8 @@ public class ClientLogUploadController {
         private static final long serialVersionUID = 1;
 
         private String url;
+        private String msg;
+        private boolean upgradeRequired;
 
         public String getUrl() {
             return url;
@@ -57,15 +59,48 @@ public class ClientLogUploadController {
         public void setUrl(String url) {
             this.url = url;
         }
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        public boolean isUpgradeRequired() {
+            return upgradeRequired;
+        }
+
+        public void setUpgradeRequired(boolean upgradeRequired) {
+            this.upgradeRequired = upgradeRequired;
+        }
     }
 
     public static class RecordGameRequest implements Serializable {
         private static final long serialVersionUID = 1;
 
+        private int version;
+        private int gameType;
         private byte[] data;
-        private Integer rank;
         private long startTime;
         private long endTime;
+
+        public int getVersion() {
+            return version;
+        }
+
+        public void setVersion(int version) {
+            this.version = version;
+        }
+
+        public int getGameType() {
+            return gameType;
+        }
+
+        public void setGameType(int gameType) {
+            this.gameType = gameType;
+        }
 
         public byte[] getData() {
             return data;
@@ -73,14 +108,6 @@ public class ClientLogUploadController {
 
         public void setData(byte[] data) {
             this.data = data;
-        }
-
-        public Integer getRank() {
-            return rank;
-        }
-
-        public void setRank(Integer rank) {
-            this.rank = rank;
         }
 
         public long getStartTime() {
@@ -101,12 +128,21 @@ public class ClientLogUploadController {
     }
 
     @RequestMapping(value = "/clientUpload", method = RequestMethod.POST)
-    public ResponseEntity<RecordGameResponse> clientUpload(@RequestBody RecordGameRequest request) {
+    public ResponseEntity<RecordGameResponse> clientUpload(@RequestBody RecordGameRequest request)  {
+
+        if (request.getVersion() == 0) {
+            RecordGameResponse response = new RecordGameResponse();
+            response.setUpgradeRequired(true);
+            response.setMsg("A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.");
+            // TODO change this in a future release...the first release didn't support messages
+            response.setUrl("A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
 
         String logfile = GameCompressionUtils.decompressGameData(request.getData());
         String[] lines = logfile.split("\n");
 
-        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), true);
+        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), request.getGameType());
 
         if (!CollectionUtils.isEmpty(rawGameDatas)) {
             RawGameData rawGameData = rawGameDatas.get(0);
@@ -118,7 +154,7 @@ public class ClientLogUploadController {
                 GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
                 gamePlayed.setStartTime(getDateTimeFromTimestamp(request.getStartTime()));
                 gamePlayed.setEndTime(getDateTimeFromTimestamp(request.getEndTime()));
-                gamePlayed.setRank(request.getRank());
+                gamePlayed.setRank(rawGameData.getRank());
 
                 GamePlayed sameGame = gameService.findSameGame(gamePlayed);
                 if (sameGame == null) {

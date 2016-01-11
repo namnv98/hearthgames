@@ -40,8 +40,6 @@ public class DetachedSerializer extends JsonSerializer<Detached> {
             g.writeFieldName("rarity");
             g.writeString(value.getDetachedFrom().getCardDetails().getRarity().toLowerCase());
             g.writeEndObject();
-        } else {
-            System.out.println();
         }
 
         g.writeEndObject();
