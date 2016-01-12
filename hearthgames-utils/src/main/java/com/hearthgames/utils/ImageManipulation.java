@@ -35,10 +35,31 @@ public class ImageManipulation {
     public static void main(String[] args) throws Exception {
 
 
-        existingMinions();
+        heroes();
 
 
     }
+
+
+    private static void heroes() {
+        File inputDir = new File("c:\\images\\heroraw");
+        File[] files = inputDir.listFiles();
+        if (files != null) {
+            for (File file1 : files) {
+                File file2 = new File("C:\\images\\assets\\heroframe-mask.png");
+                File outputFile = new File("C:\\images\\heroes\\" + file1.getName());
+
+                try {
+                    combineHeroImages(file1, file2, outputFile);
+                } catch (Exception e) {
+                    System.out.println("failed to convert + " + file1.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+
+
 
     private static void weapons() {
         File inputDir = new File("c:\\images\\weaponimages");
@@ -151,6 +172,32 @@ public class ImageManipulation {
         g2.dispose();
         return dest;
     }
+
+    public static void combineHeroImages(File file1, File file2, File outputFile) throws IOException {
+
+        BufferedImage originalImage = ImageIO.read(file1);
+
+        BufferedImage combined = new BufferedImage(286, 395, BufferedImage.TYPE_INT_ARGB);
+
+        BufferedImage weaponmask = ImageIO.read(file2);
+
+        // paint both images, preserving the alpha channels
+        Graphics g = combined.getGraphics();
+        g.drawImage(originalImage, 0, 0, null);
+        g.drawImage(weaponmask, 0, 0, null);
+
+        Image imageWithTransparency = makeColorTransparent(combined);
+        BufferedImage transparentImage = imageToBufferedImage(imageWithTransparency);
+        BufferedImage croppedImage = transparentImage.getSubimage(0, 0, 286, 284);
+        BufferedImage resized = toBufferedImage(croppedImage.getScaledInstance(181, 180, Image.SCALE_SMOOTH));
+        BufferedImage finalImage = resized.getSubimage(0, 0, 170, 180);
+
+        ImageIO.write(finalImage, "PNG", outputFile);
+        System.out.println();
+
+    }
+
+
 
     public static void combineWeaponImages(File file1, File file2, File outputFile) throws IOException {
 

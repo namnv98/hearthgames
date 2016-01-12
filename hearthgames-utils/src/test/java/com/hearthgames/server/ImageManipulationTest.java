@@ -21,6 +21,33 @@ public class ImageManipulationTest {
     @Autowired
     CardService cardService;
 
+
+    @Test
+    public void shouldMakeHeroes() throws IOException {
+
+        File dir = new File("C:\\images\\heroes");
+        File[] files = dir.listFiles();
+
+        List<String> heroes = new ArrayList<>();
+        if (files != null) {
+            for (File file: files) {
+                String name = file.getName().replace(".png","");
+                heroes.add(name);
+            }
+
+        }
+        for (String hero: heroes) {
+
+            System.out.println("."+hero+"_h { background-image: url(\"http://images.hearthgames.com/h/"+hero+".png\"); }");
+
+
+        }
+
+        System.out.println();
+
+    }
+
+
     @Test
     public void shouldMakeMinions() throws IOException {
 
