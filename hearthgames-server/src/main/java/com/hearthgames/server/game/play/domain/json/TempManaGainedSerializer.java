@@ -20,7 +20,7 @@ public class TempManaGainedSerializer extends JsonSerializer<TempManaGained> {
             g.writeFieldName("name");
             g.writeString(value.getPlayer().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getPlayer().getPlayerClass().toLowerCase());
+            g.writeString(value.getPlayer().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("card");

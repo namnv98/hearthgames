@@ -37,7 +37,7 @@ public class Board implements Action {
             turnData.setBoard(1);
         }
         turnData.setTurn(result.getCurrentTurn().getTurnNumber());
-        if (result.getCurrentTurn().getWhoseTurn() != null) {
+        if (result.getCurrentTurn().getWhoseTurn() != null && result.getCurrentTurn().getTurnNumber() != 0) {
             turnData.setWho(context.getFriendlyPlayer() == result.getCurrentTurn().getWhoseTurn() ? "Your Turn" : "Enemy Turn");
             if (result.getCurrentTurn().getWhoseTurn().getNumOptions() != null) {
                 int numOptions = Integer.parseInt(result.getCurrentTurn().getWhoseTurn().getNumOptions());

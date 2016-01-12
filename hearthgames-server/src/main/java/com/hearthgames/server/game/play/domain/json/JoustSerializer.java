@@ -44,7 +44,7 @@ public class JoustSerializer extends JsonSerializer<Joust> {
             g.writeFieldName("name");
             g.writeString(value.getFriendly().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getFriendly().getPlayerClass().toLowerCase());
+            g.writeString(value.getFriendly().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("opposing");
@@ -52,7 +52,7 @@ public class JoustSerializer extends JsonSerializer<Joust> {
             g.writeFieldName("name");
             g.writeString(value.getOpposing().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getOpposing().getPlayerClass().toLowerCase());
+            g.writeString(value.getOpposing().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("winner");

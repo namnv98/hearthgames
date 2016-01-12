@@ -32,7 +32,7 @@ public class FrozenSerializer extends JsonSerializer<Frozen> {
             g.writeFieldName("name");
             g.writeString(value.getCardController().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getCardController().getPlayerClass().toLowerCase());
+            g.writeString(value.getCardController().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("frozen");

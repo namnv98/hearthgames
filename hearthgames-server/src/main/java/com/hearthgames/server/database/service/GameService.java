@@ -60,11 +60,11 @@ public class GameService {
         gamePlayed.setOpposingGameAccountId(context.getOpposingPlayer().getGameAccountIdLo());
         gamePlayed.setRank(rawGameData.getRank());
         gamePlayed.setFriendlyName(context.getFriendlyPlayer().getName());
-        gamePlayed.setFriendlyClass(context.getFriendlyPlayer().getPlayerClass());
+        gamePlayed.setFriendlyClass(context.getFriendlyPlayer().getPlayerClass() == null ? "unknown" : context.getFriendlyPlayer().getPlayerClass());
         gamePlayed.setOpposingName(context.getOpposingPlayer().getName());
-        gamePlayed.setOpposingClass(context.getOpposingPlayer().getPlayerClass());
+        gamePlayed.setOpposingClass(context.getOpposingPlayer().getPlayerClass() == null ? "unknown" : context.getOpposingPlayer().getPlayerClass());
         gamePlayed.setWinner(result.getWinner().getName());
-        gamePlayed.setWinnerClass(result.getWinnerClass());
+        gamePlayed.setWinnerClass(result.getWinnerClass() == null ? "unknown" : result.getWinnerClass());
         gamePlayed.setTurns(result.getTurns().size());
         gamePlayed.setGameType(rawGameData.getGameType().getType());
 

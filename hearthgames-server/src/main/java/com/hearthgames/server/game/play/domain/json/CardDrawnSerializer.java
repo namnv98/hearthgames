@@ -20,7 +20,7 @@ public class CardDrawnSerializer extends JsonSerializer<CardDrawn> {
             g.writeFieldName("name");
             g.writeString(value.getDrawer().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getDrawer().getPlayerClass().toLowerCase());
+            g.writeString(value.getDrawer().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("card");

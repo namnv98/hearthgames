@@ -64,40 +64,42 @@ public class RawLogProcessingService {
                 line = rawLine; // For games that don't have timestamps
             }
 
-            GameType detectedType = detectGameMode(line);
-            if (detectedType != null) {
-                gameType = detectedType;
-            }
-
-            if (line.startsWith(CREATE_GAME)) {
-                addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType);
-                gameComplete = false;
-                rank = null;
-                currentGame = new ArrayList<>();
-                currentRawGame = new ArrayList<>();
-            } else if (line.startsWith(GAME_STATE_COMPLETE)) {
-                gameComplete = true;
-            } else if (gameComplete && line.startsWith(MEDAL_RANKED)) {
-                int rankFound = getRank(line);
-                if (rank == null || rankFound < rank) {
-                    rank = rankFound;
-                }
-            }
             if (isLineLoggable(line)) {
+
+                GameType detectedType = detectGameMode(line);
+                if (detectedType != null) {
+                    gameType = detectedType;
+                }
+
+                if (line.contains(CREATE_GAME)) {
+                    addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType);
+                    gameComplete = false;
+                    rank = null;
+                    currentGame = new ArrayList<>();
+                    currentRawGame = new ArrayList<>();
+                } else if (line.contains(GAME_STATE_COMPLETE)) {
+                    gameComplete = true;
+                } else if (gameComplete && line.contains(MEDAL_RANKED)) {
+                    int rankFound = getRank(line);
+                    if (rank == null || rankFound < rank) {
+                        rank = rankFound;
+                    }
+                }
+
                 LogLineData data = new LogLineData(timestamp, line);
                 currentGame.add(data);
                 currentRawGame.add(rawLine);
-            }
 
-            if (gameComplete && line.startsWith(END_OF_LOGS_FOR_GAME_MARKER)) {
-                // wait until register friend challenge for casual/rank mode games since the ranks are contained in log messages in between
-                RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank);
-                rawGameData.setGameType(gameType);
-                if (isGame(rawGameData)) {
-                    rawGameDatas.add(rawGameData);
+                if (gameComplete && line.contains(END_OF_LOGS_FOR_GAME_MARKER)) {
+                    // wait until register friend challenge for casual/rank mode games since the ranks are contained in log messages in between
+                    RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank);
+                    rawGameData.setGameType(gameType);
+                    if (isGame(rawGameData)) {
+                        rawGameDatas.add(rawGameData);
+                    }
+                    currentGame = new ArrayList<>();
+                    currentRawGame = new ArrayList<>();
                 }
-                currentGame = new ArrayList<>();
-                currentRawGame = new ArrayList<>();
             }
         }
         addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType);
@@ -115,8 +117,6 @@ public class RawLogProcessingService {
                 return GameType.CASUAL;
             } else if (line.contains(FRIEND_CHALLENGE)) {
                 return GameType.FRIENDLY_CHALLENGE;
-            } else if (line.contains(ADVENTURE_MODE)) {
-                return GameType.ADVENTURE;
             }
         } else if (line.startsWith(LOADING_SCREEN)) {
             String mode = getMode(line);
@@ -133,6 +133,8 @@ public class RawLogProcessingService {
                     return GameType.ARENA;
                 }
             }
+        } else if (line.contains(ADVENTURE_MODE)) {
+            return GameType.ADVENTURE;
         }
         return null;
     }

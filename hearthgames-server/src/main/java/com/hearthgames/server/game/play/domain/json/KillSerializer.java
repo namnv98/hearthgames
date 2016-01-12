@@ -47,7 +47,7 @@ public class KillSerializer extends JsonSerializer<Kill> {
             g.writeFieldName("name");
             g.writeString(value.getKillerController().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getKillerController().getPlayerClass().toLowerCase());
+            g.writeString(value.getKillerController().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("killedController");
@@ -55,7 +55,7 @@ public class KillSerializer extends JsonSerializer<Kill> {
             g.writeFieldName("name");
             g.writeString(value.getKilledController().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getKilledController().getPlayerClass().toLowerCase());
+            g.writeString(value.getKilledController().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("beneficiary");
@@ -63,7 +63,7 @@ public class KillSerializer extends JsonSerializer<Kill> {
             g.writeFieldName("name");
             g.writeString(value.getBeneficiary().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getBeneficiary().getPlayerClass().toLowerCase());
+            g.writeString(value.getBeneficiary().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("favorable");

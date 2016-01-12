@@ -33,7 +33,7 @@ public class AttackSerializer extends JsonSerializer<Attack> {
             g.writeFieldName("name");
             g.writeString(value.getAttackerController().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getAttackerController().getPlayerClass().toLowerCase());
+            g.writeString(value.getAttackerController().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("defender");
@@ -53,7 +53,7 @@ public class AttackSerializer extends JsonSerializer<Attack> {
             g.writeFieldName("name");
             g.writeString(value.getDefenderController().getName());
             g.writeFieldName("playerClass");
-            g.writeString(value.getDefenderController().getPlayerClass().toLowerCase());
+            g.writeString(value.getDefenderController().getPlayerClassToLowerCase());
         g.writeEndObject();
 
         if (value.getOriginalDefender() != null) {
@@ -74,7 +74,7 @@ public class AttackSerializer extends JsonSerializer<Attack> {
                 g.writeFieldName("name");
                 g.writeString(value.getOriginalDefenderController().getName());
                 g.writeFieldName("playerClass");
-                g.writeString(value.getOriginalDefenderController().getPlayerClass().toLowerCase());
+                g.writeString(value.getOriginalDefenderController().getPlayerClassToLowerCase());
             g.writeEndObject();
         }
 

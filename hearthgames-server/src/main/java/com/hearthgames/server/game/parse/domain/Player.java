@@ -297,6 +297,10 @@ public class Player extends Entity implements Serializable {
         return playerClass;
     }
 
+    public String getPlayerClassToLowerCase() {
+        return playerClass != null ? playerClass.toLowerCase() : "unknown";
+    }
+
     public void setPlayerClass(String playerClass) {
         this.playerClass = playerClass;
     }
