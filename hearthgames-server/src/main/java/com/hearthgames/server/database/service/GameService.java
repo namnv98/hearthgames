@@ -3,6 +3,7 @@ package com.hearthgames.server.database.service;
 import com.hearthgames.server.database.domain.Account;
 import com.hearthgames.server.database.repository.AccountRepository;
 import com.hearthgames.server.database.repository.GamePlayedRepository;
+import com.hearthgames.server.game.log.domain.GameType;
 import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.config.security.UserInfo;
@@ -58,7 +59,7 @@ public class GameService {
         gamePlayed.setEndTime(endTime == null ? now : endTime);
         gamePlayed.setFriendlyGameAccountId(context.getFriendlyPlayer().getGameAccountIdLo());
         gamePlayed.setOpposingGameAccountId(context.getOpposingPlayer().getGameAccountIdLo());
-        gamePlayed.setRank(rawGameData.getRank());
+        gamePlayed.setRank(rawGameData.getGameType() == GameType.RANKED ? rawGameData.getRank() : null);
         gamePlayed.setFriendlyName(context.getFriendlyPlayer().getName());
         gamePlayed.setFriendlyClass(context.getFriendlyPlayer().getPlayerClass() == null ? "unknown" : context.getFriendlyPlayer().getPlayerClass());
         gamePlayed.setOpposingName(context.getOpposingPlayer().getName());
