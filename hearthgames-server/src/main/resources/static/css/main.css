@@ -40,6 +40,7 @@
 
 
 @font-face { font-family: siteFont; src: url(../fonts/siteFont.woff); }
+@font-face { font-family: belwe; src: url(../fonts/belwe.woff); }
 
 body { font-family: siteFont, serif; color: #D5D4D4; background-color: #2D2D2D; opacity: .97; }
 body input { color: #000; }
