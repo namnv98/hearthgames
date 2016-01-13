@@ -18,27 +18,27 @@ public class DetachedSerializer extends JsonSerializer<Detached> {
         g.writeFieldName("card");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCard().getName());
+            g.writeString(value.getCard().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCard().getCardDetails().getId());
+            g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCard().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         // as an example we can emperor thaurasian can reduce the mana cost of cards we never know about so we need to guard against not know what the enchantment was detached from
-        if (value.getDetachedFrom() != null && value.getDetachedFrom().getCardDetails() != null) {
+        if (value.getDetachedFrom() != null) {
             g.writeFieldName("detachedFrom");
             g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getDetachedFrom().getName());
+            g.writeString(value.getDetachedFrom().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getDetachedFrom().getCardDetails().getId());
+            g.writeString(value.getDetachedFrom().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getDetachedFrom().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getDetachedFrom().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getDetachedFrom().getCardDetailsRarity().toLowerCase());
             g.writeEndObject();
         }
 

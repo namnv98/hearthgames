@@ -181,7 +181,7 @@ public class Board implements Action {
                 cardInHand.setHealth(c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0);
                 cardInHand.setAttack(c.getAtk() != null ? Integer.parseInt(c.getAtk()) : 0);
                 cardInHand.setCost(c.getCost() != null ? Integer.parseInt(c.getCost()) : 0);
-                cardInHand.setCardId(c.getCardDetails() != null ? c.getCardDetails().getId() : "cardback");
+                cardInHand.setCardId(c.getCardDetailsId());
                 cardInHand.setId(c.getEntityId());
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInHand().add(cardInHand);
@@ -215,7 +215,7 @@ public class Board implements Action {
                 minionInPlay.setHealth(health);
                 minionInPlay.setAttack(attack);
                 minionInPlay.setFrozen(c.getFrozen() != null && TRUE.equals(c.getFrozen()));
-                minionInPlay.setLegendary(LEGENDARY.equalsIgnoreCase(c.getCardDetails().getRarity()));
+                minionInPlay.setLegendary(LEGENDARY.equalsIgnoreCase(c.getCardDetailsRarity()));
                 boolean silenced = TRUE.equals(c.getSilenced());
                 if (!silenced) {
                     minionInPlay.setShielded(TRUE.equals(c.getDivineShield()));
@@ -242,7 +242,7 @@ public class Board implements Action {
             } else if (Zone.SECRET.eq(c.getZone())) {
                 CardInSecret cardInSecret = new CardInSecret();
                 cardInSecret.setCardClass(c.getCardClass().toLowerCase());
-                cardInSecret.setCardId(c.getCardDetails() != null ? c.getCardDetails().getId() : "");
+                cardInSecret.setCardId(c.getCardDetailsId());
                 cardInSecret.setId(c.getEntityId());
                 if (c.getController().equals(context.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInSecret().add(cardInSecret);

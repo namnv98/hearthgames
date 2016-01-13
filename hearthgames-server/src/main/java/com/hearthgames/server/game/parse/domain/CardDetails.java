@@ -69,7 +69,7 @@ public class CardDetails implements Serializable {
     }
 
     public String getRarity() {
-        return rarity != null ? rarity : "none";
+        return rarity;
     }
 
     public void setRarity(String rarity) {

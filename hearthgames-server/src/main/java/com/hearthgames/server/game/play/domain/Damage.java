@@ -66,7 +66,7 @@ public class Damage implements Action, Serializable {
 
     @Override
     public String toString() {
-        String damagerStr = damager != null ? damagerController.getName() + " " + damager.getName() : "";
-        return damagerStr + " has done " + amount + " damage to " + damagedController.getName() + " " + damaged.getName();
+        String damagerStr = damager != null ? damagerController.getName() + " " + damager.getCardDetailsName() : "";
+        return damagerStr + " has done " + amount + " damage to " + damagedController.getName() + " " + damaged.getCardDetailsName();
     }
 }

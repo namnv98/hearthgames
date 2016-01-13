@@ -26,26 +26,26 @@ public class CardDrawnSerializer extends JsonSerializer<CardDrawn> {
         g.writeFieldName("card");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCard().getName());
+            g.writeString(value.getCard().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCard().getCardDetails() != null ? value.getCard().getCardDetails().getId() : "cardback");
+            g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCard().getId());
-        g.writeFieldName("rarity");
-            g.writeString(value.getCard().getCardDetails() != null ? value.getCard().getCardDetails().getRarity().toLowerCase(): "none");
+            g.writeFieldName("rarity");
+            g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         if (value.getTrigger() != null) {
             g.writeFieldName("trigger");
             g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getTrigger().getName());
+            g.writeString(value.getTrigger().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getTrigger().getCardDetails().getId());
+            g.writeString(value.getTrigger().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getTrigger().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getTrigger().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getTrigger().getCardDetailsRarity().toLowerCase());
             g.writeEndObject();
         }
 

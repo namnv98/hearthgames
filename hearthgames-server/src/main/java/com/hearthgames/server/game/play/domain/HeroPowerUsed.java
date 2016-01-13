@@ -36,7 +36,7 @@ public class HeroPowerUsed implements Action, Serializable {
 
     @Override
     public String toString() {
-        return cardController.getName() + " has activated their hero power : " + card.getCardDetails().getName();
+        return cardController.getName() + " has activated their hero power : " + card.getCardDetailsName();
 
     }
 }

@@ -559,12 +559,16 @@ public class Card extends Entity implements Serializable {
                 '}';
     }
 
-    public String getName() {
-        return cardDetails != null ? cardDetails.getName() : "a card ";
+    public String getCardDetailsName() {
+        return cardDetails != null && cardDetails.getName() != null ? cardDetails.getName() : "a card ";
     }
 
-    public String getText() {
-        return cardDetails != null ? cardDetails.getText() : "";
+    public String getCardDetailsId() {
+        return cardDetails != null && cardDetails.getId() != null ? cardDetails.getId() : "cardback";
+    }
+
+    public String getCardDetailsRarity() {
+        return cardDetails != null && cardDetails.getRarity() != null ? cardDetails.getRarity() : "none";
     }
 
     public int getCardDetailsCost() {

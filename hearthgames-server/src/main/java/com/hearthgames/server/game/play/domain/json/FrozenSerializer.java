@@ -18,13 +18,13 @@ public class FrozenSerializer extends JsonSerializer<Frozen> {
         g.writeFieldName("card");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCard().getName());
+            g.writeString(value.getCard().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCard().getCardDetails().getId());
+            g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCard().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("cardController");

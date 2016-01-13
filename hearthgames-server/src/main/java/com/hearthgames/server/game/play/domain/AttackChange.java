@@ -56,6 +56,6 @@ public class AttackChange implements Action, Serializable {
 
     @Override
     public String toString() {
-        return cardController.getName() + " " + card.getName() + " attack is now : " + newAttack;
+        return cardController.getName() + " " + card.getCardDetailsName() + " attack is now : " + newAttack;
     }
 }

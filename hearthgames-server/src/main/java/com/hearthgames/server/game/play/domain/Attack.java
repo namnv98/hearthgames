@@ -84,9 +84,9 @@ public class Attack implements Action, Serializable {
     @Override
     public String toString() {
         if (originalDefenderController != null) {
-            String original = attackerController.getName() + " " + attacker.getName() + " is attacking " + originalDefenderController.getName() + " " + originalDefender.getName();
-            return original + " but instead attacked " + defenderController.getName() + " " + defender.getName();
+            String original = attackerController.getName() + " " + attacker.getCardDetailsName() + " is attacking " + originalDefenderController.getName() + " " + originalDefender.getCardDetailsName();
+            return original + " but instead attacked " + defenderController.getName() + " " + defender.getCardDetailsName();
         }
-        return attackerController.getName() + " " + attacker.getName() + " is attacking " + defenderController.getName() + " " + defender.getName();
+        return attackerController.getName() + " " + attacker.getCardDetailsName() + " is attacking " + defenderController.getName() + " " + defender.getCardDetailsName();
     }
 }

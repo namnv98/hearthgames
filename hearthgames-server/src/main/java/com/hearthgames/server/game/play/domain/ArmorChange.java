@@ -46,6 +46,6 @@ public class ArmorChange implements Action, Serializable {
 
     @Override
     public String toString() {
-        return player.getName() + " " + card.getName() + " armor is now : " + armor;
+        return player.getName() + " " + card.getCardDetailsName() + " armor is now : " + armor;
     }
 }

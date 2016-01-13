@@ -19,25 +19,25 @@ public class DamageSerializer extends JsonSerializer<Damage> {
         g.writeFieldName("damager");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getDamager().getName());
+            g.writeString(value.getDamager().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getDamager().getCardDetails().getId());
+            g.writeString(value.getDamager().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getDamager().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getDamager().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getDamager().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("damaged");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getDamaged().getName());
+            g.writeString(value.getDamaged().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getDamaged().getCardDetails().getId());
+            g.writeString(value.getDamaged().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getDamaged().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getDamaged().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getDamaged().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         if (value.getDamaged().isWeapon()) {

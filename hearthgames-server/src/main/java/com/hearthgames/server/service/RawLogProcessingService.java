@@ -46,6 +46,8 @@ public class RawLogProcessingService {
         List<RawGameData> rawGameDatas = new ArrayList<>();
 
         GameType gameType = type == -1 ? GameType.UNKNOWN : GameType.getGameType(type);
+        boolean isLegacy = lines.get(0) != null & lines.get(0).startsWith(CREATE_GAME);
+        boolean detectGameType = type == -1;
 
         boolean gameComplete = false;
         List<LogLineData> currentGame = new ArrayList<>();
@@ -64,11 +66,13 @@ public class RawLogProcessingService {
                 line = rawLine; // For games that don't have timestamps
             }
 
-            if (isLineLoggable(line)) {
+            if (isLineLoggable(line) || isLegacy) {
 
-                GameType detectedType = detectGameMode(line);
-                if (detectedType != null) {
-                    gameType = detectedType;
+                if (detectGameType) {
+                    GameType detectedType = detectGameMode(line);
+                    if (detectedType != null ) {
+                        gameType = detectedType;
+                    }
                 }
 
                 if (line.contains(CREATE_GAME)) {

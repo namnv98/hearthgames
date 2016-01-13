@@ -18,25 +18,25 @@ public class JoustSerializer extends JsonSerializer<Joust> {
         g.writeFieldName("friendlyJouster");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getFriendlyJouster().getName());
+            g.writeString(value.getFriendlyJouster().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getFriendlyJouster().getCardDetails().getId());
+            g.writeString(value.getFriendlyJouster().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getFriendlyJouster().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getFriendlyJouster().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getFriendlyJouster().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("opposingJouster");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getOpposingJouster().getName());
+            g.writeString(value.getOpposingJouster().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getOpposingJouster().getCardDetails().getId());
+            g.writeString(value.getOpposingJouster().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getOpposingJouster().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getOpposingJouster().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getOpposingJouster().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("friendly");

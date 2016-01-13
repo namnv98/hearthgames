@@ -87,6 +87,6 @@ public class CardDiscarded implements Action, Serializable {
 
     @Override
     public String toString() {
-        return cause.getName() + " has caused " + player.getName() + " to discard " + card.getName();
+        return cause.getCardDetailsName() + " has caused " + player.getName() + " to discard " + card.getCardDetailsName();
     }
 }

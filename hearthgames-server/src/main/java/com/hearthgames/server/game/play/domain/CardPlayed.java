@@ -79,19 +79,19 @@ public class CardPlayed implements Action, Serializable {
     @Override
     public String toString() {
         if (playType == 1) {
-            return player.getName() + " has played a minion from HAND : " + card.getName();
+            return player.getName() + " has played a minion from HAND : " + card.getCardDetailsName();
         } else if (playType == 2) {
-            return player.getName() + " has played a secret from HAND : " + card.getName();
+            return player.getName() + " has played a secret from HAND : " + card.getCardDetailsName();
         } else if (playType == 3) {
-            return player.getName() + " has played a minion from DECK : " + card.getName();
+            return player.getName() + " has played a minion from DECK : " + card.getCardDetailsName();
         } else if (playType == 4) {
-            return player.getName() + " has played a secret from DECK : " + card.getName();
+            return player.getName() + " has played a secret from DECK : " + card.getCardDetailsName();
         } else if (playType == 5) {
-            return player.getName() + " has played a minion from GRAVEYARD : " + card.getName();
+            return player.getName() + " has played a minion from GRAVEYARD : " + card.getCardDetailsName();
         } else if (playType == 6) {
-            return player.getName() + " has gained a minion : " + card.getName();
+            return player.getName() + " has gained a minion : " + card.getCardDetailsName();
         } else if (playType == 7) {
-            return player.getName() + " has cast a spell : " + card.getName();
+            return player.getName() + " has cast a spell : " + card.getCardDetailsName();
         }
         return "";
     }

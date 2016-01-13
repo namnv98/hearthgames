@@ -18,25 +18,25 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
         g.writeFieldName("creator");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCreator().getName());
+            g.writeString(value.getCreator().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCreator().getCardDetails().getId());
+            g.writeString(value.getCreator().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCreator().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCreator().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getCreator().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("created");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCreated().getName());
+            g.writeString(value.getCreated().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCreated().getCardDetails() != null ? value.getCreated().getCardDetails().getId() : "cardback");
+            g.writeString(value.getCreated().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCreated().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCreated().getCardDetails() != null ? value.getCreated().getCardDetails().getRarity().toLowerCase() : "none");
+            g.writeString(value.getCreated().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("creatorController");

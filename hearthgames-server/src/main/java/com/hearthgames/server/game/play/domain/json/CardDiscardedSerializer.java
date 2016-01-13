@@ -19,25 +19,25 @@ public class CardDiscardedSerializer extends JsonSerializer<CardDiscarded> {
         g.writeFieldName("card");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCard().getName());
+            g.writeString(value.getCard().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCard().getCardDetails().getId());
+            g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCard().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("cause");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCause().getName());
+            g.writeString(value.getCause().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCause().getCardDetails().getId());
+            g.writeString(value.getCause().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCause().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCause().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getCause().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("cardController");

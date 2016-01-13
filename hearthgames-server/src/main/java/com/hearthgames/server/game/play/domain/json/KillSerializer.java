@@ -21,25 +21,25 @@ public class KillSerializer extends JsonSerializer<Kill> {
         g.writeFieldName("killer");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getKiller().getName());
+            g.writeString(value.getKiller().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getKiller().getCardDetails().getId());
+            g.writeString(value.getKiller().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getKiller().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getKiller().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getKiller().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("killed");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getKilled().getName());
+            g.writeString(value.getKilled().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getKilled().getCardDetails().getId());
+            g.writeString(value.getKilled().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getKilled().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getKilled().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getKilled().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("killerController");

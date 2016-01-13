@@ -49,6 +49,6 @@ public class CardDrawn implements Action, Serializable {
 
     @Override
     public String toString() {
-        return drawer.getName() + " has drawn " + card.getName();
+        return drawer.getName() + " has drawn " + card.getCardDetailsName();
     }
 }

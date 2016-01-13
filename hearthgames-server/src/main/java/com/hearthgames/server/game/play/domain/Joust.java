@@ -76,6 +76,6 @@ public class Joust implements Action, Serializable {
 
     @Override
     public String toString() {
-        return friendlyJouster.getName() + " is jousting : " + opposingJouster.getName() + (winner ? friendlyJouster.getName() + " has won the joust!" : friendlyJouster.getName() + " has lost the joust!");
+        return friendlyJouster.getCardDetailsName() + " is jousting : " + opposingJouster.getCardDetailsName() + (winner ? friendlyJouster.getCardDetailsName() + " has won the joust!" : friendlyJouster.getCardDetailsName() + " has lost the joust!");
     }
 }

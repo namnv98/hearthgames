@@ -19,13 +19,13 @@ public class AttackSerializer extends JsonSerializer<Attack> {
         g.writeFieldName("attacker");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getAttacker().getName());
+            g.writeString(value.getAttacker().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getAttacker().getCardDetails().getId());
+            g.writeString(value.getAttacker().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getAttacker().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getAttacker().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getAttacker().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("attackerController");
@@ -39,13 +39,13 @@ public class AttackSerializer extends JsonSerializer<Attack> {
         g.writeFieldName("defender");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getDefender().getName());
+            g.writeString(value.getDefender().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getDefender().getCardDetails().getId());
+            g.writeString(value.getDefender().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getDefender().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getDefender().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getDefender().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("defenderController");
@@ -60,13 +60,13 @@ public class AttackSerializer extends JsonSerializer<Attack> {
             g.writeFieldName("originalDefender");
             g.writeStartObject();
                 g.writeFieldName("name");
-                g.writeString(value.getOriginalDefender().getName());
+                g.writeString(value.getOriginalDefender().getCardDetailsName());
                 g.writeFieldName("cardId");
-                g.writeString(value.getOriginalDefender().getCardDetails().getId());
+                g.writeString(value.getOriginalDefender().getCardDetailsId());
                 g.writeFieldName("id");
                 g.writeString(value.getOriginalDefender().getId());
                 g.writeFieldName("rarity");
-                g.writeString(value.getOriginalDefender().getCardDetails().getRarity().toLowerCase());
+                g.writeString(value.getOriginalDefender().getCardDetailsRarity().toLowerCase());
             g.writeEndObject();
 
             g.writeFieldName("originalDefenderController");

@@ -97,7 +97,7 @@ public class Kill implements Action, Serializable {
     @Override
     public String toString() {
         String msg = getMessage(favorableTrade, evenTrade, beneficiary == killerController);
-        return killerController.getName() + " " + killer.getName() + " has " + kind + " " + killedController.getName() + " " + killed.getName() + msg;
+        return killerController.getName() + " " + killer.getCardDetailsName() + " has " + kind + " " + killedController.getName() + " " + killed.getCardDetailsName() + msg;
     }
 
     private String getMessage(boolean favorableTrade, boolean evenTrade, boolean killerFriendly) {

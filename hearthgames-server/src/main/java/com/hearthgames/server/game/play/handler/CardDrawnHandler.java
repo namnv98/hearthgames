@@ -30,13 +30,13 @@ public class CardDrawnHandler implements Handler {
             if (player == playContext.getContext().getFriendlyPlayer()) {
                 if (playContext.getContext().getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
                     playContext.getResult().addFriendlyStartingCard(before);
-                    playContext.addLoggingAction(player.getName() + " has drawn " +  before.getName());
+                    playContext.addLoggingAction(player.getName() + " has drawn " +  before.getCardDetailsName());
                     return true;
                 }
             } else {
                 if (playContext.getContext().getStartingCardIds().contains(before.getEntityId())) {
                     playContext.getResult().addOpposingStartingCard(before);
-                    playContext.addLoggingAction(player.getName() + " has drawn " +  before.getName());
+                    playContext.addLoggingAction(player.getName() + " has drawn " +  before.getCardDetailsName());
                     return true;
                 }
             }

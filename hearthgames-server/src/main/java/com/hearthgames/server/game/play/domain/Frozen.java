@@ -46,6 +46,6 @@ public class Frozen implements Action, Serializable {
 
     @Override
     public String toString() {
-        return cardController.getName() + " " + card.getName() + " has been frozen";
+        return cardController.getName() + " " + card.getCardDetailsName() + " has been frozen";
     }
 }

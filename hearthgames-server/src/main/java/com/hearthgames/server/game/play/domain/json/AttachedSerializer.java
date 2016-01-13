@@ -18,25 +18,25 @@ public class AttachedSerializer extends JsonSerializer<Attached> {
         g.writeFieldName("card");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getCard().getName());
+            g.writeString(value.getCard().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getCard().getCardDetails().getId());
+            g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getCard().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getCard().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeFieldName("attachedTo");
         g.writeStartObject();
             g.writeFieldName("name");
-            g.writeString(value.getAttachedTo().getName());
+            g.writeString(value.getAttachedTo().getCardDetailsName());
             g.writeFieldName("cardId");
-            g.writeString(value.getAttachedTo().getCardDetails().getId());
+            g.writeString(value.getAttachedTo().getCardDetailsId());
             g.writeFieldName("id");
             g.writeString(value.getAttachedTo().getId());
             g.writeFieldName("rarity");
-            g.writeString(value.getAttachedTo().getCardDetails().getRarity().toLowerCase());
+            g.writeString(value.getAttachedTo().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
         g.writeEndObject();

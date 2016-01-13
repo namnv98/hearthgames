@@ -22,7 +22,7 @@ public class MulliganCardHandler implements Handler {
         } else {
             playContext.getResult().mulliganOpposingCard(before);
         }
-        playContext.addLoggingAction(player.getName() + " has mulliganed " + before.getName());
+        playContext.addLoggingAction(player.getName() + " has mulliganed " + before.getCardDetailsName());
         return true;
     }
 }

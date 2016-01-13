@@ -57,6 +57,6 @@ public class HealthChange implements Action, Serializable {
     @Override
     public String toString() {
 
-        return cardController.getName() + " " + card.getName() + " health is now : " + newHealth;
+        return cardController.getName() + " " + card.getCardDetailsName() + " health is now : " + newHealth;
     }
 }
