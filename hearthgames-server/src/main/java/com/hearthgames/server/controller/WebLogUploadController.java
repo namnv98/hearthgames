@@ -26,9 +26,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class LogFileUploadController {
+public class WebLogUploadController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LogFileUploadController.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebLogUploadController.class);
 
     @Autowired
     private RawLogProcessingService rawLogProcessingService;
@@ -51,6 +51,11 @@ public class LogFileUploadController {
             try {
                 byte[] bytes = file.getBytes();
                 String logfile = new String(bytes);
+                if (!rawLogProcessingService.doesLogFileContainAllLoggers(logfile)) {
+                    modelAndView.setViewName("invalidlog");
+                    return modelAndView;
+                }
+
                 String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
                 String[] lines = logfile.split(splitStr);
 

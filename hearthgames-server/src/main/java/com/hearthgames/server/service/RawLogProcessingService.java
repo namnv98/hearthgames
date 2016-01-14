@@ -200,6 +200,10 @@ public class RawLogProcessingService {
         return false;
     }
 
+    public boolean doesLogFileContainAllLoggers(String logfile) {
+        return logfile != null && logfile.contains("Bob]") && logfile.contains("[Asset]") && logfile.contains("[Power]") && logfile.contains("[LoadingScreen]");
+    }
+
     private int getRank(String line) {
         int rank = 0;
         Matcher matcher = medalRankPattern.matcher(line);

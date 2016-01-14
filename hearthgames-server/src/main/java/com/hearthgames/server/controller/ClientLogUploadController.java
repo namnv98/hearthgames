@@ -145,34 +145,37 @@ public class ClientLogUploadController {
         }
 
         String logfile = GameCompressionUtils.decompressGameData(request.getData());
-        String[] lines = logfile.split("\n");
 
-        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), request.getGameType());
+        if (rawLogProcessingService.doesLogFileContainAllLoggers(logfile)) {
+            String[] lines = logfile.split("\n");
 
-        if (!CollectionUtils.isEmpty(rawGameDatas)) {
-            RawGameData rawGameData = rawGameDatas.get(0);
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), request.getGameType());
 
-            try {
-                GameContext context = gameParserService.parseLines(rawGameData.getLines());
-                GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
+            if (!CollectionUtils.isEmpty(rawGameDatas)) {
+                RawGameData rawGameData = rawGameDatas.get(0);
 
-                GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
-                gamePlayed.setStartTime(getDateTimeFromTimestamp(request.getStartTime()));
-                gamePlayed.setEndTime(getDateTimeFromTimestamp(request.getEndTime()));
-                gamePlayed.setRank(rawGameData.getRank());
+                try {
+                    GameContext context = gameParserService.parseLines(rawGameData.getLines());
+                    GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
-                GamePlayed sameGame = gameService.findSameGame(gamePlayed);
-                if (sameGame == null) {
-                    gameService.saveGamePlayed(gamePlayed, context, result, true);
+                    GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+                    gamePlayed.setStartTime(getDateTimeFromTimestamp(request.getStartTime()));
+                    gamePlayed.setEndTime(getDateTimeFromTimestamp(request.getEndTime()));
+                    gamePlayed.setRank(rawGameData.getRank());
+
+                    GamePlayed sameGame = gameService.findSameGame(gamePlayed);
+                    if (sameGame == null) {
+                        gameService.saveGamePlayed(gamePlayed, context, result, true);
+                    }
+                    Long gameId = sameGame != null ? sameGame.getId() : gamePlayed.getId();
+                    RecordGameResponse response = new RecordGameResponse();
+                    response.setUrl("http://hearthgames.com/game/"+gameId);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+
+                } catch (Exception e) {
+                    logger.error(ExceptionUtils.getStackTrace(e));
+                    gameService.saveRawGameError(rawGameData, getDateTimeFromTimestamp(request.getStartTime()), getDateTimeFromTimestamp(request.getEndTime()));
                 }
-                Long gameId = sameGame != null ? sameGame.getId() : gamePlayed.getId();
-                RecordGameResponse response = new RecordGameResponse();
-                response.setUrl("http://hearthgames.com/game/"+gameId);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-
-            } catch (Exception e) {
-                logger.error(ExceptionUtils.getStackTrace(e));
-                gameService.saveRawGameError(rawGameData, getDateTimeFromTimestamp(request.getStartTime()), getDateTimeFromTimestamp(request.getEndTime()));
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

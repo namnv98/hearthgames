@@ -279,7 +279,6 @@ public class GamePlayed {
         if (!friendlyGameAccountId.equals(gamePlayed.friendlyGameAccountId)) return false;
         if (!opposingGameAccountId.equals(gamePlayed.opposingGameAccountId)) return false;
         if (!winner.equals(gamePlayed.winner)) return false;
-        if (!winnerClass.equals(gamePlayed.winnerClass)) return false;
         if (!friendlyStartingCards.equals(gamePlayed.friendlyStartingCards)) return false;
         if (!friendlyMulliganCards.equals(gamePlayed.friendlyMulliganCards)) return false;
         if (!friendlyDeckCards.equals(gamePlayed.friendlyDeckCards)) return false;
