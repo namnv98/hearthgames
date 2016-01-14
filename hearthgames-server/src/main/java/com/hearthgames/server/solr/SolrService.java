@@ -36,12 +36,12 @@ public class SolrService {
         game.setFriendlyGameAccountId(gamePlayed.getFriendlyGameAccountId());
         game.setFriendlyName(gamePlayed.getFriendlyName());
         game.setFriendlyClass(gamePlayed.getFriendlyClass());
-        game.setFriendlyClassWon(context.getFriendlyPlayer() == result.getWinner());
+        game.setFriendlyClassWon(result.getWinners().contains(context.getFriendlyPlayer()));
         game.setFriendlyClassQuit(context.getFriendlyPlayer() == result.getQuitter());
         game.setOpposingGameAccountId(gamePlayed.getOpposingGameAccountId());
         game.setOpposingName(gamePlayed.getOpposingName());
         game.setOpposingClass(gamePlayed.getOpposingClass());
-        game.setOpposingClassWon(context.getOpposingPlayer() == result.getWinner());
+        game.setOpposingClassWon(result.getWinners().contains(context.getOpposingPlayer()));
         game.setOpposingClassQuit(context.getOpposingPlayer() == result.getQuitter());
         game.setRank(gamePlayed.getRank());
         game.setTurns(gamePlayed.getTurns());

@@ -52,8 +52,8 @@ public class JoustHandler implements Handler {
                 cardId1 != null && cardId2 != null) {
             int cost1 = Integer.parseInt(controller1CardCost);
             int cost2 = Integer.parseInt(controller2CardCost);
-            Card card1 = (Card) playContext.getContext().getEntityById(controller1Id);
-            Card card2 = (Card) playContext.getContext().getEntityById(controller2Id);
+            Card card1 = playContext.getContext().getCardByEntityId(controller1Id);
+            Card card2 = playContext.getContext().getCardByEntityId(controller2Id);
 
             if (Objects.equals(playContext.getContext().getFriendlyPlayer().getController(), controller1Id)) {
                 addJoustResult(playContext, cost1, cost2, card1, card2);

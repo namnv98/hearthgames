@@ -17,16 +17,14 @@ public class AttachDetachHandler implements Handler {
         Card after = playContext.getContext().getAfter(playContext.getActivity());
 
         if (FALSE_OR_ZERO.equals(after.getAttached())) {
-            Entity entity = playContext.getContext().getEntityById(before.getAttached());
-            if (entity instanceof Card) {
-                Card detachFrom = (Card) entity;
+            Card detachFrom = playContext.getContext().getCardByEntityId(before.getAttached());
+            if (detachFrom != null) {
                 playContext.addDetached(before, detachFrom);
                 return true;
             }
         } else {
-            Entity entity = playContext.getContext().getEntityById(after.getAttached());
-            if (entity instanceof Card) {
-                Card attachTo = (Card) entity;
+            Card attachTo = playContext.getContext().getCardByEntityId(after.getAttached());
+            if (attachTo != null) {
                 playContext.addAttached(before, attachTo);
                 return true;
             }

@@ -18,7 +18,7 @@ public class KillHandler implements Handler {
         Card after = playContext.getContext().getAfter(playContext.getActivity());
 
         if (Zone.PLAY.eq(before.getZone()) && Zone.GRAVEYARD.eq(after.getZone()) && Card.Type.MINION.eq(before.getCardtype())) {
-            Card card = (Card) playContext.getContext().getEntityById(before.getLastAffectedBy());
+            Card card = playContext.getContext().getCardByEntityId(before.getLastAffectedBy());
             if (card != null) {
                 boolean favorableTrade = false;
                 boolean evenTrade = false;
@@ -71,11 +71,11 @@ public class KillHandler implements Handler {
         }
 
         if (after.getToBeDestroyed() != null && TRUE_OR_ONE.equals(after.getToBeDestroyed())) {
-            Card card = (Card) playContext.getContext().getEntityById(playContext.getActivity().getEntityId());
+            Card card = playContext.getContext().getCardByEntityId(playContext.getActivity().getEntityId());
             if (card != null) {
                 Activity parent = playContext.getActivity().getParent();
                 if (parent != null) {
-                    Card parentCard = (Card) playContext.getContext().getEntityById(parent.getEntityId());
+                    Card parentCard = playContext.getContext().getCardByEntityId(parent.getEntityId());
                     if (parentCard != null) {
                         CardDetails parentCardDetails = parentCard.getCardDetails();
                         CardDetails cardDetails = card.getCardDetails();

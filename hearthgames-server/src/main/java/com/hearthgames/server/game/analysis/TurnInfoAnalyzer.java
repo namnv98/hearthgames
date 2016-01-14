@@ -30,10 +30,10 @@ public class TurnInfoAnalyzer implements Analyzer<List<TurnInfo>> {
         info.setTurnNumber(""+turn.getTurnNumber());
         info.setWhoseTurn(whoseTurn.getName());
         if (whoseTurn == context.getFriendlyPlayer()) {
-            String friendlyClass = result.getWinner() == context.getFriendlyPlayer() ? result.getWinnerClass() : result.getLoserClass();
+            String friendlyClass = result.getWinner().equals(context.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(friendlyClass);
         } else {
-            String opposingClass = result.getWinner() == context.getOpposingPlayer() ? result.getWinnerClass() : result.getLoserClass();
+            String opposingClass = result.getWinner().equals(context.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(opposingClass);
         }
 

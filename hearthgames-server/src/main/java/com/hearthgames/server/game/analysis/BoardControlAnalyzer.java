@@ -64,8 +64,8 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
                     }
                 }
 
-                String friendlyClass = result.getWinner() == context.getFriendlyPlayer() ? result.getWinnerClass() : result.getLoserClass();
-                String opposingClass = result.getWinner() == context.getOpposingPlayer() ? result.getWinnerClass() : result.getLoserClass();
+                String friendlyClass = result.getWinner().equals(context.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
+                String opposingClass = result.getWinner().equals(context.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
 
                 if (friendlyBoardControl) {
                     addFriendlyOpposingColumns(friendlyClass, "", friendly, opposing);

@@ -7,8 +7,8 @@ import java.util.*;
 
 public class GameResult {
 
-    private Player winner;
-    private Player loser;
+    private List<Player> winners = new ArrayList<>();
+    private List<Player> losers = new ArrayList<>();
     private Player quitter;
     private Player first;
 
@@ -22,9 +22,6 @@ public class GameResult {
 
     private Set<Card> friendlyDeckCards = new LinkedHashSet<>();
     private Set<Card> opposingDeckCards = new LinkedHashSet<>();
-
-    private String winnerClass; // the class (i.e. warrior, hunter, etc...)
-    private String loserClass;
 
     private List<Turn> turns = new ArrayList<>();
     private Turn currentTurn;
@@ -96,20 +93,20 @@ public class GameResult {
         return friendlyDeckCards;
     }
 
-    public Player getWinner() {
-        return winner;
+    public List<Player> getWinners() {
+        return winners;
     }
 
-    public void setWinner(Player winner) {
-        this.winner = winner;
+    public void setWinners(List<Player> winners) {
+        this.winners = winners;
     }
 
-    public Player getLoser() {
-        return loser;
+    public List<Player> getLosers() {
+        return losers;
     }
 
-    public void setLoser(Player loser) {
-        this.loser = loser;
+    public void setLosers(List<Player> losers) {
+        this.losers = losers;
     }
 
     public Player getQuitter() {
@@ -159,22 +156,6 @@ public class GameResult {
         this.rank = rank;
     }
 
-    public String getWinnerClass() {
-        return winnerClass;
-    }
-
-    public void setWinnerClass(String winnerClass) {
-        this.winnerClass = winnerClass;
-    }
-
-    public String getLoserClass() {
-        return loserClass;
-    }
-
-    public void setLoserClass(String loserClass) {
-        this.loserClass = loserClass;
-    }
-
     public void setCurrentTurn(Turn currentTurn) {
         this.currentTurn = currentTurn;
     }
@@ -192,18 +173,44 @@ public class GameResult {
         this.turns.add(currentTurn);
     }
 
-    public Action getLastAction() {
-        if (turns != null && turns.size() > 0) {
-            Turn turn = turns.get(turns.size()-1);
-            if (turn.getActions() != null && turn.getActions().size() > 0) {
-                return turn.getActions().get(turn.getActions().size()-1);
-            } else if (turns.size() > 1) { // if the latest turn doesnt have any action go back to the previous turn and get the last action
-                turn = turns.get(turns.size()-2);
-                if (turn.getActions() != null && turn.getActions().size() > 0) {
-                    return turn.getActions().get(turn.getActions().size()-1);
-                }
-            }
+    public String getWinner() {
+        if (winners.size() > 1) {
+            return "Both";
+        } else if (winners.size() == 0) {
+            return "None";
+        } else {
+           return winners.get(0).getName();
         }
-        return null;
     }
+
+    public String getLoser() {
+        if (losers.size() > 1) {
+            return "Both";
+        } else if (losers.size() == 0) {
+            return "None";
+        } else {
+            return losers.get(0).getName();
+        }
+    }
+
+    public String getWinnerClass() {
+        if (winners.size() > 1) {
+            return "N/A";
+        } else if (winners.size() == 0){
+            return "";
+        } else {
+            return winners.get(0).getPlayerClass() == null ? "unknown" : winners.get(0).getPlayerClass();
+        }
+    }
+
+    public String getLoserClass() {
+        if (losers.size() > 1) {
+            return "N/A";
+        } else if (losers.size() == 0){
+            return "";
+        } else {
+            return losers.get(0).getPlayerClass() == null ? "unknown" : losers.get(0).getPlayerClass();
+        }
+    }
+
 }

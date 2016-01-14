@@ -65,6 +65,13 @@ public class CardCreation implements Action, Serializable {
 
     @Override
     public String toString() {
-        return creatorController.getName() + " " + creator.getCardDetailsName() + " has created : " + createdController.getName() + " " +  created.getCardDetailsName() + " ( " + beneficiary.getName() + " has benefited )";
+        String msg;
+        if (createdController != null && creator != null) {
+            msg = creatorController.getName() + " " + creator.getCardDetailsName();
+        } else {
+            msg = "Game";
+        }
+
+        return msg + " has created : " + (createdController != null ? createdController.getName() : "") + " " +  created.getCardDetailsName() + " ( " + beneficiary.getName() + " has benefited )";
     }
 }

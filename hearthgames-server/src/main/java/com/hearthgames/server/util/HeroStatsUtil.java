@@ -44,16 +44,16 @@ public class HeroStatsUtil {
     }
 
     public static Card getHeroCard(Player player, GameContext context) {
-        return (Card) context.getEntityById(player.getHeroEntity());
+        return context.getCardByEntityId(player.getHeroEntity());
     }
 
     public static Integer getCurrentHealth(Player player, GameContext context) {
-        Card heroCard = (Card) context.getEntityById(player.getHeroEntity());
+        Card heroCard = context.getCardByEntityId(player.getHeroEntity());
         return heroCard.getHealth() != null ? Integer.parseInt(heroCard.getHealth()) : 0;
     }
 
     public static Integer getCurrentArmor(Player player, GameContext context) {
-        Card heroCard = (Card) context.getEntityById(player.getHeroEntity());
+        Card heroCard = context.getCardByEntityId(player.getHeroEntity());
         Integer armor;
         try {
             armor = Integer.parseInt(heroCard.getArmor());

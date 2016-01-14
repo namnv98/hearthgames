@@ -114,6 +114,15 @@ public class GameContext {
         return null;
     }
 
+    public Card getCardByEntityId(String id) {
+        for (Card c: cards) {
+            if (c.getEntityId().equals(id)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     public boolean isCreateAction() {
         return createAction;
     }

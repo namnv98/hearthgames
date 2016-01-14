@@ -31,11 +31,11 @@ public class PlayerHandler implements Handler {
         }
         if (after.getPlaystate() != null && Player.PlayState.WON.eq(after.getPlaystate())) {
             playContext.addLoggingAction(before.getName() + " has won.");
-            playContext.getResult().setWinner(before);
+            playContext.getResult().getWinners().add(before);
         }
         if (after.getPlaystate() != null && Player.PlayState.LOST.eq(after.getPlaystate())) {
             playContext.addLoggingAction(before.getName() + " has lost.");
-            playContext.getResult().setLoser(before);
+            playContext.getResult().getLosers().add(before);
         }
         if (TRUE_OR_ONE.equals(before.getFirstPlayer())) {
             playContext.getResult().setFirst(before);

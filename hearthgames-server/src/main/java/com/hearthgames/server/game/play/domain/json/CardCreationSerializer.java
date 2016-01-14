@@ -15,17 +15,24 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
         g.writeFieldName("type");
         g.writeString("cardCreation");
 
-        g.writeFieldName("creator");
-        g.writeStartObject();
-            g.writeFieldName("name");
-            g.writeString(value.getCreator().getCardDetailsName());
-            g.writeFieldName("cardId");
-            g.writeString(value.getCreator().getCardDetailsId());
-            g.writeFieldName("id");
-            g.writeString(value.getCreator().getId());
-            g.writeFieldName("rarity");
-            g.writeString(value.getCreator().getCardDetailsRarity().toLowerCase());
-        g.writeEndObject();
+        if (value.getCreator() != null) {
+            g.writeFieldName("creator");
+            g.writeStartObject();
+                g.writeFieldName("name");
+                g.writeString(value.getCreator().getCardDetailsName());
+                g.writeFieldName("cardId");
+                g.writeString(value.getCreator().getCardDetailsId());
+                g.writeFieldName("id");
+                g.writeString(value.getCreator().getId());
+                g.writeFieldName("rarity");
+                g.writeString(value.getCreator().getCardDetailsRarity().toLowerCase());
+            g.writeEndObject();
+        } else {
+            g.writeFieldName("creator");
+            g.writeStartObject();
+                g.writeStringField("name", "Game");
+            g.writeEndObject();
+        }
 
         g.writeFieldName("created");
         g.writeStartObject();
@@ -39,29 +46,35 @@ public class CardCreationSerializer extends JsonSerializer<CardCreation> {
             g.writeString(value.getCreated().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
-        g.writeFieldName("creatorController");
-        g.writeStartObject();
-            g.writeFieldName("name");
-            g.writeString(value.getCreatorController().getName());
-            g.writeFieldName("playerClass");
-            g.writeString(value.getCreatorController().getPlayerClassToLowerCase());
-        g.writeEndObject();
+        if (value.getCreatorController() != null) {
+            g.writeFieldName("creatorController");
+                g.writeStartObject();
+                g.writeFieldName("name");
+                g.writeString(value.getCreatorController().getName());
+                g.writeFieldName("playerClass");
+                g.writeString(value.getCreatorController().getPlayerClassToLowerCase());
+            g.writeEndObject();
+        }
 
-        g.writeFieldName("createdController");
-        g.writeStartObject();
-            g.writeFieldName("name");
-            g.writeString(value.getCreatedController().getName());
-            g.writeFieldName("playerClass");
-            g.writeString(value.getCreatedController().getPlayerClassToLowerCase());
-        g.writeEndObject();
+        if (value.getCreatedController() != null) {
+            g.writeFieldName("createdController");
+                g.writeStartObject();
+                g.writeFieldName("name");
+                g.writeString(value.getCreatedController().getName());
+                g.writeFieldName("playerClass");
+                g.writeString(value.getCreatedController().getPlayerClassToLowerCase());
+            g.writeEndObject();
+        }
 
-        g.writeFieldName("beneficiary");
-        g.writeStartObject();
-            g.writeFieldName("name");
-            g.writeString(value.getBeneficiary().getName());
-            g.writeFieldName("playerClass");
-            g.writeString(value.getBeneficiary().getPlayerClassToLowerCase());
-        g.writeEndObject();
+        if (value.getBeneficiary() != null) {
+            g.writeFieldName("beneficiary");
+                g.writeStartObject();
+                g.writeFieldName("name");
+                g.writeString(value.getBeneficiary().getName());
+                g.writeFieldName("playerClass");
+                g.writeString(value.getBeneficiary().getPlayerClassToLowerCase());
+            g.writeEndObject();
+        }
 
         g.writeEndObject();
     }

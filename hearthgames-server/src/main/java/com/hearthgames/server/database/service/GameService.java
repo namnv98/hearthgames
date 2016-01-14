@@ -64,7 +64,7 @@ public class GameService {
         gamePlayed.setFriendlyClass(context.getFriendlyPlayer().getPlayerClass() == null ? "unknown" : context.getFriendlyPlayer().getPlayerClass());
         gamePlayed.setOpposingName(context.getOpposingPlayer().getName());
         gamePlayed.setOpposingClass(context.getOpposingPlayer().getPlayerClass() == null ? "unknown" : context.getOpposingPlayer().getPlayerClass());
-        gamePlayed.setWinner(result.getWinner().getName());
+        gamePlayed.setWinner(result.getWinner());
         gamePlayed.setWinnerClass(result.getWinnerClass() == null ? "unknown" : result.getWinnerClass());
         gamePlayed.setTurns(result.getTurns().size());
         gamePlayed.setGameType(rawGameData.getGameType().getType());

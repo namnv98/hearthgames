@@ -14,8 +14,8 @@ public class DamageHandler implements Handler {
         Card before = playContext.getContext().getBefore(playContext.getActivity());
         Card after = playContext.getContext().getAfter(playContext.getActivity());
 
-        Card attacker = (Card) playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedAttacker());
-        Card defender = (Card) playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedDefender());
+        Card attacker = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedAttacker());
+        Card defender = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedDefender());
         if (attacker == null && defender == null) {
             if (playContext.getActivity().getParent().getDelta() instanceof Card && playContext.getActivity().getParent().getTarget() != null && playContext.getActivity().getParent().getTarget() instanceof Card) {
                 attacker = (Card) playContext.getActivity().getParent().getDelta();

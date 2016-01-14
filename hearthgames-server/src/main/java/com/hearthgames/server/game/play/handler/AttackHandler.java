@@ -21,12 +21,18 @@ public class AttackHandler implements Handler {
 
         Activity attack = getParentAttackActivity(playContext.getActivity());
         if (attack != null) {
-            Card attacker = (Card) playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedAttacker());
-            Card defender = (Card) playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedDefender());
-            Player attackerController = attacker.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
+            Card attacker = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedAttacker());
+            Card defender = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedDefender());
+            Player attackerController = null;
+            if (attacker.getController().equals(playContext.getContext().getFriendlyPlayer().getController())) {
+                attackerController = playContext.getContext().getFriendlyPlayer();
+            } else if (attacker.getController().equals(playContext.getContext().getOpposingPlayer().getController())) {
+                attackerController = playContext.getContext().getOpposingPlayer();
+            }
+
             Player defenderController = defender.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
 
-            Card originalDefender = (Card) playContext.getContext().getEntityById(attack.getTarget().getEntityId());
+            Card originalDefender = playContext.getContext().getCardByEntityId(attack.getTarget().getEntityId());
             if (originalDefender == defender) {
                 playContext.addAttack(attacker, defender, attackerController, defenderController);
             } else {

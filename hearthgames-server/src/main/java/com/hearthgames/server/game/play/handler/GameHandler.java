@@ -18,8 +18,8 @@ public class GameHandler implements Handler {
 
         if ((before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) ||
             (before.getStep() == null && GameEntity.Step.MAIN_READY.eq(after.getStep()))) {
-            Card friendlyHeroCard = (Card) playContext.getContext().getEntityById(playContext.getContext().getFriendlyPlayer().getHeroEntity());
-            Card opposingHeroCard = (Card) playContext.getContext().getEntityById(playContext.getContext().getOpposingPlayer().getHeroEntity());
+            Card friendlyHeroCard = playContext.getContext().getCardByEntityId(playContext.getContext().getFriendlyPlayer().getHeroEntity());
+            Card opposingHeroCard = playContext.getContext().getCardByEntityId(playContext.getContext().getOpposingPlayer().getHeroEntity());
             CardDetails friendlyCardDetails = friendlyHeroCard.getCardDetails();
             CardDetails opposingCardDetails = opposingHeroCard.getCardDetails();
             playContext.getContext().getFriendlyPlayer().setPlayerClass(friendlyCardDetails.getPlayerClass());
@@ -86,13 +86,6 @@ public class GameHandler implements Handler {
         }
 
         if (GameEntity.State.COMPLETE.eq(after.getState())) {
-            if (playContext.getResult().getWinner() == playContext.getContext().getFriendlyPlayer()) {
-                playContext.getResult().setWinnerClass(playContext.getContext().getFriendlyPlayer().getPlayerClass());
-                playContext.getResult().setLoserClass(playContext.getContext().getOpposingPlayer().getPlayerClass());
-            } else {
-                playContext.getResult().setWinnerClass(playContext.getContext().getOpposingPlayer().getPlayerClass());
-                playContext.getResult().setLoserClass(playContext.getContext().getFriendlyPlayer().getPlayerClass());
-            }
             playContext.addLoggingAction("Game Over");
         }
 
