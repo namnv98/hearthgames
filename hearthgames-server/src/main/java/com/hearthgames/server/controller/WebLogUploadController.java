@@ -9,6 +9,7 @@ import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.service.GameParserService;
 import com.hearthgames.server.service.GamePlayingService;
 import com.hearthgames.server.service.RawLogProcessingService;
+import com.hearthgames.server.util.GamesPlayedWrapperUtil;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class WebLogUploadController {
     @RequestMapping(value = "/webUpload", method = RequestMethod.POST)
     public ModelAndView upload(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
-        String viewName = null;
+        modelAndView.setViewName("uploadedgames");
 
         if (!file.isEmpty()) {
             try {
@@ -61,6 +63,10 @@ public class WebLogUploadController {
 
                 List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), -1);
 
+                List<GamePlayed> gamesPlayed = new ArrayList<>();
+                String gameAccountId = null;
+                int gamesAlreadyUploaded = 0;
+
                 for (RawGameData rawGameData : rawGameDatas) {
                     try {
                         GameContext context = gameParserService.parseLines(rawGameData.getLines());
@@ -75,8 +81,11 @@ public class WebLogUploadController {
                         GamePlayed sameGame = gameService.findSameGame(gamePlayed);
                         if (sameGame == null) {
                             gameService.saveGamePlayed(gamePlayed, context, result, true);
+                            gamesPlayed.add(gamePlayed);
+                        } else {
+                            gamesAlreadyUploaded++;
                         }
-                        viewName = "redirect:/account/"+gamePlayed.getFriendlyGameAccountId()+"/games";
+                        gameAccountId = gamePlayed.getFriendlyGameAccountId();
 
                     } catch (Exception e) {
                         logger.error(ExceptionUtils.getStackTrace(e));
@@ -85,12 +94,16 @@ public class WebLogUploadController {
                     }
                 }
 
+                modelAndView.addObject("gameAccountId", gameAccountId);
+                modelAndView.addObject("gamesAlreadyUploaded", gamesAlreadyUploaded);
+
+                GamesPlayedWrapperUtil.addGamesPlayed(modelAndView, gamesPlayed, true, 1);
+
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
                 modelAndView.addObject("error", "An error has occured.");
             }
         }
-        modelAndView.setViewName(viewName);
         return modelAndView;
     }
 }

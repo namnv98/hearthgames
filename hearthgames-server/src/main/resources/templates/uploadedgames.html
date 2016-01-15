@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthGames.com - Uploaded Games</title>
+    <meta name="description" content="Check out some of the Top Rated Games. Search for games that match criteria such as Deck Archetype, High Win Rate and many more. Rate other peoples games and leave comments."/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="shortcut icon" href="http://images.hearthgames.com/misc/favicon.ico" />
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+    <link href="../static/css/game.css" th:href="@{/css/game.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div th:replace="/fragments/nav-fragment::nav"></div>
+
+<div class="container">
+
+    <div th:replace="/fragments/beta-fragment::beta"></div>
+
+    <div class="title-container">
+        <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    </div>
+
+    <h3>You Game Account Info</h3>
+
+    <p>
+        <span>Your Game Account ID is : </span><span class="game-account-id" th:text="${gameAccountId}">23213213</span>
+    </p>
+
+    <p>
+        Bookmark this link to see your games : <a th:text="'http://hearthgames.com/account/'+${gameAccountId}+'/games'" th:href="@{'/account/'+${gameAccountId}+'/games'}"></a>
+    </p>
+
+    <p>
+        <span th:if="${gamesAlreadyUploaded > 0}" th:text="'Found games already uploaded : '+${gamesAlreadyUploaded}"></span>
+    </p>
+
+
+    <h3>Games Uploaded</h3>
+
+    <div id="games">
+
+    </div>
+
+    <div th:replace="/fragments/footer-fragment::footer"></div>
+
+</div>
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/handlebarsjs/4.0.2/handlebars.min.js" th:src="@{/webjars/handlebars/4.0.2/handlebars.min.js}"></script>
+<script th:src="@{/webjars/twbs-pagination/1.2.5/jquery.twbsPagination.min.js}"></script>
+
+<script id="games-template" type="text/x-handlebars-template" th:inline="javascript">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Friendly</th>
+            <th>Opponent</th>
+            <th>Winner</th>
+            <th># Turns</th>
+            <th>Rank</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each games}}
+        <tr>
+            <td><span class="{{friendlyClass}}">{{friendlyName}}</span></td>
+            <td><span class="{{opposingClass}}">{{opposingName}}</span></td>
+            <td><span class="{{winnerClass}}">{{winner}}</span></td>
+            <td><span>{{turns}}</span></td>
+            <th>{{rank}}</th>
+            <td><a href="/game/{{id}}">View</a></td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(document).ready(function(){
+        var gamesPlayedData = JSON.parse([[${gamesPlayed}]]);
+
+        var template = Handlebars.compile($("#games-template").html());
+        $('#games').html(template(gamesPlayedData));
+    });
+
+    /*]]>*/
+</script>
+
+
+</body>
+</html>
