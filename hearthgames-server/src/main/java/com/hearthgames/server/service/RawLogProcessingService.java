@@ -1,10 +1,10 @@
 package com.hearthgames.server.service;
 
+import com.hearthgames.server.game.log.domain.GameLogger;
 import com.hearthgames.server.game.log.domain.GameType;
 import com.hearthgames.server.game.log.domain.LogLineData;
 import com.hearthgames.server.game.log.domain.RawGameData;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,10 +26,6 @@ public class RawLogProcessingService {
     private static final String GAME_STATE_COMPLETE = "TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE";
     private static final String END_OF_LOGS_FOR_GAME_MARKER = "---RegisterFriendChallenge---";
 
-
-    private static final String BOB = "[Bob]";
-    private static final String LOADING_SCREEN = "[LoadingScreen]";
-
     private static final String RANKED = "unloading name=Medal_Ranked";
     private static final String ARENA_GAME = "---RegisterScreenForge---";
     private static final String PLAY_MODE = "---RegisterScreenTourneys---";
@@ -46,8 +42,10 @@ public class RawLogProcessingService {
         List<RawGameData> rawGameDatas = new ArrayList<>();
 
         GameType gameType = type == -1 ? GameType.UNKNOWN : GameType.getGameType(type);
-        boolean isLegacy = lines.get(0) != null & lines.get(0).startsWith(CREATE_GAME);
         boolean detectGameType = type == -1;
+
+        // TODO Need to purge the database of old games so that we don't have to do this check anymore
+        boolean isLegacy = lines.get(0) != null & lines.get(0).startsWith(CREATE_GAME);
 
         boolean gameComplete = false;
         List<LogLineData> currentGame = new ArrayList<>();
@@ -66,7 +64,8 @@ public class RawLogProcessingService {
                 line = rawLine; // For games that don't have timestamps
             }
 
-            if (isLineLoggable(line) || isLegacy) {
+            // TODO Need to purge the database of old games so that we don't have to do this check anymore
+            if (GameLogger.isLineValid(line) || isLegacy) {
 
                 if (detectGameType) {
                     GameType detectedType = detectGameMode(line);
@@ -112,7 +111,7 @@ public class RawLogProcessingService {
     }
 
     private GameType detectGameMode(String line) {
-        if (line.startsWith(BOB)) {
+        if (line.startsWith(GameLogger.Bob.getName())) {
             if (line.contains(RANKED)) {
                 return GameType.RANKED;
             } else if (line.contains(ARENA_GAME)) {
@@ -122,7 +121,7 @@ public class RawLogProcessingService {
             } else if (line.contains(FRIEND_CHALLENGE)) {
                 return GameType.FRIENDLY_CHALLENGE;
             }
-        } else if (line.startsWith(LOADING_SCREEN)) {
+        } else if (line.startsWith(GameLogger.LoadingScreen.getName())) {
             String mode = getMode(line);
             if (mode != null) {
                 if (TAVERN_BRAWL.equals(mode)) {
@@ -191,17 +190,15 @@ public class RawLogProcessingService {
         return rawGameData;
     }
 
-    private boolean isLineLoggable(String line) {
-        if (StringUtils.isEmpty(line)) return false;
-        if (line.startsWith("[Power] GameState.DebugPrintPower() - ")) return true;
-        if (line.startsWith("[Asset] CachedAsset.UnloadAssetObject() - unloading name=Medal_Ranked")) return true;
-        if (line.startsWith("[Bob] ---Register")) return true;
-        if (line.startsWith("[LoadingScreen] LoadingScreen.OnSceneLoaded() - prevMode=")) return true;
-        return false;
-    }
-
     public boolean doesLogFileContainAllLoggers(String logfile) {
-        return logfile != null && logfile.contains("Bob]") && logfile.contains("[Asset]") && logfile.contains("[Power]") && logfile.contains("[LoadingScreen]");
+        return logfile != null &&
+                logfile.contains(GameLogger.Bob.getName()) &&
+                logfile.contains(GameLogger.Asset.getName()) &&
+                logfile.contains(GameLogger.Power.getName()) &&
+                logfile.contains(GameLogger.LoadingScreen.getName()) &&
+                logfile.contains(GameLogger.Achievements.getName()) &&
+                logfile.contains(GameLogger.Arena.getName()) &&
+                logfile.contains(GameLogger.Rachelle.getName());
     }
 
     private int getRank(String line) {

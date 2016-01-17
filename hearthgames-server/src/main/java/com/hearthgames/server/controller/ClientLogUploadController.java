@@ -137,7 +137,7 @@ public class ClientLogUploadController {
             // TODO change this in a future release...the first release didn't support messages
             response.setUrl("A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.");
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } else if (request.getVersion() == 1) {
+        } else if (request.getVersion() < 3) {
             RecordGameResponse response = new RecordGameResponse();
             response.setUpgradeRequired(true);
             response.setMsg("A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.");
