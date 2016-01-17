@@ -33,6 +33,8 @@ public class ClientLogUploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientLogUploadController.class);
 
+    private static final String MSG = "A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.";
+
     @Autowired
     private RawLogProcessingService rawLogProcessingService;
 
@@ -133,14 +135,14 @@ public class ClientLogUploadController {
         if (request.getVersion() == 0) {
             RecordGameResponse response = new RecordGameResponse();
             response.setUpgradeRequired(true);
-            response.setMsg("A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.");
+            response.setMsg(MSG);
             // TODO change this in a future release...the first release didn't support messages
-            response.setUrl("A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.");
+            response.setUrl(MSG);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else if (request.getVersion() < 3) {
             RecordGameResponse response = new RecordGameResponse();
             response.setUpgradeRequired(true);
-            response.setMsg("A new version of the client is required to upload games.  Please go to http://hearthgames.com/download to get the new one.");
+            response.setMsg(MSG);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
