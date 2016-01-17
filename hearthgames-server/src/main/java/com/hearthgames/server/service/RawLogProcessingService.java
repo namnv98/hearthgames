@@ -21,7 +21,7 @@ public class RawLogProcessingService {
 
     private static final Pattern gameModePattern = Pattern.compile("\\[LoadingScreen\\] LoadingScreen.OnSceneLoaded\\(\\) - prevMode=(.*) currMode=(.*)");
     private static final Pattern medalRankPattern = Pattern.compile("name=Medal_Ranked_(.*) family");
-    private static final String MEDAL_RANKED = "unloading name=Medal_Ranked";
+
     private static final String CREATE_GAME = "CREATE_GAME";
     private static final String GAME_STATE_COMPLETE = "TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE";
     private static final String END_OF_LOGS_FOR_GAME_MARKER = "---RegisterScreenBox---";
@@ -82,7 +82,7 @@ public class RawLogProcessingService {
                     currentRawGame = new ArrayList<>();
                 } else if (line.contains(GAME_STATE_COMPLETE)) {
                     gameComplete = true;
-                } else if (gameComplete && line.contains(MEDAL_RANKED)) {
+                } else if (gameComplete && line.contains(RANKED)) {
                     int rankFound = getRank(line);
                     if (rank == null || rankFound < rank) {
                         rank = rankFound;
