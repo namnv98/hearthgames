@@ -24,7 +24,7 @@ public class RawLogProcessingService {
     private static final String MEDAL_RANKED = "unloading name=Medal_Ranked";
     private static final String CREATE_GAME = "CREATE_GAME";
     private static final String GAME_STATE_COMPLETE = "TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE";
-    private static final String END_OF_LOGS_FOR_GAME_MARKER = "---RegisterFriendChallenge---";
+    private static final String END_OF_LOGS_FOR_GAME_MARKER = "---RegisterScreenBox---";
 
     private static final String RANKED = "unloading name=Medal_Ranked";
     private static final String ARENA_GAME = "---RegisterScreenForge---";
@@ -68,7 +68,7 @@ public class RawLogProcessingService {
             if (GameLogger.isLineValid(line) || isLegacy) {
 
                 if (detectGameType) {
-                    GameType detectedType = detectGameMode(line);
+                    GameType detectedType = detectGameMode(line, gameComplete);
                     if (detectedType != null ) {
                         gameType = detectedType;
                     }
@@ -110,11 +110,14 @@ public class RawLogProcessingService {
         return rawGameDatas;
     }
 
-    private GameType detectGameMode(String line) {
-        if (line.startsWith(GameLogger.Bob.getName())) {
-            if (line.contains(RANKED)) {
+    private GameType detectGameMode(String line, boolean gameComplete) {
+        if (line.startsWith(GameLogger.Asset.getName())) {
+            // check if this happens only once the game completes
+            if (gameComplete && line.contains(RANKED)) {
                 return GameType.RANKED;
-            } else if (line.contains(ARENA_GAME)) {
+            }
+        } else if (line.startsWith(GameLogger.Bob.getName())) {
+            if (line.contains(ARENA_GAME)) {
                 return GameType.ARENA;
             } else if (line.contains(PLAY_MODE)) {
                 return GameType.CASUAL;
