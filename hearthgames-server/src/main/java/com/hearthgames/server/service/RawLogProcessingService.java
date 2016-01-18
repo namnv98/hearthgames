@@ -24,7 +24,8 @@ public class RawLogProcessingService {
 
     private static final String CREATE_GAME = "CREATE_GAME";
     private static final String GAME_STATE_COMPLETE = "TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE";
-    private static final String END_OF_LOGS_FOR_GAME_MARKER = "---RegisterScreenBox---";
+    private static final String END_OF_GAME_MODE_DETECTION = "---RegisterScreenBox---";
+    private static final String END_OF_GAME = "---RegisterFriendChallenge---";
 
     private static final String RANKED = "unloading name=Medal_Ranked";
     private static final String ARENA_GAME = "---RegisterScreenForge---";
@@ -48,6 +49,7 @@ public class RawLogProcessingService {
         boolean isLegacy = lines.get(0) != null & lines.get(0).startsWith(CREATE_GAME);
 
         boolean gameComplete = false;
+        boolean gameModeDetectionComplete = false;
         List<LogLineData> currentGame = new ArrayList<>();
         List<String> currentRawGame = new ArrayList<>();
         Integer rank = null;
@@ -67,7 +69,7 @@ public class RawLogProcessingService {
             // TODO Need to purge the database of old games so that we don't have to do this check anymore
             if (GameLogger.isLineValid(line) || isLegacy) {
 
-                if (detectGameType) {
+                if (detectGameType && !gameModeDetectionComplete) {
                     GameType detectedType = detectGameMode(line, gameComplete);
                     if (detectedType != null ) {
                         gameType = detectedType;
@@ -77,6 +79,7 @@ public class RawLogProcessingService {
                 if (line.contains(CREATE_GAME)) {
                     addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType);
                     gameComplete = false;
+                    gameModeDetectionComplete = false;
                     rank = null;
                     currentGame = new ArrayList<>();
                     currentRawGame = new ArrayList<>();
@@ -87,13 +90,15 @@ public class RawLogProcessingService {
                     if (rank == null || rankFound < rank) {
                         rank = rankFound;
                     }
+                } else if (line.contains(END_OF_GAME_MODE_DETECTION)) {
+                    gameModeDetectionComplete = true;
                 }
 
                 LogLineData data = new LogLineData(timestamp, line);
                 currentGame.add(data);
                 currentRawGame.add(rawLine);
 
-                if (gameComplete && line.contains(END_OF_LOGS_FOR_GAME_MARKER)) {
+                if (gameComplete && line.contains(END_OF_GAME)) {
                     // wait until register friend challenge for casual/rank mode games since the ranks are contained in log messages in between
                     RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank);
                     rawGameData.setGameType(gameType);
