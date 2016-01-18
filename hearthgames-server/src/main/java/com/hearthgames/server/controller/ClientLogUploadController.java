@@ -139,7 +139,7 @@ public class ClientLogUploadController {
             // TODO change this in a future release...the first release didn't support messages
             response.setUrl(MSG);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } else if (request.getVersion() < 3) {
+        } else if (request.getVersion() < 4) {
             RecordGameResponse response = new RecordGameResponse();
             response.setUpgradeRequired(true);
             response.setMsg(MSG);
