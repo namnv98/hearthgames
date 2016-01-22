@@ -227,4 +227,13 @@ public class CardDetails implements Serializable {
     public void setPlayRequirements(PlayRequirements playRequirements) {
         this.playRequirements = playRequirements;
     }
+
+    @Override
+    public String toString() {
+        return "CardDetails{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", set='" + set + '\'' +
+                '}';
+    }
 }
