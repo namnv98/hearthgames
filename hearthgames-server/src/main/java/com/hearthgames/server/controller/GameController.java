@@ -59,20 +59,20 @@ public class GameController {
             String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
             String[] lines = logfile.split(splitStr);
 
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), gamePlayed.getGameType());
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
             if (rawGameDatas != null && rawGameDatas.size() == 1) {
                 RawGameData rawGameData = rawGameDatas.get(0);
                 GameContext context = gameParserService.parseLines(rawGameData.getLines());
                 GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
-                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
-                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
-                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context);
-                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
-                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
-                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
-                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context);
-                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context);
+                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context, rawGameData);
+                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context, rawGameData);
+                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context, rawGameData);
+                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context, rawGameData);
+                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context, rawGameData);
+                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context, rawGameData);
+                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context, rawGameData);
+                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context, rawGameData);
 
                 modelAndView.addObject("cardInfos", Collections.singletonList(cardInfo));
                 modelAndView.addObject("versusInfo", versusInfo);

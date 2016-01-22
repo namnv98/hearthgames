@@ -71,10 +71,16 @@ public class GameService {
 
         String friendlyStartingCards = StringUtils.join(result.getFriendlyStartingCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
         String friendlyMulliganCards = StringUtils.join(result.getFriendlyMulliganedCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
-        String friendlyDeckCards = StringUtils.join(result.getFriendlyDeckCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
         gamePlayed.setFriendlyStartingCards(friendlyStartingCards);
         gamePlayed.setFriendlyMulliganCards(friendlyMulliganCards);
-        gamePlayed.setFriendlyDeckCards(friendlyDeckCards);
+
+        if (rawGameData.getArenaDeckId() != null) {
+            gamePlayed.setArenaDeckId(rawGameData.getArenaDeckId());
+            gamePlayed.setFriendlyDeckCards(StringUtils.join(rawGameData.getArenaDeckCards(), ","));
+        } else {
+            String friendlyDeckCards = StringUtils.join(result.getFriendlyDeckCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
+            gamePlayed.setFriendlyDeckCards(friendlyDeckCards);
+        }
 
         String opposingStartingCards = StringUtils.join(result.getOpposingStartingCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");
         String opposingMulliganCards = StringUtils.join(result.getOpposingMulliganedCards().stream().filter(card -> !StringUtils.isEmpty(card.getCardid())).map(Card::getCardid).collect(Collectors.toList()),",");

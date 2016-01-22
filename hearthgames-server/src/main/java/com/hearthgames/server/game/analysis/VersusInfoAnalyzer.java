@@ -1,6 +1,7 @@
 package com.hearthgames.server.game.analysis;
 
 import com.hearthgames.server.game.analysis.domain.VersusInfo;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.play.GameResult;
@@ -13,7 +14,7 @@ import java.time.Duration;
 @Component
 public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
     @Override
-    public VersusInfo analyze(GameResult result, GameContext context) {
+    public VersusInfo analyze(GameResult result, GameContext context, RawGameData rawGameData) {
         VersusInfo info = new VersusInfo();
 
         info.setWinner(result.getWinner());

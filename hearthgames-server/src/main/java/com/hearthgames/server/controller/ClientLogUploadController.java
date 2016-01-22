@@ -83,7 +83,6 @@ public class ClientLogUploadController {
         private static final long serialVersionUID = 1;
 
         private int version;
-        private int gameType;
         private byte[] data;
         private long startTime;
         private long endTime;
@@ -94,14 +93,6 @@ public class ClientLogUploadController {
 
         public void setVersion(int version) {
             this.version = version;
-        }
-
-        public int getGameType() {
-            return gameType;
-        }
-
-        public void setGameType(int gameType) {
-            this.gameType = gameType;
         }
 
         public byte[] getData() {
@@ -132,14 +123,7 @@ public class ClientLogUploadController {
     @RequestMapping(value = "/clientUpload", method = RequestMethod.POST)
     public ResponseEntity<RecordGameResponse> clientUpload(@RequestBody RecordGameRequest request)  {
 
-        if (request.getVersion() == 0) {
-            RecordGameResponse response = new RecordGameResponse();
-            response.setUpgradeRequired(true);
-            response.setMsg(MSG);
-            // TODO change this in a future release...the first release didn't support messages
-            response.setUrl(MSG);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else if (request.getVersion() < 4) {
+        if (request.getVersion() < 5) {
             RecordGameResponse response = new RecordGameResponse();
             response.setUpgradeRequired(true);
             response.setMsg(MSG);
@@ -151,7 +135,7 @@ public class ClientLogUploadController {
         if (rawLogProcessingService.doesLogFileContainAllLoggers(logfile)) {
             String[] lines = logfile.split("\n");
 
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), request.getGameType());
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
 
             if (!CollectionUtils.isEmpty(rawGameDatas)) {
                 RawGameData rawGameData = rawGameDatas.get(0);

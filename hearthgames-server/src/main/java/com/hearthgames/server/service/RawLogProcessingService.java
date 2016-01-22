@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,9 @@ public class RawLogProcessingService {
 
     private static final Pattern gameModePattern = Pattern.compile("\\[LoadingScreen\\] LoadingScreen.OnSceneLoaded\\(\\) - prevMode=(.*) currMode=(.*)");
     private static final Pattern medalRankPattern = Pattern.compile("name=Medal_Ranked_(.*) family");
+
+    private static final Pattern arenaCardChoicePattern = Pattern.compile("\\[Arena\\] DraftManager.OnChoicesAndContents - Draft deck contains card (.*)");
+    private static final Pattern arenaDeckIdPattern = Pattern.compile("\\[Arena\\] DraftManager.OnChoicesAndContents - Draft Deck ID: (.*), Hero Card = (.*)");
 
     private static final String CREATE_GAME = "CREATE_GAME";
     private static final String GAME_STATE_COMPLETE = "TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE";
@@ -38,12 +42,11 @@ public class RawLogProcessingService {
     private static final String ADVENTURE = "ADVENTURE";
     private static final String DRAFT = "DRAFT";
 
-    public List<RawGameData> processLogFile(List<String> lines, int type) {
+    public List<RawGameData> processLogFile(List<String> lines) {
 
         List<RawGameData> rawGameDatas = new ArrayList<>();
 
-        GameType gameType = type == -1 ? GameType.UNKNOWN : GameType.getGameType(type);
-        boolean detectGameType = type == -1;
+        GameType gameType = GameType.UNKNOWN;
 
         // TODO Need to purge the database of old games so that we don't have to do this check anymore
         boolean isLegacy = lines.get(0) != null & lines.get(0).startsWith(CREATE_GAME);
@@ -53,12 +56,16 @@ public class RawLogProcessingService {
         List<LogLineData> currentGame = new ArrayList<>();
         List<String> currentRawGame = new ArrayList<>();
         Integer rank = null;
+
+        String arenaDeckId = null;
+        List<String> arenaDeckCards = new ArrayList<>();
+
         for (String rawLine: lines) {
 
             String timestamp = "";
             String lineWithoutTimestamp;
             String line;
-            if (rawLine.contains(": [")) {
+            if (!StringUtils.isEmpty(rawLine) && Character.isDigit(rawLine.charAt(0)) && rawLine.contains(": [")) {
                 timestamp = rawLine.substring(0, rawLine.indexOf(": ["));
                 lineWithoutTimestamp = rawLine.substring(rawLine.indexOf("["));
                 line = lineWithoutTimestamp;
@@ -69,7 +76,7 @@ public class RawLogProcessingService {
             // TODO Need to purge the database of old games so that we don't have to do this check anymore
             if (GameLogger.isLineValid(line) || isLegacy) {
 
-                if (detectGameType && !gameModeDetectionComplete) {
+                if (!gameModeDetectionComplete) {
                     GameType detectedType = detectGameMode(line, gameComplete);
                     if (detectedType != null ) {
                         gameType = detectedType;
@@ -77,12 +84,14 @@ public class RawLogProcessingService {
                 }
 
                 if (line.contains(CREATE_GAME)) {
-                    addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType);
+                    addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType, arenaDeckId, arenaDeckCards);
                     gameComplete = false;
                     gameModeDetectionComplete = false;
                     rank = null;
                     currentGame = new ArrayList<>();
                     currentRawGame = new ArrayList<>();
+                    arenaDeckId = null;
+                    arenaDeckCards = new ArrayList<>();
                 } else if (line.contains(GAME_STATE_COMPLETE)) {
                     gameComplete = true;
                 } else if (gameComplete && line.contains(RANKED)) {
@@ -91,7 +100,21 @@ public class RawLogProcessingService {
                         rank = rankFound;
                     }
                 } else if (line.contains(END_OF_GAME_MODE_DETECTION)) {
-                    gameModeDetectionComplete = true;
+                    // the log can trigger end of game mode detection even when a game hasn't started so we need
+                    // to check is the game we are recording is actually a full game
+                    if (isGame(currentRawGame)) {
+                        gameModeDetectionComplete = true;
+                    }
+                } else if (line.contains("[Arena]") && line.contains("Draft deck contains")) {
+                    String cardId = getArenaCardChoice(line);
+                    if (cardId != null) {
+                        arenaDeckCards.add(cardId);
+                    }
+                } else if (line.contains("[Arena]") && line.contains("Draft Deck ID:")) {
+                    String deckId = getArenaDeckId(line);
+                    if (deckId != null) {
+                        arenaDeckId = deckId;
+                    }
                 }
 
                 LogLineData data = new LogLineData(timestamp, line);
@@ -100,9 +123,9 @@ public class RawLogProcessingService {
 
                 if (gameComplete && line.contains(END_OF_GAME)) {
                     // wait until register friend challenge for casual/rank mode games since the ranks are contained in log messages in between
-                    RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank);
+                    RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank, arenaDeckId, arenaDeckCards);
                     rawGameData.setGameType(gameType);
-                    if (isGame(rawGameData)) {
+                    if (isGame(rawGameData.getRawLines())) {
                         rawGameDatas.add(rawGameData);
                     }
                     currentGame = new ArrayList<>();
@@ -110,7 +133,7 @@ public class RawLogProcessingService {
                 }
             }
         }
-        addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType);
+        addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType, arenaDeckId, arenaDeckCards);
 
         return rawGameDatas;
     }
@@ -159,24 +182,25 @@ public class RawLogProcessingService {
         return mode;
     }
 
-    private void addGameIfNotEmpty(List<LogLineData> currentGame, List<String> currentRawGame, List<RawGameData> rawGameDatas, Integer rank, GameType gameType) {
+    private void addGameIfNotEmpty(List<LogLineData> currentGame, List<String> currentRawGame, List<RawGameData> rawGameDatas,
+                                   Integer rank, GameType gameType, String arenaDeckId, List<String> arenaDeckCards) {
         if (!CollectionUtils.isEmpty(currentGame)) {
-            RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank);
+            RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank, arenaDeckId, arenaDeckCards);
             rawGameData.setGameType(gameType);
             if (rank != null) { // just a last test here because the [LoadingScreen] logger comes up at the very end and tells us the mode is TOURNAMENT which means casual
                 rawGameData.setGameType(GameType.RANKED);
             }
-            if (isGame(rawGameData)) {
+            if (isGame(rawGameData.getRawLines())) {
                 rawGameDatas.add(rawGameData);
             }
         }
     }
 
-    private boolean isGame(RawGameData rawGameData) {
+    private boolean isGame(List<String> rawLines) {
         boolean hasCreateGame = false;
         boolean hasCompleteState = false;
-        if (rawGameData.getRawLines() != null && rawGameData.getRawLines().size() > 0) {
-            for (String line: rawGameData.getRawLines()) {
+        if (rawLines != null && rawLines.size() > 0) {
+            for (String line: rawLines) {
                 if (line.contains(CREATE_GAME)) {
                     hasCreateGame = true;
                 } else if (line.contains(GAME_STATE_COMPLETE)) {
@@ -190,11 +214,14 @@ public class RawLogProcessingService {
         return false;
     }
 
-    private RawGameData createRawGameData(List<LogLineData> currentGame, List<String> currentRawGame, Integer rank) {
+    private RawGameData createRawGameData(List<LogLineData> currentGame, List<String> currentRawGame, Integer rank,
+                                          String arenaDeckId, List<String> arenaDeckCards) {
         RawGameData rawGameData = new RawGameData();
         rawGameData.setLines(currentGame);
         rawGameData.setRawLines(currentRawGame);
         rawGameData.setRank(rank);
+        rawGameData.setArenaDeckId(arenaDeckId);
+        rawGameData.setArenaDeckCards(arenaDeckCards);
         return rawGameData;
     }
 
@@ -224,4 +251,21 @@ public class RawLogProcessingService {
         return rank;
     }
 
+    private String getArenaCardChoice(String line) {
+        String cardId = null;
+        Matcher matcher = arenaCardChoicePattern.matcher(line);
+        if (matcher.find()) {
+            cardId = matcher.group(1);
+        }
+        return cardId;
+    }
+
+    private String getArenaDeckId(String line) {
+        String cardId = null;
+        Matcher matcher = arenaDeckIdPattern.matcher(line);
+        if (matcher.find()) {
+            cardId = matcher.group(1);
+        }
+        return cardId;
+    }
 }

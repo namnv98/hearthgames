@@ -4,6 +4,7 @@ import com.hearthgames.server.game.analysis.*;
 import com.hearthgames.server.game.analysis.domain.TurnInfo;
 import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,35 +43,35 @@ public class GameAnalysisService {
         this.tradeAnalyzer = tradeAnalyzer;
     }
 
-    public VersusInfo getVersusInfo(GameResult result, GameContext context) {
-        return versusInfoAnalyzer.analyze(result, context);
+    public VersusInfo getVersusInfo(GameResult result, GameContext context, RawGameData rawGameData) {
+        return versusInfoAnalyzer.analyze(result, context, rawGameData);
     }
 
-    public List<GenericTable> getHealthArmor(GameResult result, GameContext context) {
-        return healthArmorAnalyzer.analyze(result, context);
+    public List<GenericTable> getHealthArmor(GameResult result, GameContext context, RawGameData rawGameData) {
+        return healthArmorAnalyzer.analyze(result, context, rawGameData);
     }
 
-    public GenericTable getManaInfo(GameResult result, GameContext context) {
-        return manaSummaryAnalyzer.analyze(result, context);
+    public GenericTable getManaInfo(GameResult result, GameContext context, RawGameData rawGameData) {
+        return manaSummaryAnalyzer.analyze(result, context, rawGameData);
     }
 
-    public GenericTable getCardSummary(GameResult result, GameContext context) {
-        return cardSummaryAnalyzer.analyze(result, context);
+    public GenericTable getCardSummary(GameResult result, GameContext context, RawGameData rawGameData) {
+        return cardSummaryAnalyzer.analyze(result, context, rawGameData);
     }
 
-    public List<GenericTable> getBoardControl(GameResult result, GameContext context) {
-        return boardControlAnalyzer.analyze(result, context);
+    public List<GenericTable> getBoardControl(GameResult result, GameContext context, RawGameData rawGameData) {
+        return boardControlAnalyzer.analyze(result, context, rawGameData);
     }
 
-    public List<GenericTable> getCardAdvantage(GameResult result, GameContext context) {
-        return cardAdvantageAnalyzer.analyze(result, context);
+    public List<GenericTable> getCardAdvantage(GameResult result, GameContext context, RawGameData rawGameData) {
+        return cardAdvantageAnalyzer.analyze(result, context, rawGameData);
     }
 
-    public List<TurnInfo> getTurnInfo(GameResult result, GameContext context) {
-        return turnInfoAnalyzer.analyze(result, context);
+    public List<TurnInfo> getTurnInfo(GameResult result, GameContext context, RawGameData rawGameData) {
+        return turnInfoAnalyzer.analyze(result, context, rawGameData);
     }
 
-    public GenericTable getTradeInfo(GameResult result, GameContext context) {
-        return tradeAnalyzer.analyze(result, context);
+    public GenericTable getTradeInfo(GameResult result, GameContext context, RawGameData rawGameData) {
+        return tradeAnalyzer.analyze(result, context, rawGameData);
     }
 }

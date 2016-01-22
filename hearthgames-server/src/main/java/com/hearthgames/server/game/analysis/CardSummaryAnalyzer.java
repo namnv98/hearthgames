@@ -2,16 +2,23 @@ package com.hearthgames.server.game.analysis;
 
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
+import com.hearthgames.server.game.parse.domain.Card;
+import com.hearthgames.server.game.parse.domain.CardDetails;
 import com.hearthgames.server.game.play.GameResult;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
 
     @Override
-    public GenericTable analyze(GameResult result, GameContext context) {
+    public GenericTable analyze(GameResult result, GameContext context, RawGameData rawGameData) {
 
         GenericTable table = new GenericTable();
 
@@ -26,7 +33,21 @@ public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
         friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyStartingCards()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyMulliganedCards()));
-        friendly.addColumn(new GenericColumn<>(result.getFriendlyDeckCards()));
+
+        if (CollectionUtils.isEmpty(rawGameData.getArenaDeckCards())) {
+            friendly.addColumn(new GenericColumn<>(result.getFriendlyDeckCards()));
+        } else {
+            List<Card> cards = new ArrayList<>();
+            for (String cardId: rawGameData.getArenaDeckCards()) {
+                Card card = new Card();
+                card.setCardid(cardId);
+                CardDetails cardDetails = new CardDetails();
+                cardDetails.setId(cardId);
+                card.setCardDetails(cardDetails);
+                cards.add(card);
+            }
+            friendly.addColumn(new GenericColumn<>(cards));
+        }
         table.setFriendly(friendly);
 
         GenericRow opposing = new GenericRow();

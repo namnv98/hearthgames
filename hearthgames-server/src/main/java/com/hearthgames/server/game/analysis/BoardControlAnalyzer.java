@@ -3,6 +3,7 @@ package com.hearthgames.server.game.analysis;
 import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.board.Board;
@@ -16,7 +17,7 @@ import java.util.List;
 public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
     @Override
-    protected GenericTable getInfo(GameResult result, GameContext context, List<Turn> turns) {
+    protected GenericTable getInfo(GameResult result, GameContext context, RawGameData rawGameData, List<Turn> turns) {
 
         GenericTable table = new GenericTable();
 

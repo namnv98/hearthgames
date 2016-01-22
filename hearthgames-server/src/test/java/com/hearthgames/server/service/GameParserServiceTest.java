@@ -56,7 +56,7 @@ public class GameParserServiceTest {
         List<String> lines = FileUtils.readLines(new File("c:\\games\\output_log.txt"));
 
         String accountId = "";
-        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines, -1);
+        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines);
         for (RawGameData rawGameData : rawGameDatas) {
 
             try {
@@ -65,14 +65,14 @@ public class GameParserServiceTest {
 
                 GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
-                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context);
-                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context);
-                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context);
-                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context);
-                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context);
-                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context);
-                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context);
-                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context);
+                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context, rawGameData);
+                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context, rawGameData);
+                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context, rawGameData);
+                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context, rawGameData);
+                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context, rawGameData);
+                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context, rawGameData);
+                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context, rawGameData);
+                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context, rawGameData);
 
                 GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
                 System.out.println();
@@ -100,7 +100,7 @@ public class GameParserServiceTest {
 
             FileUtils.writeStringToFile(new File("c:\\games\\error"+rawGameError.getId()), gameData);
 
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), -1);
+            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
             try {
                 for (RawGameData rawGameData: rawGameDatas) {
                     GameContext context = gameParserService.parseLines(rawGameData.getLines());

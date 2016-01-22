@@ -1,5 +1,6 @@
 package com.hearthgames.server.game.analysis;
 
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.Turn;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public abstract class PagingAbstractAnalyzer<T> implements Analyzer<List<T>> {
 
-    public List<T> analyze(GameResult result, GameContext context) {
+    public List<T> analyze(GameResult result, GameContext context, RawGameData rawGameData) {
 
         List<T> infos = new ArrayList<>();
 
@@ -18,7 +19,7 @@ public abstract class PagingAbstractAnalyzer<T> implements Analyzer<List<T>> {
             if (turn.getTurnNumber() != 0) {
                 if (turn.getTurnNumber() % 24 == 0) {
                     subSetOfTurns.add(turn);
-                    T info = getInfo(result, context, subSetOfTurns);
+                    T info = getInfo(result, context, rawGameData, subSetOfTurns);
                     infos.add(info);
                     subSetOfTurns = new ArrayList<>();
                 } else {
@@ -27,11 +28,11 @@ public abstract class PagingAbstractAnalyzer<T> implements Analyzer<List<T>> {
             }
         }
         if (subSetOfTurns.size() > 0) {
-            T info = getInfo(result, context, subSetOfTurns);
+            T info = getInfo(result, context, rawGameData, subSetOfTurns);
             infos.add(info);
         }
         return infos;
     }
 
-    protected abstract T getInfo(GameResult result, GameContext context, List<Turn> turns);
+    protected abstract T getInfo(GameResult result, GameContext context, RawGameData rawGameData, List<Turn> turns);
 }

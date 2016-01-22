@@ -1,6 +1,7 @@
 package com.hearthgames.server.game.analysis;
 
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.play.domain.Turn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
@@ -14,7 +15,7 @@ import java.util.List;
 @Component
 public class HealthArmorAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
-    protected GenericTable getInfo(GameResult result, GameContext context, List<Turn> turns) {
+    protected GenericTable getInfo(GameResult result, GameContext context, RawGameData rawGameData, List<Turn> turns) {
         GenericTable table = new GenericTable();
 
         GenericRow header = new GenericRow();

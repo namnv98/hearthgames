@@ -35,6 +35,7 @@ public class GamePlayed {
     private Integer turns;
     private String challenge;
     private Integer gameType;
+    private String arenaDeckId;
 
     @Column(nullable = false)
     private String friendlyGameAccountId;
@@ -271,6 +272,14 @@ public class GamePlayed {
 
     public void setJustAdded(boolean justAdded) {
         this.justAdded = justAdded;
+    }
+
+    public String getArenaDeckId() {
+        return arenaDeckId;
+    }
+
+    public void setArenaDeckId(String arenaDeckId) {
+        this.arenaDeckId = arenaDeckId;
     }
 
     public boolean isSameGame(GamePlayed gamePlayed) {

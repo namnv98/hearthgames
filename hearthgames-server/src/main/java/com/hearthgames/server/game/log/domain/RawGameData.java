@@ -9,6 +9,8 @@ public class RawGameData {
     private Integer rank;
     private GameType gameType;
 
+    private String arenaDeckId;
+    private List<String> arenaDeckCards;
 
     public List<LogLineData> getLines() {
         return lines;
@@ -40,5 +42,21 @@ public class RawGameData {
 
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+    }
+
+    public String getArenaDeckId() {
+        return arenaDeckId;
+    }
+
+    public void setArenaDeckId(String arenaDeckId) {
+        this.arenaDeckId = arenaDeckId;
+    }
+
+    public List<String> getArenaDeckCards() {
+        return arenaDeckCards;
+    }
+
+    public void setArenaDeckCards(List<String> arenaDeckCards) {
+        this.arenaDeckCards = arenaDeckCards;
     }
 }

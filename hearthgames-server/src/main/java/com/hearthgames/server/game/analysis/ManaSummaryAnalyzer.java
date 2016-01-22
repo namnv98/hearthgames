@@ -3,6 +3,7 @@ package com.hearthgames.server.game.analysis;
 import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.GameResult;
@@ -25,7 +26,7 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
     }
 
     @Override
-    public GenericTable analyze(GameResult result, GameContext context) {
+    public GenericTable analyze(GameResult result, GameContext context, RawGameData rawGameData) {
         GenericTable table = new GenericTable();
 
         GenericRow header = new GenericRow();

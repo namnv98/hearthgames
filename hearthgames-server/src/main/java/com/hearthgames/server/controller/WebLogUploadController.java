@@ -61,7 +61,7 @@ public class WebLogUploadController {
                 String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
                 String[] lines = logfile.split(splitStr);
 
-                List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines), -1);
+                List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
 
                 List<GamePlayed> gamesPlayed = new ArrayList<>();
                 String gameAccountId = null;

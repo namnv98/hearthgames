@@ -1,6 +1,7 @@
 package com.hearthgames.server.game.analysis;
 
 import com.hearthgames.server.game.analysis.domain.TurnInfo;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.GameResult;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class TurnInfoAnalyzer implements Analyzer<List<TurnInfo>> {
 
     @Override
-    public List<TurnInfo> analyze(GameResult result, GameContext context) {
+    public List<TurnInfo> analyze(GameResult result, GameContext context, RawGameData rawGameData) {
         return result.getTurns().stream().map(turn -> getTurnInfo(result, context, turn)).collect(Collectors.toList());
     }
 
