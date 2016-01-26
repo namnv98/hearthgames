@@ -21,6 +21,7 @@ public class RawLogProcessingService {
     private static final Logger logger = LoggerFactory.getLogger(RawLogProcessingService.class);
 
     private static final Pattern gameModePattern = Pattern.compile("\\[LoadingScreen\\] LoadingScreen.OnSceneLoaded\\(\\) - prevMode=(.*) currMode=(.*)");
+    private static final Pattern gameModePattern2 = Pattern.compile("\\[LoadingScreen\\] LoadingScreen.OnScenePreUnload\\(\\) - prevMode=(.*) currMode=(.*) m_phase=.*");
     private static final Pattern medalRankPattern = Pattern.compile("name=Medal_Ranked_(.*) family");
 
     private static final Pattern arenaCardChoicePattern = Pattern.compile("\\[Arena\\] DraftManager.OnChoicesAndContents - Draft deck contains card (.*)");
@@ -56,6 +57,7 @@ public class RawLogProcessingService {
         List<LogLineData> currentGame = new ArrayList<>();
         List<String> currentRawGame = new ArrayList<>();
         Integer rank = null;
+        int rankFoundCount = 0;
 
         String arenaDeckId = null;
         List<String> arenaDeckCards = new ArrayList<>();
@@ -76,7 +78,7 @@ public class RawLogProcessingService {
             // TODO Need to purge the database of old games so that we don't have to do this check anymore
             if (GameLogger.isLineValid(line) || isLegacy) {
 
-                if (!gameModeDetectionComplete) {
+                if (!gameModeDetectionComplete || gameType == GameType.UNKNOWN) {
                     GameType detectedType = detectGameMode(line, gameComplete);
                     if (detectedType != null ) {
                         gameType = detectedType;
@@ -87,6 +89,7 @@ public class RawLogProcessingService {
                     addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType, arenaDeckId, arenaDeckCards);
                     gameComplete = false;
                     gameModeDetectionComplete = false;
+                    rankFoundCount = 0;
                     rank = null;
                     currentGame = new ArrayList<>();
                     currentRawGame = new ArrayList<>();
@@ -95,6 +98,7 @@ public class RawLogProcessingService {
                 } else if (line.contains(GAME_STATE_COMPLETE)) {
                     gameComplete = true;
                 } else if (gameComplete && line.contains(RANKED)) {
+                    rankFoundCount++;
                     int rankFound = getRank(line);
                     if (rank == null || rankFound < rank) {
                         rank = rankFound;
@@ -123,6 +127,7 @@ public class RawLogProcessingService {
 
                 if (gameComplete && line.contains(END_OF_GAME)) {
                     // wait until register friend challenge for casual/rank mode games since the ranks are contained in log messages in between
+                    rank = rankFoundCount > 1 ? rank : null;
                     RawGameData rawGameData = createRawGameData(currentGame, currentRawGame, rank, arenaDeckId, arenaDeckCards);
                     rawGameData.setGameType(gameType);
                     if (isGame(rawGameData.getRawLines())) {
@@ -133,6 +138,7 @@ public class RawLogProcessingService {
                 }
             }
         }
+        rank = rankFoundCount > 1 ? rank : null;
         addGameIfNotEmpty(currentGame, currentRawGame, rawGameDatas, rank, gameType, arenaDeckId, arenaDeckCards);
 
         return rawGameDatas;
@@ -178,6 +184,11 @@ public class RawLogProcessingService {
         Matcher matcher = gameModePattern.matcher(line);
         if (matcher.find()) {
             mode = matcher.group(2);
+        } else {
+            matcher = gameModePattern2.matcher(line);
+            if (matcher.find()) {
+                mode = matcher.group(2);
+            }
         }
         return mode;
     }
@@ -225,15 +236,13 @@ public class RawLogProcessingService {
         return rawGameData;
     }
 
+    // These are the core loggers needed...Arena, Rachelle and Achievements are optional
     public boolean doesLogFileContainAllLoggers(String logfile) {
         return logfile != null &&
                 logfile.contains(GameLogger.Bob.getName()) &&
                 logfile.contains(GameLogger.Asset.getName()) &&
                 logfile.contains(GameLogger.Power.getName()) &&
-                logfile.contains(GameLogger.LoadingScreen.getName()) &&
-                logfile.contains(GameLogger.Achievements.getName()) &&
-                logfile.contains(GameLogger.Arena.getName()) &&
-                logfile.contains(GameLogger.Rachelle.getName());
+                logfile.contains(GameLogger.LoadingScreen.getName());
     }
 
     private int getRank(String line) {
