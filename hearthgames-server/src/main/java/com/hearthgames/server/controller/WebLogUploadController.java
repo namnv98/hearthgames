@@ -9,7 +9,7 @@ import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.service.GameParserService;
 import com.hearthgames.server.service.GamePlayingService;
 import com.hearthgames.server.service.RawLogProcessingService;
-import com.hearthgames.server.util.GamesPlayedWrapperUtil;
+import com.hearthgames.server.util.WrapperUtil;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +97,7 @@ public class WebLogUploadController {
                 modelAndView.addObject("gameAccountId", gameAccountId);
                 modelAndView.addObject("gamesAlreadyUploaded", gamesAlreadyUploaded);
 
-                GamesPlayedWrapperUtil.addGamesPlayed(modelAndView, gamesPlayed, true, 1);
+                WrapperUtil.addGamesPlayed(modelAndView, gamesPlayed, true, 1);
 
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));

@@ -25,7 +25,9 @@ public enum GameLogger {
     }
 
     public static boolean isLineValid(String line) {
-        if (StringUtils.isEmpty(line)) return false;
+        if (StringUtils.isEmpty(line)) {
+            return false;
+        }
         for (GameLogger gameLogger : GameLogger.values()) {
             if (matchesLogger(gameLogger, line)) {
                 return true;
@@ -37,7 +39,9 @@ public enum GameLogger {
     private static boolean matchesLogger(GameLogger gameLogger, String line) {
         if (line.contains(gameLogger.name())) {
             for (String filter: gameLogger.filters) {
-                if (line.contains(filter)) return true;
+                if (line.contains(filter)) {
+                    return true;
+                }
             }
         }
         return false;

@@ -41,14 +41,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String LOGIN_URL = "/login";
+        String loginUrl = "/login";
 
-        HearthGamesAuthenticationFilter hearthGamesAuthenticationFilter = new HearthGamesAuthenticationFilter(LOGIN_URL, restTemplate, gameService);
+        HearthGamesAuthenticationFilter hearthGamesAuthenticationFilter = new HearthGamesAuthenticationFilter(loginUrl, restTemplate, gameService);
         hearthGamesAuthenticationFilter.setAuthenticationSuccessHandler(successHandler());
 
         http.addFilterAfter(oAuth2ClientContextFilter, AbstractPreAuthenticatedProcessingFilter.class)
             .addFilterAfter(hearthGamesAuthenticationFilter, OAuth2ClientContextFilter.class)
-            .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(LOGIN_URL))
+            .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl))
             .and().authorizeRequests()
             .antMatchers("/").permitAll()
             .antMatchers("/**").permitAll().and()

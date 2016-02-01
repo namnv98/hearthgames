@@ -46,6 +46,25 @@
         </div>
     </div>
 
+    <h3>Arena Runs</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Win - Loss</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="run: ${arenaRuns}">
+            <td><span th:class="${#strings.toLowerCase(run.playerClass)}" th:text="${run.playerName}">Seekay</span></td>
+            <td><span th:text="${run.wins}+' - '+${run.losses}">4 - 3</span></td>
+            <td><a th:href="@{'/games/arenarun/'+${run.arenaDeckId}}">View Arena Run Games</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Other Games</h3>
     <table class="table table-bordered">
         <thead>
         <tr>

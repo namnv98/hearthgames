@@ -1,7 +1,9 @@
 package com.hearthgames.server.database.service;
 
 import com.hearthgames.server.database.domain.Account;
+import com.hearthgames.server.database.domain.ArenaRun;
 import com.hearthgames.server.database.repository.AccountRepository;
+import com.hearthgames.server.database.repository.ArenaRunRepository;
 import com.hearthgames.server.database.repository.GamePlayedRepository;
 import com.hearthgames.server.game.log.domain.GameType;
 import com.hearthgames.server.game.log.domain.RawGameData;
@@ -39,6 +41,9 @@ public class GameService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private ArenaRunRepository arenaRunRepository;
 
     @Autowired
     private SolrService solrService;
@@ -111,8 +116,24 @@ public class GameService {
         return gamePlayedRepository.findByFriendlyGameAccountId(id);
     }
 
+    public List<ArenaRun> getArenaRuns(String id) {
+        return arenaRunRepository.findByGameAccountId(id);
+    }
+
     public List<GamePlayed> getGamesPlayed(PageRequest pageRequest, int gameType) {
         return gamePlayedRepository.findAllByGameType(pageRequest, gameType);
+    }
+
+    public List<GamePlayed> getArenaGamesByDeckId(String deckId) {
+        return gamePlayedRepository.findAllByArenaDeckId(deckId);
+    }
+
+    public List<ArenaRun> getArenaRuns(PageRequest pageRequest) {
+        return arenaRunRepository.findAll(pageRequest).getContent();
+    }
+
+    public Long getArenaRunCount() {
+        return arenaRunRepository.count();
     }
 
     public Long getGamesPlayedCount(int gameType) {
