@@ -6,7 +6,11 @@ import com.hearthgames.server.game.play.PlayContext;
 public class DamageHandler implements Handler {
     @Override
     public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() && (playContext.getActivity().getDelta() instanceof Card) && playContext.getContext().getAfter(playContext.getActivity()).getPredamage() != null && !FALSE_OR_ZERO.equals(playContext.getContext().getAfter(playContext.getActivity()).getPredamage());
+        return playContext.getActivity().isTagChange()
+                && (playContext.getActivity().getDelta() instanceof Card)
+                && !playContext.getContext().getBefore(playContext.getActivity()).isWeapon()
+                && playContext.getContext().getAfter(playContext.getActivity()).getPredamage() != null
+                && !FALSE_OR_ZERO.equals(playContext.getContext().getAfter(playContext.getActivity()).getPredamage());
     }
 
     @Override
