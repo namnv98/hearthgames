@@ -52,14 +52,7 @@ public class UpdateCardHandler extends AbstractHandler {
         // HIDE_ENTITY - Entity=[name=Master Jouster id=49 zone=HAND zonePos=3 cardId=AT_112 player=2] tag=ZONE value=DECK
         // HIDE_ENTITY - Entity=69 tag=ZONE value=DECK
         String entityStr = line.replace(HIDE_ENTITY,"").trim();
-        if (!entityStr.startsWith(B)) {
-            entityStr = entityStr.substring(0, entityStr.indexOf(TAG_EQ)).trim();
-        } else if (entityStr.startsWith(B_NAME_EQ)) {
-            // The entityStr doesn't ever appear to start with [name= during a card update.  I am leaving this here just in case in the future it does
-            entityStr = entityStr.substring(entityStr.indexOf(ID_EQ)+ID_EQ.length(), entityStr.indexOf(SP_ZONE_EQ)).trim();
-        } else {
-            entityStr = entityStr.substring(entityStr.indexOf(ID_EQ)+ID_EQ.length(), entityStr.indexOf(SP_TAG_EQ)).trim();
-        }
+        entityStr = getPartialEntityStr(entityStr);
         List<Object> objects = new ArrayList<>();
         objects.add(entityStr);
         objects.add(getKeyValueData(line.substring(line.lastIndexOf(TAG_EQ)), tagPattern));
@@ -72,16 +65,21 @@ public class UpdateCardHandler extends AbstractHandler {
         // SHOW_ENTITY - Updating Entity=[name=Emperor Thaurissan id=25 zone=DECK zonePos=0 cardId=BRM_028 player=1] CardID=BRM_028
         // SHOW_ENTITY - Updating Entity=[id=23 cardId= type=INVALID zone=DECK zonePos=0 player=1] CardID=CS2_031
         String entityStr = line.replace(SHOW_ENTITY,"").trim();
+        entityStr = getPartialEntityStr(entityStr);
+        data[0] = entityStr;
+        data[1] = line.substring(line.lastIndexOf(CARDID_EQ)+CARDID_EQ.length());
+        return data;
+    }
+
+    private String getPartialEntityStr(String entityStr) {
         if (!entityStr.startsWith(B)) {
-            entityStr = entityStr.substring(0, entityStr.indexOf(CARDID_EQ)).trim();
+            entityStr = entityStr.substring(0, entityStr.indexOf(TAG_EQ)).trim();
         } else if (entityStr.startsWith(B_NAME_EQ)) {
             // The entityStr doesn't ever appear to start with [name= during a card update.  I am leaving this here just in case in the future it does
             entityStr = entityStr.substring(entityStr.indexOf(ID_EQ)+ID_EQ.length(), entityStr.indexOf(SP_ZONE_EQ)).trim();
         } else {
-            entityStr = entityStr.substring(entityStr.indexOf(ID_EQ)+ID_EQ.length(), entityStr.indexOf(SP_CARDID_EQ)).trim();
+            entityStr = entityStr.substring(entityStr.indexOf(ID_EQ)+ID_EQ.length(), entityStr.indexOf(SP_TAG_EQ)).trim();
         }
-        data[0] = entityStr;
-        data[1] = line.substring(line.lastIndexOf(CARDID_EQ)+CARDID_EQ.length());
-        return data;
+        return entityStr;
     }
 }

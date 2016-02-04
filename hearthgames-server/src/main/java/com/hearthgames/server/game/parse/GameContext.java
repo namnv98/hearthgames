@@ -85,11 +85,11 @@ public class GameContext {
     public Entity getEntity(String entityStr) {
         Entity entity = null;
         if (entityStr == null || "0".equals(entityStr)) return null;
-        if (entityStr.equals(GAME_ENTITY)) { // The match itself
+        if (entityStr.equals(GAME_ENTITY) || gameEntity != null && entityStr.equals(gameEntity.getEntityId())) { // The match itself
             entity = gameEntity;
-        } else if (friendlyPlayer.getName().equals(entityStr)) {
+        } else if (friendlyPlayer.getName().equals(entityStr) || entityStr.equals(friendlyPlayer.getEntityId())) {
             entity = friendlyPlayer;
-        } else if (opposingPlayer.getName().equals(entityStr)) {
+        } else if (opposingPlayer.getName().equals(entityStr) || entityStr.equals(opposingPlayer.getEntityId())) {
             entity = opposingPlayer;
         } else {
             for (Card c: cards) {
