@@ -9,6 +9,7 @@ import com.hearthgames.server.database.service.GameService;
 import com.hearthgames.server.game.analysis.domain.TurnInfo;
 import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
+import com.hearthgames.server.game.hsreplay.HSReplayHandler;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.log.domain.RawGameData;
@@ -19,8 +20,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.xml.sax.InputSource;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.xpath.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,6 +55,59 @@ public class GameParserServiceTest {
     @Autowired
     private RawMatchErrorRepository rawMatchErrorRepository;
 
+    @Test
+    public void shouldPlayHSReplay() throws Exception {
+
+        String xml = FileUtils.readFileToString(new File("/Users/milice/github/hearthgames/hearthgames-server/src/main/resources/test-data/decks-assemble.hsreplay.xml"));
+        String[] rawGamesXml = xml.split("<Game ");
+        List<String> rawGames = new ArrayList<>();
+        for (String rawGame: rawGamesXml) {
+            if (rawGame.startsWith("ts"))
+                rawGames.add("<?xml version=\"1.0\" ?><Game "+rawGame);
+        }
+
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        SAXParser saxParser = saxParserFactory.newSAXParser();
+
+        HSReplayHandler handler;
+        for (String rawGame: rawGames) {
+            handler = new HSReplayHandler();
+            saxParser.parse(new InputSource(new StringReader(rawGame)), handler);
+
+            GameContext context = handler.getContext();
+            String accountId = context.getFriendlyPlayer().getGameAccountIdLo();
+
+            GameResult result = gamePlayingService.processGame(context, null);
+
+            RawGameData rawGameData = new RawGameData();
+            rawGameData.setXml(rawGame);
+
+            GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+
+//            gameService.saveGamePlayed(gamePlayed, context, result, false);
+            System.out.println();
+
+
+        }
+
+    }
+
+    public static String getXPathValue(String stringCompile, String stringSource) {
+        StringBuilder stringBuilder = new StringBuilder();
+        XPathFactory pathFactory = XPathFactory.newInstance();
+        XPath path = pathFactory.newXPath();
+
+        try {
+            XPathExpression pathExpression = path.compile(stringCompile);
+            Object result = pathExpression.evaluate(new InputSource(new StringReader(stringSource)), XPathConstants.STRING);
+            if (result instanceof String) {
+                stringBuilder.append(result.toString());
+            }
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
 
     @Test
     public void shouldPlayUncompressedGame() throws IOException {

@@ -8,6 +8,7 @@ public class RawGameData {
     private List<LogLineData> lines;
     private Integer rank;
     private GameType gameType;
+    private String xml;
 
     private String arenaDeckId;
     private List<String> arenaDeckCards;
@@ -58,5 +59,13 @@ public class RawGameData {
 
     public void setArenaDeckCards(List<String> arenaDeckCards) {
         this.arenaDeckCards = arenaDeckCards;
+    }
+
+    public String getXml() {
+        return xml;
+    }
+
+    public void setXml(String xml) {
+        this.xml = xml;
     }
 }

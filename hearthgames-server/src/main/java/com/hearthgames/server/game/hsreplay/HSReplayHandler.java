@@ -10,13 +10,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HSReplayHandler extends DefaultHandler {
 
@@ -36,8 +30,6 @@ public class HSReplayHandler extends DefaultHandler {
     public static final String RUNNING = "2";
 
     public static final String CARDID = "cardid";
-
-    private List<GameContext> contexts = new ArrayList<>();
 
     private GameContext context;
 
@@ -104,10 +96,7 @@ public class HSReplayHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        if (GAME.equalsIgnoreCase(qName)) {
-            contexts.add(context);
-            context = null;
-        } else if (GAME_ENTITY.equalsIgnoreCase(qName)) {
+        if (GAME_ENTITY.equalsIgnoreCase(qName)) {
             context.endCreateGame(null);
         } else if (PLAYER.equalsIgnoreCase(qName)) {
             context.endCreatePlayer(null);
@@ -121,7 +110,7 @@ public class HSReplayHandler extends DefaultHandler {
 
     }
 
-    private String[] getActionData(Attributes attributes) {
+    private static String[] getActionData(Attributes attributes) {
         Map<String, String> data = getEntityData(attributes);
         String[] actionData = new String[4];
         actionData[0] = data.get("entityId");
@@ -131,7 +120,7 @@ public class HSReplayHandler extends DefaultHandler {
         return actionData;
     }
 
-    private Map<String, String> getEntityData(Attributes attributes) {
+    private static Map<String, String> getEntityData(Attributes attributes) {
         Map<String, String> data = new HashMap<>();
         for (int i=0; i < attributes.getLength(); i++) {
             String tag = fixTagName(attributes.getQName(i));
@@ -141,7 +130,7 @@ public class HSReplayHandler extends DefaultHandler {
         return data;
     }
 
-    private Map<String, String> getTagData(Attributes attributes) {
+    private static Map<String, String> getTagData(Attributes attributes) {
         Map<String, String> data = new HashMap<>();
         String tag = attributes.getValue("tag");
         Tag t = Tag.getTagByValue(tag);
@@ -151,7 +140,7 @@ public class HSReplayHandler extends DefaultHandler {
         return data;
     }
 
-    private Map<String, String> getTagChangeData(Attributes attributes) {
+    private static Map<String, String> getTagChangeData(Attributes attributes) {
         Map<String, String> data = new HashMap<>();
         data.put(ENTITY, attributes.getValue("entity"));
         String tag = attributes.getValue("tag");
@@ -162,7 +151,7 @@ public class HSReplayHandler extends DefaultHandler {
         return data;
     }
 
-    private String fixTagName(String originalTagName) {
+    private static String fixTagName(String originalTagName) {
         switch (originalTagName) {
             case "id": case ENTITY: return "entityId";
             case "cardID": return "cardid";
@@ -170,33 +159,15 @@ public class HSReplayHandler extends DefaultHandler {
         }
     }
 
-    private String fixTagValue(String tagName, String originalTagValue) {
+    private static String fixTagValue(String tagName, String originalTagValue) {
         if ("zone".equalsIgnoreCase(tagName)) {
             return Zone.getZoneByValue(originalTagValue).toString();
         }
         return originalTagValue;
     }
 
-    public List<GameContext> getContexts() {
-        return contexts;
+    public GameContext getContext() {
+        return context;
     }
-
-    public static void main(String[] args) throws Exception {
-
-        System.out.println();
-
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-        SAXParser saxParser = saxParserFactory.newSAXParser();
-        HSReplayHandler handler = new HSReplayHandler();
-        saxParser.parse(new File("C:\\GitSandbox\\hearthgames\\hearthgames-server\\src\\main\\resources\\test-data\\decks-assemble.hsreplay.xml"), handler);
-
-        List<GameContext> contexts = handler.getContexts();
-
-        System.out.println();
-
-    }
-
 
 }
-
-

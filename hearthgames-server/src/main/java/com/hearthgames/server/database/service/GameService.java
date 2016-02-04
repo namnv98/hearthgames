@@ -56,12 +56,18 @@ public class GameService {
             gamePlayed.setBattletag(userInfo.getBattletag());
             gamePlayed.setBattletagId(userInfo.getId());
         }
-        gamePlayed.setRawGame(GameCompressionUtils.compress(linesToString(rawGameData.getRawLines())));
-        LocalDateTime startTime = rawGameData.getLines().get(0).getDateTime();
         LocalDateTime now = LocalDateTime.now();
-        gamePlayed.setStartTime(startTime == null ? now : startTime);
-        LocalDateTime endTime = rawGameData.getLines().get(rawGameData.getLines().size()-1).getDateTime();
-        gamePlayed.setEndTime(endTime == null ? now : endTime);
+        if (rawGameData.getXml() == null) {
+            LocalDateTime startTime = rawGameData.getLines().get(0).getDateTime();
+            gamePlayed.setStartTime(startTime == null ? now : startTime);
+            LocalDateTime endTime = rawGameData.getLines().get(rawGameData.getLines().size()-1).getDateTime();
+            gamePlayed.setEndTime(endTime == null ? now : endTime);
+            gamePlayed.setRawGame(GameCompressionUtils.compress(linesToString(rawGameData.getRawLines())));
+        } else {
+            gamePlayed.setRawGame(GameCompressionUtils.compress(rawGameData.getXml()));
+            gamePlayed.setStartTime(now);
+            gamePlayed.setEndTime(now);
+        }
         gamePlayed.setFriendlyGameAccountId(context.getFriendlyPlayer().getGameAccountIdLo());
         gamePlayed.setOpposingGameAccountId(context.getOpposingPlayer().getGameAccountIdLo());
         gamePlayed.setRank(rawGameData.getGameType() == GameType.RANKED ? rawGameData.getRank() : null);
