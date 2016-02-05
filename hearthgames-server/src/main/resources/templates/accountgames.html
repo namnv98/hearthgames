@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HearthGames.com - Games</title>
+    <meta name="description" content="Check out some of the Top Rated Games. Search for games that match criteria such as Deck Archetype, High Win Rate and many more. Rate other peoples games and leave comments."/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="shortcut icon" href="http://images.hearthgames.com/misc/favicon.ico" />
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body>
+
+<div th:replace="/fragments/nav-fragment::nav"></div>
+
+<div class="container">
+
+    <div th:replace="/fragments/beta-fragment::beta"></div>
+
+    <div class="title-container">
+        <div class="hearthgames-title"><a href="home.html" th:href="@{/}">HEARTHGAMES.com</a></div>
+    </div>
+
+    <h3>Arena Runs</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Win - Loss</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="run: ${arenaRuns}">
+            <td><span th:class="${#strings.toLowerCase(run.playerClass)}" th:text="${run.playerName}">Seekay</span></td>
+            <td><span th:text="${run.wins}+' - '+${run.losses}">4 - 3</span></td>
+            <td><a th:href="@{'/games/arenarun/'+${run.arenaDeckId}}">View Arena Run Games</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Other Games</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Friendly</th>
+            <th>Opponent</th>
+            <th>Winner</th>
+            <th># Turns</th>
+            <th>Rank</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="game: ${gamesPlayed}">
+            <td><span th:class="${#strings.toLowerCase(game.friendlyClass)}" th:text="${game.friendlyName}">Seekay</span></td>
+            <td><span th:class="${#strings.toLowerCase(game.opposingClass)}" th:text="${game.opposingName}">Some Opponent</span></td>
+            <td><span th:class="${#strings.toLowerCase(game.winnerClass)}" th:text="${game.winner}">Seekay</span></td>
+            <td><span th:text="${game.turns}">23</span></td>
+            <th th:text="${game.rank}"></th>
+            <td><a th:href="@{'/mygame/'+${game.id}}" href="game.html">View</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:replace="/fragments/footer-fragment::footer"></div>
+
+</div>
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:if="${updated}">
+    $(document).ready(function(){
+        setTimeout(function() {
+            $(".account-updated").hide();
+        }, 2000)
+    });
+</script>
+
+</body>
+</html>

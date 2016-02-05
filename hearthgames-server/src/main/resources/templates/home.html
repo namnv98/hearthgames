@@ -60,24 +60,25 @@
 
         </div>
 
-        <div class="home-upload-panel panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Select a Hearthstone log file to upload</h3>
-            </div>
-
-            <div class="panel-body">
-                <div>
-                    <form id="logFileUpload" method="POST" enctype="multipart/form-data" action="game.html" th:action="@{/webUpload}">
-                        <input id="upload" name="file" type="file" class="file" data-show-preview="false" />
-                    </form>
-                </div>
-                <a href="where.html" th:href="@{/where}">Where do I find my log files?</a>
-            </div>
+        <div class="row">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Win - Loss</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="player: ${players}">
+                    <td><span th:text="${player.playerName}">Seekay</span></td>
+                    <td><span th:text="${player.wins}+' - '+${player.losses}">4 - 3</span></td>
+                    <td><a th:href="@{'/account/'+${player.gameAccountId}+'/games'}">View Games</a></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
-        <div class="download-client">
-            <span>As an alternative to manually uploading your files you can Download the <a href="download.html" th:href="@{/download}">Official Hearth Games Client Uploader</a>.</span>
-        </div>
 
         <div th:replace="/fragments/footer-fragment::homeFooter"></div>
     </div>

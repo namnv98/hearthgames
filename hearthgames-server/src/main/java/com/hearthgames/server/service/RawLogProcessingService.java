@@ -43,6 +43,28 @@ public class RawLogProcessingService {
     private static final String ADVENTURE = "ADVENTURE";
     private static final String DRAFT = "DRAFT";
 
+    public boolean isHSReplayFile(String xml) {
+        return xml != null && xml.contains("<?xml version");
+    }
+
+    public List<RawGameData> processHSReplayFile(String xml) {
+
+        String[] rawGamesXml = xml.split("<Game ");
+        List<String> rawGames = new ArrayList<>();
+        for (String rawGame: rawGamesXml) {
+            if (rawGame.startsWith("ts"))
+                rawGames.add("<?xml version=\"1.0\" ?><Game "+rawGame);
+        }
+        List<RawGameData> rawGameDatas = new ArrayList<>();
+        for (String rawGame: rawGames) {
+            RawGameData rawGameData = new RawGameData();
+            rawGameData.setGameType(GameType.CASUAL);
+            rawGameData.setXml(rawGame);
+            rawGameDatas.add(rawGameData);
+        }
+        return rawGameDatas;
+    }
+
     public List<RawGameData> processLogFile(List<String> lines) {
 
         List<RawGameData> rawGameDatas = new ArrayList<>();
@@ -210,7 +232,7 @@ public class RawLogProcessingService {
     private boolean isGame(List<String> rawLines) {
         boolean hasCreateGame = false;
         boolean hasCompleteState = false;
-        if (rawLines != null && rawLines.size() > 0) {
+        if (rawLines != null && !rawLines.isEmpty()) {
             for (String line: rawLines) {
                 if (line.contains(CREATE_GAME)) {
                     hasCreateGame = true;

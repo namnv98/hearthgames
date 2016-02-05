@@ -22,6 +22,7 @@ public class GamesController {
 
     private static final String GAMES = "games";
     private static final String ARENARUNS = "arenaruns";
+    private static final String NAVPAGE = "navpage";
 
     @Autowired
     private GameService gameService;
@@ -29,13 +30,15 @@ public class GamesController {
     @RequestMapping(value = "/account/{gameAccountId}/games")
     public ModelAndView listGames(@PathVariable String gameAccountId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(GAMES);
+        modelAndView.setViewName("accountgames");
 
         List<GamePlayed> gamesPlayed = gameService.getGamesPlayed(gameAccountId);
-        Long count = gameService.getGamesPlayedCount(gameAccountId);
-        int pages = (int) Math.ceil((double) count / 10);
+        List<ArenaRun> arenaRuns = gameService.getArenaRuns(gameAccountId);
 
-        WrapperUtil.addGamesPlayed(modelAndView, gamesPlayed, true, pages);
+        modelAndView.addObject("gamesPlayed", gamesPlayed);
+        modelAndView.addObject("arenaRuns", arenaRuns);
+        modelAndView.addObject(NAVPAGE, GAMES);
+
         return modelAndView;
     }
 
@@ -50,7 +53,7 @@ public class GamesController {
 
         WrapperUtil.addGamesPlayed(modelAndView, gamesPlayed, GameType.getGameType(gameType).equals(GameType.RANKED), pages);
 
-        modelAndView.addObject("navpage", "games");
+        modelAndView.addObject(NAVPAGE, GAMES);
         return modelAndView;
     }
 
@@ -79,7 +82,7 @@ public class GamesController {
 
         WrapperUtil.addArenaRuns(modelAndView, arenaRuns, pages);
 
-        modelAndView.addObject("navpage", "games");
+        modelAndView.addObject(NAVPAGE, GAMES);
         return modelAndView;
     }
 
@@ -105,7 +108,7 @@ public class GamesController {
 
         WrapperUtil.addGamesPlayed(modelAndView, gamesPlayed, false, pages);
 
-        modelAndView.addObject("navpage", "games");
+        modelAndView.addObject(NAVPAGE, GAMES);
         return modelAndView;
     }
 

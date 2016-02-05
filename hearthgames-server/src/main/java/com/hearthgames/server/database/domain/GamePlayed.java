@@ -29,6 +29,8 @@ public class GamePlayed {
     @Column(nullable = false)
     private byte[] rawGame;
 
+    private Integer rawGameType;
+
     private boolean justAdded;
 
     private Integer rank;
@@ -51,12 +53,16 @@ public class GamePlayed {
     private String winner;
     private String winnerClass;
 
+    @Column(length = 1000)
     private String friendlyStartingCards;
+    @Column(length = 1000)
     private String friendlyMulliganCards;
     @Column(length = 1000)
     private String friendlyDeckCards;
 
+    @Column(length = 1000)
     private String opposingStartingCards;
+    @Column(length = 1000)
     private String opposingMulliganCards;
     @Column(length = 1000)
     private String opposingDeckCards;
@@ -107,6 +113,14 @@ public class GamePlayed {
 
     public void setRawGame(byte[] rawGame) {
         this.rawGame = rawGame;
+    }
+
+    public Integer getRawGameType() {
+        return rawGameType;
+    }
+
+    public void setRawGameType(Integer rawGameType) {
+        this.rawGameType = rawGameType;
     }
 
     public Integer getRank() {

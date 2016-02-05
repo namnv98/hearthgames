@@ -1,18 +1,12 @@
 package com.hearthgames.server.database.service;
 
-import com.hearthgames.server.database.domain.Account;
-import com.hearthgames.server.database.domain.ArenaRun;
-import com.hearthgames.server.database.repository.AccountRepository;
-import com.hearthgames.server.database.repository.ArenaRunRepository;
-import com.hearthgames.server.database.repository.GamePlayedRepository;
+import com.hearthgames.server.config.security.UserInfo;
+import com.hearthgames.server.database.domain.*;
+import com.hearthgames.server.database.repository.*;
 import com.hearthgames.server.game.log.domain.GameType;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.config.security.UserInfo;
-import com.hearthgames.server.database.domain.GamePlayed;
-import com.hearthgames.server.database.domain.RawGameError;
-import com.hearthgames.server.database.repository.RawMatchErrorRepository;
 import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.solr.SolrService;
 import com.hearthgames.server.util.GameCompressionUtils;
@@ -46,6 +40,9 @@ public class GameService {
     private ArenaRunRepository arenaRunRepository;
 
     @Autowired
+    private PlayerWinLossSummaryRepository playerWinLossSummaryRepository;
+
+    @Autowired
     private SolrService solrService;
 
     public GamePlayed createGamePlayed(RawGameData rawGameData, GameContext context, GameResult result, UserInfo userInfo) {
@@ -63,10 +60,12 @@ public class GameService {
             LocalDateTime endTime = rawGameData.getLines().get(rawGameData.getLines().size()-1).getDateTime();
             gamePlayed.setEndTime(endTime == null ? now : endTime);
             gamePlayed.setRawGame(GameCompressionUtils.compress(linesToString(rawGameData.getRawLines())));
+            gamePlayed.setRawGameType(1);
         } else {
             gamePlayed.setRawGame(GameCompressionUtils.compress(rawGameData.getXml()));
             gamePlayed.setStartTime(now);
             gamePlayed.setEndTime(now);
+            gamePlayed.setRawGameType(2);
         }
         gamePlayed.setFriendlyGameAccountId(context.getFriendlyPlayer().getGameAccountIdLo());
         gamePlayed.setOpposingGameAccountId(context.getOpposingPlayer().getGameAccountIdLo());
@@ -112,6 +111,10 @@ public class GameService {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
         }
+    }
+
+    public Iterable<PlayerWinLossSummary> getPlayers() {
+        return playerWinLossSummaryRepository.findAll();
     }
 
     public Long getGamesPlayedCount(String id) {

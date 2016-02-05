@@ -7,12 +7,13 @@ import com.hearthgames.server.config.security.UserInfo;
 import com.hearthgames.server.database.domain.GamePlayed;
 import com.hearthgames.server.database.service.GameService;
 import com.hearthgames.server.game.analysis.domain.TurnInfo;
+import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
+import com.hearthgames.server.game.hsreplay.HSReplayHandler;
 import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
-import com.hearthgames.server.service.GameAnalysisService;
-import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.service.GameAnalysisService;
 import com.hearthgames.server.service.GameParserService;
 import com.hearthgames.server.service.GamePlayingService;
 import com.hearthgames.server.service.RawLogProcessingService;
@@ -24,7 +25,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.context.WebContext;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,21 +56,27 @@ public class GameController {
     private GameAnalysisService gameAnalysisService;
 
     @RequestMapping(value = {"/game/{gameId}", "/mygame/{gameId}"})
-    public ModelAndView getGame(@PathVariable Long gameId) {
+    public ModelAndView getGame(@PathVariable Long gameId) throws ParserConfigurationException, SAXException, IOException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("game");
 
         GamePlayed gamePlayed = gameService.getById(gameId);
         if (gamePlayed != null) {
-            byte[] bytes = gamePlayed.getRawGame();
-            String logfile = GameCompressionUtils.decompressGameData(bytes);
-            String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
-            String[] lines = logfile.split(splitStr);
+            RawGameData rawGameData;
+            GameContext context;
 
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
-            if (rawGameDatas != null && rawGameDatas.size() == 1) {
-                RawGameData rawGameData = rawGameDatas.get(0);
-                GameContext context = gameParserService.parseLines(rawGameData.getLines());
+            if (gamePlayed.getRawGameType() == 1) {
+                rawGameData = getRawGameDataFromLogFile(gamePlayed.getRawGame());
+                context = getGameContextFromLogFile(rawGameData);
+            } else {
+                rawGameData = getRawGameDataFromXml(gamePlayed.getRawGame());
+                SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+                SAXParser saxParser = saxParserFactory.newSAXParser();
+                HSReplayHandler handler = new HSReplayHandler();
+                saxParser.parse(new InputSource(new StringReader(rawGameData.getXml())), handler);
+                context = handler.getContext();
+            }
+            if (rawGameData != null && context != null) {
                 GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
 
                 GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context, rawGameData);
@@ -105,7 +119,6 @@ public class GameController {
                     gamePlayed.setJustAdded(false);
                     gameService.saveGamePlayed(gamePlayed, context, result, false);
                 }
-
                 //hack for Thymeleaf plugin - duplicate model properties
                 if (false) {
                     WebContext webContext = new org.thymeleaf.context.WebContext(null, null, null);
@@ -118,9 +131,30 @@ public class GameController {
                     webContext.setVariable("cardAdvantageInfos", cardAdvantageInfos);
                     webContext.setVariable("turnInfos", turnInfos);
                 }
-
             }
         }
         return modelAndView;
+    }
+
+    private RawGameData getRawGameDataFromXml(byte[] bytes) {
+        RawGameData rawGameData = new RawGameData();
+        rawGameData.setXml(GameCompressionUtils.decompressGameData(bytes));
+        return rawGameData;
+    }
+
+    private RawGameData getRawGameDataFromLogFile(byte[] bytes ) {
+        String logfile = GameCompressionUtils.decompressGameData(bytes);
+        String splitStr = logfile.contains("\r\n") ? "\r\n" : "\n";
+        String[] lines = logfile.split(splitStr);
+
+        List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
+        if (rawGameDatas != null && rawGameDatas.size() == 1) {
+            return rawGameDatas.get(0);
+        }
+        return null;
+    }
+
+    private GameContext getGameContextFromLogFile(RawGameData rawGameData){
+        return gameParserService.parseLines(rawGameData.getLines());
     }
 }
