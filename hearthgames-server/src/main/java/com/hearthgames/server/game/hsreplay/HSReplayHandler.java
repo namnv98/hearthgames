@@ -1,9 +1,7 @@
 package com.hearthgames.server.game.hsreplay;
 
 import com.google.common.base.CaseFormat;
-import com.hearthgames.server.game.hsreplay.domain.BlockType;
-import com.hearthgames.server.game.hsreplay.domain.Tag;
-import com.hearthgames.server.game.hsreplay.domain.Zone;
+import com.hearthgames.server.game.hsreplay.domain.*;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Player;
 import org.xml.sax.Attributes;
@@ -42,7 +40,7 @@ public class HSReplayHandler extends DefaultHandler {
             context.startCreateGame();
             context.updateCreateGame(getEntityData(attributes));
         } else if (context != null && context.isCreateGameEntity() && TAG.equalsIgnoreCase(qName)) {
-            context.updateCreateGame(getTagData(attributes));
+            context.updateCreateGame(getTagData(attributes, EntityType.GAME_ENTITY));
         } else if (PLAYER.equalsIgnoreCase(qName)) {
             Map<String, String> data = getEntityData(attributes);
             String[] playerData = new String[2];
@@ -54,18 +52,18 @@ public class HSReplayHandler extends DefaultHandler {
             player.setPlayerId(data.get("playerID"));
             player.setName(data.get("name"));
         } else if (context != null && context.isCreatePlayer() && TAG.equalsIgnoreCase(qName)) {
-            context.updateCreatePlayer(getTagData(attributes));
+            context.updateCreatePlayer(getTagData(attributes, EntityType.PLAYER));
         } else if (FULL_ENTITY.equalsIgnoreCase(qName)) {
             context.startCreateCard(null, getEntityData(attributes));
         } else if (context != null && context.isCreateCard() && TAG.equalsIgnoreCase(qName)) {
-            context.updateCreateCard(getTagData(attributes));
+            context.updateCreateCard(getTagData(attributes, EntityType.CARD));
         } else if (context != null && ACTION.equalsIgnoreCase(qName) && context.isCreateAction()) {
             context.createSubAction(null, getActionData(attributes));
         } else if (ACTION.equalsIgnoreCase(qName)) {
             context.createAction(null, getActionData(attributes));
         } else if (context != null && (SHOW_ENTITY.equalsIgnoreCase(qName) || context.isUpdateCard() || HIDE_ENTITY.equalsIgnoreCase(qName))) {
             if (context.isUpdateCard() && TAG.equalsIgnoreCase(qName)) {
-                context.updateCurrentCard(getTagData(attributes));
+                context.updateCurrentCard(getTagData(attributes, EntityType.CARD));
             } else if (SHOW_ENTITY.equalsIgnoreCase(qName)) {
                 Map<String, String> data = getEntityData(attributes);
                 context.startUpdateCard(null, data.get("entityId"), data.get(CARDID));
@@ -74,7 +72,7 @@ public class HSReplayHandler extends DefaultHandler {
                 context.hideEntity(null, data.get("entityId"), data);
             }
         } else if (context != null && TAG_CHANGE.equalsIgnoreCase(qName) && context.getGameEntity().getEntityId().equalsIgnoreCase(attributes.getValue(ENTITY))) {
-            Map<String, String> data = getTagData(attributes);
+            Map<String, String> data = getTagData(attributes, EntityType.GAME_ENTITY);
             String state = attributes.getValue(STATE);
             if (state != null && state.equals(COMPLETE)) {
                 context.endUpdateGame(null, data);
@@ -83,10 +81,17 @@ public class HSReplayHandler extends DefaultHandler {
             } else if (context.isGameUpdating()) {
                 context.updateCurrentGame(null, data);
             } else {
-                context.populateEntity(context.getGameEntity(), data);
+                context.tagChange(null, "1", data);
             }
         } else if (TAG_CHANGE.equalsIgnoreCase(qName)) {
-            Map<String, String> data = getTagChangeData(attributes);
+            int entityId = getEntityId(attributes.getValue("entity"));
+            EntityType entityType = EntityType.GAME_ENTITY;
+            if (entityId >= 2 && entityId <= 3) {
+                entityType = EntityType.PLAYER;
+            } else if (entityId > 3) {
+                entityType = EntityType.CARD;
+            }
+            Map<String, String> data = getTagData(attributes, entityType);
             String entity = data.get(ENTITY);
             data.remove(ENTITY);
             context.tagChange(null, entity, data);
@@ -130,23 +135,12 @@ public class HSReplayHandler extends DefaultHandler {
         return data;
     }
 
-    private static Map<String, String> getTagData(Attributes attributes) {
+    private static Map<String, String> getTagData(Attributes attributes, EntityType entityType) {
         Map<String, String> data = new HashMap<>();
         String tag = attributes.getValue("tag");
-        Tag t = Tag.getTagByValue(tag);
+        Tag t = Tag.getTagByValue(tag, entityType);
         tag = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, t.toString());
-        String value = attributes.getValue("value");
-        data.put(tag, value);
-        return data;
-    }
-
-    private static Map<String, String> getTagChangeData(Attributes attributes) {
-        Map<String, String> data = new HashMap<>();
-        data.put(ENTITY, attributes.getValue("entity"));
-        String tag = attributes.getValue("tag");
-        Tag t = Tag.getTagByValue(tag);
-        tag = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, t.toString());
-        String value = attributes.getValue("value");
+        String value = fixTagValue(tag, attributes.getValue("value"));
         data.put(tag, value);
         return data;
     }
@@ -159,9 +153,15 @@ public class HSReplayHandler extends DefaultHandler {
         }
     }
 
+    private int getEntityId(String entityIdStr) {
+        return Integer.parseInt(entityIdStr);
+    }
+
     private static String fixTagValue(String tagName, String originalTagValue) {
         if ("zone".equalsIgnoreCase(tagName)) {
             return Zone.getZoneByValue(originalTagValue).toString();
+        } else if ("step".equalsIgnoreCase(tagName) || "nextStep".equalsIgnoreCase(tagName)) {
+            return Step.getStepByValue(originalTagValue).toString();
         }
         return originalTagValue;
     }

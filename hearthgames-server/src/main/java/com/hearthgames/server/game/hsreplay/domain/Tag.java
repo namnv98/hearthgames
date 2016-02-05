@@ -63,7 +63,7 @@ public enum Tag {
     DIVINE_SHIELD(194),
     CHARGE(197),
     NEXT_STEP(198),
-    CARD_CLASS(199),
+    CLASS(199),
     CARDRACE(200),
     FACTION(201),
     CARDTYPE(202),
@@ -260,7 +260,12 @@ public enum Tag {
     DIVINE_SHIELD_READY(314),
 
     // Missing, only present in logs
-    WEAPON(334);
+    WEAPON(334),
+
+
+    // These are aliases for CLASS
+    PLAYER_CLASS(199),
+    CARD_CLASS(199);
 
     private int tag;
 
@@ -272,7 +277,7 @@ public enum Tag {
         return tag;
     }
 
-    public static Tag getTagByValue(String value) {
+    public static Tag getTagByValue(String value, EntityType entityType) {
         int val = 0;
         try {
             val = Integer.parseInt(value);
@@ -280,6 +285,11 @@ public enum Tag {
         }
         for (Tag tag: Tag.values()) {
             if (tag.getTag() == val) {
+                if (val == 199 && entityType == EntityType.CARD) {
+                    return CARD_CLASS;
+                } else if (val == 199 && entityType == EntityType.PLAYER) {
+                    return PLAYER_CLASS;
+                }
                 return tag;
             }
         }
