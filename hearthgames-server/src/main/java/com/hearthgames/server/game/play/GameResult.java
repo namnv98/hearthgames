@@ -30,6 +30,7 @@ public class GameResult {
     private List<String> actionLogs = new ArrayList<>();
 
     public void addActionLog(String log) {
+        //System.out.println(log);
         actionLogs.add(log);
     }
 

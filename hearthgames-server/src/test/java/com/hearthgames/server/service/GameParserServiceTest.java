@@ -58,7 +58,7 @@ public class GameParserServiceTest {
     @Test
     public void shouldPlayHSReplay() throws Exception {
 
-        String xml = FileUtils.readFileToString(new File("/Users/milice/github/hearthgames/hearthgames-server/src/main/resources/test-data/decks-assemble.hsreplay.xml"));
+        String xml = FileUtils.readFileToString(new File("/Users/milice/github/hearthgames/hearthgames-server/src/main/resources/test-data/ranked.hsreplay.xml"));
         String[] rawGamesXml = xml.split("<Game ");
         List<String> rawGames = new ArrayList<>();
         for (String rawGame: rawGamesXml) {
@@ -82,7 +82,7 @@ public class GameParserServiceTest {
             RawGameData rawGameData = new RawGameData();
             rawGameData.setXml(rawGame);
 
-            GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+//            GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
 
 //            gameService.saveGamePlayed(gamePlayed, context, result, false);
             System.out.println();

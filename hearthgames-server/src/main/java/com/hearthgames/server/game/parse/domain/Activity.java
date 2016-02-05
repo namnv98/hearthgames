@@ -206,7 +206,7 @@ public class Activity implements Serializable {
 
     @Override
     public String toString() {
-        String entityType = "";
+        String entityType;
         if (delta instanceof Player) {
             entityType = "Player";
         } else if (delta instanceof Card) {
@@ -217,9 +217,12 @@ public class Activity implements Serializable {
 
         String fields = type != Type.ACTION ? Arrays.toString(getNonNullPropertyNames(delta)) : "";
 
+        String blockType = this.blockType != null ? ", blockType=" + this.blockType : "";
+
         return "Activity{" +
                 "id=" + id+
                 ", type=" + type +
+                blockType +
                 ", delta=" + entityType +
                 ", fields= " + fields +
                 '}';

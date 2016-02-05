@@ -31,6 +31,8 @@ public class HSReplayHandler extends DefaultHandler {
 
     private GameContext context;
 
+    private int actionNestingCount = 0;
+
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
@@ -57,10 +59,13 @@ public class HSReplayHandler extends DefaultHandler {
             context.startCreateCard(null, getEntityData(attributes));
         } else if (context != null && context.isCreateCard() && TAG.equalsIgnoreCase(qName)) {
             context.updateCreateCard(getTagData(attributes, EntityType.CARD));
-        } else if (context != null && ACTION.equalsIgnoreCase(qName) && context.isCreateAction()) {
-            context.createSubAction(null, getActionData(attributes));
         } else if (ACTION.equalsIgnoreCase(qName)) {
-            context.createAction(null, getActionData(attributes));
+            if (actionNestingCount == 1) {
+                context.createAction(null, getActionData(attributes));
+            } else if (actionNestingCount > 1) {
+                context.createSubAction(null, getActionData(attributes));
+            }
+            actionNestingCount++;
         } else if (context != null && (SHOW_ENTITY.equalsIgnoreCase(qName) || context.isUpdateCard() || HIDE_ENTITY.equalsIgnoreCase(qName))) {
             if (context.isUpdateCard() && TAG.equalsIgnoreCase(qName)) {
                 context.updateCurrentCard(getTagData(attributes, EntityType.CARD));
@@ -92,9 +97,7 @@ public class HSReplayHandler extends DefaultHandler {
                 entityType = EntityType.CARD;
             }
             Map<String, String> data = getTagData(attributes, entityType);
-            String entity = data.get(ENTITY);
-            data.remove(ENTITY);
-            context.tagChange(null, entity, data);
+            context.tagChange(null, Integer.toString(entityId), data);
         }
     }
 
@@ -108,7 +111,10 @@ public class HSReplayHandler extends DefaultHandler {
         } else if (FULL_ENTITY.equalsIgnoreCase(qName)) {
             context.endCreateCard(null);
         } else if (ACTION.equalsIgnoreCase(qName)) {
-            context.endAction();
+            if (actionNestingCount >= 1) {
+                context.endAction();
+            }
+            actionNestingCount--;
         } else if (SHOW_ENTITY.equalsIgnoreCase(qName)) {
             context.endUpdateCard(null);
         }
@@ -162,6 +168,8 @@ public class HSReplayHandler extends DefaultHandler {
             return Zone.getZoneByValue(originalTagValue).toString();
         } else if ("step".equalsIgnoreCase(tagName) || "nextStep".equalsIgnoreCase(tagName)) {
             return Step.getStepByValue(originalTagValue).toString();
+        } else if ("cardType".equalsIgnoreCase(tagName)) {
+            return CardType.getCardTypeByValue(originalTagValue).toString();
         }
         return originalTagValue;
     }

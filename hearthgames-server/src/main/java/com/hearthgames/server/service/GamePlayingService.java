@@ -8,8 +8,6 @@ import com.hearthgames.server.game.play.handler.PlayHandlers;
 import com.hearthgames.server.game.play.handler.Handler;
 import com.hearthgames.server.game.play.GameResult;
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -23,8 +21,6 @@ import java.util.Set;
 
 @Component
 public class GamePlayingService {
-
-    private static final Logger logger = LoggerFactory.getLogger(GamePlayingService.class);
 
     private CardService cardService;
     private PlayHandlers playHandlers = new PlayHandlers();
@@ -97,7 +93,7 @@ public class GamePlayingService {
         if (playContext.getActivity().isTagChange() || playContext.getActivity().isShowEntity() || playContext.getActivity().isHideEntity()) {
             copyNonNullProperties(playContext.getActivity().getDelta(), playContext.getContext().getEntityById(playContext.getActivity().getEntityId()));
             if (playContext.getActivity().isShowEntity()) {
-                Card c = ((Card) playContext.getActivity().getDelta());
+                Card c = (Card) playContext.getActivity().getDelta();
                 c.setCardDetails(cardService.getCardDetails(c.getCardid()));
             }
         }
@@ -110,7 +106,9 @@ public class GamePlayingService {
         Set<String> emptyNames = new LinkedHashSet<>();
         for(PropertyDescriptor pd : pds) {
             Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
+            if (srcValue == null) {
+                emptyNames.add(pd.getName());
+            }
         }
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
