@@ -14,8 +14,8 @@ public class CreateActionHandler extends AbstractHandler {
     private static final Pattern actionStartPattern = Pattern.compile("ACTION_START Entity=(.*?) BlockType=(.*?) Index=(.*?) Target=(.*)");
 
     @Override
-    public boolean supports(GameContext context, String line) {
-        return line != null && context != null && (context.isCreateAction() || line.startsWith(ACTION_START) || line.startsWith(ACTION_END));
+    protected boolean supportsLine(GameContext context, String line) {
+        return context.isCreateAction() || line.startsWith(ACTION_START) || line.startsWith(ACTION_END);
     }
 
     @Override

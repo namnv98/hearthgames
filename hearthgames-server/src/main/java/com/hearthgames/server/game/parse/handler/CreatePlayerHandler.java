@@ -15,8 +15,8 @@ public class CreatePlayerHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    public boolean supports(GameContext context, String line) {
-        return line != null && context != null && (line.startsWith(PLAYER) || context.isCreatePlayer());
+    protected boolean supportsLine(GameContext context, String line) {
+        return line.startsWith(PLAYER) || context.isCreatePlayer();
     }
 
     @Override

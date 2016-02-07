@@ -12,8 +12,8 @@ public class TagChangeHandler extends AbstractHandler {
     private static final Pattern tagPattern = Pattern.compile("tag=(.*?) value=(.*)");
 
     @Override
-    public boolean supports(GameContext context, String line) {
-        return line != null && context != null && line.startsWith(TAG_CHANGE_LINE) ;
+    protected boolean supportsLine(GameContext context, String line) {
+        return line.startsWith(TAG_CHANGE_LINE);
     }
 
     @Override

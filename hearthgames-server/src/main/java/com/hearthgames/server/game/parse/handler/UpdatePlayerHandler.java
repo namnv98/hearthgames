@@ -16,7 +16,7 @@ public class UpdatePlayerHandler extends AbstractHandler {
     private static final String GAME_ENTITY = "GameEntity";
 
     @Override
-    public boolean supports(GameContext context, String line) {
+    protected boolean supportsLine(GameContext context, String line) {
         // We are looking for the following line:
         // TAG_CHANGE Entity=<Player Name> tag=PLAYSTATE value=PLAYING
         // OR
@@ -24,7 +24,7 @@ public class UpdatePlayerHandler extends AbstractHandler {
         // This tells us that additional properties are being populated on players.  It is the first time we see
         // the player's name.  Unfortunately we have to wait till all the tag changes are complete
         // to find out what the player id is.
-        return line != null && context != null && !context.isGameUpdating() && (getPlayerName(line) != null || context.isUpdatePlayer());
+        return !context.isGameUpdating() && (getPlayerName(line) != null || context.isUpdatePlayer());
     }
 
     @Override

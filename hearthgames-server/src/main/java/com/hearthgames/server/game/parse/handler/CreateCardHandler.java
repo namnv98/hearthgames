@@ -14,8 +14,8 @@ public class CreateCardHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    public boolean supports(GameContext context, String line) {
-        return line != null && context != null && (line.startsWith(CREATE_CARD) || context.isCreateCard());
+    protected boolean supportsLine(GameContext context, String line) {
+        return line.startsWith(CREATE_CARD) || context.isCreateCard();
     }
 
     @Override

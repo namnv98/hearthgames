@@ -1,5 +1,6 @@
 package com.hearthgames.server.game.parse.handler;
 
+import com.hearthgames.server.game.parse.GameContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -23,12 +24,21 @@ public abstract class AbstractHandler implements Handler {
     private static final char CHAR_UNDERSCORE = '_';
     private static final String STRING_UNDERSCORE = "_";
 
+    @Override
+    public boolean supports(GameContext context, String line) {
+        return line != null && context != null && supportsLine(context, line);
+    }
+
+    protected abstract boolean supportsLine(GameContext context, String line);
+
     public String parseEntityStr(String line) {
         String parseEntityStr = null;
         if (line.startsWith(TAG_CHANGE_ENTITY)) {
             // We have 3 kinds of TAG_CHANGE entities.  One that is a enclosed in square brackets and one that name which may have spaces in it and one with an entity id
             String entityStr = line.replace(TAG_CHANGE_ENTITY, "");
-            if (!entityStr.contains(TAG_EQ)) return null;
+            if (!entityStr.contains(TAG_EQ)) {
+                return null;
+            }
             entityStr = entityStr.substring(0, entityStr.indexOf(SP_TAG_EQ));
             parseEntityStr =  parseEntity(entityStr);
         }

@@ -13,8 +13,8 @@ public class CreateGameEntityHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    public boolean supports(GameContext context, String line) {
-        return line != null && context != null && (line.startsWith(GAME_ENTITY) || context.isCreateGameEntity());
+    protected boolean supportsLine(GameContext context, String line) {
+        return line.startsWith(GAME_ENTITY) || context.isCreateGameEntity();
     }
 
     @Override

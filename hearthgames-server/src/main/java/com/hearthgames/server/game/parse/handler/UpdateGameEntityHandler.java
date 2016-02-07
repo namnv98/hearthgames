@@ -15,8 +15,8 @@ public class UpdateGameEntityHandler extends AbstractHandler {
     private static final String RUNNING = "RUNNING";
 
     @Override
-    public boolean supports(GameContext context, String line) {
-        return line != null && context != null && line.startsWith(TAG_CHANGE_ENTITY_GAME_ENTITY);
+    protected boolean supportsLine(GameContext context, String line) {
+        return line.startsWith(TAG_CHANGE_ENTITY_GAME_ENTITY);
     }
 
     @Override
