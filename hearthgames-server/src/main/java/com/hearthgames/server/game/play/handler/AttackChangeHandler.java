@@ -9,13 +9,16 @@ public class AttackChangeHandler implements Handler {
 
     @Override
     public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() && (playContext.getActivity().getDelta() instanceof Card) && playContext.getContext().getAfter(playContext.getActivity()).getAtk() != null && Zone.PLAY.eq(playContext.getContext().getBefore(playContext.getActivity()).getZone());
+        return playContext.getActivity().isTagChange() &&
+               playContext.getActivity().isCard() &&
+               playContext.getAfter().getAtk() != null &&
+               Zone.PLAY.eq(playContext.getBefore().getZone());
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
-        Card before = playContext.getContext().getBefore(playContext.getActivity());
-        Card after = playContext.getContext().getAfter(playContext.getActivity());
+        Card before = playContext.getBefore();
+        Card after = playContext.getAfter();
 
         int newAttack = Integer.parseInt(after.getAtk());
         int currentAttack = before.getAtk() == null ? before.getCardDetailsAttack() : Integer.parseInt(before.getAtk());

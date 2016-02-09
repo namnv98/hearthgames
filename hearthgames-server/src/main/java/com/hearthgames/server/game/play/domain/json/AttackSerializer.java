@@ -23,7 +23,7 @@ public class AttackSerializer extends JsonSerializer<Attack> {
             g.writeFieldName("cardId");
             g.writeString(value.getAttacker().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getAttacker().getId());
+            g.writeString(value.getAttacker().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getAttacker().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
@@ -43,7 +43,7 @@ public class AttackSerializer extends JsonSerializer<Attack> {
             g.writeFieldName("cardId");
             g.writeString(value.getDefender().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getDefender().getId());
+            g.writeString(value.getDefender().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getDefender().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
@@ -64,7 +64,7 @@ public class AttackSerializer extends JsonSerializer<Attack> {
                 g.writeFieldName("cardId");
                 g.writeString(value.getOriginalDefender().getCardDetailsId());
                 g.writeFieldName("id");
-                g.writeString(value.getOriginalDefender().getId());
+                g.writeString(value.getOriginalDefender().getEntityId());
                 g.writeFieldName("rarity");
                 g.writeString(value.getOriginalDefender().getCardDetailsRarity().toLowerCase());
             g.writeEndObject();

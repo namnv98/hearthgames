@@ -1,13 +1,16 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.parse.domain.*;
+import com.hearthgames.server.game.parse.domain.Activity;
+import com.hearthgames.server.game.parse.domain.Card;
+import com.hearthgames.server.game.parse.domain.GameEntity;
+import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.PlayContext;
 
 public class AttackHandler implements Handler {
 
     @Override
     public boolean supports(PlayContext playContext) {
-        if (playContext.getActivity().isTagChange() && (playContext.getActivity().getDelta() instanceof GameEntity)) {
+        if (playContext.getActivity().isTagChange() && playContext.getActivity().isGame()) {
             GameEntity after = (GameEntity) playContext.getActivity().getDelta();
             if (after.getStep() != null && GameEntity.Step.MAIN_COMBAT.eq(after.getStep())) {
                 return true;
@@ -21,8 +24,8 @@ public class AttackHandler implements Handler {
 
         Activity attack = getParentAttackActivity(playContext.getActivity());
         if (attack != null) {
-            Card attacker = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedAttacker());
-            Card defender = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedDefender());
+            Card attacker = playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedAttacker());
+            Card defender = playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedDefender());
             Player attackerController = null;
             if (attacker.getController().equals(playContext.getContext().getFriendlyPlayer().getController())) {
                 attackerController = playContext.getContext().getFriendlyPlayer();
@@ -32,7 +35,7 @@ public class AttackHandler implements Handler {
 
             Player defenderController = defender.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
 
-            Card originalDefender = playContext.getContext().getCardByEntityId(attack.getTarget().getEntityId());
+            Card originalDefender = playContext.getContext().getEntityById(attack.getTarget().getEntityId());
             if (originalDefender == defender) {
                 playContext.addAttack(attacker, defender, attackerController, defenderController);
             } else {
@@ -45,8 +48,12 @@ public class AttackHandler implements Handler {
     }
 
     private Activity getParentAttackActivity(Activity activity) {
-        if (activity == null) return null;
-        if (activity.isAttack()) return activity;
+        if (activity == null) {
+            return null;
+        }
+        if (activity.isAttack()) {
+            return activity;
+        }
         return getParentAttackActivity(activity.getParent());
     }
 }

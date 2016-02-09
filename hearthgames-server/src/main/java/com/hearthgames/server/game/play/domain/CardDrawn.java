@@ -2,7 +2,6 @@ package com.hearthgames.server.game.play.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.game.parse.domain.Entity;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.domain.json.CardDrawnSerializer;
 
@@ -15,12 +14,10 @@ public class CardDrawn implements Action, Serializable {
     private Card card;
     private Card trigger;
 
-    public CardDrawn(Player drawer, Card card, Entity trigger) {
+    public CardDrawn(Player drawer, Card card, Card trigger) {
         this.drawer = drawer;
         this.card = card;
-        if (trigger instanceof Card) {
-            this.trigger = (Card) trigger;
-        }
+        this.trigger = trigger;
     }
 
     public Player getDrawer() {

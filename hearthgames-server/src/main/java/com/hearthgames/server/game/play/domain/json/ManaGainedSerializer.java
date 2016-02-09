@@ -24,7 +24,7 @@ public class ManaGainedSerializer extends JsonSerializer<ManaGained> {
         g.writeEndObject();
 
         g.writeFieldName("amount");
-        g.writeNumber(value.getManaGained());
+        g.writeNumber(value.getAmount());
 
         g.writeEndObject();
     }

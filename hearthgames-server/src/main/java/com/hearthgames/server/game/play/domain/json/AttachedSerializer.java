@@ -22,7 +22,7 @@ public class AttachedSerializer extends JsonSerializer<Attached> {
             g.writeFieldName("cardId");
             g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getCard().getId());
+            g.writeString(value.getCard().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
@@ -34,7 +34,7 @@ public class AttachedSerializer extends JsonSerializer<Attached> {
             g.writeFieldName("cardId");
             g.writeString(value.getAttachedTo().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getAttachedTo().getId());
+            g.writeString(value.getAttachedTo().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getAttachedTo().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();

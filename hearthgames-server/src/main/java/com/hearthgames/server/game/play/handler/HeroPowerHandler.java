@@ -8,18 +8,17 @@ public class HeroPowerHandler implements Handler {
 
     @Override
     public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isPower() && playContext.getActivity().getDelta() instanceof Card;
+        return playContext.getActivity().isPower() &&
+               playContext.getActivity().isCard() &&
+               playContext.getBefore().isHeroPower();
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
-        Card card = playContext.getContext().getBefore(playContext.getActivity());
+        Card card = playContext.getBefore();
         Player player = playContext.getContext().getPlayerForCard(card);
 
-        if (Card.Type.HERO_POWER.eq(card.getCardtype())) {
-            playContext.addHeroPowerUsed(player, card);
-            return true;
-        }
-        return false;
+        playContext.addHeroPowerUsed(player, card);
+        return true;
     }
 }

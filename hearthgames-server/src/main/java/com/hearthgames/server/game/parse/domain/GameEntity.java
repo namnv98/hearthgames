@@ -41,7 +41,7 @@ import java.io.Serializable;
  *
  *
  */
-public class GameEntity extends Entity implements Serializable {
+public class GameEntity extends Card implements Serializable {
 
     private static final long serialVersionUID = 1;
 
@@ -73,9 +73,7 @@ public class GameEntity extends Entity implements Serializable {
     }
 
     private String turn;
-    private String zone;
     private String nextStep;
-    private String cardtype;
     private String state;
     private String step;
     private String numMinionsKilledThisTurn;
@@ -98,19 +96,6 @@ public class GameEntity extends Entity implements Serializable {
     }
 
     /**
-     * Gets the zone the match is in.  Other than when the match is initialized I don't see this ever get updated.
-     *
-     * @return a zone (only known value: PLAY)
-     */
-    public String getZone() {
-        return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
-
-    /**
      * Gets the next match step (See class description for the available steps)
      *
      * @return the next step in the match
@@ -121,19 +106,6 @@ public class GameEntity extends Entity implements Serializable {
 
     public void setNextStep(String nextStep) {
         this.nextStep = nextStep;
-    }
-
-    /**
-     * Gets the type of card the Game object is
-     *
-     * @return "Game".  Yes the Game object is a Card too!  But I didn't model it that way but that might change if I see the Game object behaving like a Card.
-     */
-    public String getCardtype() {
-        return cardtype;
-    }
-
-    public void setCardtype(String cardtype) {
-        this.cardtype = cardtype;
     }
 
     /**

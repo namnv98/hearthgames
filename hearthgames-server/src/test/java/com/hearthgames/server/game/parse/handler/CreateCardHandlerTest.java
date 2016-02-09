@@ -1,8 +1,9 @@
 package com.hearthgames.server.game.parse.handler;
 
-import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.log.domain.LogLineData;
+import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.domain.Card;
+import com.hearthgames.server.game.parse.domain.Player;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -49,9 +50,10 @@ public class CreateCardHandlerTest {
         }
 
         assertEquals(2, context.getCards().size());
-        assertEquals("1", context.getCards().get(0).getController());
-        assertEquals("MINION", context.getCards().get(0).getCardtype());
-        assertEquals("86", context.getCards().get(0).getEntityId());
+        Card card = context.getCards().values().iterator().next();
+        assertEquals("1", card.getController());
+        assertEquals("MINION", card.getCardtype());
+        assertEquals("86", card.getEntityId());
         assertEquals("1", context.getFriendlyPlayer().getTeamId());
         assertEquals("2", context.getOpposingPlayer().getTeamId());
 

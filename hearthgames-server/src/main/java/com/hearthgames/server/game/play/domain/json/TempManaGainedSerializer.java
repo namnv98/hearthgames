@@ -30,14 +30,14 @@ public class TempManaGainedSerializer extends JsonSerializer<TempManaGained> {
             g.writeFieldName("cardId");
             g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getCard().getId());
+            g.writeString(value.getCard().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
 
 
         g.writeFieldName("amount");
-        g.writeNumber(value.getTempManaGained());
+        g.writeNumber(value.getAmount());
 
 
         g.writeEndObject();

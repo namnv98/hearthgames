@@ -1,7 +1,6 @@
 package com.hearthgames.server.game.play.domain.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.hearthgames.server.game.play.domain.Damage;
@@ -10,7 +9,7 @@ import java.io.IOException;
 
 public class DamageSerializer extends JsonSerializer<Damage> {
     @Override
-    public void serialize(Damage value, JsonGenerator g, SerializerProvider serializers) throws IOException, JsonProcessingException {
+    public void serialize(Damage value, JsonGenerator g, SerializerProvider serializers) throws IOException {
         g.writeStartObject();
 
         g.writeFieldName("type");
@@ -23,7 +22,7 @@ public class DamageSerializer extends JsonSerializer<Damage> {
             g.writeFieldName("cardId");
             g.writeString(value.getDamager().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getDamager().getId());
+            g.writeString(value.getDamager().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getDamager().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
@@ -35,7 +34,7 @@ public class DamageSerializer extends JsonSerializer<Damage> {
             g.writeFieldName("cardId");
             g.writeString(value.getDamaged().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getDamaged().getId());
+            g.writeString(value.getDamaged().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getDamaged().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();

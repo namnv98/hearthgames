@@ -44,16 +44,16 @@ public class HeroStatsUtil {
     }
 
     public static Card getHeroCard(Player player, GameContext context) {
-        return context.getCardByEntityId(player.getHeroEntity());
+        return context.getEntityById(player.getHeroEntity());
     }
 
     public static Integer getCurrentHealth(Player player, GameContext context) {
-        Card heroCard = context.getCardByEntityId(player.getHeroEntity());
+        Card heroCard = context.getEntityById(player.getHeroEntity());
         return heroCard.getHealth() != null ? Integer.parseInt(heroCard.getHealth()) : 0;
     }
 
     public static Integer getCurrentArmor(Player player, GameContext context) {
-        Card heroCard = context.getCardByEntityId(player.getHeroEntity());
+        Card heroCard = context.getEntityById(player.getHeroEntity());
         Integer armor;
         try {
             armor = Integer.parseInt(heroCard.getArmor());
@@ -72,7 +72,7 @@ public class HeroStatsUtil {
                     break;
                 }
                 if (action instanceof ManaUsed) {
-                    manaUsed += ((ManaUsed) action).getManaUsed();
+                    manaUsed += ((ManaUsed) action).getAmount();
                 }
             }
         }
@@ -87,9 +87,9 @@ public class HeroStatsUtil {
                     break;
                 }
                 if (action instanceof ManaGained) {
-                    manaGained += ((ManaGained) action).getManaGained();
+                    manaGained += ((ManaGained) action).getAmount();
                 } else if (action instanceof TempManaGained) {
-                    manaGained += ((TempManaGained) action).getTempManaGained();
+                    manaGained += ((TempManaGained) action).getAmount();
                 }
             }
         }

@@ -1,9 +1,12 @@
 package com.hearthgames.server.game.play;
 
 import com.hearthgames.server.game.parse.GameContext;
-import com.hearthgames.server.game.parse.domain.*;
+import com.hearthgames.server.game.parse.domain.Activity;
+import com.hearthgames.server.game.parse.domain.Card;
+import com.hearthgames.server.game.parse.domain.Player;
+import com.hearthgames.server.game.parse.domain.Zone;
 import com.hearthgames.server.game.play.domain.*;
-import com.hearthgames.server.game.play.domain.board.*;
+import com.hearthgames.server.game.play.domain.board.Board;
 
 public class PlayContext {
 
@@ -11,6 +14,9 @@ public class PlayContext {
     private GameResult result;
 
     private Activity activity;
+
+    private Action lastAction = null;
+    private Action lastActionProcessed = null;
 
     public PlayContext(GameContext context, GameResult result) {
         this.context = context;
@@ -36,6 +42,15 @@ public class PlayContext {
     public Activity getActivity() {
         return activity;
     }
+
+    public Card getBefore() {
+        return context.getBefore(activity);
+    }
+
+    public Card getAfter() {
+        return activity.getDelta();
+    }
+
 
     public void setActivity(Activity activity) {
         this.activity = activity;
@@ -65,7 +80,7 @@ public class PlayContext {
         addAction(new ArmorChange(player, card, armor));
     }
 
-    public void addCardDrawn(Player beneficiary, Card card, Entity trigger) {
+    public void addCardDrawn(Player beneficiary, Card card, Card trigger) {
         addAction(new CardDrawn(beneficiary, card, trigger));
     }
 
@@ -81,7 +96,7 @@ public class PlayContext {
         addAction(new ManaGained(player, mana));
     }
 
-    public void addManaUsed(Player player, Entity entity, int mana) {
+    public void addManaUsed(Player player, Card entity, int mana) {
         addAction(new ManaUsed(player, entity, mana));
     }
 
@@ -141,10 +156,6 @@ public class PlayContext {
         // we add this so that if the last action is a ZonePositionChange we can capture it with the code below
         addAction(new EndOfTurn());
     }
-
-
-    private Action lastAction = null;
-    private Action lastActionProcessed = null;
 
     private void addAction(Action action) {
 

@@ -17,14 +17,16 @@ public class GameContext {
     private static final String NAME = "name";
     private static final String TEAM_ID = "teamId";
 
+    private static final String ID_EQUALS_ZERO = "0";
+
     private long activityId;
     private GameEntity gameEntity;
     private Player friendlyPlayer;
     private Player opposingPlayer;
-    private List<Card> cards = new ArrayList<>();
+    private Map<String, Card> cards = new HashMap<>();
     private List<String> startingCardIds = new ArrayList<>();
 
-    private Stack<Activity> activityStack = new Stack<>();
+    private Deque<Activity> activityStack = new ArrayDeque<>();
     private List<Activity> activities = new ArrayList<>();
 
     private Card currentCard;
@@ -58,12 +60,16 @@ public class GameContext {
         this.opposingPlayer = opposingPlayer;
     }
 
-    public Stack<Activity> getActivityStack() {
+    public Deque<Activity> getActivityStack() {
         return activityStack;
     }
 
-    public List<Card> getCards() {
+    public Map<String, Card> getCards() {
         return cards;
+    }
+
+    public void addCard(Card card) {
+        cards.put(card.getEntityId(), card);
     }
 
     public GameEntity getGameEntity() {
@@ -82,9 +88,11 @@ public class GameContext {
         return activities;
     }
 
-    public Entity getEntity(String entityStr) {
-        Entity entity = null;
-        if (entityStr == null || "0".equals(entityStr)) return null;
+    public Card getEntity(String entityStr) {
+        Card entity;
+        if (entityStr == null || ID_EQUALS_ZERO.equals(entityStr)) {
+            return Card.UNKNOWN;
+        }
         if (entityStr.equals(GAME_ENTITY) || gameEntity != null && entityStr.equals(gameEntity.getEntityId())) { // The match itself
             entity = gameEntity;
         } else if (friendlyPlayer.getName().equals(entityStr) || entityStr.equals(friendlyPlayer.getEntityId())) {
@@ -92,35 +100,22 @@ public class GameContext {
         } else if (opposingPlayer.getName().equals(entityStr) || entityStr.equals(opposingPlayer.getEntityId())) {
             entity = opposingPlayer;
         } else {
-            for (Card c: cards) {
-                if (c.getEntityId().equals(entityStr)) {
-                    entity = c;
-                    break;
-                }
-            }
+            entity = cards.get(entityStr);
         }
-        return entity;
+        return entity == null ? Card.UNKNOWN : entity;
     }
 
-    public Entity getEntityById(String id) {
-        if (gameEntity.getEntityId().equals(id)) return gameEntity;
-        if (friendlyPlayer.getEntityId().equals(id)) return friendlyPlayer;
-        if (opposingPlayer.getEntityId().equals(id)) return opposingPlayer;
-        for (Card c: cards) {
-            if (c.getEntityId().equals(id)) {
-                return c;
-            }
+    public Card getEntityById(String id) {
+        if (gameEntity.getEntityId().equals(id)) {
+            return gameEntity;
         }
-        return null;
-    }
-
-    public Card getCardByEntityId(String id) {
-        for (Card c: cards) {
-            if (c.getEntityId().equals(id)) {
-                return c;
-            }
+        if (friendlyPlayer.getEntityId().equals(id)) {
+            return friendlyPlayer;
         }
-        return null;
+        if (opposingPlayer.getEntityId().equals(id)) {
+            return opposingPlayer;
+        }
+        return cards.get(id);
     }
 
     public boolean isCreateAction() {
@@ -234,7 +229,7 @@ public class GameContext {
         return currentIndentLevel < previousIndentLevel && previousLine != null && !previousLine.trim().startsWith("tag=");
     }
 
-    public void populateEntity(Entity entity, Map<String, String> data) {
+    public void populateEntity(Card entity, Map<String, String> data) {
         for (Map.Entry<String, String> entry: data.entrySet()) {
             try {
                 String key = entry.getKey();
@@ -290,7 +285,7 @@ public class GameContext {
         getActivityStack().push(activity);
     }
 
-    public void createAction(LocalDateTime dateTime, String data[]) {
+    public void createAction(LocalDateTime dateTime, String[] data) {
         processPendingCardUpdate(dateTime);
         Activity activity = createActivity(dateTime, data);
         addActivity(activity);
@@ -299,15 +294,17 @@ public class GameContext {
     }
 
     public void endAction() {
-        if (getActivityStack().isEmpty()) return; // The log is missing data when spectating games.  So these games can't fully be serialized at the moment.
+        if (getActivityStack().isEmpty()) {
+            return; // The log is missing data when spectating games.  So these games can't fully be serialized at the moment.
+        }
         getActivityStack().pop();
     }
 
-    public Activity createActivity(LocalDateTime dateTime, String[]data) {
-        Entity entity = getEntity(data[0]);
+    public Activity createActivity(LocalDateTime dateTime, String[] data) {
+        Card entity = getEntity(data[0]);
         Activity.BlockType blockType = Activity.BlockType.valueOf(data[1]);
         String index = data[2];
-        Entity target = getEntity(data[3]);
+        Card target = getEntity(data[3]);
         return createActivity(dateTime, entity, blockType, index, target);
     }
 
@@ -335,7 +332,7 @@ public class GameContext {
         } else {
             card.setZone(Zone.DELAYED_PLAY.toString());
         }
-        getCards().add(getCurrentCard());
+        addCard(getCurrentCard());
 
         Activity activity = createActivity(dateTime, getCurrentCard());
         addActivity(activity);
@@ -390,19 +387,15 @@ public class GameContext {
     }
 
     public void tagChange(LocalDateTime dateTime, String entityStr, Map<String, String> data) {
-        Entity entity = getEntity(entityStr);
-        if (entity != null) {
-            Activity activity = createActivity(dateTime, Activity.Type.TAG_CHANGE, entity, data);
-            addActivity(activity);
-        }
+        Card entity = getEntity(entityStr);
+        Activity activity = createActivity(dateTime, Activity.Type.TAG_CHANGE, entity, data);
+        addActivity(activity);
     }
 
     public void hideEntity(LocalDateTime dateTime, String entityStr, Map<String, String> data) {
-        Entity entity = getEntity(entityStr);
-        if (entity != null) {
-            Activity activity = createActivity(dateTime, Activity.Type.HIDE_ENTITY, entity, data);
-            addActivity(activity);
-        }
+        Card entity = getEntity(entityStr);
+        Activity activity = createActivity(dateTime, Activity.Type.HIDE_ENTITY, entity, data);
+        addActivity(activity);
     }
 
     public void updateCurrentCard(Map<String, String> data) {
@@ -423,13 +416,11 @@ public class GameContext {
         // In all other cases the change of state of an entity is saved in an match activity but this is just a CARDID update
         // so having this data before hand during a replay of the match opens up extra information that was revealed later in the match
         // (example: we know what IDs of cards an opponent drew and mulliganed but later in the match we see those cards drawn again and revealed)
-        for (Card c: getCards()) {
-            if (c.getEntityId().equals(entityStr)) {
-                c.setCardid(cardId);
-                setCurrentCard(c);
-                tempCardData = new HashMap<>();
-                break;
-            }
+        Card c = cards.get(entityStr);
+        if (c.getEntityId().equals(entityStr)) {
+            c.setCardid(cardId);
+            setCurrentCard(c);
+            tempCardData = new HashMap<>();
         }
     }
 
@@ -460,32 +451,32 @@ public class GameContext {
         }
     }
 
-    public Activity createActivity(LocalDateTime dateTime, Entity entity) {
+    public Activity createActivity(LocalDateTime dateTime, Card entity) {
         Activity activity = new Activity();
         activity.setId(activityId++);
         activity.setDateTime(dateTime);
         activity.setDelta(entity);
         activity.setEntityId(entity.getEntityId());
-        if (entity instanceof Card) {
-            activity.setType(Activity.Type.NEW_CARD);
-        } else if (entity instanceof GameEntity) {
+        if (entity.isGame()) {
             activity.setType(Activity.Type.NEW_GAME);
-        } else if (entity instanceof Player) {
+        } else if (entity.isPlayer()) {
             activity.setType(Activity.Type.NEW_PLAYER);
+        } else {
+            activity.setType(Activity.Type.NEW_CARD);
         }
         return activity;
     }
 
-    public Activity createActivity(LocalDateTime dateTime, Activity.Type type, Entity entity, Map<String, String> entityData) {
-        Entity data = null;
-        if (entity instanceof Card) {
+    public Activity createActivity(LocalDateTime dateTime, Activity.Type type, Card entity, Map<String, String> entityData) {
+        Card data;
+        if (entity.isGame()) {
+            data = new GameEntity();
+        } else if (entity.isPlayer()) {
+            data = new Player();
+        } else {
             data = new Card();
             data.setEntityId(entity.getEntityId());
-            ((Card) data).setCardid(((Card) entity).getCardid());
-        } else if (entity instanceof GameEntity) {
-            data = new GameEntity();
-        } else if (entity instanceof Player) {
-            data = new Player();
+            data.setCardid(entity.getCardid());
         }
         populateEntity(data, entityData);
 
@@ -499,7 +490,7 @@ public class GameContext {
 
     }
 
-    public Activity createActivity(LocalDateTime dateTime, Entity entity, Activity.BlockType blockType, String index, Entity target) {
+    public Activity createActivity(LocalDateTime dateTime, Card entity, Activity.BlockType blockType, String index, Card target) {
         Activity activity = new Activity();
         activity.setDateTime(dateTime);
         activity.setId(activityId++);
@@ -514,7 +505,7 @@ public class GameContext {
 
     private void addActivity(Activity activity) {
         Activity currentActivity = null;
-        if (!getActivityStack().empty()) {
+        if (!getActivityStack().isEmpty()) {
             currentActivity = getActivityStack().peek();
         }
         if (currentActivity == null) {
@@ -534,11 +525,11 @@ public class GameContext {
     }
 
     public Card getBefore(Activity activity) {
-        return (Card) getEntityById(activity.getEntityId());
+        return getEntityById(activity.getEntityId());
     }
 
     public Card getAfter(Activity activity) {
-        return (Card) activity.getDelta();
+        return activity.getDelta();
     }
 
     public boolean isFriendly(Player player) {

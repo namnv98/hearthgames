@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.play.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.hearthgames.server.game.parse.domain.Entity;
+import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.domain.json.ManaUsedSerializer;
 
@@ -11,13 +11,13 @@ import java.io.Serializable;
 public class ManaUsed implements Action, Serializable {
 
     private Player player;
-    private Entity entity;
-    private int manaUsed;
+    private Card entity;
+    private int amount;
 
-    public ManaUsed(Player player, Entity card, int manaUsed) {
+    public ManaUsed(Player player, Card card, int amount) {
         this.player = player;
         this.entity = card;
-        this.manaUsed = manaUsed;
+        this.amount = amount;
     }
 
     public Player getPlayer() {
@@ -28,19 +28,19 @@ public class ManaUsed implements Action, Serializable {
         this.player = player;
     }
 
-    public int getManaUsed() {
-        return manaUsed;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setManaUsed(int manaUsed) {
-        this.manaUsed = manaUsed;
+    public void setAmount(int manaUsed) {
+        this.amount = manaUsed;
     }
 
-    public Entity getEntity() {
+    public Card getEntity() {
         return entity;
     }
 
-    public void setEntity(Entity entity) {
+    public void setEntity(Card entity) {
         this.entity = entity;
     }
 

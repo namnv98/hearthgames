@@ -3,11 +3,11 @@ package com.hearthgames.server.game.play.domain;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.domain.board.Board;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Turn implements Serializable {
+public class Turn {
 
     private int turnNumber;
 
@@ -20,6 +20,10 @@ public class Turn implements Serializable {
 
     private List<Action> actions = new ArrayList<>();
     private List<Action> actionsSinceLastBoard = new ArrayList<>();
+
+    public Turn(int turnNumber) {
+        this.turnNumber = turnNumber;
+    }
 
     public List<Action> getActions() {
         return actions;
@@ -36,10 +40,6 @@ public class Turn implements Serializable {
         this.actions.add(action);
     }
 
-    public Turn(int turnNumber) {
-        this.turnNumber = turnNumber;
-    }
-
     public int getTurnNumber() {
         return turnNumber;
     }
@@ -52,9 +52,9 @@ public class Turn implements Serializable {
         int sum = 0;
         for (Action a: actions) {
             if (a instanceof ManaGained) {
-                sum += ((ManaGained) a).getManaGained();
+                sum += ((ManaGained) a).getAmount();
             } else if (a instanceof TempManaGained) {
-                sum += ((TempManaGained) a).getTempManaGained();
+                sum += ((TempManaGained) a).getAmount();
             }
         }
         return sum;
@@ -64,7 +64,7 @@ public class Turn implements Serializable {
         int sum = 0;
         for (Action a: actions) {
             if (a instanceof ManaUsed) {
-                sum += ((ManaUsed) a).getManaUsed();
+                sum += ((ManaUsed) a).getAmount();
             }
         }
         return sum;
@@ -74,7 +74,7 @@ public class Turn implements Serializable {
         int sum = 0;
         for (Action a: actions) {
             if (a instanceof ManaSaved) {
-                sum += ((ManaSaved) a).getManaSaved();
+                sum += ((ManaSaved) a).getAmount();
             }
         }
         return sum;
@@ -84,7 +84,7 @@ public class Turn implements Serializable {
         int sum = 0;
         for (Action a: actions) {
             if (a instanceof ManaLost) {
-                sum += ((ManaLost) a).getManaLost();
+                sum += ((ManaLost) a).getAmount();
             }
         }
         return sum;

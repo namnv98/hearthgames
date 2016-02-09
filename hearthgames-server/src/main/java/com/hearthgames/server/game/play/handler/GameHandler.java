@@ -4,12 +4,15 @@ import com.hearthgames.server.game.parse.domain.*;
 import com.hearthgames.server.game.play.PlayContext;
 import org.springframework.stereotype.Component;
 
+import static com.hearthgames.server.game.play.handler.HandlerConstants.TRUE_OR_ONE;
+
 @Component
 public class GameHandler implements Handler {
 
     @Override
     public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() && playContext.getActivity().getDelta() instanceof GameEntity;
+        return playContext.getActivity().isTagChange() &&
+               playContext.getActivity().isGame();
     }
 
     public boolean handle(PlayContext playContext) {
@@ -18,8 +21,8 @@ public class GameHandler implements Handler {
 
         if ((before.getStep() == null && GameEntity.Step.BEGIN_MULLIGAN.eq(after.getStep())) ||
             (before.getStep() == null && GameEntity.Step.MAIN_READY.eq(after.getStep()))) {
-            Card friendlyHeroCard = playContext.getContext().getCardByEntityId(playContext.getContext().getFriendlyPlayer().getHeroEntity());
-            Card opposingHeroCard = playContext.getContext().getCardByEntityId(playContext.getContext().getOpposingPlayer().getHeroEntity());
+            Card friendlyHeroCard = playContext.getContext().getEntityById(playContext.getContext().getFriendlyPlayer().getHeroEntity());
+            Card opposingHeroCard = playContext.getContext().getEntityById(playContext.getContext().getOpposingPlayer().getHeroEntity());
             CardDetails friendlyCardDetails = friendlyHeroCard.getCardDetails();
             CardDetails opposingCardDetails = opposingHeroCard.getCardDetails();
             playContext.getContext().getFriendlyPlayer().setPlayerClass(friendlyCardDetails.getPlayerClass());
@@ -28,7 +31,7 @@ public class GameHandler implements Handler {
             playContext.getContext().getOpposingPlayer().setHeroCard(opposingHeroCard);
 
             playContext.addLoggingAction("The Game has started");
-            playContext.getContext().getCards().stream().filter(c -> Zone.HAND.eq(c.getZone())).filter(c -> playContext.getContext().getStartingCardIds().contains(c.getEntityId())).forEach(c -> {
+            playContext.getContext().getCards().values().stream().filter(c -> Zone.HAND.eq(c.getZone())).filter(c -> playContext.getContext().getStartingCardIds().contains(c.getEntityId())).forEach(c -> {
                 Player player = c.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
                 if (player == playContext.getContext().getFriendlyPlayer()) {
                     playContext.getResult().addFriendlyStartingCard(c);
@@ -71,13 +74,11 @@ public class GameHandler implements Handler {
             playContext.getResult().getCurrentTurn().setEndDateTime(playContext.getActivity().getDateTime());
         }
 
-        if (GameEntity.Step.MAIN_START.eq(after.getStep())) {
+        if (GameEntity.Step.MAIN_START.eq(after.getStep()) && playContext.getResult().getCurrentTurn().getManaGained() == 0) {
 
             // After 10 of one players turns the game automatically gives you 10 mana without recording it in the log.
             // I check here if the mana gained was still 0 after the MAIN_READY finishes, if so we set it to 10.
-            if (playContext.getResult().getCurrentTurn().getManaGained() == 0) {
-                playContext.addManaGained(playContext.getResult().getCurrentTurn().getWhoseTurn(), 10);
-            }
+            playContext.addManaGained(playContext.getResult().getCurrentTurn().getWhoseTurn(), 10);
         }
 
         if (after.getTurn() != null && playContext.getContext().getGameEntity().isGameRunning()) {

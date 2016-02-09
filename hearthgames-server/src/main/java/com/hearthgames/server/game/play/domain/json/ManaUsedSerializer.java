@@ -24,7 +24,7 @@ public class ManaUsedSerializer extends JsonSerializer<ManaUsed> {
         g.writeEndObject();
 
         g.writeFieldName("amount");
-        g.writeNumber(value.getManaUsed());
+        g.writeNumber(value.getAmount());
 
         g.writeEndObject();
     }

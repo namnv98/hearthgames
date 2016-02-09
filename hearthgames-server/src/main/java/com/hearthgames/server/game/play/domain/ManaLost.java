@@ -10,19 +10,19 @@ import java.io.Serializable;
 public class ManaLost implements Action, Serializable {
 
     private Card card;
-    private int manaLost;
+    private int amount;
 
-    public ManaLost(Card card, int manaLost) {
+    public ManaLost(Card card, int amount) {
         this.card = card;
-        this.manaLost = manaLost;
+        this.amount = amount;
     }
 
-    public int getManaLost() {
-        return manaLost;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setManaLost(int manaLost) {
-        this.manaLost = manaLost;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public Card getCard() {

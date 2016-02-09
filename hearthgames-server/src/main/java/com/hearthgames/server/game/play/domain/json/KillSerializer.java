@@ -25,7 +25,7 @@ public class KillSerializer extends JsonSerializer<Kill> {
             g.writeFieldName("cardId");
             g.writeString(value.getKiller().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getKiller().getId());
+            g.writeString(value.getKiller().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getKiller().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
@@ -37,7 +37,7 @@ public class KillSerializer extends JsonSerializer<Kill> {
             g.writeFieldName("cardId");
             g.writeString(value.getKilled().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getKilled().getId());
+            g.writeString(value.getKilled().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getKilled().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();

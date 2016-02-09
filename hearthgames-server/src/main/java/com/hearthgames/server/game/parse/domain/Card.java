@@ -1,6 +1,8 @@
 package com.hearthgames.server.game.parse.domain;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This represents one of the Entity found in the Hearthstone log file.
@@ -21,11 +23,18 @@ import java.io.Serializable;
  *
  *
  */
-public class Card extends Entity implements Serializable {
+public class Card implements Serializable {
 
     private static final long serialVersionUID = 1;
 
     public static final String THE_COIN = "GAME_005";
+
+    public static final Card UNKNOWN;
+
+    static {
+        UNKNOWN = new Card();
+        UNKNOWN.setEntityId("0");
+    }
 
     public enum Type {
         MINION,
@@ -33,77 +42,89 @@ public class Card extends Entity implements Serializable {
         ENCHANTMENT,
         WEAPON,
         HERO,
-        HERO_POWER;
+        HERO_POWER,
+        PLAYER,
+        GAME;
 
         public boolean eq(String type) {
             return this.toString().equalsIgnoreCase(type);
         }
     }
 
-    private String id;
-    private String cardid;
-    private String triggerVisual;
-    private String health;
-    private String armor;
-    private String atk;
-    private String cost;
-    private String zone;
-    private String controller;
-    private String cardtype;
-    private String rarity;
-    private String zonePosition;
-    private String attached;
-    private String faction;
-    private String cantPlay;
-    private String battlecry;
-    private String premium;
-    private String freeze;
-    private String elite;
-    private String creator;
-    private String deathrattle;
-    private String exhausted;
-    private String cardClass;
-    private String secret;
-    private String justPlayed;
-    private String ignoreDamageOff;
-    private String spellpower;
-    private String taunt;
-    private String cardTarget;
-    private String silence;
-    private String linkedcard;
-    private String charge;
-    private String topdeck;
-    private String cantBeDamaged;
-    private String numAttacksThisTurn;
-    private String attacking;
-    private String defending;
-    private String ignoreDamage;
-    private String aura;
-    private String aiOneShotKill;
-    private String combo;
-    private String toBeDestroyed;
-    private String affectedBySpellPower;
-    private String windfury;
-    private String divineShield;
-    private String lastAffectedBy;
-    private String recall;
-    private String recallOwed;
-    private String durability;
-    private String damage;
-    private String predamage;
-    private String revealed;
-    private String frozen;
-    private String silenced;
-    private String stealth;
+    protected String entityId;
+    protected Map<String, String> unknownTags = new HashMap<>();
 
-    private CardDetails cardDetails;
+    protected String cardid;
+    protected String triggerVisual;
+    protected String health;
+    protected String armor;
+    protected String atk;
+    protected String cost;
+    protected String zone;
+    protected String controller;
+    protected String cardtype;
+    protected String rarity;
+    protected String zonePosition;
+    protected String attached;
+    protected String faction;
+    protected String cantPlay;
+    protected String battlecry;
+    protected String premium;
+    protected String freeze;
+    protected String elite;
+    protected String creator;
+    protected String deathrattle;
+    protected String exhausted;
+    protected String cardClass;
+    protected String secret;
+    protected String justPlayed;
+    protected String ignoreDamageOff;
+    protected String spellpower;
+    protected String taunt;
+    protected String cardTarget;
+    protected String silence;
+    protected String linkedcard;
+    protected String charge;
+    protected String topdeck;
+    protected String cantBeDamaged;
+    protected String numAttacksThisTurn;
+    protected String attacking;
+    protected String defending;
+    protected String ignoreDamage;
+    protected String aura;
+    protected String aiOneShotKill;
+    protected String combo;
+    protected String toBeDestroyed;
+    protected String affectedBySpellPower;
+    protected String windfury;
+    protected String divineShield;
+    protected String lastAffectedBy;
+    protected String recall;
+    protected String recallOwed;
+    protected String durability;
+    protected String damage;
+    protected String predamage;
+    protected String revealed;
+    protected String frozen;
+    protected String silenced;
+    protected String stealth;
 
-    public String getId() {
-        return id == null ? entityId : id;
+    protected CardDetails cardDetails;
+
+    public String getEntityId() {
+        return entityId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEntityId(String entityId) {
+        this.entityId = entityId;
+    }
+
+    public Map<String, String> getUnknownTags() {
+        return unknownTags;
+    }
+
+    public void setUnknownTags(Map<String, String> unknownTags) {
+        this.unknownTags = unknownTags;
     }
 
     public String getCardid() {
@@ -598,6 +619,27 @@ public class Card extends Entity implements Serializable {
     public boolean isEnchantment() {
         return Type.ENCHANTMENT.eq(this.getCardtype()) || (this.getCardDetails() != null && "enchantment".equalsIgnoreCase(this.getCardDetails().getType()));
     }
+
+    public boolean isPlayer() {
+        return Type.PLAYER.eq(this.getCardtype());
+    }
+
+    public boolean isGame() {
+        return Type.GAME.eq(this.getCardtype());
+    }
+
+    public boolean isCard() {
+        return !isPlayer() && !isGame();
+    }
+
+    public boolean isHero() {
+        return Type.HERO.eq(this.getCardtype());
+    }
+
+    public boolean isHeroPower() {
+        return Type.HERO_POWER.eq(this.getCardtype());
+    }
+
 
     public static boolean isMinion(Card before, Card after) {
         return Card.Type.MINION.eq(before.getCardtype()) || (before.getCardDetails() != null && Type.MINION.eq(before.getCardDetails().getType())) || Card.Type.MINION.eq(after.getCardtype());

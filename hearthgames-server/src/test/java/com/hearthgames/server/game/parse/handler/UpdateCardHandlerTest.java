@@ -1,8 +1,8 @@
 package com.hearthgames.server.game.parse.handler;
 
-import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.log.domain.LogLineData;
+import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.domain.Card;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -10,6 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.time.LocalDateTime;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateCardHandlerTest {
@@ -23,13 +24,13 @@ public class UpdateCardHandlerTest {
 
         Card card = new Card();
         card.setEntityId("85");
-        context.getCards().add(card);
+        context.addCard(card);
         card = new Card();
         card.setEntityId("25");
-        context.getCards().add(card);
+        context.addCard(card);
         card = new Card();
         card.setEntityId("23");
-        context.getCards().add(card);
+        context.addCard(card);
 
         String[] lines = new String[11];
         lines[0] = "SHOW_ENTITY - Updating Entity=85 CardID=CS2_017o";
@@ -52,12 +53,12 @@ public class UpdateCardHandlerTest {
         }
 
         assertEquals(3, context.getCards().size());
-        assertEquals("CS2_017o", context.getCards().get(0).getCardid());
-        assertEquals("BRM_028", context.getCards().get(1).getCardid());
-        assertEquals("CS2_031", context.getCards().get(2).getCardid());
+        assertTrue(context.getCards().containsKey("85"));
+        assertTrue(context.getCards().containsKey("25"));
+        assertTrue(context.getCards().containsKey("23"));
         assertEquals(3, context.getActivities().size());
-        assertEquals("36", ((Card) context.getActivities().get(0).getDelta()).getAttached());
-        assertEquals("HAND", ((Card) context.getActivities().get(2).getDelta()).getZone());
+        assertEquals("36", context.getActivities().get(0).getDelta().getAttached());
+        assertEquals("HAND", context.getActivities().get(2).getDelta().getZone());
         assertEquals(false, context.isUpdateCard());
     }
 }

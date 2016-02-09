@@ -17,7 +17,7 @@ public class ManaLostSerializer extends JsonSerializer<ManaLost> {
         g.writeString("manaLost");
 
         g.writeFieldName("amount");
-        g.writeNumber(value.getManaLost());
+        g.writeNumber(value.getAmount());
 
         g.writeEndObject();
     }

@@ -3,10 +3,10 @@ package com.hearthgames.server.service;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.game.play.PlayContext;
-import com.hearthgames.server.game.play.handler.PlayHandlers;
-import com.hearthgames.server.game.play.handler.Handler;
 import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.handler.Handler;
+import com.hearthgames.server.game.play.handler.PlayHandlers;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.beans.PropertyDescriptor;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class GamePlayingService {
         result.setRank(rank);
 
         // Associate all the cards with their corresponding card details
-        List<Card> cards = context.getCards();
+        Collection<Card> cards = context.getCards().values();
         for (Card c: cards) {
             c.setCardDetails(cardService.getCardDetails(c.getCardid()));
         }
@@ -93,7 +94,7 @@ public class GamePlayingService {
         if (playContext.getActivity().isTagChange() || playContext.getActivity().isShowEntity() || playContext.getActivity().isHideEntity()) {
             copyNonNullProperties(playContext.getActivity().getDelta(), playContext.getContext().getEntityById(playContext.getActivity().getEntityId()));
             if (playContext.getActivity().isShowEntity()) {
-                Card c = (Card) playContext.getActivity().getDelta();
+                Card c = playContext.getActivity().getDelta();
                 c.setCardDetails(cardService.getCardDetails(c.getCardid()));
             }
         }

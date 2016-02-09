@@ -3,29 +3,35 @@ package com.hearthgames.server.game.play.handler;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.play.PlayContext;
 
+import static com.hearthgames.server.game.play.handler.HandlerConstants.FALSE_OR_ZERO;
+
 public class DamageHandler implements Handler {
     @Override
     public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange()
-                && (playContext.getActivity().getDelta() instanceof Card)
-                && !playContext.getContext().getBefore(playContext.getActivity()).isWeapon()
-                && playContext.getContext().getAfter(playContext.getActivity()).getPredamage() != null
-                && !FALSE_OR_ZERO.equals(playContext.getContext().getAfter(playContext.getActivity()).getPredamage());
+        return playContext.getActivity().isTagChange() &&
+               playContext.getActivity().isCard() &&
+               !playContext.getBefore().isWeapon() &&
+               isDamageDone(playContext);
+    }
+
+    private boolean isDamageDone(PlayContext playContext) {
+        return playContext.getAfter().getPredamage() != null &&
+               !FALSE_OR_ZERO.equals(playContext.getAfter().getPredamage());
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
-        Card before = playContext.getContext().getBefore(playContext.getActivity());
-        Card after = playContext.getContext().getAfter(playContext.getActivity());
+        Card before = playContext.getBefore();
+        Card after = playContext.getAfter();
 
-        Card attacker = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedAttacker());
-        Card defender = playContext.getContext().getCardByEntityId(playContext.getContext().getGameEntity().getProposedDefender());
+        Card attacker = playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedAttacker());
+        Card defender = playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedDefender());
         if (attacker == null && defender == null) {
-            if (playContext.getActivity().getParent().getDelta() instanceof Card && playContext.getActivity().getParent().getTarget() != null && playContext.getActivity().getParent().getTarget() instanceof Card) {
-                attacker = (Card) playContext.getActivity().getParent().getDelta();
-                defender = (Card) playContext.getActivity().getParent().getTarget();
+            if (playContext.getActivity().getParent().getTarget() != null) {
+                attacker = playContext.getActivity().getParent().getDelta();
+                defender = playContext.getActivity().getParent().getTarget();
             } else {
-                attacker = (Card) playContext.getActivity().getParent().getDelta();
+                attacker = playContext.getActivity().getParent().getDelta();
                 defender = before;
             }
         }

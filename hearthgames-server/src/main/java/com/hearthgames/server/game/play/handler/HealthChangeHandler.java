@@ -8,13 +8,16 @@ import com.hearthgames.server.game.play.PlayContext;
 public class HealthChangeHandler implements Handler {
     @Override
     public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() && (playContext.getActivity().getDelta() instanceof Card) && playContext.getContext().getAfter(playContext.getActivity()).getHealth() != null && Zone.PLAY.eq(playContext.getContext().getBefore(playContext.getActivity()).getZone());
+        return playContext.getActivity().isTagChange() &&
+               playContext.getActivity().isCard() &&
+               playContext.getAfter().getHealth() != null &&
+               Zone.PLAY.eq(playContext.getBefore().getZone());
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
-        Card before = playContext.getContext().getBefore(playContext.getActivity());
-        Card after = playContext.getContext().getAfter(playContext.getActivity());
+        Card before = playContext.getBefore();
+        Card after = playContext.getAfter();
 
         int newHealth = Integer.parseInt(after.getHealth());
         int currentHealth = before.getHealth() == null ? before.getCardDetailsHealth() : Integer.parseInt(before.getHealth());

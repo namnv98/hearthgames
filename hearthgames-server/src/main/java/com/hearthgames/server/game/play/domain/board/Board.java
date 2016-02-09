@@ -1,8 +1,8 @@
 package com.hearthgames.server.game.play.domain.board;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.parse.domain.Zone;
 import com.hearthgames.server.game.play.GameResult;
@@ -12,6 +12,7 @@ import com.hearthgames.server.game.play.domain.board.json.BoardSerializer;
 import com.hearthgames.server.util.HeroStatsUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -160,7 +161,7 @@ public class Board implements Action {
         Player friendlyPlayer = context.getFriendlyPlayer();
         Player opposingPlayer = context.getOpposingPlayer();
 
-        List<Card> cards = context.getCards();
+        Collection<Card> cards = context.getCards().values();
         for (Card card: cards) {
             if (Card.Type.HERO_POWER.eq(card.getCardtype()) && Zone.PLAY.eq(card.getZone()) && card.getController().equals(friendlyPlayer.getController())) {
                 friendlyHero.setPowerId(card.getCardid());
@@ -175,7 +176,7 @@ public class Board implements Action {
 
     private void setHeroCards(GameContext context, Hero friendlyHero, Hero opposingHero) {
 
-        for (Card c: context.getCards()) {
+        for (Card c: context.getCards().values()) {
             if (Zone.HAND.eq(c.getZone())) {
                 CardInHand cardInHand = new CardInHand();
                 cardInHand.setHealth(c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0);

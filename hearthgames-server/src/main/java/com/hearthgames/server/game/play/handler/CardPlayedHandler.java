@@ -9,13 +9,19 @@ public class CardPlayedHandler implements Handler {
 
     @Override
     public boolean supports(PlayContext playContext) {
-        return (playContext.getActivity().isTagChange() || playContext.getActivity().isShowEntity() || playContext.getActivity().isHideEntity()) && (playContext.getActivity().getDelta() instanceof Card) && playContext.getContext().getAfter(playContext.getActivity()).getZone() != null;
+        return isTagChangeOrShowEntityOrHideEntity(playContext) &&
+               playContext.getActivity().isCard() &&
+               playContext.getAfter().getZone() != null;
+    }
+
+    private boolean isTagChangeOrShowEntityOrHideEntity(PlayContext playContext) {
+        return playContext.getActivity().isTagChange() || playContext.getActivity().isShowEntity() || playContext.getActivity().isHideEntity();
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
-        Card before = playContext.getContext().getBefore(playContext.getActivity());
-        Card after = playContext.getContext().getAfter(playContext.getActivity());
+        Card before = playContext.getBefore();
+        Card after = playContext.getAfter();
         Player player = playContext.getContext().getPlayerForCard(before);
 
         if (Zone.HAND.eq(before.getZone()) && Zone.PLAY.eq(after.getZone()) && Card.isMinion(before, after)) {
@@ -33,7 +39,7 @@ public class CardPlayedHandler implements Handler {
         } else if (Zone.HAND.eq(before.getZone()) && Zone.PLAY.eq(after.getZone()) && Card.isSpell(before, after)) {
             playContext.addCardPlayed(Zone.HAND, Zone.PLAY, player, before);
         } else if (Zone.HAND.eq(before.getZone()) && Zone.GRAVEYARD.eq(after.getZone())) {
-            Card cause = (Card) playContext.getActivity().getParent().getDelta();
+            Card cause = playContext.getActivity().getParent().getDelta();
             Player causeController = playContext.getContext().getPlayer(cause);
             Player cardController = playContext.getContext().getPlayer(before);
             playContext.addCardDiscarded(causeController, cardController, Zone.HAND, Zone.GRAVEYARD, player, before, cause);

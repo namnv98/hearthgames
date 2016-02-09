@@ -2,7 +2,7 @@ package com.hearthgames.server.game.parse.domain;
 
 import java.io.Serializable;
 
-public class Player extends Entity implements Serializable {
+public class Player extends Card implements Serializable {
 
     private static final long serialVersionUID = 1;
 
@@ -32,10 +32,7 @@ public class Player extends Entity implements Serializable {
     private String starthandsize;
     private String playerId;
     private String teamId;
-    private String zone;
-    private String controller;
     private String maxresources;
-    private String cardtype;
     private String numTurnsLeft;
     private String numCardsDrawnThisTurn;
     private String mulliganState;
@@ -133,36 +130,12 @@ public class Player extends Entity implements Serializable {
         this.teamId = teamId;
     }
 
-    public String getZone() {
-        return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
-
-    public String getController() {
-        return controller;
-    }
-
-    public void setController(String controller) {
-        this.controller = controller;
-    }
-
     public String getMaxresources() {
         return maxresources;
     }
 
     public void setMaxresources(String maxresources) {
         this.maxresources = maxresources;
-    }
-
-    public String getCardtype() {
-        return cardtype;
-    }
-
-    public void setCardtype(String cardtype) {
-        this.cardtype = cardtype;
     }
 
     public String getNumTurnsLeft() {

@@ -40,7 +40,7 @@ public abstract class AbstractHandler implements Handler {
                 return null;
             }
             entityStr = entityStr.substring(0, entityStr.indexOf(SP_TAG_EQ));
-            parseEntityStr =  parseEntity(entityStr);
+            parseEntityStr = parseEntity(entityStr);
         }
         return parseEntityStr;
     }

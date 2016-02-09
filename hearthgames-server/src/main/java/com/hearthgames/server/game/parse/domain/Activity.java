@@ -12,8 +12,22 @@ public class Activity implements Serializable {
 
     private static final long serialVersionUID = 1;
 
-    public Activity() {
-    }
+    private Type type;
+
+    private long id;
+
+    private String entityId;
+
+    // Action Data
+    private LocalDateTime dateTime;
+    private Card delta;
+    private BlockType blockType;
+    private String index;
+    private Card target;
+
+    private Activity parent;
+
+    private List<Activity> children = new ArrayList<>();
 
     public enum Type {
         NEW_GAME,
@@ -35,14 +49,14 @@ public class Activity implements Serializable {
         JOUST("JOUST"),
         FATIGUE("FATIGUE");
 
-        private String blockType;
+        private String type;
 
-        BlockType(String blockType) {
-            this.blockType = blockType;
+        BlockType(String type) {
+            this.type = type;
         }
 
-        public String getBlockType() {
-            return blockType;
+        public String getType() {
+            return type;
         }
     }
 
@@ -52,6 +66,18 @@ public class Activity implements Serializable {
 
     public boolean isShowEntity() {
         return type == Type.SHOW_ENTITY;
+    }
+
+    public boolean isCard() {
+        return !(delta instanceof Player) && !(delta instanceof GameEntity);
+    }
+
+    public boolean isPlayer() {
+        return delta instanceof Player;
+    }
+
+    public boolean isGame() {
+        return delta instanceof GameEntity;
     }
 
     public boolean isHideEntity() {
@@ -102,28 +128,11 @@ public class Activity implements Serializable {
         return this.blockType != null && this.blockType.equals(BlockType.FATIGUE);
     }
 
-    private Type type;
-
-    private long id;
-
-    private String entityId;
-
-    // Action Data
-    LocalDateTime dateTime;
-    private Entity delta;
-    private BlockType blockType;
-    private String index;
-    private Entity target;
-
-    private Activity parent;
-
-    private List<Activity> children = new ArrayList<>();
-
-    public Entity getDelta() {
+    public Card getDelta() {
         return delta;
     }
 
-    public void setDelta(Entity delta) {
+    public void setDelta(Card delta) {
         this.delta = delta;
     }
 
@@ -143,11 +152,11 @@ public class Activity implements Serializable {
         this.index = index;
     }
 
-    public Entity getTarget() {
+    public Card getTarget() {
         return target;
     }
 
-    public void setTarget(Entity target) {
+    public void setTarget(Card target) {
         this.target = target;
     }
 
@@ -209,25 +218,22 @@ public class Activity implements Serializable {
         String entityType;
         if (delta instanceof Player) {
             entityType = "Player";
-        } else if (delta instanceof Card) {
-            entityType = "Card";
-        } else {
+        } else if (delta instanceof GameEntity) {
             entityType = "Game";
+        } else {
+            entityType = "Card";
         }
 
         String fields = type != Type.ACTION ? Arrays.toString(getNonNullPropertyNames(delta)) : "";
 
-        String blockType = this.blockType != null ? ", blockType=" + this.blockType : "";
+        String bt = this.blockType != null ? ", type=" + this.blockType : "";
 
         return "Activity{" +
                 "id=" + id+
-                ", type=" + type +
-                blockType +
+                ", type=" + type + bt +
                 ", delta=" + entityType +
                 ", fields= " + fields +
                 '}';
-
-
     }
 
     public static String[] getNonNullPropertyNames (Object source) {

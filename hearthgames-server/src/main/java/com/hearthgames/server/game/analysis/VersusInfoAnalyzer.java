@@ -33,8 +33,8 @@ public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
         info.setFriendlyName(context.getFriendlyPlayer().getName());
         info.setOpposingName(context.getOpposingPlayer().getName());
 
-        Card friendlyHeroCard = context.getCardByEntityId(context.getFriendlyPlayer().getHeroEntity());
-        Card opposingHeroCard = context.getCardByEntityId(context.getOpposingPlayer().getHeroEntity());
+        Card friendlyHeroCard = context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
+        Card opposingHeroCard = context.getEntityById(context.getOpposingPlayer().getHeroEntity());
 
         info.setFriendlyHeroCardId(friendlyHeroCard.getCardid());
         info.setOpposingHeroCardId(opposingHeroCard.getCardid());

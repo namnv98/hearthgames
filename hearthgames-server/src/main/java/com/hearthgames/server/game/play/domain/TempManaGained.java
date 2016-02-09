@@ -12,12 +12,12 @@ public class TempManaGained implements Action, Serializable {
 
     private Player player;
     private Card card;
-    private int tempManaGained;
+    private int amount;
 
-    public TempManaGained(Player player, Card card, int tempManaGained) {
+    public TempManaGained(Player player, Card card, int amount) {
         this.player = player;
         this.card = card;
-        this.tempManaGained = tempManaGained;
+        this.amount = amount;
     }
 
     public Player getPlayer() {
@@ -28,12 +28,12 @@ public class TempManaGained implements Action, Serializable {
         this.player = player;
     }
 
-    public int getTempManaGained() {
-        return tempManaGained;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setTempManaGained(int tempManaGained) {
-        this.tempManaGained = tempManaGained;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public Card getCard() {

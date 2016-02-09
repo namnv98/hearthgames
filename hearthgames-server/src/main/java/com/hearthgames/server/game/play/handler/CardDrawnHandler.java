@@ -9,12 +9,25 @@ public class CardDrawnHandler implements Handler {
 
     @Override
     public boolean supports(PlayContext playContext) {
-        return (playContext.getActivity().isShowEntity() || playContext.getActivity().isTagChange()) && (playContext.getActivity().getDelta() instanceof Card) && playContext.getContext().getAfter(playContext.getActivity()).getZone() != null && Zone.DECK.eq(playContext.getContext().getBefore(playContext.getActivity()).getZone()) && Zone.HAND.eq(playContext.getContext().getAfter(playContext.getActivity()).getZone());
+        return isShowEntityOrTagChange(playContext) &&
+               playContext.getActivity().isCard() &&
+               isCardFromDeckToHand(playContext);
+    }
+
+    private boolean isShowEntityOrTagChange(PlayContext playContext) {
+        return playContext.getActivity().isShowEntity() ||
+               playContext.getActivity().isTagChange();
+    }
+
+    private boolean isCardFromDeckToHand(PlayContext playContext) {
+        return playContext.getAfter().getZone() != null &&
+               Zone.DECK.eq(playContext.getBefore().getZone()) &&
+               Zone.HAND.eq(playContext.getAfter().getZone());
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
-        Card before = playContext.getContext().getBefore(playContext.getActivity());
+        Card before = playContext.getBefore();
         Player player = playContext.getContext().getPlayerForCard(before);
 
         if (playContext.getContext().getGameEntity().isMulliganOver()) {

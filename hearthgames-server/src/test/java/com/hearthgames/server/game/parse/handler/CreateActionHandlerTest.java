@@ -1,10 +1,10 @@
 package com.hearthgames.server.game.parse.handler;
 
+import com.hearthgames.server.game.log.domain.LogLineData;
+import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.GameEntity;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.parse.GameContext;
-import com.hearthgames.server.game.log.domain.LogLineData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -34,7 +34,7 @@ public class CreateActionHandlerTest {
 
         Card card = new Card();
         card.setEntityId("24");
-        context.getCards().add(card);
+        context.addCard(card);
 
 
         String[] lines = new String[7];

@@ -30,7 +30,7 @@ public class CardDrawnSerializer extends JsonSerializer<CardDrawn> {
             g.writeFieldName("cardId");
             g.writeString(value.getCard().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getCard().getId());
+            g.writeString(value.getCard().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getCard().getCardDetailsRarity().toLowerCase());
         g.writeEndObject();
@@ -43,7 +43,7 @@ public class CardDrawnSerializer extends JsonSerializer<CardDrawn> {
             g.writeFieldName("cardId");
             g.writeString(value.getTrigger().getCardDetailsId());
             g.writeFieldName("id");
-            g.writeString(value.getTrigger().getId());
+            g.writeString(value.getTrigger().getEntityId());
             g.writeFieldName("rarity");
             g.writeString(value.getTrigger().getCardDetailsRarity().toLowerCase());
             g.writeEndObject();

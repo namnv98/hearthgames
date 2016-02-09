@@ -9,14 +9,14 @@ public class ArmorChangeHandler implements Handler {
     @Override
     public boolean supports(PlayContext playContext) {
         return playContext.getActivity().isTagChange() &&
-               (playContext.getActivity().getDelta() instanceof Card) &&
-               playContext.getContext().getAfter(playContext.getActivity()).getArmor() != null;
+               playContext.getActivity().isCard() &&
+               playContext.getAfter().getArmor() != null;
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
-        Card before = playContext.getContext().getBefore(playContext.getActivity());
-        Card after = playContext.getContext().getAfter(playContext.getActivity());
+        Card before = playContext.getBefore();
+        Card after = playContext.getAfter();
 
         int armor = Integer.parseInt(after.getArmor());
         Player player = playContext.getContext().getPlayer(before);

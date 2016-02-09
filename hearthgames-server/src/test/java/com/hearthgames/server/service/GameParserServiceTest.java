@@ -2,7 +2,6 @@ package com.hearthgames.server.service;
 
 import com.hearthgames.server.HearthGamesServerApplication;
 import com.hearthgames.server.database.domain.GamePlayed;
-import com.hearthgames.server.database.domain.RawGameError;
 import com.hearthgames.server.database.repository.GamePlayedRepository;
 import com.hearthgames.server.database.repository.RawMatchErrorRepository;
 import com.hearthgames.server.database.service.GameService;
@@ -10,10 +9,9 @@ import com.hearthgames.server.game.analysis.domain.TurnInfo;
 import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
 import com.hearthgames.server.game.hsreplay.HSReplayHandler;
+import com.hearthgames.server.game.log.domain.RawGameData;
 import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.play.GameResult;
-import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.util.GameCompressionUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +23,10 @@ import org.xml.sax.InputSource;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.xpath.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -58,7 +57,10 @@ public class GameParserServiceTest {
     @Test
     public void shouldPlayHSReplay() throws Exception {
 
-        String xml = FileUtils.readFileToString(new File("/Users/milice/github/hearthgames/hearthgames-server/src/main/resources/test-data/ranked.hsreplay.xml"));
+        File file = new File("/Users/milice/github/hearthgames/hearthgames-server/src/main/resources/test-data/ranked.hsreplay.xml");
+        org.junit.Assume.assumeTrue(file.exists());
+
+        String xml = FileUtils.readFileToString(file);
         String[] rawGamesXml = xml.split("<Game ");
         List<String> rawGames = new ArrayList<>();
         for (String rawGame: rawGamesXml) {
@@ -112,7 +114,10 @@ public class GameParserServiceTest {
     @Test
     public void shouldPlayUncompressedGame() throws IOException {
 
-        List<String> lines = FileUtils.readLines(new File("c:\\games\\output_log.txt"));
+        File file = new File("c:\\games\\output_log.txt");
+        org.junit.Assume.assumeTrue(file.exists());
+
+        List<String> lines = FileUtils.readLines(file);
 
         String accountId = "";
         List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(lines);
@@ -147,40 +152,40 @@ public class GameParserServiceTest {
         System.out.println();
     }
 
-    @Test
-    public void shouldFixRawGameError() throws IOException {
-
-        Iterable<RawGameError> errors = rawMatchErrorRepository.findAll();
-
-        for (RawGameError rawGameError: errors) {
-
-            String gameData = GameCompressionUtils.decompressGameData(rawGameError.getRawGame());
-            String[] lines = gameData.split("\n");
-
-            FileUtils.writeStringToFile(new File("c:\\games\\error"+rawGameError.getId()), gameData);
-
-            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
-            try {
-                for (RawGameData rawGameData: rawGameDatas) {
-                    GameContext context = gameParserService.parseLines(rawGameData.getLines());
-                    GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
-
-                    GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
-                    GamePlayed sameGame = gameService.findSameGame(gamePlayed);
-                    if (sameGame == null) {
-                        gameService.saveGamePlayed(gamePlayed, context, result, true);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            System.out.println();
-
-        }
-
-
-    }
+//    @Test
+//    public void shouldFixRawGameError() throws IOException {
+//
+//        Iterable<RawGameError> errors = rawMatchErrorRepository.findAll();
+//
+//        for (RawGameError rawGameError: errors) {
+//
+//            String gameData = GameCompressionUtils.decompressGameData(rawGameError.getRawGame());
+//            String[] lines = gameData.split("\n");
+//
+//            FileUtils.writeStringToFile(new File("c:\\games\\error"+rawGameError.getId()), gameData);
+//
+//            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
+//            try {
+//                for (RawGameData rawGameData: rawGameDatas) {
+//                    GameContext context = gameParserService.parseLines(rawGameData.getLines());
+//                    GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
+//
+//                    GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+//                    GamePlayed sameGame = gameService.findSameGame(gamePlayed);
+//                    if (sameGame == null) {
+//                        gameService.saveGamePlayed(gamePlayed, context, result, true);
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//            System.out.println();
+//
+//        }
+//
+//
+//    }
 
 }

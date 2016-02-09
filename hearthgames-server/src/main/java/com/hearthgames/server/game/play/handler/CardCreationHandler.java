@@ -7,16 +7,17 @@ import com.hearthgames.server.game.play.PlayContext;
 public class CardCreationHandler implements Handler {
     @Override
     public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isNewCard() && playContext.getContext().getGameEntity().isGameRunning();
+        return playContext.getActivity().isNewCard() &&
+               playContext.getContext().getGameEntity().isGameRunning();
     }
 
     @Override
     public boolean handle(PlayContext playContext) {
         if (playContext.getActivity().getParent() == null || !playContext.getActivity().getParent().isJoust()) { // Cards created during the joust are not part of your deck but do represent a copy of card in your deck, they are temporary.
-            Card created = playContext.getContext().getAfter(playContext.getActivity());;
+            Card created = playContext.getAfter();;
             if (created.getController() != null && created.getCreator() != null) {
                 Player beneficiary = playContext.getContext().getPlayerForCard(created);
-                Card creator = playContext.getContext().getCardByEntityId(created.getCreator());
+                Card creator = playContext.getContext().getEntityById(created.getCreator());
                 Player creatorController = null;
                 Player createdController = playContext.getContext().getPlayer(created);
                 if (creator != null) {

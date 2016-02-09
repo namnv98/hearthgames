@@ -10,11 +10,11 @@ import java.io.Serializable;
 public class ManaGained implements Action, Serializable {
 
     private Player player;
-    private int manaGained;
+    private int amount;
 
-    public ManaGained(Player player, int manaGained) {
+    public ManaGained(Player player, int amount) {
         this.player = player;
-        this.manaGained = manaGained;
+        this.amount = amount;
     }
 
     public Player getPlayer() {
@@ -25,12 +25,12 @@ public class ManaGained implements Action, Serializable {
         this.player = player;
     }
 
-    public int getManaGained() {
-        return manaGained;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setManaGained(int manaGained) {
-        this.manaGained = manaGained;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
 }
