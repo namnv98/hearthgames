@@ -4,7 +4,7 @@ import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.Turn;
@@ -26,7 +26,7 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
     }
 
     @Override
-    public GenericTable analyze(GameResult result, GameContext context, RawGameData rawGameData) {
+    public GenericTable analyze(GameResult result, GameState gameState, RawGameData rawGameData) {
         GenericTable table = new GenericTable();
 
         GenericRow header = new GenericRow();
@@ -42,18 +42,18 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
         int friendlyManaNotNeeded = 0;
         int opposingManaNotNeeded = 0;
         int manaNotNeeded = result.getCurrentTurn().getManaGained() - result.getCurrentTurn().getManaUsed();
-        if (result.getCurrentTurn().getWhoseTurn() == context.getFriendlyPlayer()) {
+        if (result.getCurrentTurn().getWhoseTurn() == gameState.getFriendlyPlayer()) {
             friendlyManaNotNeeded = manaNotNeeded;
         } else {
             opposingManaNotNeeded = manaNotNeeded;
         }
 
         GenericRow friendly = new GenericRow();
-        long friendlyManaUsed = calcFriendlyManaUsed(result.getTurns(), context.getFriendlyPlayer());
-        long friendlyManaGained = calcFriendlyManaGained(result.getTurns(), context.getFriendlyPlayer());
-        long friendlyManaLost = calcFriendlyManaLost(result.getTurns(), context.getFriendlyPlayer());
-        long friendlyManaSaved = calcFriendlyManaSaved(result.getTurns(), context.getFriendlyPlayer());
-        friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
+        long friendlyManaUsed = calcFriendlyManaUsed(result.getTurns(), gameState.getFriendlyPlayer());
+        long friendlyManaGained = calcFriendlyManaGained(result.getTurns(), gameState.getFriendlyPlayer());
+        long friendlyManaLost = calcFriendlyManaLost(result.getTurns(), gameState.getFriendlyPlayer());
+        long friendlyManaSaved = calcFriendlyManaSaved(result.getTurns(), gameState.getFriendlyPlayer());
+        friendly.addColumn(new GenericColumn(gameState.getFriendlyPlayer().getName()));
         friendly.addColumn(new GenericColumn(""+friendlyManaUsed));
         friendly.addColumn(new GenericColumn(""+friendlyManaGained));
         friendly.addColumn(new GenericColumn(""+friendlyManaLost));
@@ -65,11 +65,11 @@ public class ManaSummaryAnalyzer implements Analyzer<GenericTable> {
         table.setFriendly(friendly);
 
         GenericRow opposing = new GenericRow();
-        long opposingManaUsed = calcOpposingManaUsed(result.getTurns(), context.getOpposingPlayer());
-        long opposingManaGained = calcOpposingManaGained(result.getTurns(), context.getOpposingPlayer());
-        long opposingManaLost = calcOpposingManaLost(result.getTurns(), context.getOpposingPlayer());
-        long opposingManaSaved = calcOpposingManaSaved(result.getTurns(), context.getOpposingPlayer());
-        opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
+        long opposingManaUsed = calcOpposingManaUsed(result.getTurns(), gameState.getOpposingPlayer());
+        long opposingManaGained = calcOpposingManaGained(result.getTurns(), gameState.getOpposingPlayer());
+        long opposingManaLost = calcOpposingManaLost(result.getTurns(), gameState.getOpposingPlayer());
+        long opposingManaSaved = calcOpposingManaSaved(result.getTurns(), gameState.getOpposingPlayer());
+        opposing.addColumn(new GenericColumn(gameState.getOpposingPlayer().getName()));
         opposing.addColumn(new GenericColumn(""+opposingManaUsed));
         opposing.addColumn(new GenericColumn(""+opposingManaGained));
         opposing.addColumn(new GenericColumn(""+opposingManaLost));

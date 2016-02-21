@@ -1,14 +1,15 @@
 package com.hearthgames.server.game.parse.handler;
 
-import static org.junit.Assert.*;
-
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.log.domain.LogLineData;
+import com.hearthgames.server.game.parse.GameState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateGameEntityHandlerTest {
@@ -18,7 +19,7 @@ public class CreateGameEntityHandlerTest {
 
         CreateGameEntityHandler handler = new CreateGameEntityHandler();
 
-        GameContext context = new GameContext();
+        GameState gameState = new GameState();
 
         String[] lines = new String[5];
         lines[0] = "    GameEntity EntityID=1".trim();
@@ -28,15 +29,15 @@ public class CreateGameEntityHandlerTest {
         lines[4] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(context, line)) {
+            if (handler.supports(gameState, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(context, logLineData);
+                handler.handle(gameState, logLineData);
             }
         }
 
-        assertNotNull(context.getGameEntity());
-        assertEquals("1", context.getGameEntity().getEntityId());
-        assertEquals("1", context.getGameEntity().getTurn());
-        assertEquals("RUNNING", context.getGameEntity().getState());
+        assertNotNull(gameState.getGameEntity());
+        assertEquals("1", gameState.getGameEntity().getEntityId());
+        assertEquals("1", gameState.getGameEntity().getTurn());
+        assertEquals("RUNNING", gameState.getGameEntity().getState());
     }
 }

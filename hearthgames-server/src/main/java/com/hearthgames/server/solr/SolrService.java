@@ -1,26 +1,21 @@
 package com.hearthgames.server.solr;
 
 import com.hearthgames.server.database.domain.GamePlayed;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.solr.domain.IndexedGamePlayed;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,20 +24,20 @@ public class SolrService {
 
     private SolrClient solr = new HttpSolrClient("http://localhost:8983/solr/hearthgames");
 
-    public void indexGame(GamePlayed gamePlayed, GameContext context, GameResult result) throws IOException, SolrServerException {
+    public void indexGame(GamePlayed gamePlayed, GameState gameState, GameResult result) throws IOException, SolrServerException {
 
         IndexedGamePlayed game = new IndexedGamePlayed();
         game.setId(gamePlayed.getId()+"");
         game.setFriendlyGameAccountId(gamePlayed.getFriendlyGameAccountId());
         game.setFriendlyName(gamePlayed.getFriendlyName());
         game.setFriendlyClass(gamePlayed.getFriendlyClass());
-        game.setFriendlyClassWon(result.getWinners().contains(context.getFriendlyPlayer()));
-        game.setFriendlyClassQuit(context.getFriendlyPlayer() == result.getQuitter());
+        game.setFriendlyClassWon(result.getWinners().contains(gameState.getFriendlyPlayer()));
+        game.setFriendlyClassQuit(gameState.getFriendlyPlayer() == result.getQuitter());
         game.setOpposingGameAccountId(gamePlayed.getOpposingGameAccountId());
         game.setOpposingName(gamePlayed.getOpposingName());
         game.setOpposingClass(gamePlayed.getOpposingClass());
-        game.setOpposingClassWon(result.getWinners().contains(context.getOpposingPlayer()));
-        game.setOpposingClassQuit(context.getOpposingPlayer() == result.getQuitter());
+        game.setOpposingClassWon(result.getWinners().contains(gameState.getOpposingPlayer()));
+        game.setOpposingClassQuit(gameState.getOpposingPlayer() == result.getQuitter());
         game.setRank(gamePlayed.getRank());
         game.setTurns(gamePlayed.getTurns());
         game.setStartTime(Timestamp.valueOf(gamePlayed.getStartTime()));

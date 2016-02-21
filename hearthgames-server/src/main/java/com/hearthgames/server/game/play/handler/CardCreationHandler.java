@@ -2,30 +2,30 @@ package com.hearthgames.server.game.play.handler;
 
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 
 public class CardCreationHandler implements Handler {
     @Override
-    public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isNewCard() &&
-               playContext.getContext().getGameEntity().isGameRunning();
+    public boolean supports(GameContext gameContext) {
+        return gameContext.getActivity().isNewCard() &&
+               gameContext.getGameState().getGameEntity().isGameRunning();
     }
 
     @Override
-    public boolean handle(PlayContext playContext) {
-        if (playContext.getActivity().getParent() == null || !playContext.getActivity().getParent().isJoust()) { // Cards created during the joust are not part of your deck but do represent a copy of card in your deck, they are temporary.
-            Card created = playContext.getAfter();;
+    public boolean handle(GameContext gameContext) {
+        if (gameContext.getActivity().getParent() == null || !gameContext.getActivity().getParent().isJoust()) { // Cards created during the joust are not part of your deck but do represent a copy of card in your deck, they are temporary.
+            Card created = gameContext.getAfter();;
             if (created.getController() != null && created.getCreator() != null) {
-                Player beneficiary = playContext.getContext().getPlayerForCard(created);
-                Card creator = playContext.getContext().getEntityById(created.getCreator());
+                Player beneficiary = gameContext.getGameState().getPlayerForCard(created);
+                Card creator = gameContext.getGameState().getEntityById(created.getCreator());
                 Player creatorController = null;
-                Player createdController = playContext.getContext().getPlayer(created);
+                Player createdController = gameContext.getGameState().getPlayer(created);
                 if (creator != null) {
-                    creatorController = playContext.getContext().getPlayer(creator);
+                    creatorController = gameContext.getGameState().getPlayer(creator);
                 }
 
                 if (!created.isEnchantment()) {
-                    playContext.addCardCreation(creatorController, createdController, beneficiary, creator, created);
+                    gameContext.addCardCreation(creatorController, createdController, beneficiary, creator, created);
                 }
                 return true;
             }

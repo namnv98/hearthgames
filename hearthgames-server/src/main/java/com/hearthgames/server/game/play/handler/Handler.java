@@ -1,11 +1,11 @@
 package com.hearthgames.server.game.play.handler;
 
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 
 public interface Handler {
 
-    boolean supports(PlayContext playContext);
+    boolean supports(GameContext gameContext);
 
-    boolean handle(PlayContext playContext);
+    boolean handle(GameContext gameContext);
 
 }

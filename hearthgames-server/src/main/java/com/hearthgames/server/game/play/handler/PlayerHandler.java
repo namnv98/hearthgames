@@ -3,7 +3,7 @@ package com.hearthgames.server.game.play.handler;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.CardDetails;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 import org.springframework.stereotype.Component;
 
 import static com.hearthgames.server.game.play.handler.HandlerConstants.FALSE_OR_ZERO;
@@ -13,16 +13,16 @@ import static com.hearthgames.server.game.play.handler.HandlerConstants.TRUE_OR_
 public class PlayerHandler implements Handler {
 
     @Override
-    public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() && playContext.getActivity().getDelta() instanceof Player;
+    public boolean supports(GameContext gameContext) {
+        return gameContext.getActivity().isTagChange() && gameContext.getActivity().getDelta() instanceof Player;
     }
 
-    public boolean handle(PlayContext playContext) {
-        Player before = (Player) playContext.getContext().getEntityById(playContext.getActivity().getEntityId());
-        Player after = (Player) playContext.getActivity().getDelta();
+    public boolean handle(GameContext gameContext) {
+        Player before = (Player) gameContext.getGameState().getEntityById(gameContext.getActivity().getEntityId());
+        Player after = (Player) gameContext.getActivity().getDelta();
 
         if (after.getNumTurnsLeft() != null && FALSE_OR_ZERO.equals(after.getNumTurnsLeft())) {
-            playContext.addEndofTurn();
+            gameContext.addEndofTurn();
         }
 
         if (after.getNumOptions() != null) {
@@ -31,50 +31,50 @@ public class PlayerHandler implements Handler {
         }
 
         if (after.getPlaystate() != null && (Player.PlayState.QUIT.eq(after.getPlaystate()) || Player.PlayState.CONCEDED.eq(after.getPlaystate()))) {
-            playContext.addLoggingAction(before.getName() + " has quit.");
-            playContext.getResult().setQuitter(before);
+            gameContext.addLoggingAction(before.getName() + " has quit.");
+            gameContext.getResult().setQuitter(before);
         }
         if (after.getPlaystate() != null && Player.PlayState.WON.eq(after.getPlaystate())) {
-            playContext.addLoggingAction(before.getName() + " has won.");
-            playContext.getResult().getWinners().add(before);
+            gameContext.addLoggingAction(before.getName() + " has won.");
+            gameContext.getResult().getWinners().add(before);
         }
         if (after.getPlaystate() != null && Player.PlayState.LOST.eq(after.getPlaystate())) {
-            playContext.addLoggingAction(before.getName() + " has lost.");
-            playContext.getResult().getLosers().add(before);
+            gameContext.addLoggingAction(before.getName() + " has lost.");
+            gameContext.getResult().getLosers().add(before);
         }
         if (TRUE_OR_ONE.equals(before.getFirstPlayer())) {
-            playContext.getResult().setFirst(before);
+            gameContext.getResult().setFirst(before);
         }
 
         if (after.getResources() != null) {
-            playContext.addManaGained(playContext.getResult().getCurrentTurn().getWhoseTurn(), Integer.parseInt(after.getResources()));
-        } else if (after.getResourcesUsed() != null && !HandlerConstants.FALSE_OR_ZERO.equals(after.getResourcesUsed()) && before == playContext.getResult().getCurrentTurn().getWhoseTurn()) {
-            Card usedOn = playContext.getActivity().getParent().getDelta();
+            gameContext.addManaGained(gameContext.getResult().getCurrentTurn().getWhoseTurn(), Integer.parseInt(after.getResources()));
+        } else if (after.getResourcesUsed() != null && !HandlerConstants.FALSE_OR_ZERO.equals(after.getResourcesUsed()) && before == gameContext.getResult().getCurrentTurn().getWhoseTurn()) {
+            Card usedOn = gameContext.getActivity().getParent().getDelta();
 
-            int manaUsed = Integer.parseInt(after.getResourcesUsed()) - playContext.getResult().getCurrentTurn().getManaUsed();
-            if (playContext.getResult().getCurrentTurn().getTempManaUsed() > 0) {
-                manaUsed += playContext.getResult().getCurrentTurn().getTempManaUsed();
-                playContext.getResult().getCurrentTurn().setTempManaUsed(0);
+            int manaUsed = Integer.parseInt(after.getResourcesUsed()) - gameContext.getResult().getCurrentTurn().getManaUsed();
+            if (gameContext.getResult().getCurrentTurn().getTempManaUsed() > 0) {
+                manaUsed += gameContext.getResult().getCurrentTurn().getTempManaUsed();
+                gameContext.getResult().getCurrentTurn().setTempManaUsed(0);
             }
-            playContext.addManaUsed(playContext.getResult().getCurrentTurn().getWhoseTurn(), usedOn, manaUsed);
+            gameContext.addManaUsed(gameContext.getResult().getCurrentTurn().getWhoseTurn(), usedOn, manaUsed);
 
-            if (playContext.getActivity().getParent().getDelta().isCard()) {
+            if (gameContext.getActivity().getParent().getDelta().isCard()) {
                 CardDetails cardDetails = usedOn.getCardDetails();
                 if (cardDetails != null) {
                     int cost = cardDetails.getCost();
                     if (manaUsed < cost) {
-                        playContext.addManaSaved(usedOn, cost - manaUsed);
+                        gameContext.addManaSaved(usedOn, cost - manaUsed);
                     } else if (manaUsed > cost){
-                        playContext.addManaLost(usedOn, manaUsed - cost);
+                        gameContext.addManaLost(usedOn, manaUsed - cost);
                     }
                 }
             }
         } else if ((before.getTempResources() == null || HandlerConstants.FALSE_OR_ZERO.equals(before.getTempResources())) && after.getTempResources() != null) {
-            Card fromCard = playContext.getActivity().getParent().getDelta();
-            playContext.addTempManaGained(playContext.getResult().getCurrentTurn().getWhoseTurn(), fromCard, Integer.parseInt(after.getTempResources()));
+            Card fromCard = gameContext.getActivity().getParent().getDelta();
+            gameContext.addTempManaGained(gameContext.getResult().getCurrentTurn().getWhoseTurn(), fromCard, Integer.parseInt(after.getTempResources()));
         } else if (before.getTempResources() != null && after.getTempResources() != null) {
             int tempManaUsed = Integer.parseInt(before.getTempResources()) - Integer.parseInt(after.getTempResources());
-            playContext.getResult().getCurrentTurn().setTempManaUsed(tempManaUsed);
+            gameContext.getResult().getCurrentTurn().setTempManaUsed(tempManaUsed);
         }
         return true;
     }

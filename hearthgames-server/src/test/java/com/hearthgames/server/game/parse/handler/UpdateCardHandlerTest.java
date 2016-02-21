@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.parse.handler;
 
 import com.hearthgames.server.game.log.domain.LogLineData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,17 +20,17 @@ public class UpdateCardHandlerTest {
 
         UpdateCardHandler handler = new UpdateCardHandler();
 
-        GameContext context = new GameContext();
+        GameState gameState = new GameState();
 
         Card card = new Card();
         card.setEntityId("85");
-        context.addCard(card);
+        gameState.addCard(card);
         card = new Card();
         card.setEntityId("25");
-        context.addCard(card);
+        gameState.addCard(card);
         card = new Card();
         card.setEntityId("23");
-        context.addCard(card);
+        gameState.addCard(card);
 
         String[] lines = new String[11];
         lines[0] = "SHOW_ENTITY - Updating Entity=85 CardID=CS2_017o";
@@ -46,19 +46,19 @@ public class UpdateCardHandlerTest {
         lines[10] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(context, line)) {
+            if (handler.supports(gameState, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(context, logLineData);
+                handler.handle(gameState, logLineData);
             }
         }
 
-        assertEquals(3, context.getCards().size());
-        assertTrue(context.getCards().containsKey("85"));
-        assertTrue(context.getCards().containsKey("25"));
-        assertTrue(context.getCards().containsKey("23"));
-        assertEquals(3, context.getActivities().size());
-        assertEquals("36", context.getActivities().get(0).getDelta().getAttached());
-        assertEquals("HAND", context.getActivities().get(2).getDelta().getZone());
-        assertEquals(false, context.isUpdateCard());
+        assertEquals(3, gameState.getCards().size());
+        assertTrue(gameState.getCards().containsKey("85"));
+        assertTrue(gameState.getCards().containsKey("25"));
+        assertTrue(gameState.getCards().containsKey("23"));
+        assertEquals(3, gameState.getActivities().size());
+        assertEquals("36", gameState.getActivities().get(0).getDelta().getAttached());
+        assertEquals("HAND", gameState.getActivities().get(2).getDelta().getZone());
+        assertEquals(false, gameState.isUpdateCard());
     }
 }

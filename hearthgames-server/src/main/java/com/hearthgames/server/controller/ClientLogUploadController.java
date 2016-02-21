@@ -3,7 +3,7 @@ package com.hearthgames.server.controller;
 import com.hearthgames.server.database.domain.GamePlayed;
 import com.hearthgames.server.database.service.GameService;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.service.GameParserService;
 import com.hearthgames.server.service.GamePlayingService;
@@ -141,17 +141,17 @@ public class ClientLogUploadController {
                 RawGameData rawGameData = rawGameDatas.get(0);
 
                 try {
-                    GameContext context = gameParserService.parseLines(rawGameData.getLines());
-                    GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
+                    GameState gameState = gameParserService.parseLines(rawGameData.getLines());
+                    GameResult result = gamePlayingService.processGame(gameState, rawGameData.getRank());
 
-                    GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+                    GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, gameState, result, null);
                     gamePlayed.setStartTime(getDateTimeFromTimestamp(request.getStartTime()));
                     gamePlayed.setEndTime(getDateTimeFromTimestamp(request.getEndTime()));
                     gamePlayed.setRank(rawGameData.getRank());
 
                     GamePlayed sameGame = gameService.findSameGame(gamePlayed);
                     if (sameGame == null) {
-                        gameService.saveGamePlayed(gamePlayed, context, result, true);
+                        gameService.saveGamePlayed(gamePlayed, gameState, result, true);
                     }
                     Long gameId = sameGame != null ? sameGame.getId() : gamePlayed.getId();
                     RecordGameResponse response = new RecordGameResponse();

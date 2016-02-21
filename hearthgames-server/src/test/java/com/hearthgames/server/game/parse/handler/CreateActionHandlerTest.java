@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.parse.handler;
 
 import com.hearthgames.server.game.log.domain.LogLineData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.GameEntity;
 import com.hearthgames.server.game.parse.domain.Player;
@@ -21,20 +21,20 @@ public class CreateActionHandlerTest {
 
         CreateActionHandler handler = new CreateActionHandler();
 
-        GameContext context = new GameContext();
+        GameState gameState = new GameState();
         GameEntity gameEntity = new GameEntity();
         gameEntity.setState("RUNNING");
-        context.setGameEntity(gameEntity);
+        gameState.setGameEntity(gameEntity);
         Player friendlyPlayer = new Player();
         friendlyPlayer.setName("Seekay");
-        context.setFriendlyPlayer(friendlyPlayer);
+        gameState.setFriendlyPlayer(friendlyPlayer);
         Player opposingPlayer = new Player();
         opposingPlayer.setName("Another Player");
-        context.setOpposingPlayer(opposingPlayer);
+        gameState.setOpposingPlayer(opposingPlayer);
 
         Card card = new Card();
         card.setEntityId("24");
-        context.addCard(card);
+        gameState.addCard(card);
 
 
         String[] lines = new String[7];
@@ -47,14 +47,14 @@ public class CreateActionHandlerTest {
         lines[6] = "ACTION_END";
 
         for (String line: lines) {
-            if (handler.supports(context, line)) {
+            if (handler.supports(gameState, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(context, logLineData);
+                handler.handle(gameState, logLineData);
             }
         }
 
-        assertEquals(1, context.getActivities().size());
-        assertEquals(1, context.getActivities().get(0).getChildren().size());
+        assertEquals(1, gameState.getActivities().size());
+        assertEquals(1, gameState.getActivities().get(0).getChildren().size());
     }
 
 }

@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.parse.handler;
 
 import com.hearthgames.server.game.log.domain.LogLineData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -13,20 +13,20 @@ public class CreateGameEntityHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    protected boolean supportsLine(GameContext context, String line) {
-        return line.startsWith(GAME_ENTITY) || context.isCreateGameEntity();
+    protected boolean supportsLine(GameState gameState, String line) {
+        return line.startsWith(GAME_ENTITY) || gameState.isCreateGameEntity();
     }
 
     @Override
-    public boolean handle(GameContext context, LogLineData logLineData) {
+    public boolean handle(GameState gameState, LogLineData logLineData) {
         String line = logLineData.getTrimmedLine();
-        if (context.isCreateGameEntity() && line.startsWith(TAG)) { // are we populating match data?
+        if (gameState.isCreateGameEntity() && line.startsWith(TAG)) { // are we populating match data?
             Map<String, String> data = getKeyValueData(line, tagPattern);
-            context.updateCreateGame(data);
-        } else if (!context.isCreateGameEntity() && line.startsWith(GAME_ENTITY)) { // found the directive to create a match
-            context.startCreateGame();
+            gameState.updateCreateGame(data);
+        } else if (!gameState.isCreateGameEntity() && line.startsWith(GAME_ENTITY)) { // found the directive to create a match
+            gameState.startCreateGame();
         } else { // we must have found something else to create/populate
-            context.endCreateGame(logLineData.getDateTime());
+            gameState.endCreateGame(logLineData.getDateTime());
             return false;
         }
         return true;

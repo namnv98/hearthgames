@@ -1,10 +1,10 @@
 package com.hearthgames.server.game.analysis;
 
+import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
-import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.CardDetails;
 import com.hearthgames.server.game.play.GameResult;
@@ -18,7 +18,7 @@ import java.util.List;
 public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
 
     @Override
-    public GenericTable analyze(GameResult result, GameContext context, RawGameData rawGameData) {
+    public GenericTable analyze(GameResult result, GameState gameState, RawGameData rawGameData) {
 
         GenericTable table = new GenericTable();
 
@@ -30,7 +30,7 @@ public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
         table.setHeader(header);
 
         GenericRow friendly = new GenericRow();
-        friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
+        friendly.addColumn(new GenericColumn(gameState.getFriendlyPlayer().getName()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyStartingCards()));
         friendly.addColumn(new GenericColumn<>(result.getFriendlyMulliganedCards()));
 
@@ -51,7 +51,7 @@ public class CardSummaryAnalyzer implements Analyzer<GenericTable> {
         table.setFriendly(friendly);
 
         GenericRow opposing = new GenericRow();
-        opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
+        opposing.addColumn(new GenericColumn(gameState.getOpposingPlayer().getName()));
         opposing.addColumn(new GenericColumn<>(result.getOpposingStartingCards()));
         opposing.addColumn(new GenericColumn<>(result.getOpposingMulliganedCards()));
         opposing.addColumn(new GenericColumn<>(result.getOpposingDeckCards()));

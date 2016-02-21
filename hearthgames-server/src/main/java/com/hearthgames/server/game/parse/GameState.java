@@ -9,9 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class GameContext {
+public class GameState {
 
-    private static final Logger logger = LoggerFactory.getLogger(GameContext.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameState.class);
 
     private static final String GAME_ENTITY = "GameEntity";
     private static final String NAME = "name";
@@ -457,9 +457,9 @@ public class GameContext {
         activity.setDateTime(dateTime);
         activity.setDelta(entity);
         activity.setEntityId(entity.getEntityId());
-        if (entity.isGame()) {
+        if (entity instanceof GameEntity || entity.isGame()) {
             activity.setType(Activity.Type.NEW_GAME);
-        } else if (entity.isPlayer()) {
+        } else if (entity instanceof Player || entity.isPlayer()) {
             activity.setType(Activity.Type.NEW_PLAYER);
         } else {
             activity.setType(Activity.Type.NEW_CARD);
@@ -469,9 +469,9 @@ public class GameContext {
 
     public Activity createActivity(LocalDateTime dateTime, Activity.Type type, Card entity, Map<String, String> entityData) {
         Card data;
-        if (entity.isGame()) {
+        if (entity instanceof GameEntity || entity.isGame()) {
             data = new GameEntity();
-        } else if (entity.isPlayer()) {
+        } else if (entity instanceof Player || entity.isPlayer()) {
             data = new Player();
         } else {
             data = new Card();

@@ -1,14 +1,15 @@
 package com.hearthgames.server.game.parse.handler;
 
-import static org.junit.Assert.*;
-
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.log.domain.LogLineData;
+import com.hearthgames.server.game.parse.GameState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreatePlayerHandlerTest {
@@ -18,7 +19,7 @@ public class CreatePlayerHandlerTest {
 
         CreatePlayerHandler handler = new CreatePlayerHandler();
 
-        GameContext context = new GameContext();
+        GameState gameState = new GameState();
 
         String[] lines = new String[33];
         lines[0]  = "Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115193835963207 lo=35548956]";
@@ -56,21 +57,21 @@ public class CreatePlayerHandlerTest {
         lines[32] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(context, line)) {
+            if (handler.supports(gameState, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(context, logLineData);
+                handler.handle(gameState, logLineData);
             }
         }
 
-        assertNotNull(context.getFriendlyPlayer());
-        assertNotNull(context.getOpposingPlayer());
-        assertEquals("35548956", context.getFriendlyPlayer().getGameAccountIdLo());
-        assertEquals("26973114", context.getOpposingPlayer().getGameAccountIdLo());
-        assertEquals("1", context.getOpposingPlayer().getFirstPlayer());
-        assertEquals("1", context.getFriendlyPlayer().getTeamId());
-        assertEquals("2", context.getOpposingPlayer().getTeamId());
-        assertEquals("4", context.getFriendlyPlayer().getNumCardsDrawnThisTurn());
-        assertEquals("3", context.getOpposingPlayer().getNumCardsDrawnThisTurn());
+        assertNotNull(gameState.getFriendlyPlayer());
+        assertNotNull(gameState.getOpposingPlayer());
+        assertEquals("35548956", gameState.getFriendlyPlayer().getGameAccountIdLo());
+        assertEquals("26973114", gameState.getOpposingPlayer().getGameAccountIdLo());
+        assertEquals("1", gameState.getOpposingPlayer().getFirstPlayer());
+        assertEquals("1", gameState.getFriendlyPlayer().getTeamId());
+        assertEquals("2", gameState.getOpposingPlayer().getTeamId());
+        assertEquals("4", gameState.getFriendlyPlayer().getNumCardsDrawnThisTurn());
+        assertEquals("3", gameState.getOpposingPlayer().getNumCardsDrawnThisTurn());
 
     }
 }

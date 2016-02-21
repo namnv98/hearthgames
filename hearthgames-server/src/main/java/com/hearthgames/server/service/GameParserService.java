@@ -1,7 +1,7 @@
 package com.hearthgames.server.service;
 
 import com.hearthgames.server.game.log.domain.LogLineData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.handler.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,27 +28,27 @@ public class GameParserService {
         handlers.add(new CreateActionHandler());
     }
 
-    public GameContext parseLines(List<LogLineData> logLineDatas) {
-        GameContext context = new GameContext();
+    public GameState parseLines(List<LogLineData> logLineDatas) {
+        GameState gameState = new GameState();
         for (LogLineData logLineData : logLineDatas) {
-            context.setIndentLevel(logLineData.getLine()); // setting the level of indentation will help with cases where there are issues with the log file (i.e. an action_end is missing)
-            parseLine(context, logLineData);
+            gameState.setIndentLevel(logLineData.getLine()); // setting the level of indentation will help with cases where there are issues with the log file (i.e. an action_end is missing)
+            parseLine(gameState, logLineData);
         }
-        return context;
+        return gameState;
     }
 
 
-    protected void parseLine(GameContext context, LogLineData logLineData) {
-        boolean processed = processLine(context, logLineData);
+    protected void parseLine(GameState gameState, LogLineData logLineData) {
+        boolean processed = processLine(gameState, logLineData);
         if (!processed) {
-            parseLine(context, logLineData);
+            parseLine(gameState, logLineData);
         }
     }
 
-    protected boolean processLine(GameContext context, LogLineData logLineData) {
+    protected boolean processLine(GameState gameState, LogLineData logLineData) {
         for (Handler handler: handlers) {
-            if (handler.supports(context, logLineData.getTrimmedLine())) {
-                return handler.handle(context, logLineData);
+            if (handler.supports(gameState, logLineData.getTrimmedLine())) {
+                return handler.handle(gameState, logLineData);
             }
         }
         return true;

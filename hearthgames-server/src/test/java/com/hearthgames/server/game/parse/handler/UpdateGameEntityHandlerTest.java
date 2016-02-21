@@ -1,8 +1,8 @@
 package com.hearthgames.server.game.parse.handler;
 
-import com.hearthgames.server.game.parse.domain.GameEntity;
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.log.domain.LogLineData;
+import com.hearthgames.server.game.parse.GameState;
+import com.hearthgames.server.game.parse.domain.GameEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -19,8 +19,8 @@ public class UpdateGameEntityHandlerTest {
 
         UpdateGameEntityHandler handler = new UpdateGameEntityHandler();
 
-        GameContext context = new GameContext();
-        context.setGameEntity(new GameEntity());
+        GameState gameState = new GameState();
+        gameState.setGameEntity(new GameEntity());
 
         String lines[] = new String[5];
         lines[0] = "TAG_CHANGE Entity=GameEntity tag=TURN value=1";
@@ -30,15 +30,15 @@ public class UpdateGameEntityHandlerTest {
         lines[4] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(context, line)) {
+            if (handler.supports(gameState, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(context, logLineData);
+                handler.handle(gameState, logLineData);
             }
         }
 
-        assertEquals(2, context.getActivities().size());
-        assertEquals("1", context.getGameEntity().getTurn());
-        assertEquals("RUNNING", context.getGameEntity().getState());
-        assertEquals("COMPLETE", ((GameEntity) context.getActivities().get(1).getDelta()).getState());
+        assertEquals(2, gameState.getActivities().size());
+        assertEquals("1", gameState.getGameEntity().getTurn());
+        assertEquals("RUNNING", gameState.getGameEntity().getState());
+        assertEquals("COMPLETE", ((GameEntity) gameState.getActivities().get(1).getDelta()).getState());
     }
 }

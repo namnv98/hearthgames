@@ -10,7 +10,7 @@ import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
 import com.hearthgames.server.game.hsreplay.HSReplayHandler;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.play.GameResult;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -76,17 +76,17 @@ public class GameParserServiceTest {
             handler = new HSReplayHandler();
             saxParser.parse(new InputSource(new StringReader(rawGame)), handler);
 
-            GameContext context = handler.getContext();
-            String accountId = context.getFriendlyPlayer().getGameAccountIdLo();
+            GameState gameState = handler.getGameState();
+            String accountId = gameState.getFriendlyPlayer().getGameAccountIdLo();
 
-            GameResult result = gamePlayingService.processGame(context, null);
+            GameResult result = gamePlayingService.processGame(gameState, null);
 
             RawGameData rawGameData = new RawGameData();
             rawGameData.setXml(rawGame);
 
-//            GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+//            GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, gameState, result, null);
 
-//            gameService.saveGamePlayed(gamePlayed, context, result, false);
+//            gameService.saveGamePlayed(gamePlayed, gameState, result, false);
             System.out.println();
 
 
@@ -124,21 +124,21 @@ public class GameParserServiceTest {
         for (RawGameData rawGameData : rawGameDatas) {
 
             try {
-                GameContext context = gameParserService.parseLines(rawGameData.getLines());
-                accountId = context.getFriendlyPlayer().getGameAccountIdLo();
+                GameState gameState = gameParserService.parseLines(rawGameData.getLines());
+                accountId = gameState.getFriendlyPlayer().getGameAccountIdLo();
 
-                GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
+                GameResult result = gamePlayingService.processGame(gameState, rawGameData.getRank());
 
-                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context, rawGameData);
-                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context, rawGameData);
-                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context, rawGameData);
-                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context, rawGameData);
-                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context, rawGameData);
-                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context, rawGameData);
-                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context, rawGameData);
-                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context, rawGameData);
+                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, gameState, rawGameData);
+                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, gameState, rawGameData);
+                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, gameState, rawGameData);
+                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, gameState, rawGameData);
+                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, gameState, rawGameData);
+                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, gameState, rawGameData);
+                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, gameState, rawGameData);
+                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, gameState, rawGameData);
 
-                GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+                GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, gameState, result, null);
                 System.out.println();
 
             } catch (Exception e) {
@@ -167,13 +167,13 @@ public class GameParserServiceTest {
 //            List<RawGameData> rawGameDatas = rawLogProcessingService.processLogFile(Arrays.asList(lines));
 //            try {
 //                for (RawGameData rawGameData: rawGameDatas) {
-//                    GameContext context = gameParserService.parseLines(rawGameData.getLines());
-//                    GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
+//                    GameContext gameState = gameParserService.parseLines(rawGameData.getLines());
+//                    GameResult result = gamePlayingService.processGame(gameState, rawGameData.getRank());
 //
-//                    GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, context, result, null);
+//                    GamePlayed gamePlayed = gameService.createGamePlayed(rawGameData, gameState, result, null);
 //                    GamePlayed sameGame = gameService.findSameGame(gamePlayed);
 //                    if (sameGame == null) {
-//                        gameService.saveGamePlayed(gamePlayed, context, result, true);
+//                        gameService.saveGamePlayed(gamePlayed, gameState, result, true);
 //                    }
 //                }
 //            } catch (Exception e) {

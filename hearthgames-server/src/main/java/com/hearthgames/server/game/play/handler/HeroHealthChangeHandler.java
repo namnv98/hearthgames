@@ -2,36 +2,36 @@ package com.hearthgames.server.game.play.handler;
 
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 
 import static com.hearthgames.server.game.play.handler.HandlerConstants.FALSE_OR_ZERO;
 
 public class HeroHealthChangeHandler implements Handler {
 
     @Override
-    public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() &&
-               playContext.getActivity().isCard() &&
-               playContext.getBefore().isHero() &&
-               isThereDamage(playContext);
+    public boolean supports(GameContext gameContext) {
+        return gameContext.getActivity().isTagChange() &&
+               gameContext.getActivity().isCard() &&
+               gameContext.getBefore().isHero() &&
+               isThereDamage(gameContext);
     }
 
-    private boolean isThereDamage(PlayContext playContext) {
-        return playContext.getAfter().getDamage() != null &&
-               !FALSE_OR_ZERO.equals(playContext.getAfter().getDamage());
+    private boolean isThereDamage(GameContext gameContext) {
+        return gameContext.getAfter().getDamage() != null &&
+               !FALSE_OR_ZERO.equals(gameContext.getAfter().getDamage());
     }
 
     @Override
-    public boolean handle(PlayContext playContext) {
-        Card before = playContext.getBefore();
-        Card after = playContext.getAfter();
+    public boolean handle(GameContext gameContext) {
+        Card before = gameContext.getBefore();
+        Card after = gameContext.getAfter();
 
         int health = before.getCardDetailsHealth();
         int damage = Integer.parseInt(after.getDamage());
         int newHealth = health - damage;
 
-        Player player = playContext.getContext().getPlayer(before);
-        playContext.addHeroHealthChange(player, before, newHealth);
+        Player player = gameContext.getGameState().getPlayer(before);
+        gameContext.addHeroHealthChange(player, before, newHealth);
         return true;
     }
 }

@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.play.handler;
 
 import com.hearthgames.server.game.parse.domain.*;
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 
 import static com.hearthgames.server.game.play.handler.HandlerConstants.TRUE_OR_ONE;
 
@@ -10,39 +10,39 @@ public class KillHandler implements Handler {
     public static final String DOOMSAYER = "NEW1_021";
 
     @Override
-    public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() &&
-               playContext.getActivity().isCard() &&
-               playContext.getAfter().getZone() != null;
+    public boolean supports(GameContext gameContext) {
+        return gameContext.getActivity().isTagChange() &&
+               gameContext.getActivity().isCard() &&
+               gameContext.getAfter().getZone() != null;
     }
 
-    private boolean isMinionMovingFromPlayToGraveyard(PlayContext playContext) {
-        return Zone.PLAY.eq(playContext.getBefore().getZone()) &&
-               Zone.GRAVEYARD.eq(playContext.getAfter().getZone()) &&
-               Card.Type.MINION.eq(playContext.getBefore().getCardtype()) &&
-               playContext.getContext().getEntityById(playContext.getBefore().getLastAffectedBy()) != null;
+    private boolean isMinionMovingFromPlayToGraveyard(GameContext gameContext) {
+        return Zone.PLAY.eq(gameContext.getBefore().getZone()) &&
+               Zone.GRAVEYARD.eq(gameContext.getAfter().getZone()) &&
+               Card.Type.MINION.eq(gameContext.getBefore().getCardtype()) &&
+               gameContext.getGameState().getEntityById(gameContext.getBefore().getLastAffectedBy()) != null;
     }
 
-    private boolean isMinionBeingDestroyed(PlayContext playContext) {
-        return playContext.getAfter().getToBeDestroyed() != null &&
-               TRUE_OR_ONE.equals(playContext.getAfter().getToBeDestroyed());
+    private boolean isMinionBeingDestroyed(GameContext gameContext) {
+        return gameContext.getAfter().getToBeDestroyed() != null &&
+               TRUE_OR_ONE.equals(gameContext.getAfter().getToBeDestroyed());
     }
 
     @Override
-    public boolean handle(PlayContext playContext) {
-        if (isMinionMovingFromPlayToGraveyard(playContext)) {
-            handleNormalKill(playContext);
+    public boolean handle(GameContext gameContext) {
+        if (isMinionMovingFromPlayToGraveyard(gameContext)) {
+            handleNormalKill(gameContext);
         }
-        if (isMinionBeingDestroyed(playContext)) {
-            handleDestroyedMinion(playContext);
+        if (isMinionBeingDestroyed(gameContext)) {
+            handleDestroyedMinion(gameContext);
         }
         return false;
     }
 
-    private boolean handleNormalKill(PlayContext playContext) {
-        Card before = playContext.getBefore();
+    private boolean handleNormalKill(GameContext gameContext) {
+        Card before = gameContext.getBefore();
 
-        Card card = playContext.getContext().getEntityById(before.getLastAffectedBy());
+        Card card = gameContext.getGameState().getEntityById(before.getLastAffectedBy());
         if (card == null) {
             return false;
         }
@@ -50,7 +50,7 @@ public class KillHandler implements Handler {
         boolean evenTrade = false;
 
         boolean killerFriendly = false;
-        if (card.getController().equals(playContext.getContext().getFriendlyPlayer().getController())) {
+        if (card.getController().equals(gameContext.getGameState().getFriendlyPlayer().getController())) {
             killerFriendly = true;
         }
 
@@ -88,23 +88,23 @@ public class KillHandler implements Handler {
                 }
             }
         }
-        Player killerController = playContext.getContext().getPlayer(card);
-        Player killedController = playContext.getContext().getPlayer(before);
-        playContext.addKill("killed", killerController, killedController, killerFriendly ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer(), card, before, favorableTrade, evenTrade);
+        Player killerController = gameContext.getGameState().getPlayer(card);
+        Player killedController = gameContext.getGameState().getPlayer(before);
+        gameContext.addKill("killed", killerController, killedController, killerFriendly ? gameContext.getGameState().getFriendlyPlayer() : gameContext.getGameState().getOpposingPlayer(), card, before, favorableTrade, evenTrade);
 
         return true;
     }
 
-    private boolean handleDestroyedMinion(PlayContext playContext) {
-        Card card = playContext.getContext().getEntityById(playContext.getActivity().getEntityId());
+    private boolean handleDestroyedMinion(GameContext gameContext) {
+        Card card = gameContext.getGameState().getEntityById(gameContext.getActivity().getEntityId());
         if (card == null) {
             return false;
         }
-        Activity parent = playContext.getActivity().getParent();
+        Activity parent = gameContext.getActivity().getParent();
         if (parent == null) {
             return false;
         }
-        Card parentCard = playContext.getContext().getEntityById(parent.getEntityId());
+        Card parentCard = gameContext.getGameState().getEntityById(parent.getEntityId());
         if (parentCard == null) {
             return false;
         }
@@ -118,7 +118,7 @@ public class KillHandler implements Handler {
         boolean evenTrade = false;
 
         boolean killerFriendly = false;
-        if (parentCard.getController().equals(playContext.getContext().getFriendlyPlayer().getController())) {
+        if (parentCard.getController().equals(gameContext.getGameState().getFriendlyPlayer().getController())) {
             killerFriendly = true;
         }
 
@@ -141,9 +141,9 @@ public class KillHandler implements Handler {
                 }
             }
         }
-        Player killerController = playContext.getContext().getPlayer(parentCard);
-        Player killedController = playContext.getContext().getPlayer(card);
-        playContext.addKill("destroyed", killerController, killedController, killerFriendly ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
+        Player killerController = gameContext.getGameState().getPlayer(parentCard);
+        Player killedController = gameContext.getGameState().getPlayer(card);
+        gameContext.addKill("destroyed", killerController, killedController, killerFriendly ? gameContext.getGameState().getFriendlyPlayer() : gameContext.getGameState().getOpposingPlayer(), parentCard, card, favorableTrade, evenTrade);
 
         return true;
     }

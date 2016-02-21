@@ -1,8 +1,8 @@
 package com.hearthgames.server.game.parse.handler;
 
-import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.parse.GameContext;
 import com.hearthgames.server.game.log.domain.LogLineData;
+import com.hearthgames.server.game.parse.GameState;
+import com.hearthgames.server.game.parse.domain.Player;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -19,15 +19,15 @@ public class UpdatePlayerHandlerTest {
 
         UpdatePlayerHandler handler = new UpdatePlayerHandler();
 
-        GameContext context = new GameContext();
+        GameState gameState = new GameState();
         Player player1 = new Player();
         player1.setEntityId("2");
         player1.setTeamId("1");
         Player player2 = new Player();
         player2.setEntityId("3");
         player2.setTeamId("2");
-        context.setFriendlyPlayer(player1);
-        context.setOpposingPlayer(player2);
+        gameState.setFriendlyPlayer(player1);
+        gameState.setOpposingPlayer(player2);
 
         String[] lines = new String[11];
         lines[0] = "TAG_CHANGE Entity=Player2 tag=TIMEOUT value=75";
@@ -43,17 +43,17 @@ public class UpdatePlayerHandlerTest {
         lines[10] = "TAG_CHANGE Entity=GameEntity tag=10 value=85";
 
         for (String line : lines) {
-            if (handler.supports(context, line)) {
+            if (handler.supports(gameState, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(context, logLineData);
+                handler.handle(gameState, logLineData);
             }
         }
 
-        assertEquals("2", context.getOpposingPlayer().getTeamId());
-        assertEquals("Player2", context.getOpposingPlayer().getName());
-        assertEquals("1", context.getOpposingPlayer().getFirstPlayer());
-        assertEquals("1", context.getFriendlyPlayer().getTeamId());
-        assertEquals("4", context.getFriendlyPlayer().getNumCardsDrawnThisTurn());
+        assertEquals("2", gameState.getOpposingPlayer().getTeamId());
+        assertEquals("Player2", gameState.getOpposingPlayer().getName());
+        assertEquals("1", gameState.getOpposingPlayer().getFirstPlayer());
+        assertEquals("1", gameState.getFriendlyPlayer().getTeamId());
+        assertEquals("4", gameState.getFriendlyPlayer().getNumCardsDrawnThisTurn());
     }
 
 }

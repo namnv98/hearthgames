@@ -11,7 +11,7 @@ import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
 import com.hearthgames.server.game.hsreplay.HSReplayHandler;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.service.GameAnalysisService;
 import com.hearthgames.server.service.GameParserService;
@@ -63,30 +63,30 @@ public class GameController {
         GamePlayed gamePlayed = gameService.getById(gameId);
         if (gamePlayed != null) {
             RawGameData rawGameData;
-            GameContext context;
+            GameState gameState;
 
             if (gamePlayed.getRawGameType() == 1) {
                 rawGameData = getRawGameDataFromLogFile(gamePlayed.getRawGame());
-                context = getGameContextFromLogFile(rawGameData);
+                gameState = getGameContextFromLogFile(rawGameData);
             } else {
                 rawGameData = getRawGameDataFromXml(gamePlayed.getRawGame());
                 SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
                 SAXParser saxParser = saxParserFactory.newSAXParser();
                 HSReplayHandler handler = new HSReplayHandler();
                 saxParser.parse(new InputSource(new StringReader(rawGameData.getXml())), handler);
-                context = handler.getContext();
+                gameState = handler.getGameState();
             }
-            if (rawGameData != null && context != null) {
-                GameResult result = gamePlayingService.processGame(context, rawGameData.getRank());
+            if (rawGameData != null && gameState != null) {
+                GameResult result = gamePlayingService.processGame(gameState, rawGameData.getRank());
 
-                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, context, rawGameData);
-                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, context, rawGameData);
-                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, context, rawGameData);
-                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, context, rawGameData);
-                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, context, rawGameData);
-                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, context, rawGameData);
-                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, context, rawGameData);
-                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, context, rawGameData);
+                GenericTable cardInfo = gameAnalysisService.getCardSummary(result, gameState, rawGameData);
+                VersusInfo versusInfo = gameAnalysisService.getVersusInfo(result, gameState, rawGameData);
+                List<GenericTable> healthArmorInfos = gameAnalysisService.getHealthArmor(result, gameState, rawGameData);
+                List<GenericTable> boardControlInfos = gameAnalysisService.getBoardControl(result, gameState, rawGameData);
+                List<GenericTable> cardAdvantageInfos = gameAnalysisService.getCardAdvantage(result, gameState, rawGameData);
+                List<TurnInfo> turnInfos = gameAnalysisService.getTurnInfo(result, gameState, rawGameData);
+                GenericTable tradeInfo = gameAnalysisService.getTradeInfo(result, gameState, rawGameData);
+                GenericTable manaInfo = gameAnalysisService.getManaInfo(result, gameState, rawGameData);
 
                 modelAndView.addObject("cardInfos", Collections.singletonList(cardInfo));
                 modelAndView.addObject("versusInfo", versusInfo);
@@ -113,11 +113,11 @@ public class GameController {
                     if (principal != null && principal instanceof UserInfo) {
                         userInfo = (UserInfo) principal;
                     }
-                    GamePlayed updatedGamePlayed = gameService.createGamePlayed(rawGameData, context, result, userInfo);
-                    gameService.saveGamePlayed(updatedGamePlayed, context, result, false);
+                    GamePlayed updatedGamePlayed = gameService.createGamePlayed(rawGameData, gameState, result, userInfo);
+                    gameService.saveGamePlayed(updatedGamePlayed, gameState, result, false);
                 } else {
                     gamePlayed.setJustAdded(false);
-                    gameService.saveGamePlayed(gamePlayed, context, result, false);
+                    gameService.saveGamePlayed(gamePlayed, gameState, result, false);
                 }
                 //hack for Thymeleaf plugin - duplicate model properties
                 if (false) {
@@ -154,7 +154,7 @@ public class GameController {
         return null;
     }
 
-    private GameContext getGameContextFromLogFile(RawGameData rawGameData){
+    private GameState getGameContextFromLogFile(RawGameData rawGameData){
         return gameParserService.parseLines(rawGameData.getLines());
     }
 }

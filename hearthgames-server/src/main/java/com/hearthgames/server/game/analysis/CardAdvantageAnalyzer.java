@@ -4,12 +4,10 @@ import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
-import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.game.play.domain.board.Board;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.Turn;
-import com.hearthgames.server.game.play.domain.board.CardInHand;
+import com.hearthgames.server.game.play.domain.board.Board;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.List;
 public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
     @Override
-    protected GenericTable getInfo(GameResult result, GameContext context, RawGameData rawGameData, List<Turn> turns) {
+    protected GenericTable getInfo(GameResult result, GameState gameState, RawGameData rawGameData, List<Turn> turns) {
 
         GenericTable table = new GenericTable();
         GenericRow header = new GenericRow();
@@ -30,11 +28,11 @@ public class CardAdvantageAnalyzer extends PagingAbstractAnalyzer<GenericTable> 
 
         GenericRow friendly = new GenericRow();
         table.setFriendly(friendly);
-        friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
+        friendly.addColumn(new GenericColumn(gameState.getFriendlyPlayer().getName()));
 
         GenericRow opposing = new GenericRow();
         table.setOpposing(opposing);
-        opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
+        opposing.addColumn(new GenericColumn(gameState.getOpposingPlayer().getName()));
 
         for (Turn turn: turns) {
 

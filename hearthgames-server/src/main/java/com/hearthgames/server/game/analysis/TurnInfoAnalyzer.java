@@ -2,7 +2,7 @@ package com.hearthgames.server.game.analysis;
 
 import com.hearthgames.server.game.analysis.domain.TurnInfo;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.Turn;
@@ -17,24 +17,24 @@ import java.util.stream.Collectors;
 public class TurnInfoAnalyzer implements Analyzer<List<TurnInfo>> {
 
     @Override
-    public List<TurnInfo> analyze(GameResult result, GameContext context, RawGameData rawGameData) {
-        return result.getTurns().stream().map(turn -> getTurnInfo(result, context, turn)).collect(Collectors.toList());
+    public List<TurnInfo> analyze(GameResult result, GameState gameState, RawGameData rawGameData) {
+        return result.getTurns().stream().map(turn -> getTurnInfo(result, gameState, turn)).collect(Collectors.toList());
     }
 
-    private TurnInfo getTurnInfo(GameResult result, GameContext context, Turn turn) {
+    private TurnInfo getTurnInfo(GameResult result, GameState gameState, Turn turn) {
         TurnInfo info = new TurnInfo();
 
         Player whoseTurn = turn.getWhoseTurn();
         if (whoseTurn == null) {
-            whoseTurn = "1".equals(context.getFriendlyPlayer().getFirstPlayer()) ? context.getFriendlyPlayer() : context.getOpposingPlayer();
+            whoseTurn = "1".equals(gameState.getFriendlyPlayer().getFirstPlayer()) ? gameState.getFriendlyPlayer() : gameState.getOpposingPlayer();
         }
         info.setTurnNumber(""+turn.getTurnNumber());
         info.setWhoseTurn(whoseTurn.getName());
-        if (whoseTurn == context.getFriendlyPlayer()) {
-            String friendlyClass = result.getWinner().equals(context.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
+        if (whoseTurn == gameState.getFriendlyPlayer()) {
+            String friendlyClass = result.getWinner().equals(gameState.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(friendlyClass);
         } else {
-            String opposingClass = result.getWinner().equals(context.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
+            String opposingClass = result.getWinner().equals(gameState.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
             info.setTurnClass(opposingClass);
         }
 

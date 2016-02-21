@@ -3,53 +3,53 @@ package com.hearthgames.server.game.play.handler;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.parse.domain.Zone;
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 
 public class CardDrawnHandler implements Handler {
 
     @Override
-    public boolean supports(PlayContext playContext) {
-        return isShowEntityOrTagChange(playContext) &&
-               playContext.getActivity().isCard() &&
-               isCardFromDeckToHand(playContext);
+    public boolean supports(GameContext gameContext) {
+        return isShowEntityOrTagChange(gameContext) &&
+               gameContext.getActivity().isCard() &&
+               isCardFromDeckToHand(gameContext);
     }
 
-    private boolean isShowEntityOrTagChange(PlayContext playContext) {
-        return playContext.getActivity().isShowEntity() ||
-               playContext.getActivity().isTagChange();
+    private boolean isShowEntityOrTagChange(GameContext gameContext) {
+        return gameContext.getActivity().isShowEntity() ||
+               gameContext.getActivity().isTagChange();
     }
 
-    private boolean isCardFromDeckToHand(PlayContext playContext) {
-        return playContext.getAfter().getZone() != null &&
-               Zone.DECK.eq(playContext.getBefore().getZone()) &&
-               Zone.HAND.eq(playContext.getAfter().getZone());
+    private boolean isCardFromDeckToHand(GameContext gameContext) {
+        return gameContext.getAfter().getZone() != null &&
+               Zone.DECK.eq(gameContext.getBefore().getZone()) &&
+               Zone.HAND.eq(gameContext.getAfter().getZone());
     }
 
     @Override
-    public boolean handle(PlayContext playContext) {
-        Card before = playContext.getBefore();
-        Player player = playContext.getContext().getPlayerForCard(before);
+    public boolean handle(GameContext gameContext) {
+        Card before = gameContext.getBefore();
+        Player player = gameContext.getGameState().getPlayerForCard(before);
 
-        if (playContext.getContext().getGameEntity().isMulliganOver()) {
-            if (playContext.getContext().getStartingCardIds().contains(before.getEntityId())) {
-                if (player == playContext.getContext().getFriendlyPlayer()) {
-                    playContext.getResult().addFriendlyDeckCard(before);
+        if (gameContext.getGameState().getGameEntity().isMulliganOver()) {
+            if (gameContext.getGameState().getStartingCardIds().contains(before.getEntityId())) {
+                if (player == gameContext.getGameState().getFriendlyPlayer()) {
+                    gameContext.getResult().addFriendlyDeckCard(before);
                 } else {
-                    playContext.getResult().addOpposingDeckCard(before);
+                    gameContext.getResult().addOpposingDeckCard(before);
                 }
             }
-            playContext.addCardDrawn(player, before, playContext.getActivity().getParent().getDelta());
+            gameContext.addCardDrawn(player, before, gameContext.getActivity().getParent().getDelta());
         } else {
-            if (player == playContext.getContext().getFriendlyPlayer()) {
-                if (playContext.getContext().getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
-                    playContext.getResult().addFriendlyStartingCard(before);
-                    playContext.addLoggingAction(player.getName() + " has drawn " +  before.getCardDetailsName());
+            if (player == gameContext.getGameState().getFriendlyPlayer()) {
+                if (gameContext.getGameState().getStartingCardIds().contains(before.getEntityId())) {  // Only add cards that were in the starting deck
+                    gameContext.getResult().addFriendlyStartingCard(before);
+                    gameContext.addLoggingAction(player.getName() + " has drawn " +  before.getCardDetailsName());
                     return true;
                 }
             } else {
-                if (playContext.getContext().getStartingCardIds().contains(before.getEntityId())) {
-                    playContext.getResult().addOpposingStartingCard(before);
-                    playContext.addLoggingAction(player.getName() + " has drawn " +  before.getCardDetailsName());
+                if (gameContext.getGameState().getStartingCardIds().contains(before.getEntityId())) {
+                    gameContext.getResult().addOpposingStartingCard(before);
+                    gameContext.addLoggingAction(player.getName() + " has drawn " +  before.getCardDetailsName());
                     return true;
                 }
             }

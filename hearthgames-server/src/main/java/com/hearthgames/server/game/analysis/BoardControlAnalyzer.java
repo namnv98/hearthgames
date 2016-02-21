@@ -4,11 +4,11 @@ import com.hearthgames.server.game.analysis.domain.generic.GenericColumn;
 import com.hearthgames.server.game.analysis.domain.generic.GenericRow;
 import com.hearthgames.server.game.analysis.domain.generic.GenericTable;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.play.GameResult;
+import com.hearthgames.server.game.play.domain.Turn;
 import com.hearthgames.server.game.play.domain.board.Board;
 import com.hearthgames.server.game.play.domain.board.MinionInPlay;
-import com.hearthgames.server.game.play.domain.Turn;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
     @Override
-    protected GenericTable getInfo(GameResult result, GameContext context, RawGameData rawGameData, List<Turn> turns) {
+    protected GenericTable getInfo(GameResult result, GameState gameState, RawGameData rawGameData, List<Turn> turns) {
 
         GenericTable table = new GenericTable();
 
@@ -30,11 +30,11 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
 
         GenericRow friendly = new GenericRow();
         table.setFriendly(friendly);
-        friendly.addColumn(new GenericColumn(context.getFriendlyPlayer().getName()));
+        friendly.addColumn(new GenericColumn(gameState.getFriendlyPlayer().getName()));
 
         GenericRow opposing = new GenericRow();
         table.setOpposing(opposing);
-        opposing.addColumn(new GenericColumn(context.getOpposingPlayer().getName()));
+        opposing.addColumn(new GenericColumn(gameState.getOpposingPlayer().getName()));
 
 
         for (Turn turn: turns) {
@@ -65,8 +65,8 @@ public class BoardControlAnalyzer extends PagingAbstractAnalyzer<GenericTable> {
                     }
                 }
 
-                String friendlyClass = result.getWinner().equals(context.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
-                String opposingClass = result.getWinner().equals(context.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
+                String friendlyClass = result.getWinner().equals(gameState.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
+                String opposingClass = result.getWinner().equals(gameState.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
 
                 if (friendlyBoardControl) {
                     addFriendlyOpposingColumns(friendlyClass, "", friendly, opposing);

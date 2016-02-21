@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.play.domain.board;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.parse.domain.Zone;
@@ -29,7 +29,7 @@ public class Board implements Action {
 
     private List<Action> actions = new ArrayList<>();
 
-    public Board(GameResult result, GameContext context) {
+    public Board(GameResult result, GameState gameState) {
 
         Board previousBoard = result.getCurrentTurn().findLastBoard();
         if (previousBoard != null) {
@@ -39,7 +39,7 @@ public class Board implements Action {
         }
         turnData.setTurn(result.getCurrentTurn().getTurnNumber());
         if (result.getCurrentTurn().getWhoseTurn() != null && result.getCurrentTurn().getTurnNumber() != 0) {
-            turnData.setWho(context.getFriendlyPlayer() == result.getCurrentTurn().getWhoseTurn() ? "Your Turn" : "Enemy Turn");
+            turnData.setWho(gameState.getFriendlyPlayer() == result.getCurrentTurn().getWhoseTurn() ? "Your Turn" : "Enemy Turn");
             if (result.getCurrentTurn().getWhoseTurn().getNumOptions() != null) {
                 int numOptions = Integer.parseInt(result.getCurrentTurn().getWhoseTurn().getNumOptions());
                 turnData.setStatus(numOptions > 1 ? "yellow" : "green");
@@ -51,11 +51,11 @@ public class Board implements Action {
             turnData.setStatus("yellow");
         }
 
-        setHeroIds(context, friendlyHero, opposingHero);
-        setHeroHealthArmor(result, context, friendlyHero, opposingHero);
-        setHeroMana(result, context, friendlyHero, opposingHero);
-        setHeroPowerStatus(context, friendlyHero, opposingHero);
-        setHeroCards(context, friendlyHero, opposingHero);
+        setHeroIds(gameState, friendlyHero, opposingHero);
+        setHeroHealthArmor(result, gameState, friendlyHero, opposingHero);
+        setHeroMana(result, gameState, friendlyHero, opposingHero);
+        setHeroPowerStatus(gameState, friendlyHero, opposingHero);
+        setHeroCards(gameState, friendlyHero, opposingHero);
 
         if (friendlyHero.getWeapon() != null) {
             friendlyHero.setAttack(friendlyHero.getWeapon().getAttack());
@@ -85,16 +85,16 @@ public class Board implements Action {
         return turnData;
     }
 
-    private void setHeroIds(GameContext context, Hero friendlyHero, Hero opposingHero) {
-        Card friendlyHeroCard = HeroStatsUtil.getHeroCard(context.getFriendlyPlayer(), context);
-        Card opposingHeroCard = HeroStatsUtil.getHeroCard(context.getOpposingPlayer(), context);
+    private void setHeroIds(GameState gameState, Hero friendlyHero, Hero opposingHero) {
+        Card friendlyHeroCard = HeroStatsUtil.getHeroCard(gameState.getFriendlyPlayer(), gameState);
+        Card opposingHeroCard = HeroStatsUtil.getHeroCard(gameState.getOpposingPlayer(), gameState);
         friendlyHero.setCardId(friendlyHeroCard.getCardid());
         friendlyHero.setId(friendlyHeroCard.getEntityId());
         opposingHero.setCardId(opposingHeroCard.getCardid());
         opposingHero.setId(opposingHeroCard.getEntityId());
     }
 
-    private void setHeroHealthArmor(GameResult result, GameContext context, Hero friendlyHero, Hero opposingHero) {
+    private void setHeroHealthArmor(GameResult result, GameState gameState, Hero friendlyHero, Hero opposingHero) {
 
         Integer friendlyHealth;
         Integer opposingHealth;
@@ -106,10 +106,10 @@ public class Board implements Action {
         Board previousBoard = currentTurn.findLastBoard();
 
         if (result.getCurrentTurn().getTurnNumber() == 0 && previousBoard == null) {
-            friendlyHealth = HeroStatsUtil.getCurrentHealth(context.getFriendlyPlayer(), context);
-            opposingHealth = HeroStatsUtil.getCurrentHealth(context.getOpposingPlayer(), context);
-            friendlyArmor = HeroStatsUtil.getCurrentArmor(context.getFriendlyPlayer(), context);
-            opposingArmor = HeroStatsUtil.getCurrentArmor(context.getOpposingPlayer(), context);
+            friendlyHealth = HeroStatsUtil.getCurrentHealth(gameState.getFriendlyPlayer(), gameState);
+            opposingHealth = HeroStatsUtil.getCurrentHealth(gameState.getOpposingPlayer(), gameState);
+            friendlyArmor = HeroStatsUtil.getCurrentArmor(gameState.getFriendlyPlayer(), gameState);
+            opposingArmor = HeroStatsUtil.getCurrentArmor(gameState.getOpposingPlayer(), gameState);
         } else {
             if (previousBoard == null) {
                 previousBoard = previousTurn.findLastBoard();
@@ -121,17 +121,17 @@ public class Board implements Action {
         }
 
 
-        if (HeroStatsUtil.hasHealthChanged(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
-            friendlyHealth = HeroStatsUtil.getHealth(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasHealthChanged(gameState.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
+            friendlyHealth = HeroStatsUtil.getHealth(gameState.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
         }
-        if (HeroStatsUtil.hasArmorChanged(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
-            friendlyArmor = HeroStatsUtil.getArmor(context.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasArmorChanged(gameState.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this)) {
+            friendlyArmor = HeroStatsUtil.getArmor(gameState.getFriendlyPlayer(), result.getCurrentTurn().getActions(), this);
         }
-        if (HeroStatsUtil.hasHealthChanged(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
-            opposingHealth = HeroStatsUtil.getHealth(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasHealthChanged(gameState.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
+            opposingHealth = HeroStatsUtil.getHealth(gameState.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
         }
-        if (HeroStatsUtil.hasArmorChanged(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
-            opposingArmor = HeroStatsUtil.getArmor(context.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
+        if (HeroStatsUtil.hasArmorChanged(gameState.getOpposingPlayer(), result.getCurrentTurn().getActions(), this)) {
+            opposingArmor = HeroStatsUtil.getArmor(gameState.getOpposingPlayer(), result.getCurrentTurn().getActions(), this);
         }
 
         friendlyHero.setHealth(friendlyHealth);
@@ -143,25 +143,25 @@ public class Board implements Action {
         opposingHero.setArmor(opposingArmor);
     }
 
-    private void setHeroMana(GameResult result, GameContext context, Hero friendlyHero, Hero opposingHero) {
+    private void setHeroMana(GameResult result, GameState gameState, Hero friendlyHero, Hero opposingHero) {
 
-        Integer friendlyManaGained = HeroStatsUtil.getManaGained(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
-        Integer friendlyManaUsed = HeroStatsUtil.getManaUsed(context.getFriendlyPlayer(), result.getCurrentTurn(), this);
+        Integer friendlyManaGained = HeroStatsUtil.getManaGained(gameState.getFriendlyPlayer(), result.getCurrentTurn(), this);
+        Integer friendlyManaUsed = HeroStatsUtil.getManaUsed(gameState.getFriendlyPlayer(), result.getCurrentTurn(), this);
         friendlyHero.setMana(friendlyManaGained-friendlyManaUsed);
         friendlyHero.setManaTotal(friendlyManaGained);
 
-        Integer opposingManaGained = HeroStatsUtil.getManaGained(context.getOpposingPlayer(), result.getCurrentTurn(), this);
-        Integer opposingManaUsed = HeroStatsUtil.getManaUsed(context.getOpposingPlayer(), result.getCurrentTurn(), this);
+        Integer opposingManaGained = HeroStatsUtil.getManaGained(gameState.getOpposingPlayer(), result.getCurrentTurn(), this);
+        Integer opposingManaUsed = HeroStatsUtil.getManaUsed(gameState.getOpposingPlayer(), result.getCurrentTurn(), this);
         opposingHero.setMana(opposingManaGained-opposingManaUsed);
         opposingHero.setManaTotal(opposingManaGained);
     }
 
-    private void setHeroPowerStatus(GameContext context, Hero friendlyHero, Hero opposingHero) {
+    private void setHeroPowerStatus(GameState gameState, Hero friendlyHero, Hero opposingHero) {
 
-        Player friendlyPlayer = context.getFriendlyPlayer();
-        Player opposingPlayer = context.getOpposingPlayer();
+        Player friendlyPlayer = gameState.getFriendlyPlayer();
+        Player opposingPlayer = gameState.getOpposingPlayer();
 
-        Collection<Card> cards = context.getCards().values();
+        Collection<Card> cards = gameState.getCards().values();
         for (Card card: cards) {
             if (Card.Type.HERO_POWER.eq(card.getCardtype()) && Zone.PLAY.eq(card.getZone()) && card.getController().equals(friendlyPlayer.getController())) {
                 friendlyHero.setPowerId(card.getCardid());
@@ -174,9 +174,9 @@ public class Board implements Action {
         }
     }
 
-    private void setHeroCards(GameContext context, Hero friendlyHero, Hero opposingHero) {
+    private void setHeroCards(GameState gameState, Hero friendlyHero, Hero opposingHero) {
 
-        for (Card c: context.getCards().values()) {
+        for (Card c: gameState.getCards().values()) {
             if (Zone.HAND.eq(c.getZone())) {
                 CardInHand cardInHand = new CardInHand();
                 cardInHand.setHealth(c.getHealth() != null ? Integer.parseInt(c.getHealth()) : 0);
@@ -184,7 +184,7 @@ public class Board implements Action {
                 cardInHand.setCost(c.getCost() != null ? Integer.parseInt(c.getCost()) : 0);
                 cardInHand.setCardId(c.getCardDetailsId());
                 cardInHand.setId(c.getEntityId());
-                if (c.getController().equals(context.getFriendlyPlayer().getController())) {
+                if (c.getController().equals(gameState.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInHand().add(cardInHand);
                 } else {
                     opposingHero.getCardsInHand().add(cardInHand);
@@ -234,7 +234,7 @@ public class Board implements Action {
                 }
                 minionInPlay.setExhausted(TRUE.equals(c.getExhausted()));
                 minionInPlay.setSilenced(silenced);
-                if (c.getController().equals(context.getFriendlyPlayer().getController())) {
+                if (c.getController().equals(gameState.getFriendlyPlayer().getController())) {
                     friendlyHero.getMinionsInPlay().add(minionInPlay);
                 } else {
                     opposingHero.getMinionsInPlay().add(minionInPlay);
@@ -245,7 +245,7 @@ public class Board implements Action {
                 cardInSecret.setCardClass(c.getCardClass().toLowerCase());
                 cardInSecret.setCardId(c.getCardDetailsId());
                 cardInSecret.setId(c.getEntityId());
-                if (c.getController().equals(context.getFriendlyPlayer().getController())) {
+                if (c.getController().equals(gameState.getFriendlyPlayer().getController())) {
                     friendlyHero.getCardsInSecret().add(cardInSecret);
                 } else {
                     opposingHero.getCardsInSecret().add(cardInSecret);
@@ -260,7 +260,7 @@ public class Board implements Action {
                 int damage = c.getDamage() != null ? Integer.parseInt(c.getDamage()) : 0;
 
                 weapon.setDurability(durability - damage);
-                if (c.getController().equals(context.getFriendlyPlayer().getController())) {
+                if (c.getController().equals(gameState.getFriendlyPlayer().getController())) {
                     friendlyHero.setWeapon(weapon);
                 } else {
                     opposingHero.setWeapon(weapon);

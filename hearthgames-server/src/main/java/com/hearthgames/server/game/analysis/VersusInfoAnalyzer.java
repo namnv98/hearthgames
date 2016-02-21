@@ -2,7 +2,7 @@ package com.hearthgames.server.game.analysis;
 
 import com.hearthgames.server.game.analysis.domain.VersusInfo;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.game.play.domain.Turn;
@@ -14,7 +14,7 @@ import java.time.Duration;
 @Component
 public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
     @Override
-    public VersusInfo analyze(GameResult result, GameContext context, RawGameData rawGameData) {
+    public VersusInfo analyze(GameResult result, GameState gameState, RawGameData rawGameData) {
         VersusInfo info = new VersusInfo();
 
         info.setWinner(result.getWinner());
@@ -26,15 +26,15 @@ public class VersusInfoAnalyzer implements Analyzer<VersusInfo> {
             info.setQuitterClass(result.getQuitter().getPlayerClass());
         }
 
-        String friendlyClass = result.getWinner().equals(context.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
-        String opposingClass = result.getWinner().equals(context.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
+        String friendlyClass = result.getWinner().equals(gameState.getFriendlyPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
+        String opposingClass = result.getWinner().equals(gameState.getOpposingPlayer().getName()) ? result.getWinnerClass() : result.getLoserClass();
         info.setFriendlyClass(friendlyClass);
         info.setOpposingClass(opposingClass);
-        info.setFriendlyName(context.getFriendlyPlayer().getName());
-        info.setOpposingName(context.getOpposingPlayer().getName());
+        info.setFriendlyName(gameState.getFriendlyPlayer().getName());
+        info.setOpposingName(gameState.getOpposingPlayer().getName());
 
-        Card friendlyHeroCard = context.getEntityById(context.getFriendlyPlayer().getHeroEntity());
-        Card opposingHeroCard = context.getEntityById(context.getOpposingPlayer().getHeroEntity());
+        Card friendlyHeroCard = gameState.getEntityById(gameState.getFriendlyPlayer().getHeroEntity());
+        Card opposingHeroCard = gameState.getEntityById(gameState.getOpposingPlayer().getHeroEntity());
 
         info.setFriendlyHeroCardId(friendlyHeroCard.getCardid());
         info.setOpposingHeroCardId(opposingHeroCard.getCardid());

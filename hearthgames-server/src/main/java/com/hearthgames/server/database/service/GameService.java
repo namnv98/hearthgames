@@ -5,7 +5,7 @@ import com.hearthgames.server.database.domain.*;
 import com.hearthgames.server.database.repository.*;
 import com.hearthgames.server.game.log.domain.GameType;
 import com.hearthgames.server.game.log.domain.RawGameData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.play.GameResult;
 import com.hearthgames.server.solr.SolrService;
@@ -45,7 +45,7 @@ public class GameService {
     @Autowired
     private SolrService solrService;
 
-    public GamePlayed createGamePlayed(RawGameData rawGameData, GameContext context, GameResult result, UserInfo userInfo) {
+    public GamePlayed createGamePlayed(RawGameData rawGameData, GameState gameState, GameResult result, UserInfo userInfo) {
 
         GamePlayed gamePlayed = new GamePlayed();
         gamePlayed.setJustAdded(true);
@@ -67,13 +67,13 @@ public class GameService {
             gamePlayed.setEndTime(now);
             gamePlayed.setRawGameType(2);
         }
-        gamePlayed.setFriendlyGameAccountId(context.getFriendlyPlayer().getGameAccountIdLo());
-        gamePlayed.setOpposingGameAccountId(context.getOpposingPlayer().getGameAccountIdLo());
+        gamePlayed.setFriendlyGameAccountId(gameState.getFriendlyPlayer().getGameAccountIdLo());
+        gamePlayed.setOpposingGameAccountId(gameState.getOpposingPlayer().getGameAccountIdLo());
         gamePlayed.setRank(rawGameData.getGameType() == GameType.RANKED ? rawGameData.getRank() : null);
-        gamePlayed.setFriendlyName(context.getFriendlyPlayer().getName());
-        gamePlayed.setFriendlyClass(context.getFriendlyPlayer().getPlayerClass() == null ? "unknown" : context.getFriendlyPlayer().getPlayerClass());
-        gamePlayed.setOpposingName(context.getOpposingPlayer().getName());
-        gamePlayed.setOpposingClass(context.getOpposingPlayer().getPlayerClass() == null ? "unknown" : context.getOpposingPlayer().getPlayerClass());
+        gamePlayed.setFriendlyName(gameState.getFriendlyPlayer().getName());
+        gamePlayed.setFriendlyClass(gameState.getFriendlyPlayer().getPlayerClass() == null ? "unknown" : gameState.getFriendlyPlayer().getPlayerClass());
+        gamePlayed.setOpposingName(gameState.getOpposingPlayer().getName());
+        gamePlayed.setOpposingClass(gameState.getOpposingPlayer().getPlayerClass() == null ? "unknown" : gameState.getOpposingPlayer().getPlayerClass());
         gamePlayed.setWinner(result.getWinner());
         gamePlayed.setWinnerClass(result.getWinnerClass() == null ? "unknown" : result.getWinnerClass());
         gamePlayed.setTurns(result.getTurns().size());
@@ -102,11 +102,11 @@ public class GameService {
         return gamePlayed;
     }
 
-    public void saveGamePlayed(GamePlayed gamePlayed, GameContext context, GameResult result, boolean index) {
+    public void saveGamePlayed(GamePlayed gamePlayed, GameState gameState, GameResult result, boolean index) {
         gamePlayedRepository.save(gamePlayed);
         if (index) {
             try {
-                solrService.indexGame(gamePlayed, context, result);
+                solrService.indexGame(gamePlayed, gameState, result);
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }

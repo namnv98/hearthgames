@@ -1,6 +1,6 @@
 package com.hearthgames.server.game.parse.handler;
 
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -25,11 +25,11 @@ public abstract class AbstractHandler implements Handler {
     private static final String STRING_UNDERSCORE = "_";
 
     @Override
-    public boolean supports(GameContext context, String line) {
-        return line != null && context != null && supportsLine(context, line);
+    public boolean supports(GameState gameState, String line) {
+        return line != null && gameState != null && supportsLine(gameState, line);
     }
 
-    protected abstract boolean supportsLine(GameContext context, String line);
+    protected abstract boolean supportsLine(GameState gameState, String line);
 
     public String parseEntityStr(String line) {
         String parseEntityStr = null;

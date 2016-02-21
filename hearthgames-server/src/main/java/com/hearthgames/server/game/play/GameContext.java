@@ -1,6 +1,6 @@
 package com.hearthgames.server.game.play;
 
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
@@ -8,9 +8,9 @@ import com.hearthgames.server.game.parse.domain.Zone;
 import com.hearthgames.server.game.play.domain.*;
 import com.hearthgames.server.game.play.domain.board.Board;
 
-public class PlayContext {
+public class GameContext {
 
-    private GameContext context;
+    private GameState gameState;
     private GameResult result;
 
     private Activity activity;
@@ -18,17 +18,17 @@ public class PlayContext {
     private Action lastAction = null;
     private Action lastActionProcessed = null;
 
-    public PlayContext(GameContext context, GameResult result) {
-        this.context = context;
+    public GameContext(GameState gameState, GameResult result) {
+        this.gameState = gameState;
         this.result = result;
     }
 
-    public GameContext getContext() {
-        return context;
+    public GameState getGameState() {
+        return gameState;
     }
 
-    public void setContext(GameContext context) {
-        this.context = context;
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 
     public GameResult getResult() {
@@ -44,7 +44,7 @@ public class PlayContext {
     }
 
     public Card getBefore() {
-        return context.getBefore(activity);
+        return gameState.getBefore(activity);
     }
 
     public Card getAfter() {
@@ -191,6 +191,6 @@ public class PlayContext {
     }
 
     private void addBoard(GameResult result) {
-        result.getCurrentTurn().addAction(new Board(result, context));
+        result.getCurrentTurn().addAction(new Board(result, gameState));
     }
 }

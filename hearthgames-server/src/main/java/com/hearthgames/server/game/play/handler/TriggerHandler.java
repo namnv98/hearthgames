@@ -2,22 +2,22 @@ package com.hearthgames.server.game.play.handler;
 
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 
 public class TriggerHandler implements Handler {
 
     @Override
-    public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTrigger() &&
-               playContext.getActivity().isCard() &&
-               playContext.getActivity().getChildren().isEmpty();
+    public boolean supports(GameContext gameContext) {
+        return gameContext.getActivity().isTrigger() &&
+               gameContext.getActivity().isCard() &&
+               gameContext.getActivity().getChildren().isEmpty();
     }
 
     @Override
-    public boolean handle(PlayContext playContext) {
-        Card card = playContext.getBefore();
-        Player cardController = card.getController().equals(playContext.getContext().getFriendlyPlayer().getController()) ? playContext.getContext().getFriendlyPlayer() : playContext.getContext().getOpposingPlayer();
-        playContext.addTrigger(cardController, card);
+    public boolean handle(GameContext gameContext) {
+        Card card = gameContext.getBefore();
+        Player cardController = card.getController().equals(gameContext.getGameState().getFriendlyPlayer().getController()) ? gameContext.getGameState().getFriendlyPlayer() : gameContext.getGameState().getOpposingPlayer();
+        gameContext.addTrigger(cardController, card);
         return true;
     }
 }

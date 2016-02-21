@@ -1,37 +1,37 @@
 package com.hearthgames.server.game.play.handler;
 
 import com.hearthgames.server.game.parse.domain.Card;
-import com.hearthgames.server.game.play.PlayContext;
+import com.hearthgames.server.game.play.GameContext;
 
 import static com.hearthgames.server.game.play.handler.HandlerConstants.FALSE_OR_ZERO;
 
 public class DamageHandler implements Handler {
     @Override
-    public boolean supports(PlayContext playContext) {
-        return playContext.getActivity().isTagChange() &&
-               playContext.getActivity().isCard() &&
-               !playContext.getBefore().isWeapon() &&
-               isDamageDone(playContext);
+    public boolean supports(GameContext gameContext) {
+        return gameContext.getActivity().isTagChange() &&
+               gameContext.getActivity().isCard() &&
+               !gameContext.getBefore().isWeapon() &&
+               isDamageDone(gameContext);
     }
 
-    private boolean isDamageDone(PlayContext playContext) {
-        return playContext.getAfter().getPredamage() != null &&
-               !FALSE_OR_ZERO.equals(playContext.getAfter().getPredamage());
+    private boolean isDamageDone(GameContext gameContext) {
+        return gameContext.getAfter().getPredamage() != null &&
+               !FALSE_OR_ZERO.equals(gameContext.getAfter().getPredamage());
     }
 
     @Override
-    public boolean handle(PlayContext playContext) {
-        Card before = playContext.getBefore();
-        Card after = playContext.getAfter();
+    public boolean handle(GameContext gameContext) {
+        Card before = gameContext.getBefore();
+        Card after = gameContext.getAfter();
 
-        Card attacker = playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedAttacker());
-        Card defender = playContext.getContext().getEntityById(playContext.getContext().getGameEntity().getProposedDefender());
+        Card attacker = gameContext.getGameState().getEntityById(gameContext.getGameState().getGameEntity().getProposedAttacker());
+        Card defender = gameContext.getGameState().getEntityById(gameContext.getGameState().getGameEntity().getProposedDefender());
         if (attacker == null && defender == null) {
-            if (playContext.getActivity().getParent().getTarget() != null) {
-                attacker = playContext.getActivity().getParent().getDelta();
-                defender = playContext.getActivity().getParent().getTarget();
+            if (gameContext.getActivity().getParent().getTarget() != null) {
+                attacker = gameContext.getActivity().getParent().getDelta();
+                defender = gameContext.getActivity().getParent().getTarget();
             } else {
-                attacker = playContext.getActivity().getParent().getDelta();
+                attacker = gameContext.getActivity().getParent().getDelta();
                 defender = before;
             }
         }
@@ -39,17 +39,17 @@ public class DamageHandler implements Handler {
         int damage = Integer.parseInt(after.getPredamage());
         if (before == attacker) {
             if (defender == null) {
-                playContext.addDamage(playContext.getContext().getPlayer(attacker), playContext.getContext().getPlayer(before), attacker, before, damage);
+                gameContext.addDamage(gameContext.getGameState().getPlayer(attacker), gameContext.getGameState().getPlayer(before), attacker, before, damage);
                 return true;
             } else {
-                playContext.addDamage(playContext.getContext().getPlayer(defender), playContext.getContext().getPlayer(before), defender, before, damage);
+                gameContext.addDamage(gameContext.getGameState().getPlayer(defender), gameContext.getGameState().getPlayer(before), defender, before, damage);
                 return true;
             }
         } else if (before == defender) {
-            playContext.addDamage(playContext.getContext().getPlayer(attacker), playContext.getContext().getPlayer(before), attacker, before, damage);
+            gameContext.addDamage(gameContext.getGameState().getPlayer(attacker), gameContext.getGameState().getPlayer(before), attacker, before, damage);
             return true;
         } else {
-            playContext.addDamage(playContext.getContext().getPlayer(attacker), playContext.getContext().getPlayer(before), attacker, before, damage);
+            gameContext.addDamage(gameContext.getGameState().getPlayer(attacker), gameContext.getGameState().getPlayer(before), attacker, before, damage);
             return true;
         }
     }

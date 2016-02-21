@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.parse.handler;
 
 import com.hearthgames.server.game.log.domain.LogLineData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import org.junit.Test;
@@ -20,15 +20,15 @@ public class CreateCardHandlerTest {
 
         CreateCardHandler handler = new CreateCardHandler();
 
-        GameContext context = new GameContext();
+        GameState gameState = new GameState();
 
         Player player = new Player();
         player.setTeamId("2");
-        context.setFriendlyPlayer(player);
+        gameState.setFriendlyPlayer(player);
 
         player = new Player();
         player.setTeamId("1");
-        context.setOpposingPlayer(player);
+        gameState.setOpposingPlayer(player);
 
 
         String[] lines = new String[9];
@@ -43,19 +43,19 @@ public class CreateCardHandlerTest {
         lines[8] = "something else";
 
         for (String line: lines) {
-            if (handler.supports(context, line)) {
+            if (handler.supports(gameState, line)) {
                 LogLineData logLineData = new LogLineData(LocalDateTime.now().toString(), line);
-                handler.handle(context, logLineData);
+                handler.handle(gameState, logLineData);
             }
         }
 
-        assertEquals(2, context.getCards().size());
-        Card card = context.getCards().values().iterator().next();
+        assertEquals(2, gameState.getCards().size());
+        Card card = gameState.getCards().values().iterator().next();
         assertEquals("1", card.getController());
         assertEquals("MINION", card.getCardtype());
         assertEquals("86", card.getEntityId());
-        assertEquals("1", context.getFriendlyPlayer().getTeamId());
-        assertEquals("2", context.getOpposingPlayer().getTeamId());
+        assertEquals("1", gameState.getFriendlyPlayer().getTeamId());
+        assertEquals("2", gameState.getOpposingPlayer().getTeamId());
 
     }
 }

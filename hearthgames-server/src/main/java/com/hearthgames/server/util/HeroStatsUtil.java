@@ -1,6 +1,6 @@
 package com.hearthgames.server.util;
 
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Card;
 import com.hearthgames.server.game.parse.domain.Player;
 import com.hearthgames.server.game.play.domain.*;
@@ -43,17 +43,17 @@ public class HeroStatsUtil {
         return doHasArmorChanged(player, actions, null);
     }
 
-    public static Card getHeroCard(Player player, GameContext context) {
-        return context.getEntityById(player.getHeroEntity());
+    public static Card getHeroCard(Player player, GameState gameState) {
+        return gameState.getEntityById(player.getHeroEntity());
     }
 
-    public static Integer getCurrentHealth(Player player, GameContext context) {
-        Card heroCard = context.getEntityById(player.getHeroEntity());
+    public static Integer getCurrentHealth(Player player, GameState gameState) {
+        Card heroCard = gameState.getEntityById(player.getHeroEntity());
         return heroCard.getHealth() != null ? Integer.parseInt(heroCard.getHealth()) : 0;
     }
 
-    public static Integer getCurrentArmor(Player player, GameContext context) {
-        Card heroCard = context.getEntityById(player.getHeroEntity());
+    public static Integer getCurrentArmor(Player player, GameState gameState) {
+        Card heroCard = gameState.getEntityById(player.getHeroEntity());
         Integer armor;
         try {
             armor = Integer.parseInt(heroCard.getArmor());

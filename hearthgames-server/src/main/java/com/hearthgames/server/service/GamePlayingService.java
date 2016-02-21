@@ -1,10 +1,10 @@
 package com.hearthgames.server.service;
 
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 import com.hearthgames.server.game.parse.domain.Activity;
 import com.hearthgames.server.game.parse.domain.Card;
+import com.hearthgames.server.game.play.GameContext;
 import com.hearthgames.server.game.play.GameResult;
-import com.hearthgames.server.game.play.PlayContext;
 import com.hearthgames.server.game.play.handler.Handler;
 import com.hearthgames.server.game.play.handler.PlayHandlers;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,58 +31,58 @@ public class GamePlayingService {
         this.cardService = cardService;
     }
 
-    public GameResult processGame(GameContext context, Integer rank) {
+    public GameResult processGame(GameState gameState, Integer rank) {
 
         GameResult result = new GameResult();
         result.setRank(rank);
 
         // Associate all the cards with their corresponding card details
-        Collection<Card> cards = context.getCards().values();
+        Collection<Card> cards = gameState.getCards().values();
         for (Card c: cards) {
             c.setCardDetails(cardService.getCardDetails(c.getCardid()));
         }
 
-        PlayContext playContext = new PlayContext(context, result);
-        for (Activity activity: context.getActivities()) {
-            playContext.setActivity(activity);
-            handle(playContext);
+        GameContext gameContext = new GameContext(gameState, result);
+        for (Activity activity: gameState.getActivities()) {
+            gameContext.setActivity(activity);
+            handle(gameContext);
         }
-        playContext.addLastBoard();
+        gameContext.addLastBoard();
 
         return result;
     }
 
 
-    public void handle(PlayContext playContext) {
+    public void handle(GameContext gameContext) {
         // Handler the domain first then any child actions. The reason for this is that the domain contains a high level abstraction what is happening
         // For example:
         //    ACTION_START Entity=[name=Haunted Creeper id=75 zone=PLAY zonePos=1 cardId=FP1_002 player=2] BlockType=ATTACK Index=-1 Target=[name=Jaina Proudmoore id=4 zone=PLAY zonePos=0 cardId=HERO_08 player=1]
         // means the Haunted Creeper minion is attacking Jaina Proudmoore
         // The details of the attack are in the child actions
-        doActivity(playContext);
-        doChildActivities(playContext, playContext.getActivity().getChildren());
-        playContext.addBoard();
+        doActivity(gameContext);
+        doChildActivities(gameContext, gameContext.getActivity().getChildren());
+        gameContext.addBoard();
     }
 
-    private void doChildActivities(PlayContext playContext, List<Activity> activities) {
+    private void doChildActivities(GameContext gameContext, List<Activity> activities) {
         if (!CollectionUtils.isEmpty(activities)) {
             for (Activity activity : activities) {
-                playContext.setActivity(activity);
-                doActivity(playContext);
-                doChildActivities(playContext, activity.getChildren());
+                gameContext.setActivity(activity);
+                doActivity(gameContext);
+                doChildActivities(gameContext, activity.getChildren());
             }
         }
     }
 
-    private void doActivity(PlayContext playContext) {
-        playActivity(playContext);
-        updateGameActivityData(playContext);
+    private void doActivity(GameContext gameContext) {
+        playActivity(gameContext);
+        updateGameActivityData(gameContext);
     }
 
-    private void playActivity(PlayContext playContext) {
+    private void playActivity(GameContext gameContext) {
         for (Handler handler: playHandlers.getHandlers()) {
-            if (handler.supports(playContext)) {
-                boolean handled = handler.handle(playContext);
+            if (handler.supports(gameContext)) {
+                boolean handled = handler.handle(gameContext);
                 if (handled) {
                     return;
                 }
@@ -90,11 +90,11 @@ public class GamePlayingService {
         }
     }
 
-    private void updateGameActivityData(PlayContext playContext) {
-        if (playContext.getActivity().isTagChange() || playContext.getActivity().isShowEntity() || playContext.getActivity().isHideEntity()) {
-            copyNonNullProperties(playContext.getActivity().getDelta(), playContext.getContext().getEntityById(playContext.getActivity().getEntityId()));
-            if (playContext.getActivity().isShowEntity()) {
-                Card c = playContext.getActivity().getDelta();
+    private void updateGameActivityData(GameContext gameContext) {
+        if (gameContext.getActivity().isTagChange() || gameContext.getActivity().isShowEntity() || gameContext.getActivity().isHideEntity()) {
+            copyNonNullProperties(gameContext.getActivity().getDelta(), gameContext.getGameState().getEntityById(gameContext.getActivity().getEntityId()));
+            if (gameContext.getActivity().isShowEntity()) {
+                Card c = gameContext.getActivity().getDelta();
                 c.setCardDetails(cardService.getCardDetails(c.getCardid()));
             }
         }

@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.parse.handler;
 
 import com.hearthgames.server.game.log.domain.LogLineData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -15,25 +15,25 @@ public class CreatePlayerHandler extends AbstractHandler {
     private static final String TAG = "tag";
 
     @Override
-    protected boolean supportsLine(GameContext context, String line) {
-        return line.startsWith(PLAYER) || context.isCreatePlayer();
+    protected boolean supportsLine(GameState gameState, String line) {
+        return line.startsWith(PLAYER) || gameState.isCreatePlayer();
     }
 
     @Override
-    public boolean handle(GameContext context, LogLineData logLineData) {
+    public boolean handle(GameState gameState, LogLineData logLineData) {
         String line = logLineData.getTrimmedLine();
-        if (context.isCreatePlayer() && line.startsWith(PLAYER)) { // we found the 2nd player
-            context.endCreatePlayer(logLineData.getDateTime());
+        if (gameState.isCreatePlayer() && line.startsWith(PLAYER)) { // we found the 2nd player
+            gameState.endCreatePlayer(logLineData.getDateTime());
             String[] data = getGameAccountInfo(line);
-            context.startCreatePlayer(logLineData.getDateTime(), data);
-        } else if (context.isCreatePlayer() && line.startsWith(TAG)) { // in progress creating player populate some data
+            gameState.startCreatePlayer(logLineData.getDateTime(), data);
+        } else if (gameState.isCreatePlayer() && line.startsWith(TAG)) { // in progress creating player populate some data
             Map<String, String> data = getKeyValueData(line, tagPattern);
-            context.updateCreatePlayer(data);
+            gameState.updateCreatePlayer(data);
         } else if (line.startsWith(PLAYER)) { // first time we found a player so create a new one and flag that we are creating players
             String[] data = getGameAccountInfo(line);
-            context.startCreatePlayer(logLineData.getDateTime(), data);
+            gameState.startCreatePlayer(logLineData.getDateTime(), data);
         } else { // we were creating player but found a line that meant to be doing something else
-            context.endCreatePlayer(logLineData.getDateTime());
+            gameState.endCreatePlayer(logLineData.getDateTime());
             return false;
         }
         return true;

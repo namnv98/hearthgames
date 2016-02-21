@@ -1,7 +1,7 @@
 package com.hearthgames.server.game.parse.handler;
 
 import com.hearthgames.server.game.log.domain.LogLineData;
-import com.hearthgames.server.game.parse.GameContext;
+import com.hearthgames.server.game.parse.GameState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,25 +24,25 @@ public class UpdateCardHandler extends AbstractHandler {
     private static final String TAG_EQ = "tag=";
 
     @Override
-    protected boolean supportsLine(GameContext context, String line) {
-        return line.startsWith(SHOW_ENTITY) || context.isUpdateCard() || line.startsWith(HIDE_ENTITY);
+    protected boolean supportsLine(GameState gameState, String line) {
+        return line.startsWith(SHOW_ENTITY) || gameState.isUpdateCard() || line.startsWith(HIDE_ENTITY);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean handle(GameContext context, LogLineData logLineData) {
+    public boolean handle(GameState gameState, LogLineData logLineData) {
         String line = logLineData.getTrimmedLine();
-        if (context.isUpdateCard() && line.startsWith(TAG)) { // are we updating an existing card's data
+        if (gameState.isUpdateCard() && line.startsWith(TAG)) { // are we updating an existing card's data
             Map<String, String> data = getKeyValueData(line, tagPattern);
-            context.updateCurrentCard(data);
+            gameState.updateCurrentCard(data);
         } else if (line.startsWith(SHOW_ENTITY)) {
             String[] data = getCardInfo(line);
-            context.startUpdateCard(logLineData.getDateTime(), data[0], data[1]);
+            gameState.startUpdateCard(logLineData.getDateTime(), data[0], data[1]);
         } else if (line.startsWith(HIDE_ENTITY)) {
             List<Object> objects = getHideCardInfo(line);
-            context.hideEntity(logLineData.getDateTime(), (String) objects.get(0), ( Map<String, String> ) objects.get(1));
+            gameState.hideEntity(logLineData.getDateTime(), (String) objects.get(0), ( Map<String, String> ) objects.get(1));
         } else { // we were updating a card but found a line that meant to be doing something else
-            context.endUpdateCard(logLineData.getDateTime());
+            gameState.endUpdateCard(logLineData.getDateTime());
             return false;
         }
         return true;
